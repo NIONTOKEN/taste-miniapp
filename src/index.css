@@ -1,0 +1,311 @@
+:root {
+  /* Premium Dark Theme Palette */
+  --bg-dark: #0f172a;
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --bg-card-border: rgba(255, 255, 255, 0.1);
+  --primary: #f59f0b;
+  /* Amber/Gold for "Taste" */
+  --primary-glow: rgba(245, 159, 11, 0.5);
+  --secondary: #6366f1;
+  /* Indigo */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --white: #ffffff;
+
+  /* Gradients */
+  --gradient-main: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.0) 100%);
+  --gradient-gold: linear-gradient(135deg, #f59f0b 0%, #d97706 100%);
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--gradient-main);
+  background-attachment: fixed;
+  /* Ensures gradient covers full scroll */
+  color: var(--text-main);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.glass-button {
+  background: var(--gradient-gold);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 15px var(--primary-glow);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.glass-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 5px var(--primary-glow);
+}
+
+.container {
+  max-width: 480px;
+  /* Mobile width usually */
+  margin: 0 auto;
+  padding: var(--spacing-md);
+  padding-bottom: 80px;
+  /* Space for potential bottom nav */
+}
+
+/* Typography Utilities */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: var(--gradient-gold);
+}
+
+.wallet-badges {
+  margin-top: 30px;
+}
+
+.wallet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.wallet-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.wallet-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  border-color: var(--primary-glow);
+}
+
+.wallet-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.wallet-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 10px;
+  flex: 1;
+}
+
+.nav-item.active {
+  color: var(--primary);
+}
+
+.nav-icon {
+  font-size: 20px;
+}
+
+.nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Price Ticker */
+.ticker-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  height: 30px;
+  background-color: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid var(--primary-glow);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+}
+
+.ticker {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 30s linear infinite;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.ticker-item {
+  display: inline-block;
+  padding: 0 2rem;
+}
+
+.price-up {
+  color: #10b981;
+}
+
+.price-down {
+  color: #ef4444;
+}
+
+/* Status Grid for Dashboard */
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.status-card {
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-card .label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-card .value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* RTL Support */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .ticker {
+  animation: ticker-rtl 30s linear infinite;
+}
+
+@keyframes ticker-rtl {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.rtl .status-card,
+.rtl .glass-button,
+.rtl .nav-item {
+  flex-direction: row-reverse;
+}
+
+.rtl .nav-label {
+  margin-right: 5px;
+}
+
+.rtl .status-card div {
+  text-align: right;
+}
