@@ -152,11 +152,11 @@ function App() {
   };
 
   const handleBuy = () => {
-    const STONFI_URL = `https://app.ston.fi/swap?ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-&chartVisible=false`;
+    const SWAP_URL = `https://swap.coffee/dex?from=TON&to=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-`;
     if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openLink(STONFI_URL);
+      window.Telegram.WebApp.openLink(SWAP_URL);
     } else {
-      window.open(STONFI_URL, '_blank');
+      window.open(SWAP_URL, '_blank');
     }
   };
 
