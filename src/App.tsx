@@ -152,7 +152,7 @@ function App() {
   };
 
   const handleBuy = () => {
-    const SWAP_URL = `https://swap.coffee/dex?from=TON&to=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-`;
+    const SWAP_URL = `https://dedust.io/pools/EQDPyY_pVW1r3q-5NwccvAThkPaCTQMnxz1i_HU7Fv64g-cz`;
     if (window.Telegram?.WebApp) {
       window.Telegram.WebApp.openLink(SWAP_URL);
     } else {
