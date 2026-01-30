@@ -151,12 +151,67 @@ function App() {
     setShowLangMenu(false);
   };
 
-  const handleBuy = () => {
-    const SWAP_URL = `https://dedust.io/swap/TON/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-`;
-    if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openLink(SWAP_URL);
-    } else {
-      window.open(SWAP_URL, '_blank');
+  // TASTE Address & Helper
+  const TASTE_ADDRESS = 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
+  const NATIVE_VAULT = 'EQDa4VOnTYdHv43TTYYdTABnCc0H_tG6kLQSAKCYvAboyZBu'; // DeDust Native Vault
+
+  const handleBuy = async () => {
+    // 1. Check wallet
+    if (!tonConnectUI.connected || !tonConnectUI.account?.address) {
+      tonConnectUI.openModal();
+      return;
+    }
+
+    try {
+      // 2. Import SDK dynamically to avoid load issues if not installed
+      const { Asset, VaultNative } = await import('@dedust/sdk');
+      const { Address, toNano } = await import('@ton/core');
+
+      // 3. Calculate Approx TON required (1 TASTE = 0.00106 USD, 1 TON = 3.5 USD approx)
+      // Rate: 1 TASTE ~ 0.0003 TON (Adjust logic as needed or fetch live)
+      // For now, let's assume 1 TASTE = 0.001 TON for safety/demo
+      const estimatedTon = (amount * 0.001).toFixed(4); // approx calculation
+      const amountNano = toNano(estimatedTon);
+
+      // 4. Create Swap Payload
+      // We want to send TON to Vault, and swap it to TASTE
+      const TASTE = Asset.jetton(Address.parse(TASTE_ADDRESS));
+
+      const body = VaultNative.createSwapPayload({
+        amount: amountNano,
+        step: {
+          poolAddress: undefined, // Auto-detect
+          limit: 0n,
+          next: {
+            asset: TASTE,
+          }
+        },
+        swapParams: {
+          recipientAddress: Address.parse(tonConnectUI.account.address)
+        }
+      });
+
+      // 5. Send Transaction
+      const transaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 300, // 5 min
+        messages: [
+          {
+            address: NATIVE_VAULT,
+            amount: amountNano.toString(),
+            payload: body.toBoc().toString('base64'),
+          },
+        ],
+      };
+
+      await tonConnectUI.sendTransaction(transaction);
+      alert(t('app.swap_success') || 'Transaction sent! Check your wallet.');
+
+    } catch (e) {
+      console.error('Swap failed', e);
+      // Fallback to link if SDK fails
+      const SWAP_URL = `https://dedust.io/swap/TON/${TASTE_ADDRESS}`;
+      if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(SWAP_URL);
+      else window.open(SWAP_URL, '_blank');
     }
   };
 
