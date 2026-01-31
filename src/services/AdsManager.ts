@@ -7,7 +7,7 @@ export interface AdResult {
 }
 
 export class AdsManager {
-    private static blockId = "640"; // Kanka buraya adsgram'dan aldığın ID gelecek (Şu an test ID: 640)
+    private static blockId = "22088"; // Adsgram verified Block ID
 
     static async showRewardedVideo(): Promise<boolean> {
         return new Promise((resolve) => {

@@ -120,13 +120,38 @@ class ApiService {
     /**
      * Get TASTE token price (placeholder - can be implemented with real API)
      */
+    /**
+     * Get TASTE token price from GeckoTerminal API
+     */
     async getTastePrice(): Promise<{ price: number; change: number }> {
-        // Currently using static values
-        // TODO: Integrate with real price API when available
-        return {
-            price: 0.00106,
-            change: 12.4
-        };
+        const POOL_ADDRESS = 'EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS';
+        try {
+            const data = await this.fetchWithRetry(
+                `https://api.geckoterminal.com/api/v2/networks/ton/pools/${POOL_ADDRESS}`,
+                {
+                    timeout: 8000,
+                    retries: 2,
+                    fallbackValue: null
+                }
+            );
+
+            if (data?.data?.attributes) {
+                const attrs = data.data.attributes;
+                return {
+                    price: parseFloat(attrs.base_token_price_usd || '0'),
+                    change: parseFloat(attrs.price_change_percentage?.h24 || '0')
+                };
+            }
+
+            throw new Error('Invalid API response format');
+        } catch (error) {
+            console.warn('Price fetch failed, using fallback:', error);
+            // Fallback to latest known values
+            return {
+                price: 0.00112, // Updated from GeckoTerminal
+                change: 0.0     // Updated from GeckoTerminal
+            };
+        }
     }
 
     /**
