@@ -109,7 +109,8 @@ const resources = {
                     "facebook": "Follow us on Facebook",
                     "instagram": "Follow us on Instagram",
                     "tiktok": "Follow us on TikTok",
-                    "whatsapp": "Join WhatsApp Channel"
+                    "whatsapp": "Join WhatsApp Channel",
+                    "website": "Visit Our Website"
                 }
             },
             "rewards": {
@@ -118,9 +119,9 @@ const resources = {
                 "day": "Day {{day}}",
                 "claim": "Claim Reward (0.005 TASTE)",
                 "claimed": "Claimed Today",
-                "withdraw": "Send Taste (Min 5)",
+                "withdraw": "Send Taste (Min 1)",
                 "withdraw_success": "Withdrawal Request Sent!",
-                "insufficient_balance": "Min 5 TASTE required",
+                "insufficient_balance": "Min 1 TASTE required",
                 "connect_wallet": "Please connect wallet first"
             }
         }
@@ -235,7 +236,8 @@ const resources = {
                     "facebook": "Facebook'ta takip et",
                     "instagram": "Instagram'da takip et",
                     "tiktok": "TikTok'ta takip et",
-                    "whatsapp": "WhatsApp Kanalına katıl"
+                    "whatsapp": "WhatsApp Kanalına katıl",
+                    "website": "Web Sitemizi Ziyaret Et"
                 }
             },
             "rewards": {
@@ -244,9 +246,9 @@ const resources = {
                 "day": "Gün {{day}}",
                 "claim": "Ödülü Al (0.005 TASTE)",
                 "claimed": "Bugün Alındı",
-                "withdraw": "Taste Gönder (Min 5)",
+                "withdraw": "Taste Gönder (Min 1)",
                 "withdraw_success": "Çekim Talebi Gönderildi!",
-                "insufficient_balance": "En az 5 TASTE gereklidir",
+                "insufficient_balance": "En az 1 TASTE gereklidir",
                 "connect_wallet": "Lütfen önce cüzdanı bağlayın"
             }
         }
@@ -303,9 +305,9 @@ const resources = {
             },
             "social": {
                 "title": "المهام الاجتماعية",
-                "tasks": { "x_follow": "تابعنا على X", "tg_join": "انضم للقناة", "whatsapp": "انضم للواتساب" }
+                "tasks": { "x_follow": "تابعنا على X", "tg_join": "انضم للقناة", "whatsapp": "انضم للواتساب", "website": "زوروا موقعنا" }
             },
-            "rewards": { "title": "المكافأة اليومية", "claim": "المطالبة بالمكافأة", "withdraw": "سحب TASTE (بحد أدنى 5)" }
+            "rewards": { "title": "المكافأة اليومية", "claim": "المطالبة بالمكافأة", "withdraw": "سحب TASTE (بحد أدنى 1)" }
         }
     },
     ru: {
@@ -360,9 +362,9 @@ const resources = {
             },
             "social": {
                 "title": "Задания",
-                "tasks": { "x_follow": "Подписаться на X", "tg_join": "Вступить в TG", "whatsapp": "Вступить в WhatsApp" }
+                "tasks": { "x_follow": "Подписаться на X", "tg_join": "Вступить в TG", "whatsapp": "Вступить в WhatsApp", "website": "Посетить сайт" }
             },
-            "rewards": { "title": "Дневная награда", "claim": "Забрать (0.005)", "withdraw": "Вывести TASTE (Мин 5)" }
+            "rewards": { "title": "Дневная награда", "claim": "Забрать (0.005)", "withdraw": "Вывести TASTE (Мин 1)" }
         }
     },
     hi: {
@@ -415,7 +417,11 @@ const resources = {
                 },
                 "supply_policy": { "title": "आपूर्ति नीति", "content": "TASTE की आपूर्ति 25 मिलियन तक सीमित है।" }
             },
-            "rewards": { "title": "दैनिक पुरस्कार", "claim": "दावा (0.005)", "withdraw": "वापसी TASTE (न्यूनतम 5)" }
+            "social": {
+                "title": "सामाजिक कार्य",
+                "tasks": { "x_follow": "X पर फॉलो करें", "tg_join": "टेलीग्राम से जुड़ें", "whatsapp": "व्हाट्सएप चैनल", "website": "हमारी वेबसाइट देखें" }
+            },
+            "rewards": { "title": "दैनिक पुरस्कार", "claim": "दावा (0.005)", "withdraw": "वापसी TASTE (न्यूनतम 1)" }
         }
     }
 };

@@ -49,6 +49,12 @@ export function SocialTasks() {
             icon: '💬',
             link: 'https://whatsapp.com/channel/0029Vb7ACtI1CYoNo8B1e21N',
             reward: 0.1
+        },
+        {
+            id: 'website',
+            icon: '🌐',
+            link: 'https://www.tastetoken.net',
+            reward: 0.1
         }
     ]
 

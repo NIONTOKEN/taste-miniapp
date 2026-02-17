@@ -26,38 +26,41 @@ import { apiService } from './services/api'
 
 const TASTE_LOGO = '/logo.jpg'
 
+
 function PriceTicker() {
-  const [price, setPrice] = useState<string>('0.00106')
-  const [tryPrice, setTryPrice] = useState<string>('0.0365')
-  const [change, setChange] = useState<number>(12.4)
+  const [price, setPrice] = useState<string>('0.00135')
+  const [tryPrice, setTryPrice] = useState<string>('0.0466')
+  const [change, setChange] = useState<number>(0)
 
   useEffect(() => {
-    const fetchPrice = async () => {
+    const fetchLivePrice = async () => {
       try {
-        // Get current TASTE price
-        const priceData = await apiService.getTastePrice();
-        setPrice(priceData.price.toFixed(5));
-        setChange(priceData.change);
-
-        // Fetch USD to TRY rate with retry logic
-        const exchangeData = await apiService.getExchangeRate();
-        setTryPrice((priceData.price * exchangeData.rate).toFixed(4));
+        const [priceData, rateData] = await Promise.all([
+          apiService.getTastePrice(),
+          apiService.getExchangeRate()
+        ])
+        if (priceData.price > 0) {
+          setPrice(priceData.price.toFixed(5))
+          setChange(priceData.change)
+          setTryPrice((priceData.price * rateData.usdToTry).toFixed(4))
+        }
       } catch (e) {
-        // Fallback values
-        setPrice('0.00106');
-        setChange(12.4);
-        setTryPrice('0.0365');
+        console.warn('[PriceTicker] API fetch failed, keeping current values')
       }
     }
-    fetchPrice();
-    const interval = setInterval(fetchPrice, 60000);
-    return () => clearInterval(interval);
+
+    fetchLivePrice()
+    const interval = setInterval(fetchLivePrice, 30000) // Her 30 saniyede güncelle
+    return () => clearInterval(interval)
   }, [])
+
+  const changeColor = change >= 0 ? 'price-up' : 'price-down'
+  const changeSign = change >= 0 ? '+' : ''
 
   return (
     <div className="ticker-wrap">
       <div className="ticker">
-        <span className="ticker-item">💎 TASTE/USD: ${price} <span className={change >= 0 ? 'price-up' : 'price-down'}>({change >= 0 ? '+' : ''}{change}%)</span></span>
+        <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
         <span className="ticker-item">🇹🇷 TASTE/TRY: ₺{tryPrice}</span>
         <span className="ticker-item">🚀 NEXT GOAL: $0.01</span>
         <span className="ticker-item">🔥 TOTAL SUPPLY: 25,000,000</span>
@@ -67,6 +70,7 @@ function PriceTicker() {
     </div>
   )
 }
+
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -155,63 +159,14 @@ function App() {
   const TASTE_ADDRESS = 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
   const NATIVE_VAULT = 'EQDa4VOnTYdHv43TTYYdTABnCc0H_tG6kLQSAKCYvAboyZBu'; // DeDust Native Vault
 
-  const handleBuy = async () => {
-    // 1. Check wallet
-    if (!tonConnectUI.connected || !tonConnectUI.account?.address) {
-      tonConnectUI.openModal();
-      return;
-    }
+  const handleBuy = () => {
+    // STON.fi swap via Tonkeeper deep link
+    const SWAP_URL = 'https://app.tonkeeper.com/dapp/https%3A%2F%2Fapp.ston.fi%2Fswap%3FchartVisible%3Dfalse%26ft%3DTON%26tt%3DEQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
 
-    try {
-      // 2. Import SDK dynamically to avoid load issues if not installed
-      const { Asset, VaultNative } = await import('@dedust/sdk');
-      const { Address, toNano } = await import('@ton/core');
-
-      // 3. Calculate Approx TON required (1 TASTE = 0.00106 USD, 1 TON = 3.5 USD approx)
-      // Rate: 1 TASTE ~ 0.0003 TON (Adjust logic as needed or fetch live)
-      // For now, let's assume 1 TASTE = 0.001 TON for safety/demo
-      const estimatedTon = (amount * 0.001).toFixed(4); // approx calculation
-      const amountNano = toNano(estimatedTon);
-
-      // 4. Create Swap Payload
-      // We want to send TON to Vault, and swap it to TASTE
-      const TASTE = Asset.jetton(Address.parse(TASTE_ADDRESS));
-
-      const body = VaultNative.createSwapPayload({
-        amount: amountNano,
-        step: {
-          poolAddress: undefined, // Auto-detect
-          limit: 0n,
-          next: {
-            asset: TASTE,
-          }
-        },
-        swapParams: {
-          recipientAddress: Address.parse(tonConnectUI.account.address)
-        }
-      });
-
-      // 5. Send Transaction
-      const transaction = {
-        validUntil: Math.floor(Date.now() / 1000) + 300, // 5 min
-        messages: [
-          {
-            address: NATIVE_VAULT,
-            amount: amountNano.toString(),
-            payload: body.toBoc().toString('base64'),
-          },
-        ],
-      };
-
-      await tonConnectUI.sendTransaction(transaction);
-      alert(t('app.swap_success') || 'Transaction sent! Check your wallet.');
-
-    } catch (e) {
-      console.error('Swap failed', e);
-      // Fallback to link if SDK fails
-      const SWAP_URL = `https://dedust.io/swap/TON/${TASTE_ADDRESS}`;
-      if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(SWAP_URL);
-      else window.open(SWAP_URL, '_blank');
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.openLink(SWAP_URL);
+    } else {
+      window.open(SWAP_URL, '_blank');
     }
   };
 
@@ -294,7 +249,7 @@ function App() {
                 <motion.div key={balance} initial={{ scale: 1.2, color: 'var(--primary)' }} animate={{ scale: 1 }} style={{ fontWeight: 'bold' }}>
                   {balance} TASTE
                 </motion.div>
-                <motion.button whileHover={balance >= 5 ? { scale: 1.05 } : {}} whileTap={balance >= 5 ? { scale: 0.95 } : {}} onClick={handleWithdraw} disabled={balance < 5 || isWithdrawing} style={{ marginTop: '10px', padding: '8px', borderRadius: '10px', border: 'none', background: balance >= 5 ? 'var(--gradient-gold)' : 'rgba(255,255,255,0.05)', color: balance >= 5 ? '#000' : 'var(--text-muted)', fontSize: '11px', fontWeight: 'bold', width: '100%' }}>
+                <motion.button whileHover={balance >= 1 ? { scale: 1.05 } : {}} whileTap={balance >= 1 ? { scale: 0.95 } : {}} onClick={handleWithdraw} disabled={balance < 1 || isWithdrawing} style={{ marginTop: '10px', padding: '8px', borderRadius: '10px', border: 'none', background: balance >= 1 ? 'var(--gradient-gold)' : 'rgba(255,255,255,0.05)', color: balance >= 1 ? '#000' : 'var(--text-muted)', fontSize: '11px', fontWeight: 'bold', width: '100%' }}>
                   {isWithdrawing ? '...' : `📤 ${t('rewards.withdraw')}`}
                 </motion.button>
               </div>

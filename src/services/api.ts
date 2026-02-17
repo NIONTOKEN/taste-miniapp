@@ -118,40 +118,59 @@ class ApiService {
     }
 
     /**
-     * Get TASTE token price (placeholder - can be implemented with real API)
-     */
-    /**
      * Get TASTE token price from GeckoTerminal API
+     * Uses both DeDust and STON.fi pools with multiple CORS proxies for reliability
      */
     async getTastePrice(): Promise<{ price: number; change: number }> {
-        const POOL_ADDRESS = 'EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS';
-        try {
-            const data = await this.fetchWithRetry(
-                `https://api.geckoterminal.com/api/v2/networks/ton/pools/${POOL_ADDRESS}`,
-                {
-                    timeout: 8000,
-                    retries: 2,
-                    fallbackValue: null
+        // Pool addresses - STON.fi v2 is the main pool
+        const STONFI_POOL = 'EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS';
+
+        // Multiple CORS proxies for reliability
+        const CORS_PROXIES = [
+            '', // Try direct first
+            'https://corsproxy.io/?',
+            'https://api.allorigins.win/raw?url=',
+            'https://cors-anywhere.herokuapp.com/'
+        ];
+
+        const pools = [STONFI_POOL];
+
+        for (const poolAddress of pools) {
+            const API_URL = `https://api.geckoterminal.com/api/v2/networks/ton/pools/${poolAddress}`;
+
+            for (const proxy of CORS_PROXIES) {
+                try {
+                    const url = proxy ? `${proxy}${encodeURIComponent(API_URL)}` : API_URL;
+                    const proxyName = proxy ? proxy.split('/')[2] || 'proxy' : 'direct';
+                    console.log(`[Price] Trying ${proxyName} for pool ${poolAddress.slice(0, 10)}...`);
+
+                    const data = await this.fetchWithRetry(url, {
+                        timeout: 6000,
+                        retries: 0,
+                        fallbackValue: null
+                    });
+
+                    if (data?.data?.attributes) {
+                        const attrs = data.data.attributes;
+                        const price = parseFloat(attrs.base_token_price_usd || '0');
+                        const change = parseFloat(attrs.price_change_percentage?.h24 || '0');
+
+                        if (price > 0) {
+                            console.log(`[Price] ✅ Success via ${proxyName}:`, { price: price.toFixed(6), change: change.toFixed(2) });
+                            return { price, change };
+                        }
+                    }
+                } catch (error) {
+                    // Silent fail, try next
                 }
-            );
-
-            if (data?.data?.attributes) {
-                const attrs = data.data.attributes;
-                return {
-                    price: parseFloat(attrs.base_token_price_usd || '0'),
-                    change: parseFloat(attrs.price_change_percentage?.h24 || '0')
-                };
             }
-
-            throw new Error('Invalid API response format');
-        } catch (error) {
-            console.warn('Price fetch failed, using fallback:', error);
-            // Fallback to latest known values
-            return {
-                price: 0.00112, // Updated from GeckoTerminal
-                change: 0.0     // Updated from GeckoTerminal
-            };
         }
+
+        console.warn('[Price] All sources failed, using cached fallback');
+        return {
+            price: 0.00135,
+            change: 0.0
+        };
     }
 
     /**

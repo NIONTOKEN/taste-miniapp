@@ -40,8 +40,8 @@ export function LiveMarketData() {
 
             <div style={{ marginTop: '10px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div style={{ background: 'rgba(255,255,255,0.03)', padding: '8px', borderRadius: '8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Liquidity</div>
-                    <div style={{ fontSize: '13px', fontWeight: 'bold' }}>DeDust</div>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Liquidity (STON.fi)</div>
+                    <div style={{ fontSize: '13px', fontWeight: 'bold' }}>STON.fi</div>
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.03)', padding: '8px', borderRadius: '8px', textAlign: 'center' }}>
                     <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Status</div>

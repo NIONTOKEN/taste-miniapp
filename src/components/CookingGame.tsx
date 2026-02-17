@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '../context/UserContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, CheckCircle, Clock, Zap } from 'lucide-react';
-import { AdsManager } from '../services/AdsManager';
+import { ChevronLeft, CheckCircle, Clock } from 'lucide-react';
 
 interface CookingGameProps {
     level: number;
@@ -185,14 +184,7 @@ export function CookingGame({ level, onBack }: CookingGameProps) {
 
     const resetAssembly = () => setAssembledIngredients([]);
 
-    const handleRefillEnergy = async () => {
-        const { refillEnergy } = useUser();
-        const success = await AdsManager.showRewardedVideo();
-        if (success) {
-            refillEnergy();
-            // Kanka enerji doldu uyarısı verebiliriz
-        }
-    };
+
 
     return (
         <div className="glass-panel" style={{ padding: '15px', minHeight: '600px', display: 'flex', flexDirection: 'column', gap: '15px', position: 'relative', overflow: 'hidden' }}>
@@ -453,12 +445,7 @@ export function CookingGame({ level, onBack }: CookingGameProps) {
                                 <div style={{ fontSize: '80px', marginBottom: '25px' }}>🏚️🍴</div>
                                 <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#ef4444', marginBottom: '10px' }}>KITCHEN FAILED!</h1>
                                 <p style={{ color: 'var(--text-muted)', marginBottom: '40px', fontSize: '1.1rem' }}>The customers left hungry. Don't give up!</p>
-                                <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-                                    <button onClick={() => window.location.reload()} className="glass-button" style={{ flex: 1, padding: '20px', fontSize: '1.2rem', background: '#334155', border: 'none' }}>RETRY</button>
-                                    <button onClick={handleRefillEnergy} className="glass-button" style={{ flex: 1, padding: '20px', fontSize: '1.2rem', background: 'var(--gradient-gold)', color: '#000', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                                        <Zap size={20} fill="black" /> REFILL
-                                    </button>
-                                </div>
+                                <button onClick={() => window.location.reload()} className="glass-button" style={{ width: '100%', padding: '20px', fontSize: '1.2rem', background: 'var(--gradient-gold)', color: '#000', border: 'none', fontWeight: 'bold' }}>RETRY</button>
                             </>
                         )}
                     </motion.div>

@@ -26,7 +26,7 @@ interface UserContextType {
     doubleReward: (originalAmount: number) => void;
 }
 
-const TASTE_CONTRACT_ADDRESS = 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
+const TASTE_CONTRACT_ADDRESS = 'UQDxmQflBkBRBDVWCpBiEUueRM2qNDo6TmMm23Yoc2pAxMoX';
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
@@ -158,7 +158,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     };
 
     const handleWithdraw = async (tonConnectUI: any, t: any) => {
-        if (balance < 5) return;
+        if (balance < 1) return;
 
         // Cap withdrawal at 10
         const withdrawAmount = Math.min(balance, 10);
@@ -169,24 +169,26 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         }
 
         try {
-            // Get Backend Authorization (Signature)
-            const signatureStr = await backend.getWithdrawalSignature(tonConnectUI.account.address, balance);
+            const userAddress = tonConnectUI.account.address;
+            const amountNano = toNano(withdrawAmount.toString());
 
-            // @ts-ignore
-            const signature = Buffer.from(signatureStr, 'hex');
+            // Backend'den gerçek Ed25519 imzası al
+            const signature = await backend.getWithdrawalSignature(userAddress, withdrawAmount);
 
+            // Deployed kontratın Withdraw mesaj formatı:
+            // opcode(uint32) + amount(coins) + signature(64 bytes buffer)
             const payload = beginCell()
                 .storeUint(1348123249, 32) // op::withdraw
-                .storeCoins(toNano(balance.toString()))
-                .storeSlice(beginCell().storeBuffer(signature).endCell().beginParse())
+                .storeCoins(amountNano)
+                .storeBuffer(signature)
                 .endCell();
 
             const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 60,
+                validUntil: Math.floor(Date.now() / 1000) + 600, // 10 dakika geçerli olsun
                 messages: [
                     {
                         address: TASTE_CONTRACT_ADDRESS,
-                        amount: toNano('0.05').toString(),
+                        amount: toNano('0.05').toString(), // Gas fee (biraz düşürdük, cüzdanda az var ise yetmesi için)
                         payload: payload.toBoc().toString('base64')
                     }
                 ]

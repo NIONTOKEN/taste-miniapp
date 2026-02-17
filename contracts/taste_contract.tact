@@ -59,6 +59,9 @@ contract TasteContract with Deployable {
         self._sendJettons(msg.to, msg.amount);
     }
 
+    // Accept incoming TON transfers (for gas funding)
+    receive() {}
+
     // User can withdraw with a valid backend signature
     receive(msg: Withdraw) {
         let ctx: Context = context();

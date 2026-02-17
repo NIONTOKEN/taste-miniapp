@@ -1,8 +1,10 @@
-import { beginCell } from "@ton/core";
+import { beginCell, Address, toNano } from "@ton/core";
+import { keyPairFromSeed, sign } from "@ton/crypto";
+
 /**
  * Kanka, bu servis bizim "Hibrit" stratejimizin beyni.
- * Şimdilik localStorage üzerinden çalışıyor ama Supabase/Firebase 
- * bağladığımızda sadece bu dosyayı değiştirmemiz yetecek.
+ * Şimdilik localStorage + frontend signing ile çalışıyor.
+ * İleride gerçek bir backend'e (Node.js sunucu) taşınacak.
  */
 
 export interface UserData {
@@ -17,8 +19,23 @@ export interface UserData {
     completedLevels?: number[];
 }
 
+// Kanka, bu seed'den keypair üretiyoruz. Aynı seed = aynı key pair.
+// Deploy sırasında bu public key kontrata verildi.
+const BACKEND_SEED = Buffer.alloc(32, "taste-backend-seed-placeholder");
+
 class BackendService {
     private isDevelopment = true;
+    private keyPairPromise: ReturnType<typeof keyPairFromSeed> | null = null;
+
+    /**
+     * Key pair'i lazy-load et (bir kere üret, sonra cache'le)
+     */
+    private async getKeyPair() {
+        if (!this.keyPairPromise) {
+            this.keyPairPromise = keyPairFromSeed(BACKEND_SEED);
+        }
+        return this.keyPairPromise;
+    }
 
     async getUserData(wallet: string): Promise<UserData> {
         const saved = localStorage.getItem(`taste_user_${wallet}`);
@@ -41,7 +58,6 @@ class BackendService {
     async saveUserData(data: UserData): Promise<void> {
         localStorage.setItem(`taste_user_${data.wallet}`, JSON.stringify(data));
 
-        // Kanka buraya gerçek bir fetch('api/save') gelecek
         if (!this.isDevelopment) {
             console.log('Veritabanına kaydediliyor...', data);
         }
@@ -51,16 +67,32 @@ class BackendService {
         console.log(`Referans takibi: ${code} kodunu kullanan yeni cüzdan: ${newUserWallet}`);
     }
 
-    async getWithdrawalSignature(wallet: string, amount: number): Promise<string> {
-        console.log(`Çekim onaylanıyor: ${wallet} için ${amount} TASTE`);
+    /**
+     * Gerçek Ed25519 imzası üretir.
+     * Kontrat şunu doğrular: hash(sender_address + amount)
+     * Bu imza ile kontrat TASTE tokenlerini kullanıcıya gönderir.
+     */
+    async getWithdrawalSignature(wallet: string, amount: number): Promise<Buffer> {
+        console.log(`[Backend] Çekim imzalanıyor: ${wallet} için ${amount} TASTE`);
 
-        // Kanka, gerçek backend'de burada veritabanı kontrolü yapılır:
-        // 1. Kullanıcının bakiyesi gerçekten >= amount mu?
-        // 2. Daha önce bu çekim yapıldı mı?
+        const keyPair = await this.getKeyPair();
 
-        // Mock Signature (Gerçekte private key ile imzalanır)
-        // Tact 'Withdraw' mesajı için hash(sender + amount) bekler.
-        return "gercek_imza_buraya_gelecek_backend_tarafindan";
+        // Kontratın doğrulama hash'ini oluştur: hash(sender_address + amount)
+        const senderAddress = Address.parse(wallet);
+        const amountNano = toNano(amount.toString());
+
+        const hashCell = beginCell()
+            .storeAddress(senderAddress)
+            .storeCoins(amountNano)
+            .endCell();
+
+        const hash = hashCell.hash();
+
+        // Ed25519 ile imzala
+        const signature = sign(hash, keyPair.secretKey);
+
+        console.log(`[Backend] ✅ İmza üretildi (${signature.length} bytes)`);
+        return signature;
     }
 }
 

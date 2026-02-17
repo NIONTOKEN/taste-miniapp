@@ -3,14 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { useUser } from '../context/UserContext'
 import { useTonConnectUI } from '@tonconnect/ui-react'
-import { Zap } from 'lucide-react'
-import { AdsManager } from '../services/AdsManager'
 
 const REWARD_AMOUNT = 0.005
 
 export function DailyRewards() {
     const { t } = useTranslation()
-    const { streak, balance, handleWithdraw: contextWithdraw, updateStreak, addBalance, lastClaim, doubleReward } = useUser()
+    const { streak, balance, handleWithdraw: contextWithdraw, updateStreak, addBalance, lastClaim } = useUser()
     const [canClaim, setCanClaim] = useState(false)
     const [tonConnectUI] = useTonConnectUI()
     const [isWithdrawing, setIsWithdrawing] = useState(false)
@@ -39,18 +37,6 @@ export function DailyRewards() {
         updateStreak(newStreak)
         addBalance(REWARD_AMOUNT)
         setCanClaim(false)
-    }
-
-    const handleDoubleClaim = async () => {
-        if (!canClaim) return
-        const success = await AdsManager.showRewardedVideo()
-        if (success) {
-            const newStreak = (streak % 7) + 1
-            updateStreak(newStreak)
-            addBalance(REWARD_AMOUNT) // First half
-            doubleReward(REWARD_AMOUNT) // Second half
-            setCanClaim(false)
-        }
     }
 
     const handleWithdraw = async () => {
@@ -96,69 +82,47 @@ export function DailyRewards() {
                 })}
             </div>
 
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                <motion.button
-                    whileHover={canClaim ? { scale: 1.02 } : {}}
-                    whileTap={canClaim ? { scale: 0.98 } : {}}
-                    className="glass-button"
-                    style={{
-                        flex: 1,
-                        opacity: canClaim ? 1 : 0.7,
-                        cursor: canClaim ? 'pointer' : 'not-allowed',
-                        background: canClaim ? '#1e293b' : '#0f172a',
-                        color: canClaim ? 'var(--text-main)' : 'var(--text-muted)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                    }}
-                    onClick={handleClaim}
-                    disabled={!canClaim}
-                >
-                    {canClaim ? t('rewards.claim') : `✅ ${t('rewards.claimed')}`}
-                </motion.button>
-
-                {canClaim && (
-                    <motion.button
-                        whileHover={{ scale: 1.02, boxShadow: '0 0 15px var(--primary-glow)' }}
-                        whileTap={{ scale: 0.98 }}
-                        className="glass-button"
-                        style={{
-                            flex: 1.2,
-                            background: 'var(--gradient-gold)',
-                            color: '#000',
-                            border: 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '6px',
-                            fontWeight: 'bold'
-                        }}
-                        onClick={handleDoubleClaim}
-                    >
-                        <Zap size={16} fill="black" /> 2X REWARD
-                    </motion.button>
-                )}
-            </div>
-
-            {/* Withdraw Button */}
             <motion.button
-                whileHover={balance >= 5 ? { scale: 1.02, boxShadow: '0 0 15px rgba(0,255,0,0.2)' } : {}}
-                whileTap={balance >= 5 ? { scale: 0.95 } : {}}
+                whileHover={canClaim ? { scale: 1.02 } : {}}
+                whileTap={canClaim ? { scale: 0.98 } : {}}
                 className="glass-button"
                 style={{
                     width: '100%',
-                    opacity: balance >= 5 ? 1 : 0.5,
-                    cursor: balance >= 5 ? 'pointer' : 'not-allowed',
-                    background: balance >= 5 ? 'var(--secondary)' : '#1e293b',
-                    color: balance >= 5 ? '#fff' : 'var(--text-muted)',
+                    marginBottom: '10px',
+                    opacity: canClaim ? 1 : 0.7,
+                    cursor: canClaim ? 'pointer' : 'not-allowed',
+                    background: canClaim ? 'var(--gradient-gold)' : '#0f172a',
+                    color: canClaim ? '#000' : 'var(--text-muted)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    fontWeight: 'bold'
+                }}
+                onClick={handleClaim}
+                disabled={!canClaim}
+            >
+                {canClaim ? t('rewards.claim') : `✅ ${t('rewards.claimed')}`}
+            </motion.button>
+
+            {/* Withdraw Button */}
+            <motion.button
+                whileHover={balance >= 1 ? { scale: 1.02, boxShadow: '0 0 15px rgba(0,255,0,0.2)' } : {}}
+                whileTap={balance >= 1 ? { scale: 0.95 } : {}}
+                className="glass-button"
+                style={{
+                    width: '100%',
+                    opacity: balance >= 1 ? 1 : 0.5,
+                    cursor: balance >= 1 ? 'pointer' : 'not-allowed',
+                    background: balance >= 1 ? 'var(--secondary)' : '#1e293b',
+                    color: balance >= 1 ? '#fff' : 'var(--text-muted)',
                     border: '1px solid rgba(255,255,255,0.1)',
                     fontSize: '14px'
                 }}
                 onClick={handleWithdraw}
-                disabled={balance < 5 || isWithdrawing}
+                disabled={balance < 1 || isWithdrawing}
             >
                 {isWithdrawing ? '...' : t('rewards.withdraw')}
             </motion.button>
 
-            {balance < 5 && (
+            {balance < 1 && (
                 <div style={{ fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center', marginTop: '5px' }}>
                     {t('rewards.insufficient_balance')}
                 </div>
