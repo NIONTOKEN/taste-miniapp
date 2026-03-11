@@ -222,8 +222,14 @@ function TermsContent() {
                 Aşağıdaki amaçlarla kullanım kesinlikle yasaktır:<br /><br />
                 • Para aklama veya yasadışı finansal işlemler,<br />
                 • Sistemi manipüle etmeye yönelik her türlü girişim,<br />
-                • Sahte bilgi yayma veya dolandırıcılık,<br />
+                • Yasadışı, telif hakkı ihlali içeren veya rahatsız edici içerik (fotoğraf/yazı) paylaşımı,<br />
                 • Başkalarını yanıltma amacıyla bu uygulamanın içeriklerinin kötüye kullanımı.
+            </LegalSection>
+
+            <LegalSection title="🗣️ Topluluk ve İçerik Sorumluluğu (UGC)" subtitle="User Generated Content">
+                Yemek Akışı (Community) bölümünde paylaşılan tüm fotoğraflar, tarifler, yorumlar ve mekan bilgileri doğrudan kullanıcıların kendi beyanıdır.<br /><br />
+                • <strong style={{ color: '#ef4444' }}>Alerjen ve Kalori Verisi:</strong> Paylaşılan alerjen (Gluten, Süt vb.) ve öğün bilgileri tamamen bilgilendirme amaçlıdır. Tıbbi veya kesin doğruluğu garanti edilmez. Yanlış beyandan doğacak sağlık ve hukuki sorunlardan TASTE sorumlu tutulamaz.<br />
+                • <strong style={{ color: 'rgba(255,255,255,0.8)' }}>Telif ve Şikayet:</strong> Kullanıcıların yüklediği görsellerin yasal sorumluluğu kendilerine aittir. TASTE ekibi, uygunsuz gördüğü içerikleri önceden haber vermeksizin silme hakkını saklı tutar.
             </LegalSection>
 
             <LegalSection title="⚙️ Değişiklik Hakkı" subtitle="Right to Modify">
@@ -244,11 +250,12 @@ function PrivacyContent() {
 
             <LegalSection title="📊 Toplanan Veriler" subtitle="Data We Collect">
                 Bu uygulama, Telegram Mini App altyapısı üzerinde çalışmaktadır ve aşağıdaki verilere erişebilir:<br /><br />
-                • <strong style={{ color: 'rgba(255,255,255,0.8)' }}>Telegram Kullanıcı Bilgileri:</strong> Telegram'ın sağladığı kullanıcı kimliği ve dil tercihi (Telegram Mini App standartları kapsamında).<br />
+                • <strong style={{ color: 'rgba(255,255,255,0.8)' }}>Telegram Kullanıcı Bilgileri:</strong> Topluluk paylaşımlarınızda yazar profili oluşturmak için Telegram'ın sağladığı kullanıcı kimliği ve ilk adınız (veritabanına kaydedilir).<br />
+                • <strong style={{ color: 'rgba(255,255,255,0.8)' }}>Topluluk Verileri:</strong> Yemek Akışı'nda kendi isteğinizle paylaştığınız fotoğraflar, metinler, tarifler ve diğer etkileşim verileri (Supabase veritabanımızda barındırılır).<br />
                 • <strong style={{ color: 'rgba(255,255,255,0.8)' }}>Cüzdan Adresi:</strong> TON cüzdanınızı bağladığınızda — yalnızca işlem ve gösterim amacıyla.<br />
                 • <strong style={{ color: 'rgba(255,255,255,0.8)' }}>Yerel Tercihler:</strong> Dil seçiminiz ve sorumluluk reddi onayı — yalnızca cihazınızda (localStorage).
                 <HighlightBox color="#22c55e">
-                    <strong style={{ color: '#86efac' }}>Gizlilik Taahhüdü:</strong> Kişisel verileriniz üçüncü taraflarla satılmaz, paylaşılmaz veya ticari amaçlarla kullanılmaz.
+                    <strong style={{ color: '#86efac' }}>Gizlilik Taahhüdü:</strong> Kişisel verileriniz ve iletişim bilgileriniz asla reklam şirketlerine satılmaz, pazarlama amacıyla paylaşılmaz.
                 </HighlightBox>
             </LegalSection>
 
