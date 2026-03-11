@@ -7,7 +7,7 @@ const COMPLETED = [
     { emoji: '🔒', title: 'Token & LP Kilidi', desc: 'Toplam arzın %88.4\'ü JVault\'ta 3 ayrı kilidle kilitlendi. Ek olarak STON.fi pTON-TASTE LP tokenlerinin %81.6\'sı tinu-locker.ton ile kilitlendi. Her iki kilit blockchain\'de herkese açık doğrulanabilir.' },
     { emoji: '🛡️', title: 'Güvenlik Taraması', desc: 'Akıllı sözleşme güvenlik denetiminden geçirildi.' },
     { emoji: '📱', title: 'Telegram Mini App', desc: 'Telegram üzerinde çalışan tam özellikli mini uygulama yayına girdi.' },
-    { emoji: '🎁', title: 'Airdrop & Ödül Dağıtımı', desc: '408 cüzdana TASTE airdrop gerçekleştirildi ve her gün büyüyor. Çarkıfelek ödül sistemi aktif.' },
+    { emoji: '🎁', title: 'Airdrop & Ödül Dağıtımı', desc: '443 cüzdana TASTE airdrop gerçekleştirildi ve her gün büyüyor. Çarkıfelek ödül sistemi aktif.' },
     { emoji: '📄', title: 'Whitepaper & Litepaper', desc: 'Projeyi anlatan kapsamlı teknik doküman ve lite versiyon yayınlandı.' },
     { emoji: '🌐', title: 'Sosyal Ağ Varlığı', desc: 'Telegram kanalı (@taste2025) ve Topluluk Grubu, WhatsApp kanalı, Twitter/X (@taste_token), Instagram (@taste_ton_taste), TikTok (@taste_ton), Facebook ve resmi website (tastetoken.net) kuruldu. Tüm platformlarda aktif.' },
     { emoji: '🐾', title: 'Sokak Hayvanları Bağış Platformu', desc: 'TON ve TASTE ile hayvan barınaklarına bağış yapılabilen platform eklendi.' },
@@ -63,7 +63,7 @@ export function Roadmap() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                     <div style={{ height: 1, flex: 1, background: 'rgba(34,197,94,0.2)' }} />
                     <div style={{ fontSize: '11px', fontWeight: 800, color: '#22c55e', textTransform: 'uppercase', letterSpacing: '2px', flexShrink: 0 }}>
-                        ✅ Q1 2026 — Tamamlandı
+                        ✅ Q1 2026 — Tamamlanan Hedefler
                     </div>
                     <div style={{ height: 1, flex: 1, background: 'rgba(34,197,94,0.2)' }} />
                 </div>
