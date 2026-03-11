@@ -9,14 +9,109 @@ export function Whitepaper() {
         <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
             <h3 style={{ marginBottom: '20px', textAlign: 'center' }}>📄 {t('whitepaper.title')}</h3>
 
-            {/* Branding Image */}
-            <div style={{ marginBottom: '25px', borderRadius: '15px', overflow: 'hidden', border: '1px solid rgba(255,193,7,0.2)' }}>
-                <img
-                    src="/info_branding.jpg"
-                    alt="Taste Branding"
-                    style={{ width: '100%', height: 'auto', display: 'block' }}
-                />
-            </div>
+            {/* TASTE Özet Kart */}
+            <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{
+                    marginBottom: '25px',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
+                    background: 'linear-gradient(145deg, rgba(15,23,42,0.98), rgba(30,41,59,0.9))',
+                    border: '1px solid rgba(245,159,11,0.25)',
+                    padding: '24px 20px',
+                    position: 'relative',
+                }}
+            >
+                {/* Arkaplan parıltısı */}
+                <div style={{
+                    position: 'absolute', top: '-30%', right: '-10%',
+                    width: '200px', height: '200px', borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(245,159,11,0.08), transparent 70%)',
+                    pointerEvents: 'none',
+                }} />
+                <div style={{
+                    position: 'absolute', bottom: '-30%', left: '-10%',
+                    width: '180px', height: '180px', borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(129,140,248,0.06), transparent 70%)',
+                    pointerEvents: 'none',
+                }} />
+
+                {/* Üst rozet */}
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+                    <div style={{
+                        background: 'linear-gradient(135deg, rgba(245,159,11,0.15), rgba(245,159,11,0.05))',
+                        border: '1px solid rgba(245,159,11,0.3)',
+                        borderRadius: '30px',
+                        padding: '5px 16px',
+                        fontSize: '10px',
+                        fontWeight: 800,
+                        color: '#f59e0b',
+                        letterSpacing: '2px',
+                        textTransform: 'uppercase',
+                    }}>
+                        💎 TON Blockchain Üzerinde
+                    </div>
+                </div>
+
+                {/* Başlık */}
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                    <div style={{ fontSize: '28px', fontWeight: 900, color: '#f59e0b', letterSpacing: '-0.5px', lineHeight: 1.1, marginBottom: '8px' }}>
+                        TASTE Token
+                    </div>
+                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, margin: 0, maxWidth: '280px', marginInline: 'auto' }}>
+                        Gastronomi ve eğitim odaklı,  gerçek dünya kullanımı hedefleyen <strong style={{ color: 'rgba(255,255,255,0.8)' }}>utility token</strong>
+                    </p>
+                </div>
+
+                {/* 4 ana özellik */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+                    {[
+                        { icon: '🔒', label: 'Sabit Arz', value: '25,000,000', sub: 'TASTE — Hiç mint yok', color: '#22c55e' },
+                        { icon: '⛓️', label: 'Blockchain', value: 'TON', sub: 'The Open Network', color: '#0098EA' },
+                        { icon: '🔐', label: 'Kilitli', value: '%88.4', sub: 'JVault güvenceli', color: '#f59e0b' },
+                        { icon: '🏛️', label: 'Yönetim', value: 'DAO', sub: 'Topluluk kararı', color: '#818cf8' },
+                    ].map((item, i) => (
+                        <div key={i} style={{
+                            background: `${item.color}09`,
+                            border: `1px solid ${item.color}22`,
+                            borderRadius: '14px',
+                            padding: '12px',
+                            position: 'relative',
+                        }}>
+                            <div style={{ fontSize: '18px', marginBottom: '4px' }}>{item.icon}</div>
+                            <div style={{ fontSize: '10px', color: `${item.color}90`, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>{item.label}</div>
+                            <div style={{ fontSize: '16px', fontWeight: 900, color: item.color, lineHeight: 1.1 }}>{item.value}</div>
+                            <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{item.sub}</div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Kullanım alanları */}
+                <div style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    borderRadius: '12px',
+                    padding: '12px 14px',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                }}>
+                    <div style={{ fontSize: '10px', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '10px' }}>
+                        🎯 Hedef Kullanım Alanları
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {['🍽️ Restoran', '🏨 Otel', '☕ Kafe', '🎓 Eğitim', '🎟️ İndirim Kuponu', '🤝 Sadakat Ödülü'].map((tag, i) => (
+                            <span key={i} style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                borderRadius: '20px',
+                                padding: '4px 10px',
+                                fontSize: '11px',
+                                color: 'rgba(255,255,255,0.6)',
+                            }}>{tag}</span>
+                        ))}
+                    </div>
+                </div>
+            </motion.div>
 
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
