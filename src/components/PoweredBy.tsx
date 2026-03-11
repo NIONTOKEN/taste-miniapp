@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import React from 'react'
 
 // ─── SVG Logo Components ───────────────────────────────────────────────────
 const TelegramLogo = () => (
@@ -168,6 +169,25 @@ const TonConnectLogo = () => (
     </svg>
 )
 
+const TonScanLogo = () => (
+    <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <rect width="100" height="100" rx="20" fill="#0f1f3d" />
+        <circle cx="44" cy="44" r="20" fill="none" stroke="#38bdf8" strokeWidth="7" />
+        <line x1="58" y1="58" x2="75" y2="75" stroke="#38bdf8" strokeWidth="7" strokeLinecap="round" />
+        <circle cx="44" cy="44" r="10" fill="#38bdf820" />
+    </svg>
+)
+
+const LockerLogo = () => (
+    <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <rect width="100" height="100" rx="20" fill="#1e1b4b" />
+        <rect x="26" y="46" width="48" height="36" rx="7" fill="#6366f1" />
+        <path d="M34 46V34C34 22 66 22 66 34V46" stroke="#6366f1" strokeWidth="7" fill="none" strokeLinecap="round" />
+        <rect x="44" y="56" width="12" height="10" rx="3" fill="#1e1b4b" />
+        <circle cx="50" cy="58" r="4" fill="#a5b4fc" />
+    </svg>
+)
+
 // ─── Tool Definitions ──────────────────────────────────────────────────────
 interface Tool {
     name: string
@@ -198,7 +218,9 @@ const tools: Tool[] = [
     { name: 'TON Network', color: '#0098EA', category: 'Blockchain', url: 'https://ton.org', Logo: TonLogo },
     { name: 'TonConnect', color: '#0098EA', category: 'Blockchain', url: 'https://tonconnect.io', Logo: TonConnectLogo },
     { name: 'STON.fi', color: '#00c896', category: 'Blockchain', url: 'https://ston.fi', Logo: StonFiLogo },
-    { name: 'JVault', color: '#22c55e', category: 'Blockchain', url: 'https://jvault.xyz', Logo: JVaultLogo },
+    { name: 'JVault', color: '#22c55e', category: 'Blockchain', url: 'https://jvault.xyz', Logo: JVaultLogo, badge: 'Token Kilidi' },
+    { name: 'TonScan', color: '#38bdf8', category: 'Blockchain', url: 'https://tonscan.org', Logo: TonScanLogo, badge: 'Explorer' },
+    { name: 'tinu-locker.ton', color: '#6366f1', category: 'Blockchain', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', Logo: LockerLogo, badge: 'LP Kilidi' },
 
     // 🏗️ Infrastructure
     { name: 'Netlify', color: '#00AD9F', category: 'Infra', url: 'https://netlify.com', Logo: NetlifyLogo },
