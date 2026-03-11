@@ -81,15 +81,15 @@ class ApiService {
                 {
                     timeout: 8000,
                     retries: 2,
-                    fallbackValue: { rates: { TRY: 34.5 } }
+                    fallbackValue: { rates: { TRY: 43.87 } }
                 }
             );
 
-            const rate = data?.rates?.TRY || 34.5;
+            const rate = data?.rates?.TRY || 43.87;
             return { rate, usdToTry: rate };
         } catch (error) {
             console.warn('Exchange rate fetch failed, using fallback:', error);
-            return { rate: 34.5, usdToTry: 34.5 };
+            return { rate: 43.87, usdToTry: 43.87 };
         }
     }
 
@@ -118,51 +118,64 @@ class ApiService {
     }
 
     /**
+     * Get live TON price in USD from TON API
+     */
+    async getTonPrice(): Promise<number> {
+        try {
+            const data = await this.fetchWithRetry(
+                'https://tonapi.io/v2/rates?tokens=ton&currencies=usd',
+                {
+                    timeout: 6000,
+                    retries: 1,
+                    fallbackValue: null
+                }
+            );
+            const price = data?.rates?.TON?.prices?.USD;
+            if (price && price > 0) {
+                console.log('[TON Price] ✅ Live:', price);
+                return price;
+            }
+        } catch {
+            console.warn('[TON Price] Failed, using fallback');
+        }
+        return 3.5; // fallback
+    }
+
+    /**
      * Get TASTE token price from GeckoTerminal API
-     * Uses both DeDust and STON.fi pools with multiple CORS proxies for reliability
+     * Uses direct call — CORS proxy only as last resort
      */
     async getTastePrice(): Promise<{ price: number; change: number }> {
-        // Pool addresses - STON.fi v2 is the main pool
-        const STONFI_POOL = 'EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS';
+        const STONFI_POOL = import.meta.env.VITE_POOL_ADDRESS || 'EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS';
+        const API_URL = `https://api.geckoterminal.com/api/v2/networks/ton/pools/${STONFI_POOL}`;
 
-        // Multiple CORS proxies for reliability
-        const CORS_PROXIES = [
-            '', // Try direct first
-            'https://corsproxy.io/?',
-            'https://api.allorigins.win/raw?url=',
-            'https://cors-anywhere.herokuapp.com/'
+        // Try direct first, then a single reliable CORS proxy
+        const SOURCES = [
+            { url: API_URL, name: 'direct' },
+            { url: `https://corsproxy.io/?${encodeURIComponent(API_URL)}`, name: 'corsproxy.io' },
         ];
 
-        const pools = [STONFI_POOL];
+        for (const source of SOURCES) {
+            try {
+                console.log(`[Price] Trying ${source.name}...`);
+                const data = await this.fetchWithRetry(source.url, {
+                    timeout: 6000,
+                    retries: 0,
+                    fallbackValue: null
+                });
 
-        for (const poolAddress of pools) {
-            const API_URL = `https://api.geckoterminal.com/api/v2/networks/ton/pools/${poolAddress}`;
+                if (data?.data?.attributes) {
+                    const attrs = data.data.attributes;
+                    const price = parseFloat(attrs.base_token_price_usd || '0');
+                    const change = parseFloat(attrs.price_change_percentage?.h24 || '0');
 
-            for (const proxy of CORS_PROXIES) {
-                try {
-                    const url = proxy ? `${proxy}${encodeURIComponent(API_URL)}` : API_URL;
-                    const proxyName = proxy ? proxy.split('/')[2] || 'proxy' : 'direct';
-                    console.log(`[Price] Trying ${proxyName} for pool ${poolAddress.slice(0, 10)}...`);
-
-                    const data = await this.fetchWithRetry(url, {
-                        timeout: 6000,
-                        retries: 0,
-                        fallbackValue: null
-                    });
-
-                    if (data?.data?.attributes) {
-                        const attrs = data.data.attributes;
-                        const price = parseFloat(attrs.base_token_price_usd || '0');
-                        const change = parseFloat(attrs.price_change_percentage?.h24 || '0');
-
-                        if (price > 0) {
-                            console.log(`[Price] ✅ Success via ${proxyName}:`, { price: price.toFixed(6), change: change.toFixed(2) });
-                            return { price, change };
-                        }
+                    if (price > 0) {
+                        console.log(`[Price] ✅ Success via ${source.name}:`, { price: price.toFixed(6), change: change.toFixed(2) });
+                        return { price, change };
                     }
-                } catch (error) {
-                    // Silent fail, try next
                 }
+            } catch {
+                // Silent fail, try next source
             }
         }
 

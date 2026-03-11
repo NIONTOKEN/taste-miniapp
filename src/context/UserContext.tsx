@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Address, beginCell, toNano } from '@ton/core';
 import { backend, UserData } from '../services/backend';
 
 interface UserContextType {
@@ -14,7 +13,6 @@ interface UserContextType {
     updateStreak: (newStreak: number) => void;
     addXP: (amount: number) => void;
     useEnergy: (amount: number) => boolean;
-    handleWithdraw: (tonConnectUI: any, t: any) => Promise<void>;
     loadUser: (wallet: string) => Promise<void>;
     tasksCompleted: string[];
     setTasksCompleted: (tasks: string[]) => void;
@@ -25,8 +23,6 @@ interface UserContextType {
     refillEnergy: () => void;
     doubleReward: (originalAmount: number) => void;
 }
-
-const TASTE_CONTRACT_ADDRESS = 'UQDxmQflBkBRBDVWCpBiEUueRM2qNDo6TmMm23Yoc2pAxMoX';
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
@@ -65,12 +61,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         setWallet(walletAddress);
         const data = await backend.getUserData(walletAddress);
 
-        // Kanka, eğer cüzdanda hiç veri yoksa (yeni bağlandıysa),
-        // mevcut guest verilerini koru ve cüzdana aktar.
         if (data.xp === 0 && xp > 0) {
             console.log('Misafir verileri cüzdana aktarılıyor...');
-            // Hiçbir şey yapma, mevcut state (balance, xp vs.) zaten guest verisiyle dolu.
-            // useEffect otomatik olarak bu verileri yeni cüzdan adresiyle kaydedecek.
             return;
         }
 
@@ -144,7 +136,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const completeLevel = (levelId: number): boolean => {
         if (!completedLevels.includes(levelId)) {
             let reward = 0.05;
-            if (levelId === 50) reward += 2.5; // Milestone bonus
+            if (levelId === 50) reward += 2.5;
 
             addBalance(reward);
             setCompletedLevels(prev => [...prev, levelId]);
@@ -157,58 +149,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         return false;
     };
 
-    const handleWithdraw = async (tonConnectUI: any, t: any) => {
-        if (balance < 1) return;
-
-        // Cap withdrawal at 10
-        const withdrawAmount = Math.min(balance, 10);
-
-        if (!tonConnectUI.account?.address) {
-            alert(t('app.connect_wallet_first') || 'Please connect your wallet first');
-            return;
-        }
-
-        try {
-            const userAddress = tonConnectUI.account.address;
-            const amountNano = toNano(withdrawAmount.toString());
-
-            // Backend'den gerçek Ed25519 imzası al
-            const signature = await backend.getWithdrawalSignature(userAddress, withdrawAmount);
-
-            // Deployed kontratın Withdraw mesaj formatı:
-            // opcode(uint32) + amount(coins) + signature(64 bytes buffer)
-            const payload = beginCell()
-                .storeUint(1348123249, 32) // op::withdraw
-                .storeCoins(amountNano)
-                .storeBuffer(signature)
-                .endCell();
-
-            const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 600, // 10 dakika geçerli olsun
-                messages: [
-                    {
-                        address: TASTE_CONTRACT_ADDRESS,
-                        amount: toNano('0.05').toString(), // Gas fee (biraz düşürdük, cüzdanda az var ise yetmesi için)
-                        payload: payload.toBoc().toString('base64')
-                    }
-                ]
-            };
-
-            await tonConnectUI.sendTransaction(transaction);
-            resetBalance();
-            alert(t('rewards.withdraw_success'));
-        } catch (e) {
-            console.error('Withdrawal failed', e);
-            alert('Transaction failed or cancelled');
-        }
-    };
-
     return (
         <UserContext.Provider value={{
             balance, streak, xp, rank, energy, referrals,
             addBalance, resetBalance, updateStreak,
             addXP, useEnergy,
-            handleWithdraw, loadUser,
+            loadUser,
             tasksCompleted, setTasksCompleted,
             unlockedLevels, completedLevels, completeLevel,
             lastClaim,

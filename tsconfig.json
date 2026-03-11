@@ -31,6 +31,19 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
-  ]
+    "dist",
+    "scripts/check_raw_info.ts",
+    "scripts/check_wallet_txs.ts",
+    "scripts/check_balance4.ts",
+    "scripts/check_history.ts",
+    "scripts/deep_analysis.ts"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "target": "ES2020",
+      "esModuleInterop": true,
+      "moduleResolution": "node"
+    }
+  }
 }

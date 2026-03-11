@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASTE Token — Litepaper</title>
+    <meta name="description" content="TASTE Token resmi litepaper'ı. Vizyon, tokenomics, ekip ve yol haritası.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0c14;
+            --card: #11141f;
+            --card2: #161927;
+            --border: rgba(255, 255, 255, 0.07);
+            --gold: #f59e0b;
+            --gold2: #fbbf24;
+            --gold-glow: rgba(245, 158, 11, 0.15);
+            --text: #f1f5f9;
+            --muted: #64748b;
+            --green: #22c55e;
+            --purple: #818cf8;
+            --pink: #ec4899;
+            --orange: #f97316;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.18) 0%, transparent 65%),
+                linear-gradient(180deg, #0e1222 0%, var(--bg) 100%);
+            padding: 70px 20px 50px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .logo-wrap {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.25), 0 0 80px rgba(245, 158, 11, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: var(--gold-glow);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 5px 16px;
+            border-radius: 50px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 7vw, 3.2rem);
+            font-weight: 900;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff 30%, var(--gold2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 15px;
+            max-width: 500px;
+            margin: 0 auto 24px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-gold {
+            background: var(--gold-glow);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--gold);
+        }
+
+        .badge-green {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: var(--green);
+        }
+
+        .badge-purple {
+            background: rgba(129, 140, 248, 0.1);
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            color: var(--purple);
+        }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        /* ── SECTIONS ── */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .sec-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .sec-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 24px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.75;
+        }
+
+        .card-highlight {
+            border-left: 3px solid var(--gold);
+        }
+
+        /* ── STAT ROW ── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--gold2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── TOKENOMICS ── */
+        .trow {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .trow:last-child {
+            border-bottom: none;
+        }
+
+        .tdot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .tname {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .tamt {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .tpct {
+            font-size: 12px;
+            font-weight: 800;
+            width: 55px;
+            text-align: right;
+        }
+
+        .tbar-wrap {
+            width: 90px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .tbar {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        /* ── FEATURES ── */
+        .feat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .feat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .feat-card:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .feat-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .feat-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .feat-desc {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ── ROADMAP ── */
+        .rm-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .rm-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--gold), transparent);
+        }
+
+        .rm-item:last-child::before {
+            display: none;
+        }
+
+        .rm-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gold-glow);
+            border: 2px solid rgba(245, 158, 11, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .rm-dot.done {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        .rm-dot.active {
+            background: var(--gold-glow);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .rm-content {
+            flex: 1;
+        }
+
+        .rm-q {
+            font-size: 11px;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .rm-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 2px 0;
+        }
+
+        .rm-desc {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ── TEAM ── */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        .team-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .team-card:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .team-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-glow), rgba(129, 140, 248, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .team-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .team-role {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        /* ── WHY BUY ── */
+        .why-list {
+            list-style: none;
+        }
+
+        .why-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .why-list li:last-child {
+            border-bottom: none;
+        }
+
+        .why-list .check {
+            color: var(--green);
+            font-weight: 900;
+            font-size: 16px;
+            margin-top: 1px;
+        }
+
+        /* ── CTA ── */
+        .cta {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(129, 140, 248, 0.06));
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 20px;
+            padding: 36px 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+        }
+
+        .cta h2 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .cta p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #d97706);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 40px 0;
+        }
+
+        /* ── ADDRESS BOX ── */
+        .addr-box {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 11px;
+            color: var(--gold);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+            padding: 12px 16px;
+            border-radius: 10px;
+            word-break: break-all;
+            line-height: 2.2;
+            margin-top: 14px;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center;
+            border-top: 1px solid var(--border);
+            padding: 30px 20px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 2;
+        }
+
+        footer strong {
+            color: var(--gold);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 500px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .tbar-wrap {
+                display: none;
+            }
+
+            .tpct {
+                width: 42px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+    <div class="hero">
+        <div class="logo-wrap">
+            <img src="/logo.jpg" alt="TASTE" onerror="this.parentElement.innerHTML='🍳'">
+        </div>
+        <div class="hero-tag">📄 Litepaper v1.0 — Mart 2026</div>
+        <h1>TASTE Token</h1>
+        <p>TON Blockchain üzerinde kurulmuş, gastronomi ve eğitim odaklı topluluk token'ı</p>
+        <div class="badges">
+            <span class="badge badge-gold">🏗️ TON Blockchain</span>
+            <span class="badge badge-green">🔒 %88.4 Kilitli</span>
+            <span class="badge badge-purple">🌐 Telegram MiniApp</span>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- ─── ÖZET ─── -->
+        <div class="section">
+            <div class="sec-label">Kısa Özet</div>
+            <div class="sec-title">TASTE Nedir?</div>
+            <div class="card card-highlight">
+                <p>
+                    <strong style="color:#fff">TASTE</strong>, TON Blockchain üzerinde inşa edilmiş,
+                    gastronomi kültürünü ve yemek eğitimini merkezine alan bir <strong style="color:#fff">utility
+                        token</strong>'dır.
+                    Telegram MiniApp ekosistemiyle entegre çalışır; kullanıcılar oyun oynarken, görev tamamlarken
+                    ve topluluğu büyütürken TASTE kazanır ve yönetir.
+                </p>
+            </div>
+            <div class="card">
+                <p>
+                    🌍 Hedefimiz TASTE'i yalnızca bir oyun ödül tokeni olmaktan çıkarıp;
+                    restoranlar, oteller ve yeme-içme platformlarında <strong style="color:#fff">gerçek kullanım
+                        alanı</strong> olan
+                    bir ekosistem tokeni hâline getirmektir.
+                </p>
+            </div>
+        </div>
+
+        <!-- ─── TEMEL VERİLER ─── -->
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-num">25M</div>
+                <div class="stat-label">Toplam Arz</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:#22c55e">88.4%</div>
+                <div class="stat-label">Kilitli</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">TON</div>
+                <div class="stat-label">Blockchain</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">TEP-74</div>
+                <div class="stat-label">Standart</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ─── VİZYON ─── -->
+        <div class="section">
+            <div class="sec-label">Vizyon & Misyon</div>
+            <div class="sec-title">Neden TASTE?</div>
+
+            <div class="feat-grid">
+                <div class="feat-card">
+                    <div class="feat-icon">🍳</div>
+                    <div class="feat-title">Gastronomi Odaklı</div>
+                    <div class="feat-desc">Yemek kültürünü blockchain ile buluşturan ilk Türk projesi</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">🎮</div>
+                    <div class="feat-title">Oyunlaştırma</div>
+                    <div class="feat-desc">MiniApp'te pişirme oyunu, günlük ödüller ve sosyal görevler</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">🔒</div>
+                    <div class="feat-title">Güvenli Yapı</div>
+                    <div class="feat-desc">%88.4 JVault kilitli, on-chain doğrulanabilir, Ed25519 imzalı</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">🌐</div>
+                    <div class="feat-title">Topluluk</div>
+                    <div class="feat-desc">Telegram, X, Instagram, TikTok ve WhatsApp'ta aktif topluluk</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">💱</div>
+                    <div class="feat-title">DEX Listeleme</div>
+                    <div class="feat-desc">STON.fi üzerinde aktif likidite havuzu — hemen swap yapılabilir</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">🏆</div>
+                    <div class="feat-title">Ödül Sistemi</div>
+                    <div class="feat-desc">Airdrop, günlük ödül, davet sistemi ve sıralama tablosu</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ─── TOKENOMİCS ─── -->
+        <div class="section">
+            <div class="sec-label">Token Dağılımı</div>
+            <div class="sec-title">Tokenomics</div>
+            <p style="font-size:13px;color:#64748b;margin-bottom:18px">
+                Toplam arz: <strong style="color:#f59e0b">25,000,000 TASTE</strong> — sabit, mint edilemez.
+            </p>
+
+            <div class="card">
+                <div class="trow">
+                    <div class="tdot" style="background:#22c55e;box-shadow:0 0 6px #22c55e"></div>
+                    <span class="tname">🔒 Kilitli Rezerv (JVault)</span>
+                    <span class="tamt">22,100,000</span>
+                    <div class="tbar-wrap">
+                        <div class="tbar" style="width:88.4%;background:#22c55e"></div>
+                    </div>
+                    <span class="tpct" style="color:#22c55e">88.4%</span>
+                </div>
+                <div class="trow">
+                    <div class="tdot" style="background:#818cf8;box-shadow:0 0 6px #818cf8"></div>
+                    <span class="tname">💧 Likidite Havuzu <small style="color:#64748b">(kademeli)</small></span>
+                    <span class="tamt">1,600,000</span>
+                    <div class="tbar-wrap">
+                        <div class="tbar" style="width:6.4%;background:#818cf8"></div>
+                    </div>
+                    <span class="tpct" style="color:#818cf8">6.4%</span>
+                </div>
+                <div class="trow">
+                    <div class="tdot" style="background:#facc15;box-shadow:0 0 6px #facc15"></div>
+                    <span class="tname">👥 Ekip Payı</span>
+                    <span class="tamt">500,000</span>
+                    <div class="tbar-wrap">
+                        <div class="tbar" style="width:2%;background:#facc15"></div>
+                    </div>
+                    <span class="tpct" style="color:#facc15">2%</span>
+                </div>
+                <div class="trow">
+                    <div class="tdot" style="background:#f59e0b;box-shadow:0 0 6px #f59e0b"></div>
+                    <span class="tname">👑 Kurucu / Owner</span>
+                    <span class="tamt">500,000</span>
+                    <div class="tbar-wrap">
+                        <div class="tbar" style="width:2%;background:#f59e0b"></div>
+                    </div>
+                    <span class="tpct" style="color:#f59e0b">2%</span>
+                </div>
+                <div class="trow">
+                    <div class="tdot" style="background:#f97316;box-shadow:0 0 6px #f97316"></div>
+                    <span class="tname">💼 Masraf / Borsa / Ödül</span>
+                    <span class="tamt">250,000</span>
+                    <div class="tbar-wrap">
+                        <div class="tbar" style="width:1%;background:#f97316"></div>
+                    </div>
+                    <span class="tpct" style="color:#f97316">1%</span>
+                </div>
+                <div class="trow">
+                    <div class="tdot" style="background:#ec4899;box-shadow:0 0 6px #ec4899"></div>
+                    <span class="tname">🎁 Airdrop <small style="color:#ec4899">● Dağıtılıyor</small></span>
+                    <span class="tamt">50,000</span>
+                    <div class="tbar-wrap">
+                        <div class="tbar" style="width:0.5%;min-width:3px;background:#ec4899"></div>
+                    </div>
+                    <span class="tpct" style="color:#ec4899">0.2%</span>
+                </div>
+            </div>
+
+            <div
+                style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:12px 16px;margin-top:8px;font-size:12px;color:#94a3b8">
+                💡 <strong style="color:#22c55e">Aktif Pool:</strong> Şu an STON.fi üzerinde <strong
+                    style="color:#fff">221,171 TASTE</strong> likidite havuzunda aktif.
+                Toplam 1,600,000 TASTE kademeli olarak havuza girecektir.
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ─── YOL HARİTASI ─── -->
+        <div class="section">
+            <div class="sec-label">Yol Haritası</div>
+            <div class="sec-title">2026 Planı</div>
+
+            <div class="rm-item">
+                <div class="rm-dot done">✅</div>
+                <div class="rm-content">
+                    <div class="rm-q">Ç1 2026 — Tamamlandı</div>
+                    <div class="rm-title">Lansman & Topluluk Kurulumu</div>
+                    <div class="rm-desc">Telegram MiniApp yayınlandı • STON.fi listeleme • Token kilit • Airdrop başladı
+                    </div>
+                </div>
+            </div>
+
+            <div class="rm-item">
+                <div class="rm-dot active">🔥</div>
+                <div class="rm-content">
+                    <div class="rm-q">Ç2 2026 — Devam Ediyor</div>
+                    <div class="rm-title">Topluluk Büyümesi & Likidite</div>
+                    <div class="rm-desc">Likidite artırımı • Yeni DEX listelemeleri • Tokenomics güncelleme • Sosyal
+                        büyüme</div>
+                </div>
+            </div>
+
+            <div class="rm-item">
+                <div class="rm-dot">🌍</div>
+                <div class="rm-content">
+                    <div class="rm-q">Ç3 2026 — Planlı</div>
+                    <div class="rm-title">Ortaklıklar & Gastronomi Ekosistemi</div>
+                    <div class="rm-desc">Restoran/otel ortaklıkları • CEX başvuruları • Gerçek kullanım entegrasyonu
+                    </div>
+                </div>
+            </div>
+
+            <div class="rm-item">
+                <div class="rm-dot">🚀</div>
+                <div class="rm-content">
+                    <div class="rm-q">Ç4 2026 — Planlı</div>
+                    <div class="rm-title">Global Büyüme & Mobil Uygulama</div>
+                    <div class="rm-desc">Mobil uygulama • Uluslararası topluluk • Merkezi borsa hedefleri</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ─── EKİP ─── -->
+        <div class="section">
+            <div class="sec-label">Ekip</div>
+            <div class="sec-title">Mutfak Topluluğu 👨‍🍳</div>
+            <p style="font-size:13px;color:#64748b;margin-bottom:20px">
+                TASTE, deneyimli ve tutkulu bir ekip tarafından yönetilmektedir.
+                Ekibimiz "Mutfak Topluluğu" adıy la bir araya gelmiş, gastronomi ve blockchain
+                tutkunlarından oluşmaktadır.
+            </p>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">👨‍🍳</div>
+                    <div class="team-name">Fatih Kaya</div>
+                    <div class="team-role">Kurucu & CEO<br>Finans, Proje Mimarisi & Blockchain Geliştirme</div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">🎨</div>
+                    <div class="team-name">~~AnGeL~~</div>
+                    <div class="team-role">Co-Founder & Topluluk Yöneticisi<br>Medya, Tanıtım & Sosyal Büyüme</div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">🌐</div>
+                    <div class="team-name">Mutfak Topluluğu</div>
+                    <div class="team-role">Topluluk Üyeleri<br>Telegram, X, Instagram, TikTok & WhatsApp Topluluğu</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ─── NEDEN TASTE? ─── -->
+        <div class="section">
+            <div class="sec-label">Yatırım Gerekçesi</div>
+            <div class="sec-title">Neden TASTE?</div>
+
+            <div class="card">
+                <ul class="why-list">
+                    <li>
+                        <span class="check">✅</span>
+                        <div><strong style="color:#fff">%88.4 kilitli</strong> — Toplam arzın 22,1 milyonu JVault
+                            üzerinde güvenle kilitli, fiyat manipülasyonuna karşı korumalı</div>
+                    </li>
+                    <li>
+                        <span class="check">✅</span>
+                        <div><strong style="color:#fff">Sabit arz</strong> — 25,000,000 TASTE, yeni mint asla mümkün
+                            değil; enflasyon riski sıfır</div>
+                    </li>
+                    <li>
+                        <span class="check">✅</span>
+                        <div><strong style="color:#fff">Aktif ekosistem</strong> — MiniApp, sosyal görevler, günlük
+                            ödüller ve liderlik tablosuyla canlı kullanıcı tabanı</div>
+                    </li>
+                    <li>
+                        <span class="check">✅</span>
+                        <div><strong style="color:#fff">Güvenlik denetimi</strong> — Ed25519 imzalı, replay attack
+                            korumalı, bağımsız güvenlik incelemesinden geçmiş</div>
+                    </li>
+                    <li>
+                        <span class="check">✅</span>
+                        <div><strong style="color:#fff">Gerçek kullanım hedefi</strong> — Gastronomi sektöründe ödeme,
+                            ödül ve erişim tokeni olma yolunda somut adımlar</div>
+                    </li>
+                    <li>
+                        <span class="check">✅</span>
+                        <div><strong style="color:#fff">Şeffaflık</strong> — Tüm cüzdan adresleri, kilit sözleşmeleri ve
+                            işlemler TON Explorer'da herkese açık</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ─── ADRESLER ─── -->
+        <div class="section">
+            <div class="sec-label">Şeffaflık</div>
+            <div class="sec-title">On-Chain Adresler</div>
+            <div class="addr-box">
+                📄 Token (Jetton): EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-<br>
+                👑 Owner Cüzdanı: UQBQiZVPYK_NZLZp_4orkmzNXYJpx28Y9CqRcpxo66kSoSCn<br>
+                🔒 Kilit 1 (JVault): EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co<br>
+                🔒 Kilit 2 (JVault): EQDKK...Yov2<br>
+                💧 STON.fi Pool: ston.fi üzerinden doğrulanabilir
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ─── CTA ─── -->
+        <div class="cta">
+            <h2>Mutfağa Katıl 🍽️</h2>
+            <p>Telegram MiniApp'te TASTE kazan, topluluğu büyüt,<br>ekosistemi şekillendir.</p>
+            <div class="cta-buttons">
+                <a href="https://t.me/taste_launch_bot/app" class="btn btn-gold" target="_blank">
+                    🚀 MiniApp'i Aç
+                </a>
+                <a href="https://t.me/btastechain" class="btn btn-ghost" target="_blank">
+                    📢 Topluluğa Katıl
+                </a>
+                <a href="https://app.ston.fi/swap?ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
+                    class="btn btn-ghost" target="_blank">
+                    💱 TASTE Satın Al
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer>
+        <strong>TASTE Token — Litepaper v1.0</strong><br>
+        Mart 2026 • TON Blockchain • Mutfak Topluluğu<br>
+        <span>🌐 tastetoken.net • @btastechain • @taste_token</span><br><br>
+        <span style="font-size:11px;color:#475569">
+            Bu belge yatırım tavsiyesi niteliği taşımaz. Kripto para yatırımları risk içerir.
+            Her zaman kendi araştırmanızı yapınız (DYOR).
+        </span>
+    </footer>
+
+</body>
+
+</html>

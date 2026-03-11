@@ -19,6 +19,12 @@ interface Window {
         onClick: (_callback: () => void) => void
         offClick: (_callback: () => void) => void
       }
+      CloudStorage: {
+        setItem: (key: string, value: string, callback?: (error: any, stored: boolean) => void) => void
+        getItem: (key: string, callback: (error: any, value: string) => void) => void
+        removeItem: (key: string, callback?: (error: any, removed: boolean) => void) => void
+        getKeys: (callback: (error: any, keys: string[]) => void) => void
+      }
     }
   }
 }

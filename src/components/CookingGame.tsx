@@ -438,7 +438,17 @@ export function CookingGame({ level, onBack }: CookingGameProps) {
                                     <div style={{ fontSize: '12px', textTransform: 'uppercase', fontWeight: 'bold', color: 'rgba(255,255,255,0.5)' }}>EARNED TOTAL</div>
                                     <div style={{ fontSize: '2.2rem', fontWeight: '900' }}>+{level === 50 ? '25.0' : '0.5'} TASTE</div>
                                 </div>
-                                <button onClick={onBack} className="glass-button" style={{ width: '100%', padding: '20px', fontSize: '1.2rem', background: 'var(--gradient-gold)', color: '#000', border: 'none' }}>NEXT LEVEL</button>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', width: '100%' }}>
+                                    <button onClick={onBack} className="glass-button" style={{ padding: '15px', fontSize: '1rem', background: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' }}>CONTINUE</button>
+                                    <button
+                                        onClick={() => {
+                                            const text = encodeURIComponent(`I just finished level ${level} in Taste MiniApp! 🍔💎 Come cook with me: https://t.me/taste_launch_bot/app`);
+                                            // @ts-ignore
+                                            if (window.Telegram?.WebApp) window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=https://t.me/taste_launch_bot/app&text=${text}`);
+                                        }}
+                                        className="glass-button"
+                                        style={{ padding: '15px', fontSize: '1rem', background: 'var(--gradient-gold)', color: '#000', border: 'none', fontWeight: 'bold' }}>SHARE</button>
+                                </div>
                             </>
                         ) : (
                             <>

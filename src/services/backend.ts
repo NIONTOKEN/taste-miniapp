@@ -1,10 +1,8 @@
-import { beginCell, Address, toNano } from "@ton/core";
-import { keyPairFromSeed, sign } from "@ton/crypto";
-
 /**
- * Kanka, bu servis bizim "Hibrit" stratejimizin beyni.
- * Şimdilik localStorage + frontend signing ile çalışıyor.
- * İleride gerçek bir backend'e (Node.js sunucu) taşınacak.
+ * TASTE Backend Service
+ * 
+ * Kullanıcı verilerini Telegram CloudStorage + localStorage ile yönetir.
+ * Withdrawal fonksiyonu kaldırıldı (güvenlik nedeniyle).
  */
 
 export interface UserData {
@@ -19,29 +17,75 @@ export interface UserData {
     completedLevels?: number[];
 }
 
-// Kanka, bu seed'den keypair üretiyoruz. Aynı seed = aynı key pair.
-// Deploy sırasında bu public key kontrata verildi.
-const BACKEND_SEED = Buffer.alloc(32, "taste-backend-seed-placeholder");
-
 class BackendService {
-    private isDevelopment = true;
-    private keyPairPromise: ReturnType<typeof keyPairFromSeed> | null = null;
+    /**
+     * Telegram CloudStorage'dan veri oku (Promise wrapper)
+     */
+    private cloudGet(key: string): Promise<string | null> {
+        return new Promise((resolve) => {
+            try {
+                const cs = window.Telegram?.WebApp?.CloudStorage;
+                if (cs) {
+                    cs.getItem(key, (error: any, value: string) => {
+                        if (error || !value) {
+                            resolve(null);
+                        } else {
+                            resolve(value);
+                        }
+                    });
+                } else {
+                    resolve(null);
+                }
+            } catch {
+                resolve(null);
+            }
+        });
+    }
 
     /**
-     * Key pair'i lazy-load et (bir kere üret, sonra cache'le)
+     * Telegram CloudStorage'a veri yaz
      */
-    private async getKeyPair() {
-        if (!this.keyPairPromise) {
-            this.keyPairPromise = keyPairFromSeed(BACKEND_SEED);
+    private cloudSet(key: string, value: string): void {
+        try {
+            const cs = window.Telegram?.WebApp?.CloudStorage;
+            if (cs) {
+                cs.setItem(key, value, (error: any) => {
+                    if (error) console.warn('[CloudStorage] Yazma hatası:', error);
+                });
+            }
+        } catch {
+            // CloudStorage mevcut değilse sessizce devam et
         }
-        return this.keyPairPromise;
     }
 
     async getUserData(wallet: string): Promise<UserData> {
-        const saved = localStorage.getItem(`taste_user_${wallet}`);
-        if (saved) return JSON.parse(saved);
+        const storageKey = `taste_user_${wallet}`;
 
-        // Yeni kullanıcı için varsayılan veriler
+        // 1. Önce Telegram CloudStorage'dan dene
+        const cloudData = await this.cloudGet(storageKey);
+        if (cloudData) {
+            try {
+                const parsed = JSON.parse(cloudData);
+                localStorage.setItem(storageKey, cloudData);
+                return parsed;
+            } catch {
+                // Parse hatası varsa devam et
+            }
+        }
+
+        // 2. Fallback: localStorage'dan oku
+        const localData = localStorage.getItem(storageKey);
+        if (localData) {
+            try {
+                const parsed = JSON.parse(localData);
+                this.cloudSet(storageKey, localData);
+                return parsed;
+            } catch {
+                // Parse hatası varsa devam et
+            }
+        }
+
+        // 3. Yeni kullanıcı
         return {
             wallet,
             balance: 0,
@@ -56,43 +100,16 @@ class BackendService {
     }
 
     async saveUserData(data: UserData): Promise<void> {
-        localStorage.setItem(`taste_user_${data.wallet}`, JSON.stringify(data));
+        const storageKey = `taste_user_${data.wallet}`;
+        const jsonData = JSON.stringify(data);
 
-        if (!this.isDevelopment) {
-            console.log('Veritabanına kaydediliyor...', data);
-        }
+        // Her ikisine de yaz — böylece veriler kaybolmaz
+        localStorage.setItem(storageKey, jsonData);
+        this.cloudSet(storageKey, jsonData);
     }
 
     async trackReferral(code: string, newUserWallet: string): Promise<void> {
         console.log(`Referans takibi: ${code} kodunu kullanan yeni cüzdan: ${newUserWallet}`);
-    }
-
-    /**
-     * Gerçek Ed25519 imzası üretir.
-     * Kontrat şunu doğrular: hash(sender_address + amount)
-     * Bu imza ile kontrat TASTE tokenlerini kullanıcıya gönderir.
-     */
-    async getWithdrawalSignature(wallet: string, amount: number): Promise<Buffer> {
-        console.log(`[Backend] Çekim imzalanıyor: ${wallet} için ${amount} TASTE`);
-
-        const keyPair = await this.getKeyPair();
-
-        // Kontratın doğrulama hash'ini oluştur: hash(sender_address + amount)
-        const senderAddress = Address.parse(wallet);
-        const amountNano = toNano(amount.toString());
-
-        const hashCell = beginCell()
-            .storeAddress(senderAddress)
-            .storeCoins(amountNano)
-            .endCell();
-
-        const hash = hashCell.hash();
-
-        // Ed25519 ile imzala
-        const signature = sign(hash, keyPair.secretKey);
-
-        console.log(`[Backend] ✅ İmza üretildi (${signature.length} bytes)`);
-        return signature;
     }
 }
 

@@ -8,18 +8,22 @@ const resources = {
             "app": {
                 "title": "TASTE Token",
                 "description": "The Art and Education of Culinary Utility Token",
-                "buy_title": "Early Access Sale",
+                "buy_title": "🔥 Early Access — Buy TASTE",
                 "buy_with": "Buy with TON",
                 "holders": "Holders",
                 "my_balance": "My Balance",
                 "invite_friend": "Invite a Friend",
-                "invite_gain": "Earn +0.1 TASTE per friend",
+                "invite_gain": "Grow the community together",
+                "invite_desc": "Grow the community together",
                 "share_link": "Share Invite Link",
                 "referral_message": "Join TASTE and start earning TON ecosystem rewards! 🍳",
                 "connect_wallet_first": "Please connect your wallet first",
                 "tap_to_earn": "Tap to Earn",
                 "no_energy": "Gimme some rest! (No Energy)",
-                "transaction_failed": "Transaction failed or cancelled. ❌"
+                "transaction_failed": "Transaction failed or cancelled. ❌",
+                "early_access_ending": "Early access ending",
+                "swap_opening": "TASTE Swap Opening...",
+                "you_get": "you will receive"
             },
             "market": {
                 "live_chart": "Live Market Analysis"
@@ -60,17 +64,19 @@ const resources = {
                 },
                 "tokenomics": {
                     "title": "Token Distribution",
-                    "initial_supply": "Initial Total Supply: 25,000,000 TASTE",
+                    "initial_supply": "Total Supply: 25,000,000 TASTE",
                     "allocation": {
-                        "locked": "Locked (JVault) - 72%",
-                        "liquidity": "Liquidity Pool - 20%",
-                        "rewards": "Game Rewards - 4%",
-                        "owner": "Project Owner - 4%"
+                        "locked": "Locked (JVault) — 88.4%",
+                        "liquidity": "Liquidity Pool (gradual entry) — 6.4%",
+                        "team": "Team Allocation — 2%",
+                        "founder": "Founder/Owner — 2%",
+                        "airdrop": "Airdrop (in progress) — 0.2%",
+                        "ops": "Operations, Exchange & Rewards — 1%"
                     }
                 },
                 "supply_policy": {
-                    "title": "Supply Policy - Mutable Explained",
-                    "content": "TASTE has an initial supply cap of 25,000,000 tokens. All locked funds are secured via jvault and can be verified on-chain."
+                    "title": "Supply & Mint Policy",
+                    "content": "TASTE currently has a total supply of 25,000,000 tokens — no minting has been performed. The mint authority remains technically open solely for potential future DAO governance decisions. If TASTE integrates with real-world businesses (restaurants, hotels, etc.) and the community votes to expand supply, this can only happen through a fully transparent DAO vote — the team alone has absolutely no authority to mint unilaterally. 88.4% (22,100,000 TASTE) is locked via JVault and verifiable on-chain."
                 },
                 "general_info": {
                     "title": "General Information",
@@ -106,6 +112,8 @@ const resources = {
                 "tasks": {
                     "x_follow": "Follow us on X",
                     "tg_join": "Join Telegram Channel",
+                    "post_x": "Share Taste on X",
+                    "telegram_stories": "Post on Telegram Stories",
                     "facebook": "Follow us on Facebook",
                     "instagram": "Follow us on Instagram",
                     "tiktok": "Follow us on TikTok",
@@ -131,18 +139,22 @@ const resources = {
             "app": {
                 "title": "TASTE Token",
                 "description": "Gastronomi ve Eğitim Odaklı Utility Token",
-                "buy_title": "Erken Erişim Satışı",
+                "buy_title": "🔥 Erken Erişim — TASTE Satın Al",
                 "buy_with": "TON ile Satın Al",
                 "holders": "Yatırımcılar",
                 "my_balance": "Bakiyem",
                 "invite_friend": "Arkadaşını Davet Et",
-                "invite_gain": "Her arkadaşın için +0.1 TASTE kazan",
+                "invite_gain": "Topluluğu birlikte büyütelim",
+                "invite_desc": "Topluluğu birlikte büyütelim",
                 "share_link": "Davet Linkini Paylaş",
                 "referral_message": "TASTE'e katıl ve TON ekosisteminde kazanmaya başla! 🍳",
                 "connect_wallet_first": "Lütfen önce cüzdanını bağla",
                 "tap_to_earn": "Tıkla Kazan",
                 "no_energy": "Biraz dinlenmem lazım! (Enerji Yok)",
-                "transaction_failed": "İşlem başarısız oldu veya iptal edildi. ❌"
+                "transaction_failed": "İşlem başarısız oldu veya iptal edildi. ❌",
+                "early_access_ending": "Erken erişim bitiyor",
+                "swap_opening": "TASTE Swap Açılıyor...",
+                "you_get": "alırsınız"
             },
             "market": {
                 "live_chart": "Canlı Piyasa Analizi"
@@ -183,12 +195,14 @@ const resources = {
                 },
                 "tokenomics": {
                     "title": "Token Dağılımı",
-                    "initial_supply": "Başlangıç Toplam Arzı: 25,000,000 TASTE",
+                    "initial_supply": "Toplam Arz: 25,000,000 TASTE",
                     "allocation": {
-                        "locked": "Kilitli (JVault) - 72%",
-                        "liquidity": "Likidite Havuzu - 20%",
-                        "rewards": "Oyun Ödülleri - 4%",
-                        "owner": "Proje Sahibi - 4%"
+                        "locked": "Kilitli (JVault) — %88.4",
+                        "liquidity": "Likidite Havuzu (kademeli) — %6.4",
+                        "team": "Ekip Payı — %2",
+                        "founder": "Kurucu/Owner — %2",
+                        "airdrop": "Airdrop (dağıtılıyor) — %0.2",
+                        "ops": "Masraf, Borsa & Ekstra Ödüller — %1"
                     }
                 },
                 "general_info": {
@@ -211,8 +225,8 @@ const resources = {
                     }
                 },
                 "supply_policy": {
-                    "title": "Arz Politikası",
-                    "content": "TASTE key'in initial arzı 25,000,000 adet ile sınırlıdır. Tüm kilitli fonlar jvault ile güvence altına alınmıştır ve on-chain doğrulanabilir."
+                    "title": "Arz ve Mint Politikası",
+                    "content": "TASTE'in mevcut toplam arzı 25.000.000 token olup şimdiye kadar hiç mint (yeni token basımı) yapılmamıştır. Mint yetkisi teknik olarak açık bırakılmıştır; ancak bu yetki yalnızca ilerleyen dönemlerde olası bir DAO (topluluk yönetimi) kararı için mevcuttur. TASTE ileride gerçek dünya işletmeleriyle (restoran, otel vb.) entegre bir kupon sistemi kurduğunda ve topluluk bu yönde oy kullandığında, arz artışı yalnızca şeffaf bir DAO oylamasıyla gündeme gelebilir. Ekip, tek başına ve topluluk onayı olmadan hiçbir şekilde yeni token basma yetkisine sahip değildir. 22.100.000 TASTE (%88.4) JVault ile kilitlidir ve on-chain doğrulanabilir."
                 }
             },
             "wallets": {
@@ -233,6 +247,8 @@ const resources = {
                 "tasks": {
                     "x_follow": "X'te bizi takip et",
                     "tg_join": "Telegram Kanalına katıl",
+                    "post_x": "Taste'i X'te Paylaş",
+                    "telegram_stories": "Telegram Hikayesinde Paylaş",
                     "facebook": "Facebook'ta takip et",
                     "instagram": "Instagram'da takip et",
                     "tiktok": "TikTok'ta takip et",
@@ -258,18 +274,22 @@ const resources = {
             "app": {
                 "title": "توكن TASTE",
                 "description": "توكن الخدمات المخصص لفنون الطهي والتعليم",
-                "buy_title": "البيع المبكر",
+                "buy_title": "🔥 وصول مبكر — اشترِ TASTE",
                 "buy_with": "شراء باستخدام TON",
                 "holders": "المستثمرون",
                 "my_balance": "رصيدي",
                 "invite_friend": "دعوة صديق",
-                "invite_gain": "اربح +0.1 TASTE لكل صديق",
+                "invite_gain": "لننمي المجتمع معاً",
+                "invite_desc": "لننمي المجتمع معاً",
                 "share_link": "مشاركة الرابط",
                 "referral_message": "انضم إلى TASTE وابدأ الربح! 🍳",
                 "connect_wallet_first": "يرجى ربط المحفظة أولاً",
                 "tap_to_earn": "اضغط للربح",
                 "no_energy": "لا توجد طاقة حالياً",
-                "transaction_failed": "فشلت العملية ❌"
+                "transaction_failed": "فشلت العملية ❌",
+                "early_access_ending": "ينتهي الوصول المبكر",
+                "swap_opening": "جارٍ فتح التداول...",
+                "you_get": "ستحصل على"
             },
             "market": { "live_chart": "تحليل السوق المباشر" },
             "nav": {
@@ -292,8 +312,8 @@ const resources = {
                 "vision": { "title": "رؤيتنا", "content": "هدف TASTE هو أن يصبح توكن خدمات حقيقي في عالم الطهي والضيافة في نظام TON." },
                 "mission": { "title": "مهمتنا", "content": "بناء اقتصاد خدمات شفاف بعيداً عن المضاربة." },
                 "tokenomics": {
-                    "title": "توزيع التوكنات", "initial_supply": "إجمالي العرض الأولي: 25,000,000 TASTE",
-                    "allocation": { "locked": "مغلق (JVault) - 72%", "liquidity": "سيولة - 20%", "rewards": "مكافآت - 4%", "owner": "المالك - 4%" }
+                    "title": "توزيع التوكنات", "initial_supply": "إجمالي العرض: 25,000,000 TASTE",
+                    "allocation": { "locked": "مغلق (JVault) - 88.4%", "liquidity": "سيولة (تدريجي) - 6.4%", "team": "فريق - 2%", "founder": "المؤسس - 2%", "airdrop": "إيردروب - 0.2%", "ops": "عمليات وبورصة - 1%" }
                 },
                 "general_info": { "title": "معلومات عامة", "content": "Taste! هي منصة تجربة تذوق مبتكرة تهدف إلى إيقاظ شغف الناس بالطعام." },
                 "team": {
@@ -301,7 +321,7 @@ const resources = {
                     "fatih": { "name": "Fatih Kaya", "role": "المؤسس والمدير التنفيذي" },
                     "angel": { "name": "~~AnGeL~~", "role": "متخصص إعلامي" }
                 },
-                "supply_policy": { "title": "سياسة العرض", "content": "عرض TASTE محدود بـ 25 مليون توكن." }
+                "supply_policy": { "title": "سياسة العرض والإصدار", "content": "إجمالي عرض TASTE الحالي هو 25,000,000 توكن ولم يتم إصدار أي توكنات جديدة. صلاحية الإصدار مفتوحة تقنياً فقط لقرارات DAO المستقبلية المحتملة. لا يملك الفريق صلاحية الإصدار الانفرادي — يتطلب تصويت المجتمع." }
             },
             "social": {
                 "title": "المهام الاجتماعية",
@@ -315,18 +335,22 @@ const resources = {
             "app": {
                 "title": "Токен TASTE",
                 "description": "Утилитарный токен мира кулинарии и образования",
-                "buy_title": "Предпродажа",
+                "buy_title": "🔥 Ранний доступ — Купить TASTE",
                 "buy_with": "Купить за TON",
                 "holders": "Держатели",
                 "my_balance": "Мой баланс",
                 "invite_friend": "Пригласить друга",
-                "invite_gain": "Получи +0.1 TASTE за друга",
+                "invite_gain": "Развиваем сообщество вместе",
+                "invite_desc": "Развиваем сообщество вместе",
                 "share_link": "Поделиться",
                 "referral_message": "Присоединяйся к TASTE и зарабатывай! 🍳",
                 "connect_wallet_first": "Подключите кошелек",
                 "tap_to_earn": "Жми и зарабатывай",
                 "no_energy": "Нет энергии",
-                "transaction_failed": "Ошибка транзакции ❌"
+                "transaction_failed": "Ошибка транзакции ❌",
+                "early_access_ending": "Ранний доступ заканчивается",
+                "swap_opening": "Открытие обмена...",
+                "you_get": "вы получите"
             },
             "market": { "live_chart": "Анализ рынка" },
             "nav": {
@@ -349,8 +373,8 @@ const resources = {
                 "vision": { "title": "Видение", "content": "TASTE стремится стать реальным утилитарным токеном в экосистеме TON." },
                 "mission": { "title": "Миссия", "content": "Создание прозрачной утилитарной экономики." },
                 "tokenomics": {
-                    "title": "Распределение", "initial_supply": "Начальный запас: 25,000,000 TASTE",
-                    "allocation": { "locked": "Заблокировано - 72%", "liquidity": "Ликвидность - 20%", "rewards": "Награды - 4%", "owner": "Команда - 4%" }
+                    "title": "Распределение", "initial_supply": "Общий запас: 25,000,000 TASTE",
+                    "allocation": { "locked": "Заблокировано - 88.4%", "liquidity": "Ликвидность (поэтапно) - 6.4%", "team": "Команда - 2%", "founder": "Основатель - 2%", "airdrop": "Аирдроп - 0.2%", "ops": "Операции и биржи - 1%" }
                 },
                 "general_info": { "title": "Общая информация", "content": "Taste! - это инновационная платформа для гастрономического опыта." },
                 "team": {
@@ -358,7 +382,7 @@ const resources = {
                     "fatih": { "name": "Fatih Kaya", "role": "Основатель и гендиректор" },
                     "angel": { "name": "~~AnGeL~~", "role": "Медиа-специалист" }
                 },
-                "supply_policy": { "title": "Политика запаса", "content": "Запас TASTE ограничен 25 миллионами токенов." }
+                "supply_policy": { "title": "Политика эмиссии", "content": "Текущий запас TASTE — 25,000,000 токенов, новые токены не выпускались. Право на эмиссию технически открыто исключительно для будущих DAO-решений. Команда не имеет права выпускать токены единолично — требуется голосование сообщества." }
             },
             "social": {
                 "title": "Задания",
@@ -372,18 +396,22 @@ const resources = {
             "app": {
                 "title": "TASTE टोकन",
                 "description": "पाक कला और शिक्षा पर केंद्रित यूटिलिटी टोकन",
-                "buy_title": "अर्ली एक्सेस सेल",
+                "buy_title": "🔥 अर्ली एक्सेस — TASTE खरीदें",
                 "buy_with": "TON से खरीदें",
                 "holders": "धारक",
                 "my_balance": "मेरा बैलेंस",
                 "invite_friend": "दोस्त को बुलाएं",
-                "invite_gain": "दोست पर +0.1 TASTE कमाएं",
+                "invite_gain": "समुदाय को एक साथ बढ़ाएं",
+                "invite_desc": "समुदाय को एक साथ बढ़ाएं",
                 "share_link": "शेयर करें",
                 "referral_message": "TASTE में शामिल हों और कमाई शुरू करें! 🍳",
                 "connect_wallet_first": "वॉलेट कनेक्ट करें",
                 "tap_to_earn": "टैप करें और कमाएं",
                 "no_energy": "एनर्जी नहीं है",
-                "transaction_failed": "लेनदेन विफल ❌"
+                "transaction_failed": "लेनदेन विफल ❌",
+                "early_access_ending": "अर्ली एक्सेस समाप्त हो रहा है",
+                "swap_opening": "TASTE स्वैप खुल रहा है...",
+                "you_get": "आपको मिलेगा"
             },
             "market": { "live_chart": "लाइव मार्केट एनालिसिस" },
             "nav": {
@@ -407,7 +435,7 @@ const resources = {
                 "mission": { "title": "मिशन", "content": "एक पारदर्शी उपयोगिता अर्थव्यवस्था का निर्माण करना।" },
                 "tokenomics": {
                     "title": "टोकन वितरण", "initial_supply": "कुल आपूर्ति: 25,000,000 TASTE",
-                    "allocation": { "locked": "बंद (JVault) - 72%", "liquidity": "तरलता - 20%", "rewards": "इनाम - 4%", "owner": "मालिक - 4%" }
+                    "allocation": { "locked": "बंद (JVault) - 88.4%", "liquidity": "तरलता (क्रमिक) - 6.4%", "team": "टीम - 2%", "founder": "संस्थापक - 2%", "airdrop": "एयरड्रॉप - 0.2%", "ops": "परिचालन - 1%" }
                 },
                 "general_info": { "title": "सामान्य जानकारी", "content": "Taste! लोगों में भोजन के प्रति जुनून पैदा करने वाला एक मंच है।" },
                 "team": {
@@ -415,7 +443,7 @@ const resources = {
                     "fatih": { "name": "Fatih Kaya", "role": "संस्थापक और सीईओ" },
                     "angel": { "name": "~~AnGeL~~", "role": "मीडिया विशेषज्ञ" }
                 },
-                "supply_policy": { "title": "आपूर्ति नीति", "content": "TASTE की आपूर्ति 25 मिलियन तक सीमित है।" }
+                "supply_policy": { "title": "आपूर्ति और मिंट नीति", "content": "TASTE की वर्तमान कुल आपूर्ति 25,000,000 टोकन है — अब तक कोई नया टोकन जारी नहीं किया गया। मिंट अधिकार केवल भविष्य के DAO निर्णयों के लिए खुला है। टीम अकेले टोकन जारी नहीं कर सकती — समुदाय की मंजूरी जरूरी है।" }
             },
             "social": {
                 "title": "सामाजिक कार्य",
