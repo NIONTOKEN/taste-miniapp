@@ -13,7 +13,10 @@ const COMPLETED = [
     { emoji: '🐾', title: 'Sokak Hayvanları Bağış Platformu', desc: 'TON ve TASTE ile hayvan barınaklarına bağış yapılabilen platform eklendi.' },
     { emoji: '🍽️', title: 'Günlük Yemek Paylaşım Platformu', desc: 'Kullanıcılar tarif, yemek ve mekan paylaşabiliyor. Gerçek zamanlı (Supabase ile).' },
     { emoji: '👛', title: '500 Cüzdana Ulaşma', desc: 'İlk çeyrek hedefi: 500 benzersiz cüzdan sahibi. Topluluk büyümeye devam ediyor.' },
+    { emoji: '⚠️', title: 'Gıda Alerjeni Bildirim Sistemi', desc: 'AB & Türkiye gıda mevzuatındaki 14 zorunlu alerjen (Gluten, Süt, Yumurta, Balık vb.) Yemek Akışı\'na entegre edildi. Her paylaşıma alerjen etiketi eklenebiliyor, kalori bilgisi gösteriliyor.' },
+    { emoji: '🚀', title: 'Mini App v2 Güncellemesi — Mart 2026', desc: 'PoweredBy bölümü SVG logolarla yenilendi (OKX, Bitget, Binance, Telegram, Google, Gemini). Whitepaper\'a TASTE özet kartı eklendi. Ödül dağıtımı bitiş sayacı (20 Mayıs 2026) eklendi. Yemek Akışı\'na beğeni, arama ve trend yemekler getirildi.' },
 ]
+
 
 // ─── Devam eden & yakın plan (gerçekçi) ──────────────────────────────────
 const ONGOING = [
