@@ -30,6 +30,7 @@ const TASTE_LOGO = '/logo.jpg'
 
 
 function PriceTicker() {
+  const { i18n } = useTranslation()
   const [price, setPrice] = useState<string>('0.00135')
   const [tryPrice, setTryPrice] = useState<string>('0.0466')
   const [change, setChange] = useState<number>(0)
@@ -65,9 +66,9 @@ function PriceTicker() {
       <div className="ticker">
         <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
         <span className="ticker-item">🇹🇷 TASTE/TRY: ₺{tryPrice}</span>
-        <span className="ticker-item">🚀 NEXT GOAL: $0.01</span>
-        <span className="ticker-item">🔥 TOTAL SUPPLY: 25,000,000</span>
-        <span className="ticker-item">🌍 COMMUNITY DRIVEN</span>
+        <span className="ticker-item">🚀 {i18n.language === 'tr' ? 'SIRADAKİ HEDEF' : 'NEXT GOAL'}: $0.01</span>
+        <span className="ticker-item">🔥 {i18n.language === 'tr' ? 'TOPLAM ARZ' : 'TOTAL SUPPLY'}: 25,000,000</span>
+        <span className="ticker-item">{i18n.language === 'tr' ? '🌍 TOPLULUK ODAKLI' : '🌍 COMMUNITY DRIVEN'}</span>
         <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
       </div>
     </div>
@@ -77,6 +78,7 @@ function PriceTicker() {
 
 // Countdown Timer Component - Erken erişim bitiş: 02.01.2027
 function CountdownTimer({ earlyAccessLabel }: { earlyAccessLabel: string }) {
+  const { i18n } = useTranslation()
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -108,19 +110,19 @@ function CountdownTimer({ earlyAccessLabel }: { earlyAccessLabel: string }) {
       <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.days}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>GÜN</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{i18n.language === 'en' ? 'DAYS' : 'GÜN'}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.hours}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>SAAT</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{i18n.language === 'en' ? 'HRS' : 'SAAT'}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.minutes}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>DAK</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{i18n.language === 'en' ? 'MIN' : 'DAK'}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{String(timeLeft.seconds).padStart(2, '0')}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>SN</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{i18n.language === 'en' ? 'SEC' : 'SN'}</div>
         </div>
       </div>
     </div>
@@ -129,6 +131,7 @@ function CountdownTimer({ earlyAccessLabel }: { earlyAccessLabel: string }) {
 
 // Reward Countdown - Ödül dağıtımı bitiş: 20.05.2026
 function RewardCountdown() {
+  const { i18n } = useTranslation()
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -166,24 +169,24 @@ function RewardCountdown() {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '11px', color: '#4ade80', fontWeight: 700, marginBottom: '8px' }}>
         <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite', flexShrink: 0 }} />
-        🎁 Ödül Dağıtımı Bitiyor — 20 Mayıs 2026
+        {i18n.language === 'en' ? '🎁 Reward Distribution Ends — May 20, 2026' : '🎁 Ödül Dağıtımı Bitiyor — 20 Mayıs 2026'}
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.days}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>GÜN</div>
+          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{i18n.language === 'en' ? 'DAYS' : 'GÜN'}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.hours}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>SAAT</div>
+          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{i18n.language === 'en' ? 'HRS' : 'SAAT'}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.minutes}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>DAK</div>
+          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{i18n.language === 'en' ? 'MIN' : 'DAK'}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{String(timeLeft.seconds).padStart(2, '0')}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>SN</div>
+          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{i18n.language === 'en' ? 'SEC' : 'SN'}</div>
         </div>
       </div>
     </div>
@@ -325,7 +328,7 @@ function App() {
 
               {/* Holders + STON.fi */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px', fontSize: '12px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>👥 {holdersCount} Holder</span>
+                <span style={{ color: 'var(--text-muted)' }}>👥 {holdersCount} {i18n.language === 'tr' ? 'Yatırımcı' : 'Holders'}</span>
                 <motion.a
                   whileHover={{ scale: 1.05 }}
                   href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
@@ -406,10 +409,9 @@ function App() {
               </div>
             </motion.div>
 
-            {/* 🔥 Live Activity */}
             <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="glass-panel" style={{ padding: '18px', marginBottom: '20px' }}>
-              <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#22c55e', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Canlı Veriler</div>
-              <h3 style={{ fontWeight: 900, margin: '0 0 14px', fontSize: '1rem' }}>📡 TASTE Aktivitesi</h3>
+              <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#22c55e', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>{i18n.language === 'tr' ? 'Canlı Veriler' : 'Live Activity'}</div>
+              <h3 style={{ fontWeight: 900, margin: '0 0 14px', fontSize: '1rem' }}>{i18n.language === 'tr' ? '📡 TASTE Aktivitesi' : '📡 TASTE Activity'}</h3>
               <LiveActivity />
             </motion.div>
 
@@ -437,15 +439,15 @@ function App() {
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '20px' }}>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{holdersCount}</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>Holders</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{i18n.language === 'tr' ? 'Yatırımcı' : 'Holders'}</div>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>25M</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>Total Supply</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{i18n.language === 'tr' ? 'Toplam Arz' : 'Total Supply'}</div>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>88.4%</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>Locked</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{i18n.language === 'tr' ? 'Kilitli' : 'Locked'}</div>
               </div>
             </motion.div>
 
@@ -634,7 +636,7 @@ function App() {
                 poster={TASTE_LOGO}
                 style={{ width: '100%', borderRadius: '12px', maxHeight: '250px' }}
               />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>🎬 TASTE Tanıtım</p>
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>🎬 {i18n.language === 'tr' ? 'TASTE Tanıtım' : 'TASTE Intro'}</p>
             </motion.div>
           </motion.div>
         )}
@@ -663,7 +665,7 @@ function App() {
             <span className="nav-icon"><Map size={18} /></span><span className="nav-label">{t('nav.roadmap')}</span>
           </button>
           <button className={`nav-item ${activeTab === 'whitepaper' ? 'active' : ''}`} onClick={() => setActiveTab('whitepaper')}>
-            <span className="nav-icon"><FileText size={18} /></span><span className="nav-label">WP</span>
+            <span className="nav-icon"><FileText size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Litepaper' : 'Litepaper'}</span>
           </button>
           <button className={`nav-item ${activeTab === 'legal' ? 'active' : ''}`} onClick={() => setActiveTab('legal')}>
             <span className="nav-icon"><Scale size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Yasal' : 'Legal'}</span>
@@ -697,7 +699,7 @@ function App() {
               marginBottom: '10px'
             }}
           >
-            🔒 Security Audit Report
+            🔒 {i18n.language === 'tr' ? 'Güvenlik Denetim Raporu' : 'Security Audit Report'}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -725,9 +727,9 @@ function App() {
               marginBottom: '10px'
             }}
           >
-            📄 Litepaper
+            📄 {i18n.language === 'tr' ? 'Litepaper' : 'Litepaper'}
           </motion.button>
-          <p>Built on The Open Network</p>
+          <p>{i18n.language === 'tr' ? 'The Open Network üzerinde kuruldu' : 'Built on The Open Network'}</p>
 
           {/* ─── Footer Disclaimer ─────────────────────────── */}
           <div style={{

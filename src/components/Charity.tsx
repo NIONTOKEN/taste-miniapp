@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import { useTonConnectUI } from '@tonconnect/ui-react'
 
 // ─── Config ─────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ const PROOFS: {
 const QUICK_AMOUNTS = [0.1, 0.5, 1, 5]
 
 export function Charity() {
-    const { i18n } = useTranslation()
+    const { t } = useTranslation()
     const [tonConnectUI] = useTonConnectUI()
     const isConnected = !!tonConnectUI.account?.address
 
@@ -90,23 +90,27 @@ export function Charity() {
 
                 <div style={{ fontSize: '52px', marginBottom: '10px' }}>🐾</div>
                 <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f97316', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px' }}>
-                    {i18n.language === 'tr' ? 'Hayvan Sevgisi' : 'Animal Love'}
+                    {t('charity.hero.badge')}
                 </div>
                 <h3 style={{ fontSize: '1.3rem', fontWeight: 900, margin: '0 0 10px' }}>
-                    {i18n.language === 'tr' ? 'Sokak Hayvanlarına Destek' : 'Support the Strays'}
+                    {t('charity.hero.title')}
                 </h3>
-                <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 320, margin: '0 auto' }}>
-                    {i18n.language === 'tr' ? 
-                        <>Barınaksız sokak hayvanlarına mama, veteriner ve barınak desteği için <strong style={{ color: '#f97316' }}> TON</strong> veya <strong style={{ color: '#f59e0b' }}> TASTE</strong> bağışlayabilirsin. Her kuruş bir hayata dokunur. 🐶🐱</> 
-                        : <>You can donate <strong style={{ color: '#f97316' }}> TON</strong> or <strong style={{ color: '#f59e0b' }}> TASTE</strong> to support street and shelter animals with food, vet care, and shelter. Every penny touches a life. 🐶🐱</>}
-                </p>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 320, margin: '0 auto' }}>
+                    <Trans
+                        i18nKey="charity.hero.desc"
+                        components={{
+                            1: <strong style={{ color: '#f97316' }} />,
+                            2: <strong style={{ color: '#f59e0b' }} />
+                        }}
+                    />
+                </div>
 
                 {/* Stats row */}
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px', flexWrap: 'wrap' }}>
                     {[
-                        { emoji: '🐾', label: i18n.language === 'tr' ? 'Sokak Hayvanı' : 'Stray Animal', val: i18n.language === 'tr' ? 'Sınırsız' : 'Unlimited' },
-                        { emoji: '❤️', label: i18n.language === 'tr' ? 'Bağış Kanalı' : 'Donation Channel', val: i18n.language === 'tr' ? '24/7 Açık' : '24/7 Open' },
-                        { emoji: '✅', label: i18n.language === 'tr' ? 'Şeffaflık' : 'Transparency', val: 'On-Chain' },
+                        { emoji: '🐾', label: t('charity.hero.stats.stray'), val: t('charity.hero.stats.unlimited') },
+                        { emoji: '❤️', label: t('charity.hero.stats.channel'), val: t('charity.hero.stats.247') },
+                        { emoji: '✅', label: t('charity.hero.stats.transparency'), val: 'On-Chain' },
                     ].map((s) => (
                         <div key={s.label} style={{ textAlign: 'center' }}>
                             <div style={{ fontSize: '18px' }}>{s.emoji}</div>
@@ -131,7 +135,7 @@ export function Charity() {
                 }}
             >
                 <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
-                    🏦 {i18n.language === 'tr' ? 'Bağış Cüzdanı' : 'Donation Wallet'}
+                    🏦 {t('charity.wallet.title')}
                 </div>
 
                 <div style={{
@@ -162,7 +166,7 @@ export function Charity() {
                             fontSize: '12px', fontWeight: 600, cursor: 'pointer'
                         }}
                     >
-                        {copiedTON ? (i18n.language === 'tr' ? '✅ Kopyalandı' : '✅ Copied') : (i18n.language === 'tr' ? '📋 Adresi Kopyala (TON)' : '📋 Copy Address (TON)')}
+                        {copiedTON ? t('charity.wallet.copied') : t('charity.wallet.copy_ton')}
                     </motion.button>
                     <motion.button
                         whileTap={{ scale: 0.96 }}
@@ -175,7 +179,7 @@ export function Charity() {
                             fontSize: '12px', fontWeight: 600, cursor: 'pointer'
                         }}
                     >
-                        {copiedTST ? (i18n.language === 'tr' ? '✅ Kopyalandı' : '✅ Copied') : (i18n.language === 'tr' ? '📋 Adresi Kopyala (TASTE)' : '📋 Copy Address (TASTE)')}
+                        {copiedTST ? t('charity.wallet.copied') : t('charity.wallet.copy_taste')}
                     </motion.button>
                 </div>
             </motion.div>
@@ -194,7 +198,7 @@ export function Charity() {
                 }}
             >
                 <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px' }}>
-                    💎 {i18n.language === 'tr' ? 'TON ile Bağış Yap' : 'Donate in TON'}
+                    💎 {t('charity.ton_donate.title')}
                 </div>
 
                 {/* Quick amounts */}
@@ -237,7 +241,7 @@ export function Charity() {
                             outline: 'none',
                             boxSizing: 'border-box'
                         }}
-                        placeholder={i18n.language === 'tr' ? "Miktar (TON)" : "Amount (TON)"}
+                        placeholder={t('charity.ton_donate.placeholder')}
                     />
                     <span style={{
                         position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)',
@@ -261,7 +265,7 @@ export function Charity() {
                         boxShadow: sending ? 'none' : '0 4px 16px rgba(0,136,204,0.3)'
                     }}
                 >
-                    {sending ? (i18n.language === 'tr' ? '⏳ Gönderiliyor...' : '⏳ Sending...') : isConnected ? `💎 ${donateAmt || '?'} ${i18n.language === 'tr' ? 'TON Bağışla' : 'TON Donate'}` : (i18n.language === 'tr' ? '🔌 Cüzdanı Bağla & Bağışla' : '🔌 Connect Wallet & Donate')}
+                    {sending ? t('charity.ton_donate.sending') : isConnected ? t('charity.ton_donate.donate_btn', { amount: donateAmt || '?' }) : t('charity.ton_donate.connect_btn')}
                 </motion.button>
 
                 {/* Result */}
@@ -276,13 +280,13 @@ export function Charity() {
                                 border: `1px solid ${txResult === 'success' ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)'}`
                             }}
                         >
-                            {txResult === 'success' ? (i18n.language === 'tr' ? '✅ Bağış gönderildi! Teşekkürler 🐾' : '✅ Donation sent! Thank you 🐾') : (i18n.language === 'tr' ? '❌ İşlem iptal edildi.' : '❌ Transaction cancelled.')}
+                            {txResult === 'success' ? t('charity.ton_donate.success') : t('charity.ton_donate.error')}
                         </motion.div>
                     )}
                 </AnimatePresence>
 
                 <p style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '10px', textAlign: 'center', lineHeight: 1.6 }}>
-                    💡 {i18n.language === 'tr' ? 'TASTE göndermek için adresi kopyalayıp cüzdanından manuel gönderebilirsin.' : 'To send TASTE, copy the address and send it manually from your wallet.'}
+                    💡 {t('charity.ton_donate.footer')}
                 </p>
             </motion.div>
 
@@ -303,12 +307,10 @@ export function Charity() {
                 <div style={{ fontSize: '24px' }}>🍳</div>
                 <div>
                     <div style={{ fontSize: '12px', fontWeight: 700, color: '#f59e0b', marginBottom: '4px' }}>
-                        {i18n.language === 'tr' ? 'TASTE ile Bağış' : 'Donate in TASTE'}
+                        {t('charity.taste_info.title')}
                     </div>
                     <div style={{ fontSize: '11px', color: '#94a3b8', lineHeight: 1.6 }}>
-                        {i18n.language === 'tr' ? 
-                            <>Yukarıdaki cüzdan adresi aynı zamanda TASTE kabul eder.<br /> Tonkeeper, TonWallet veya STON.fi üzerinden istediğin miktarda TASTE gönderebilirsin.</> 
-                            : <>The wallet address above also accepts TASTE.<br /> You can send any amount of TASTE using Tonkeeper, TonWallet, or STON.fi.</>}
+                        {t('charity.taste_info.desc')}
                     </div>
                 </div>
             </motion.div>
@@ -322,12 +324,12 @@ export function Charity() {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                     <div>
                         <div style={{ fontSize: '11px', letterSpacing: '1.5px', color: '#f97316', fontWeight: 700, textTransform: 'uppercase' }}>
-                            {i18n.language === 'tr' ? 'Yapılan Yardımlar' : 'Given Aids'}
+                            {t('charity.gallery.badge')}
                         </div>
-                        <h4 style={{ fontWeight: 800, margin: '2px 0 0', fontSize: '1rem' }}>📸 {i18n.language === 'tr' ? 'Kanıt & Belgeler' : 'Proofs & Documents'}</h4>
+                        <h4 style={{ fontWeight: 800, margin: '2px 0 0', fontSize: '1rem' }}>📸 {t('charity.gallery.title')}</h4>
                     </div>
                     <div style={{ fontSize: '10px', color: 'var(--text-muted)', textAlign: 'right' }}>
-                        {PROOFS.length} {i18n.language === 'tr' ? 'kayıt' : 'records'}
+                        {PROOFS.length} {t('charity.gallery.records')}
                     </div>
                 </div>
 
@@ -342,12 +344,10 @@ export function Charity() {
                     }}>
                         <div style={{ fontSize: '48px', marginBottom: '12px' }}>🐾</div>
                         <div style={{ fontSize: '14px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
-                            {i18n.language === 'tr' ? 'Henüz kanıt eklenmedi' : 'No proofs added yet'}
+                            {t('charity.gallery.empty_title')}
                         </div>
                         <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.6 }}>
-                            {i18n.language === 'tr' ? 
-                                <>Yapılan yardımların fotoğraf ve belgeleri<br />burada yayınlanacak. Şeffaf kalıyoruz! ✅</> 
-                                : <>Photos and documents of aids provided will be<br />published here. We remain transparent! ✅</>}
+                            {t('charity.gallery.empty_desc')}
                         </div>
                     </div>
                 ) : (
@@ -429,7 +429,7 @@ export function Charity() {
                                         color: '#94a3b8', borderRadius: '10px',
                                         padding: '10px', fontSize: '13px', cursor: 'pointer'
                                     }}
-                                >{i18n.language === 'tr' ? 'Kapat' : 'Close'}</motion.button>
+                                >{t('charity.gallery.close')}</motion.button>
                             </div>
                         </motion.div>
                     </>

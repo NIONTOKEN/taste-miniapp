@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useTranslation, Trans } from 'react-i18next'
 
 const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -61,6 +62,8 @@ function Quote({ children }: { children: React.ReactNode }) {
 }
 
 export function Manifesto() {
+    const { t } = useTranslation()
+
     return (
         <div style={{ paddingBottom: '20px' }}>
             {/* Title */}
@@ -75,90 +78,81 @@ export function Manifesto() {
                     marginBottom: '8px',
                     letterSpacing: '1px'
                 }}>
-                    TASTE MANİFESTOSU
+                    {t('manifesto.title')}
                 </h2>
                 <p style={{
                     color: 'var(--text-muted)',
                     fontSize: '12px',
                     fontStyle: 'italic'
                 }}>
-                    Ateşin Hikâyesi • Ustalığın Yolu
+                    {t('manifesto.subtitle')}
                 </p>
             </motion.div>
 
             {/* Bölüm 1: Ateşin Başlangıcı */}
             <Section>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
-                    🌅 Ateşin Başlangıcı
+                    {t('manifesto.section1.title')}
                 </h3>
-                <p>
-                    Dijital dünyanın ilk ateşi yakıldığında…<br />
-                    kimse bunun bir mutfak olacağını bilmiyordu.
+                <p style={{ whiteSpace: 'pre-line' }}>
+                    {t('manifesto.section1.p1')}
                 </p>
                 <Quote>
-                    Her şey bir kıvılcımla başladı.<br />
-                    Görünmeyen bir el… görünmeyen bir tarif…<br />
-                    Ve insanlığın ilk kez merkezi olmayan bir ateşi kontrol etmeyi öğrenmesi…
+                    <div style={{ whiteSpace: 'pre-line' }}>{t('manifesto.section1.quote')}</div>
                 </Quote>
-                <p>
-                    Bu ateşi yakan kişi bir isim değildi… bir kimlik değildi…<br />
-                    Bir fikir… bir devrim… bir <Highlight>uyanıştı</Highlight>.
+                <p style={{ whiteSpace: 'pre-line' }}>
+                    <Trans
+                        i18nKey="manifesto.section1.p2"
+                        components={{ highlight: <Highlight children={undefined} /> }}
+                    />
                 </p>
-                <p style={{ marginTop: '10px' }}>
-                    O sadece ateşi yaktı.<br />
-                    Ocağı kurdu.<br />
-                    Tarifi bıraktı.<br />
-                    Ve sonra… mutfaktan çıktı.
+                <p style={{ marginTop: '10px', whiteSpace: 'pre-line' }}>
+                    {t('manifesto.section1.p3')}
                 </p>
             </Section>
 
             {/* Bölüm 2: Eksik Olan */}
             <Section delay={0.1}>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
-                    ⚠️ Ateş Yeterli Değildi
+                    {t('manifesto.section2.title')}
                 </h3>
-                <p>
-                    Ama ateş tek başına yeterli değildi.<br />
-                    Ateş yanabilir…<br />
-                    Ama <Highlight>yemek pişirmek ustalık ister</Highlight>.
+                <p style={{ whiteSpace: 'pre-line' }}>
+                    <Trans
+                        i18nKey="manifesto.section2.p1"
+                        components={{ highlight: <Highlight children={undefined} /> }}
+                    />
                 </p>
-                <p style={{ marginTop: '12px' }}>
-                    Zamanla dijital dünya doldu.<br />
-                    Binlerce mutfak açıldı.<br />
-                    Parlayan tabelalar… gürültülü salonlar… hızlı tarifler…
+                <p style={{ marginTop: '12px', whiteSpace: 'pre-line' }}>
+                    {t('manifesto.section2.p2')}
                 </p>
                 <Quote>
-                    Ama çoğunda şu yoktu:<br />
-                    Emek yoktu. Sabır yoktu. Ruh yoktu.<br />
-                    Ateş vardı… ama lezzet yoktu.
+                    <div style={{ whiteSpace: 'pre-line' }}>{t('manifesto.section2.quote')}</div>
                 </Quote>
             </Section>
 
             {/* Bölüm 3: TASTE'in Doğuşu */}
             <Section delay={0.15}>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
-                    🍳 TASTE'in Doğuşu
+                    {t('manifesto.section3.title')}
                 </h3>
                 <p>
-                    İşte tam o noktada… başka bir ihtiyaç doğdu.
+                    {t('manifesto.section3.p1')}
                 </p>
-                <p style={{ marginTop: '10px' }}>
-                    Birileri ateşi sadece kullanmak istemedi.<br />
-                    Onu <Highlight>anlamak</Highlight> istedi.<br />
-                    Onu <Highlight>işlemek</Highlight> istedi.<br />
-                    Onu <Highlight>ustalığa dönüştürmek</Highlight> istedi.
+                <p style={{ marginTop: '10px', whiteSpace: 'pre-line' }}>
+                    <Trans
+                        i18nKey="manifesto.section3.p2"
+                        components={{ highlight: <Highlight children={undefined} /> }}
+                    />
                 </p>
                 <Quote>
-                    Ve bir mutfak kuruldu.<br />
-                    Sessiz. Gösterişsiz. Ama bilinçli.<br />
-                    Adı: <strong>TASTE</strong>
+                    <div style={{ whiteSpace: 'pre-line' }}>{t('manifesto.section3.quote')}</div>
                 </Quote>
             </Section>
 
             {/* Bölüm 4: Mutfağa Giriş */}
             <Section delay={0.2}>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
-                    🚪 Mutfağa Giriyoruz
+                    {t('manifesto.section4.title')}
                 </h3>
                 <div style={{
                     background: 'rgba(245, 159, 11, 0.08)',
@@ -167,56 +161,47 @@ export function Manifesto() {
                     padding: '15px',
                     marginBottom: '12px'
                 }}>
-                    <p style={{ color: '#fff', fontWeight: '500' }}>
-                        Ocağın altını yak.<br />
-                        Duyuyor musun?<br />
-                        Bu sadece bir alev sesi değil.<br />
-                        Bu <Highlight>dönüşümün sesi</Highlight>.
+                    <p style={{ color: '#fff', fontWeight: '500', whiteSpace: 'pre-line' }}>
+                        <Trans
+                            i18nKey="manifesto.section4.box"
+                            components={{ highlight: <Highlight children={undefined} /> }}
+                        />
                     </p>
                 </div>
-                <p>
-                    Metal dijitale dönüştüğünde değer doğmuştu…<br />
-                    Ama anlam doğmamıştı.<br />
-                    <Highlight>TASTE anlamı pişirmek için kuruldu.</Highlight>
+                <p style={{ whiteSpace: 'pre-line' }}>
+                    <Trans
+                        i18nKey="manifesto.section4.p1"
+                        components={{ highlight: <Highlight children={undefined} /> }}
+                    />
                 </p>
                 <p style={{ marginTop: '12px' }}>
-                    Kapıdan adım attığında şunu hissedersin:
+                    {t('manifesto.section4.p2')}
                 </p>
                 <Quote>
-                    Burada hiçbir şey hızlı yapılmaz.<br />
-                    Burada hiçbir şey boşuna yapılmaz.<br />
-                    Burada hiçbir şey sadece var olmak için var değildir.
+                    <div style={{ whiteSpace: 'pre-line' }}>{t('manifesto.section4.quote')}</div>
                 </Quote>
-                <p>
-                    Her malzemenin nedeni vardır.<br />
-                    Her tarifin geçmişi vardır.<br />
-                    Her ustanın yanık izleri vardır.
+                <p style={{ whiteSpace: 'pre-line' }}>
+                    {t('manifesto.section4.p3')}
                 </p>
             </Section>
 
             {/* Bölüm 5: Olgunlaşma */}
             <Section delay={0.25}>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
-                    ⏳ Gerçek Değer Olgunlaşır
+                    {t('manifesto.section5.title')}
                 </h3>
                 <Quote>
-                    Çünkü gerçek değer üretilmez…<br />
-                    Olgunlaşır.<br />
-                    Ateşin üstünde bekler.<br />
-                    Zamanla şekil alır.<br />
-                    Sabırla derinleşir.
+                    <div style={{ whiteSpace: 'pre-line' }}>{t('manifesto.section5.quote')}</div>
                 </Quote>
             </Section>
 
             {/* Bölüm 6: Misyon */}
             <Section delay={0.3}>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
-                    🎯 Peki Biz Ne İçin Varız?
+                    {t('manifesto.section6.title')}
                 </h3>
-                <p>
-                    Sadece işlem yapmak için değil.<br />
-                    Sadece almak ve satmak için değil.<br />
-                    Sadece görünmek için hiç değil.
+                <p style={{ whiteSpace: 'pre-line' }}>
+                    {t('manifesto.section6.p1')}
                 </p>
                 <div style={{
                     background: 'rgba(245, 159, 11, 0.08)',
@@ -225,51 +210,51 @@ export function Manifesto() {
                     padding: '15px',
                     margin: '15px 0'
                 }}>
-                    <p style={{ color: '#fff', fontWeight: '600', lineHeight: '2' }}>
-                        🔹 Biz <Highlight>değer üretmek</Highlight> için varız.<br />
-                        🔹 Biz <Highlight>bilgiyi paylaşmak</Highlight> için varız.<br />
-                        🔹 Biz <Highlight>ustalık yetiştirmek</Highlight> için varız.<br />
-                        🔹 Biz dijital dünyaya <Highlight>anlam kazandırmak</Highlight> için varız.
-                    </p>
+                    <div style={{ color: '#fff', fontWeight: '600', lineHeight: '2' }}>
+                        {(t('manifesto.section6.box', { returnObjects: true }) as string[]).map((text, i) => (
+                            <div key={i}>
+                                🔹 <Trans
+                                    defaults={text}
+                                    components={{ highlight: <Highlight children={undefined} /> }}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <Quote>
-                    Biz hızın değil… derinliğin tarafındayız.<br />
-                    Gürültünün değil… ustalığın tarafındayız.<br />
-                    Tüketmenin değil… üretmenin tarafındayız.
+                    <div style={{ whiteSpace: 'pre-line' }}>{t('manifesto.section6.quote')}</div>
                 </Quote>
             </Section>
 
             {/* Bölüm 7: Fark */}
             <Section delay={0.35}>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
-                    💎 TASTE Bir Trend Değil
+                    {t('manifesto.section7.title')}
                 </h3>
-                <p>
-                    Bugün dijital dünyada sayısız varlık dolaşıyor.<br />
-                    Bazıları sadece görülmek için var.<br />
-                    Bazıları sadece satılmak için var.<br />
-                    Bazıları sadece unutulmak için doğuyor.
+                <p style={{ whiteSpace: 'pre-line' }}>
+                    {t('manifesto.section7.p1')}
                 </p>
                 <Quote>
-                    Ama bazı şeyler… ihtiyaçtan doğar.
+                    {t('manifesto.section7.quote')}
                 </Quote>
-                <p>
-                    <Highlight>TASTE</Highlight> bir trend değil.<br />
-                    Bir kopya değil.<br />
-                    Bir gürültü değil.
+                <p style={{ whiteSpace: 'pre-line' }}>
+                    <Trans
+                        i18nKey="manifesto.section7.p2"
+                        components={{ highlight: <Highlight children={undefined} /> }}
+                    />
                 </p>
-                <p style={{ marginTop: '10px' }}>
-                    Bu mutfak bir boşluğu doldurmak için kuruldu.<br />
-                    İnsanların sadece işlem yapmadığı…<br />
-                    <Highlight>Ürettiği… öğrendiği… dönüşüp geliştiği…</Highlight><br />
-                    bir sistem olmak için.
+                <p style={{ marginTop: '10px', whiteSpace: 'pre-line' }}>
+                    <Trans
+                        i18nKey="manifesto.section7.p3"
+                        components={{ highlight: <Highlight children={undefined} /> }}
+                    />
                 </p>
             </Section>
 
             {/* Bölüm 8: Yol */}
             <Section delay={0.4}>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
-                    🛤️ Yolumuz
+                    {t('manifesto.section8.title')}
                 </h3>
                 <div style={{
                     display: 'grid',
@@ -277,14 +262,7 @@ export function Manifesto() {
                     gap: '10px',
                     margin: '15px 0'
                 }}>
-                    {[
-                        { icon: '📚', text: 'Çırak yetiştirmek' },
-                        { icon: '👨‍🍳', text: 'Usta yetiştirmek' },
-                        { icon: '🧠', text: 'Bilinci büyütmek' },
-                        { icon: '💰', text: 'Değeri derinleştirmek' },
-                        { icon: '🔥', text: 'Ateşi büyütmek' },
-                        { icon: '🍽️', text: 'Lezzeti artırmak' }
-                    ].map((item, i) => (
+                    {(t('manifesto.section8.paths', { returnObjects: true }) as { icon: string, text: string }[]).map((item, i) => (
                         <div key={i} style={{
                             background: 'rgba(255,255,255,0.03)',
                             border: '1px solid rgba(255,255,255,0.06)',
@@ -299,13 +277,20 @@ export function Manifesto() {
                     ))}
                 </div>
                 <Quote>
-                    Peki bu yol nereye gidiyor?<br />
-                    Sonu olan bir yere değil. Büyüyen bir yere.<br />
-                    Bu bir varış noktası değil… bir <strong>ustalık yolu</strong>.
+                    <div style={{ whiteSpace: 'pre-line' }}>
+                        <Trans
+                            i18nKey="manifesto.section8.quote"
+                            components={{ highlight: <Highlight children={undefined} /> }}
+                        />
+                    </div>
                 </Quote>
-                <p style={{ textAlign: 'center', color: '#fff', fontWeight: '500', marginTop: '10px' }}>
-                    Gerçek ustalar bilir:<br />
-                    <Highlight>En iyi tarif henüz yazılmamış olandır.</Highlight>
+                <p style={{ textAlign: 'center', color: '#fff', fontWeight: '500', marginTop: '10px', whiteSpace: 'pre-line' }}>
+                    {t('manifesto.section8.p1', { defaultValue: 'True masters know:' })}
+                    <br />
+                    <Trans
+                        i18nKey="manifesto.section8.p1"
+                        components={{ highlight: <Highlight children={undefined} /> }}
+                    />
                 </p>
             </Section>
 
@@ -322,13 +307,10 @@ export function Manifesto() {
                         fontWeight: '800',
                         marginBottom: '15px'
                     }}>
-                        Ve Şimdi…
+                        {t('manifesto.section9.title')}
                     </h3>
-                    <p style={{ lineHeight: '2', fontSize: '15px' }}>
-                        Ocak yanıyor.<br />
-                        Tencereler hazır.<br />
-                        Tarif yazılmayı bekliyor.<br />
-                        Zaman akıyor.
+                    <p style={{ lineHeight: '2', fontSize: '15px', whiteSpace: 'pre-line' }}>
+                        {t('manifesto.section9.p1')}
                     </p>
                     <div style={{
                         background: 'rgba(245, 159, 11, 0.1)',
@@ -337,17 +319,15 @@ export function Manifesto() {
                         padding: '20px',
                         margin: '20px 0'
                     }}>
-                        <p style={{ color: '#fff', fontWeight: '500', lineHeight: '1.8' }}>
-                            Bu bir hikâye değil.<br />
-                            Bu bir metafor değil.<br />
-                            Bu bir hayal hiç değil.<br />
-                            Bu… <Highlight>kaçınılmaz bir evrim</Highlight>.
+                        <p style={{ color: '#fff', fontWeight: '500', lineHeight: '1.8', whiteSpace: 'pre-line' }}>
+                            <Trans
+                                i18nKey="manifesto.section9.box"
+                                components={{ highlight: <Highlight children={undefined} /> }}
+                            />
                         </p>
                     </div>
-                    <p style={{ lineHeight: '2', fontSize: '15px' }}>
-                        Ateş yakıldı.<br />
-                        Sistem kuruldu.<br />
-                        Ama lezzet hâlâ pişiyor.
+                    <p style={{ lineHeight: '2', fontSize: '15px', whiteSpace: 'pre-line' }}>
+                        {t('manifesto.section9.p2')}
                     </p>
                     <div style={{
                         marginTop: '25px',
@@ -357,10 +337,10 @@ export function Manifesto() {
                         color: '#000'
                     }}>
                         <p style={{ fontSize: '13px', fontWeight: '600', marginBottom: '8px' }}>
-                            Soru şu değil: "TASTE var mı?"
+                            {t('manifesto.section9.footer_q')}
                         </p>
                         <p style={{ fontSize: '17px', fontWeight: '900' }}>
-                            Bu mutfakta yerini almaya hazır mısın? 🍽️
+                            {t('manifesto.section9.footer_a')}
                         </p>
                     </div>
                 </div>

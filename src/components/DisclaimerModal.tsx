@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 
 const STORAGE_KEY = 'taste_disclaimer_accepted_v1'
 
@@ -8,6 +9,8 @@ interface DisclaimerModalProps {
 }
 
 export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
+    const { i18n } = useTranslation()
+    const isEn = i18n.language === 'en'
     const [checked, setChecked] = useState(false)
     const [shake, setShake] = useState(false)
 
@@ -69,9 +72,9 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                     <h2 style={{
                         fontSize: '18px', fontWeight: 800,
                         color: '#f59e0b', marginBottom: '6px'
-                    }}>Önemli Risk Uyarısı</h2>
+                    }}>{isEn ? 'Important Risk Warning' : 'Önemli Risk Uyarısı'}</h2>
                     <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                        Important Risk Disclaimer
+                        {isEn ? 'Legal Notice & Terms' : 'HUKUKİ BİLGİLENDİRME & ŞARTLAR'}
                     </p>
                 </div>
 
@@ -84,33 +87,33 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                     <DisclaimerItem
                         emoji="🚫"
                         color="#ef4444"
-                        title="Yatırım Tavsiyesi Değildir"
-                        subtitle="Not Investment Advice"
-                        text="Bu uygulama içindeki hiçbir içerik, grafik, fiyat bilgisi veya ifade yatırım tavsiyesi, finansal öneri veya alım-satım teklifi olarak yorumlanamaz."
+                        title={isEn ? "Not Investment Advice" : "Yatırım Tavsiyesi Değildir"}
+                        subtitle="Disclaimer"
+                        text={isEn ? "Nothing in this application constitutes investment advice, financial guidance, or an offer to buy/sell any security or crypto asset." : "Bu uygulama içindeki hiçbir içerik, grafik, fiyat bilgisi veya ifade yatırım tavsiyesi, finansal öneri veya alım-satım teklifi olarak yorumlanamaz."}
                     />
 
                     <DisclaimerItem
                         emoji="⚠️"
                         color="#f59e0b"
-                        title="Yüksek Risk"
-                        subtitle="High Risk Warning"
-                        text="Kripto para varlıkları son derece yüksek risk içerir. Yatırımınızın tamamını kaybedebilirsiniz. Yalnızca kaybetmeyi göze aldığınız miktarı yatırın."
+                        title={isEn ? "High Risk Warning" : "Yüksek Risk Tespiti"}
+                        subtitle="Risk Level"
+                        text={isEn ? "Cryptocurrency assets carry high risk. You may lose all of your investment. Only invest what you can afford to lose." : "Kripto para varlıkları son derece yüksek risk içerir. Yatırımınızın tamamını kaybedebilirsiniz. Yalnızca kaybetmeyi göze aldığınız miktarı yatırın."}
                     />
 
                     <DisclaimerItem
                         emoji="📋"
                         color="#818cf8"
-                        title="Sorumluluk Reddi"
-                        subtitle="Limitation of Liability"
-                        text="TASTE Token ekibi, bu uygulamaya dayanarak alınan kararlar sonucunda oluşabilecek herhangi bir mali kayıp, zarar veya kayıptan sorumlu tutulamaz."
+                        title={isEn ? "Limitation of Liability" : "Sorumluluk Reddi"}
+                        subtitle="Liability"
+                        text={isEn ? "The TASTE Token team cannot be held responsible for any financial loss or damage resulting from decisions based on this application." : "TASTE Token ekibi, bu uygulamaya dayanarak alınan kararlar sonucunda oluşabilecek herhangi bir mali kayıp, zarar veya kayıptan sorumlu tutulamaz."}
                     />
 
                     <DisclaimerItem
                         emoji="🌍"
                         color="#22c55e"
-                        title="Yasal Uyarı"
-                        subtitle="Regulatory Notice"
-                        text="Kripto para işlemleri bulunduğunuz ülkede kısıtlı veya yasak olabilir. Yerel mevzuata uygun hareket etmek tamamen kullanıcının sorumluluğundadır."
+                        title={isEn ? "Regulatory Notice" : "Yasal Uyarı"}
+                        subtitle="Compliance"
+                        text={isEn ? "Crypto transactions may be restricted in your country. Users are solely responsible for complying with local laws." : "Kripto para işlemleri bulunduğunuz ülkede kısıtlı veya yasak olabilir. Yerel mevzuata uygun hareket etmek tamamen kullanıcının sorumluluğundadır."}
                     />
                 </div>
 
@@ -146,10 +149,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         {checked && '✓'}
                     </div>
                     <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
-                        Yukarıdaki risk uyarılarını okudum ve anladım. Bu uygulamanın yatırım tavsiyesi içermediğini kabul ediyorum.{' '}
-                        <span style={{ color: 'rgba(255,255,255,0.4)' }}>
-                            (I have read, understood, and accept the risk disclaimer.)
-                        </span>
+                        {isEn ? 'I have read and understood the risk warnings above. I accept that this application does not contain investment advice.' : 'Yukarıdaki risk uyarılarını okudum ve anladım. Bu uygulamanın yatırım tavsiyesi içermediğini kabul ediyorum.'}
                     </span>
                 </motion.label>
 
@@ -173,7 +173,9 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         boxShadow: checked ? '0 8px 24px rgba(245,159,11,0.3)' : 'none',
                     }}
                 >
-                    {checked ? '✅ Kabul Ediyorum — Devam Et' : 'Lütfen Onay Kutusunu İşaretleyin'}
+                    {checked 
+                        ? (isEn ? '✅ I Accept — Continue' : '✅ Kabul Ediyorum — Devam Et') 
+                        : (isEn ? 'Please check the box to continue' : 'Lütfen Onay Kutusunu İşaretleyin')}
                 </motion.button>
 
                 <p style={{ textAlign: 'center', fontSize: '10px', color: 'rgba(255,255,255,0.2)', marginTop: '12px' }}>

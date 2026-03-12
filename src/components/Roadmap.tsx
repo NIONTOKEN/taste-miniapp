@@ -1,40 +1,36 @@
 import { motion } from 'framer-motion'
-
-// ─── Tamamlanan işler (gerçek, kanıtlı) ───────────────────────────────────
-const COMPLETED = [
-    { emoji: '🪙', title: 'Token Mint & Piyasaya Sürüm', desc: 'TASTE token TON blockchain üzerinde mint edildi, STON.fi\'de işlem görmeye başladı.' },
-    { emoji: '💧', title: 'Likidite Havuzu', desc: 'STON.fi\'de TON/TASTE likidite havuzu oluşturuldu ve aktif.' },
-    { emoji: '🔒', title: 'Token & LP Kilidi', desc: 'Toplam arzın %88.4\'ü JVault\'ta 3 ayrı kilidle kilitlendi. Ek olarak STON.fi pTON-TASTE LP tokenlerinin %81.6\'sı tinu-locker.ton ile kilitlendi. Her iki kilit blockchain\'de herkese açık doğrulanabilir.' },
-    { emoji: '🛡️', title: 'Güvenlik Taraması', desc: 'Akıllı sözleşme güvenlik denetiminden geçirildi.' },
-    { emoji: '📱', title: 'Telegram Mini App', desc: 'Telegram üzerinde çalışan tam özellikli mini uygulama yayına girdi.' },
-    { emoji: '🎁', title: 'Airdrop & Ödül Dağıtımı', desc: '443 cüzdana TASTE airdrop gerçekleştirildi ve her gün büyüyor. Çarkıfelek ödül sistemi aktif.' },
-    { emoji: '📄', title: 'Whitepaper & Litepaper', desc: 'Projeyi anlatan kapsamlı teknik doküman ve lite versiyon yayınlandı.' },
-    { emoji: '🌐', title: 'Sosyal Ağ Varlığı', desc: 'Telegram kanalı (@taste2025) ve Topluluk Grubu, WhatsApp kanalı, Twitter/X (@taste_token), Instagram (@taste_ton_taste), TikTok (@taste_ton), Facebook ve resmi website (tastetoken.net) kuruldu. Tüm platformlarda aktif.' },
-    { emoji: '🐾', title: 'Sokak Hayvanları Bağış Platformu', desc: 'TON ve TASTE ile hayvan barınaklarına bağış yapılabilen platform eklendi.' },
-    { emoji: '🍽️', title: 'Günlük Yemek Paylaşım Platformu', desc: 'Kullanıcılar tarif, yemek ve mekan paylaşabiliyor. Gerçek zamanlı (Supabase ile).' },
-    { emoji: '👛', title: '500 Cüzdana Ulaşma', desc: 'İlk çeyrek hedefi: 500 benzersiz cüzdan sahibi. Topluluk büyümeye devam ediyor.' },
-    { emoji: '⚠️', title: 'Gıda Alerjeni Bildirim Sistemi', desc: 'AB & Türkiye gıda mevzuatındaki 14 zorunlu alerjen (Gluten, Süt, Yumurta, Balık vb.) Yemek Akışı\'na entegre edildi. Her paylaşıma alerjen etiketi eklenebiliyor, kalori bilgisi gösteriliyor.' },
-    { emoji: '🚀', title: 'Mini App v2 Güncellemesi — Mart 2026', desc: 'PoweredBy bölümü SVG logolarla yenilendi (OKX, Bitget, Binance, Telegram, Google, Gemini). Whitepaper\'a TASTE özet kartı eklendi. Ödül dağıtımı bitiş sayacı (20 Mayıs 2026) eklendi. Yemek Akışı\'na beğeni, arama ve trend yemekler getirildi.' },
-]
-
-
-// ─── Devam eden & yakın plan (gerçekçi) ──────────────────────────────────
-const ONGOING = [
-    { emoji: '🌱', title: 'Topluluk Büyütme', desc: 'Her gün yeni kullanıcılar, her gün yeni paylaşımlar. Organik büyüme odaklı.' },
-    { emoji: '🔗', title: 'Daha Fazla DEX Görünürlüğü', desc: 'STON.fi\'nin yanı sıra diğer TON ekosistem platformlarında varlık.' },
-    { emoji: '📊', title: 'Şeffaf Raporlama', desc: 'Holder sayısı, işlem hacmi ve topluluk büyümesi düzenli paylaşılacak.' },
-    { emoji: '🛠️', title: 'Mini App Geliştirme', desc: 'Kullanıcı geri bildirimlerine göre yeni özellikler ekleniyor.' },
-]
-
-// ─── Felsefe ──────────────────────────────────────────────────────────────
-const PHILOSOPHY = [
-    '🎯 TASTE yapamayacağı şeyin yol haritasını çizmez.',
-    '✅ Yaptığının haritasını çıkarır — kanıtlanmış, gerçek.',
-    '🤝 Veremeyeceği sözü vermez. İnsanlar bize bu yüzden güveniyor.',
-    '📌 Her adım şeffaf, her taahhüt yerine getirilmiş.',
-]
+import { useTranslation } from 'react-i18next'
 
 export function Roadmap() {
+    const { t } = useTranslation()
+
+    // ─── Tamamlanan işler (gerçek, kanıtlı) ───────────────────────────────────
+    const COMPLETED = [
+        { emoji: '🪙', key: 'mint' },
+        { emoji: '💧', key: 'lp' },
+        { emoji: '🔒', key: 'lock' },
+        { emoji: '🛡️', key: 'security' },
+        { emoji: '📱', key: 'miniapp' },
+        { emoji: '🎁', key: 'airdrop' },
+        { emoji: '📄', key: 'documents' },
+        { emoji: '🌐', key: 'social' },
+        { emoji: '🐾', key: 'stray' },
+        { emoji: '🍽️', key: 'food_sharing' },
+        { emoji: '👛', key: 'wallets' },
+        { emoji: '⚠️', key: 'allergen' },
+        { emoji: '🚀', key: 'v2' },
+    ]
+
+    // ─── Devam eden & yakın plan (gerçekçi) ──────────────────────────────────
+    const ONGOING = [
+        { emoji: '🌱', key: 'growth' },
+        { emoji: '🔗', key: 'visibility' },
+        { emoji: '📊', key: 'reporting' },
+        { emoji: '🛠️', key: 'dev' },
+    ]
+
+    const philosophy = t('roadmap.philosophy', { returnObjects: true }) as string[]
+
     return (
         <div>
             {/* Felsefe Banner */}
@@ -51,9 +47,9 @@ export function Roadmap() {
                 }}
             >
                 <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '12px' }}>
-                    TASTE Felsefesi
+                    {t('roadmap.philosophy_title')}
                 </div>
-                {PHILOSOPHY.map((p, i) => (
+                {Array.isArray(philosophy) && philosophy.map((p, i) => (
                     <div key={i} style={{ fontSize: '13px', color: '#e2e8f0', lineHeight: 1.7, marginBottom: '4px' }}>{p}</div>
                 ))}
             </motion.div>
@@ -63,7 +59,7 @@ export function Roadmap() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                     <div style={{ height: 1, flex: 1, background: 'rgba(34,197,94,0.2)' }} />
                     <div style={{ fontSize: '11px', fontWeight: 800, color: '#22c55e', textTransform: 'uppercase', letterSpacing: '2px', flexShrink: 0 }}>
-                        ✅ Q1 2026 — Tamamlanan Hedefler
+                        ✅ {t('roadmap.completed_goals')}
                     </div>
                     <div style={{ height: 1, flex: 1, background: 'rgba(34,197,94,0.2)' }} />
                 </div>
@@ -89,10 +85,10 @@ export function Roadmap() {
                                 boxShadow: '0 0 8px rgba(34,197,94,0.5)'
                             }} />
                             <div style={{ fontWeight: 700, fontSize: '13px', color: '#fff', marginBottom: '3px' }}>
-                                {item.emoji} {item.title}
+                                {item.emoji} {t(`roadmap.items.${item.key}.title`)}
                             </div>
                             <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.6 }}>
-                                {item.desc}
+                                {t(`roadmap.items.${item.key}.desc`)}
                             </div>
                         </motion.div>
                     ))}
@@ -104,7 +100,7 @@ export function Roadmap() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                     <div style={{ height: 1, flex: 1, background: 'rgba(245,158,11,0.2)' }} />
                     <div style={{ fontSize: '11px', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '2px', flexShrink: 0 }}>
-                        🔄 Devam Eden
+                        🔄 {t('roadmap.ongoing')}
                     </div>
                     <div style={{ height: 1, flex: 1, background: 'rgba(245,158,11,0.2)' }} />
                 </div>
@@ -128,10 +124,10 @@ export function Roadmap() {
                                 boxShadow: '0 0 8px rgba(245,158,11,0.5)'
                             }} />
                             <div style={{ fontWeight: 700, fontSize: '13px', color: '#fff', marginBottom: '3px' }}>
-                                {item.emoji} {item.title}
+                                {item.emoji} {t(`roadmap.items.${item.key}.title`)}
                             </div>
                             <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.6 }}>
-                                {item.desc}
+                                {t(`roadmap.items.${item.key}.desc`)}
                             </div>
                         </motion.div>
                     ))}
@@ -154,8 +150,8 @@ export function Roadmap() {
                     textAlign: 'center'
                 }}
             >
-                Bu yol haritası yaşayan bir belgedir — tamamlananlar eklenir, söz verilmeyenler eklenmez.<br />
-                <strong style={{ color: '#f59e0b' }}>TASTE güveni inşa eder, hayal satmaz.</strong>
+                {t('roadmap.footer_text')}<br />
+                <strong style={{ color: '#f59e0b' }}>{t('roadmap.footer_bold')}</strong>
             </motion.div>
         </div>
     )

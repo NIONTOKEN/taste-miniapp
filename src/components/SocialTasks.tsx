@@ -4,21 +4,22 @@ import { motion } from 'framer-motion'
 interface SocialLink {
     id: string;
     icon: string;
-    label: string;
-    sublabel?: string;
+    label: string | React.ReactNode;
+    sublabel?: string | React.ReactNode;
     link: string;
     isTelegram?: boolean;
 }
 
 export function SocialTasks() {
-    const { t } = useTranslation()
+    const { i18n } = useTranslation()
+    const isEn = i18n.language === 'en'
 
     // Telegram Community Hub links
     const telegramLinks: SocialLink[] = [
         {
             id: 'tg_channel',
             icon: '📢',
-            label: 'Duyuru Kanalı',
+            label: isEn ? 'Announcement Channel' : 'Duyuru Kanalı',
             sublabel: '@taste2025',
             link: 'https://t.me/taste2025',
             isTelegram: true,
@@ -26,7 +27,7 @@ export function SocialTasks() {
         {
             id: 'tg_group',
             icon: '💬',
-            label: 'Topluluk Sohbeti',
+            label: isEn ? 'Community Chat' : 'Topluluk Sohbeti',
             sublabel: '@taste_miniapp',
             link: 'https://t.me/taste_miniapp',
             isTelegram: true,
@@ -42,8 +43,8 @@ export function SocialTasks() {
         {
             id: 'telegram_share',
             icon: '📲',
-            label: 'Arkadaşlarına Paylaş',
-            sublabel: 'Topluluğu büyüt!',
+            label: isEn ? 'Share with Friends' : 'Arkadaşlarına Paylaş',
+            sublabel: isEn ? 'Grow the community!' : 'Topluluğu büyüt!',
             link: 'https://t.me/share/url?url=https://t.me/taste_launch_bot/app&text=Check%20out%20Taste%20MiniApp!%20🍔💎%20Join%20the%20TASTE%20community!',
             isTelegram: true,
         },
@@ -156,8 +157,8 @@ export function SocialTasks() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
                     <span style={{ fontSize: '24px' }}>✈️</span>
                     <div>
-                        <h3 style={{ fontSize: '1rem', margin: 0 }}>Telegram Community</h3>
-                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>Tüm Telegram kanallarımız</p>
+                        <h3 style={{ fontSize: '1rem', margin: 0 }}>{isEn ? 'Telegram Community' : 'Telegram Topluluğu'}</h3>
+                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>{isEn ? 'All our Telegram channels' : 'Tüm Telegram kanallarımız'}</p>
                     </div>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -167,7 +168,7 @@ export function SocialTasks() {
 
             {/* Social Media Links */}
             <div className="glass-panel" style={{ padding: '20px' }}>
-                <h3 style={{ marginBottom: '15px' }}>🌍 Social Media</h3>
+                <h3 style={{ marginBottom: '15px' }}>{isEn ? '🌍 Social Media' : '🌍 Sosyal Medya'}</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {socialLinks.map((item, idx) => renderLinkItem(item, idx))}
                 </div>
