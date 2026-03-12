@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTonConnectUI } from '@tonconnect/ui-react'
+import { useTranslation } from 'react-i18next'
 import {
     getPlayerId,
     checkSpinStatus,
@@ -121,6 +122,7 @@ function WheelSVG() {
 
 // ─── Main Component ─────────────────────────────────────────────────────────
 export function SpinWheel() {
+    const { i18n } = useTranslation()
     const [tonConnectUI] = useTonConnectUI()
     const walletAddress = tonConnectUI.account?.address ?? ''
 
@@ -260,13 +262,20 @@ export function SpinWheel() {
     const whatsappLink = WHATSAPP_GROUP
 
     function copyMessage() {
-        const msg =
+        const msg = i18n.language === 'tr' ?
             `🎉 TASTE ÖDÜL TALEBİ\n\n` +
             `Merhaba! 2.000 puan biriktirdim.\n\n` +
             `💰 Talep: ${REWARD_TASTE} TASTE\n` +
             `👛 Cüzdan: ${walletAddress || '(cüzdan bağlı değil)'}\n` +
             `🆔 Player ID: ${playerIdRef.current}\n\n` +
             `Tarih: ${new Date().toLocaleDateString('tr-TR')}`
+            :
+            `🎉 TASTE REWARD CLAIM\n\n` +
+            `Hello! I accumulated 2,000 points.\n\n` +
+            `💰 Claim: ${REWARD_TASTE} TASTE\n` +
+            `👛 Wallet: ${walletAddress || '(wallet not connected)'}\n` +
+            `🆔 Player ID: ${playerIdRef.current}\n\n` +
+            `Date: ${new Date().toLocaleDateString()}`
         navigator.clipboard.writeText(msg).then(() => {
             setCopied(true)
             setTimeout(() => setCopied(false), 2500)
@@ -274,12 +283,18 @@ export function SpinWheel() {
     }
 
     function copyTasteMessage() {
-        const msg =
+        const msg = i18n.language === 'tr' ?
             `🏆 ÇARKTA TASTE KAZANDIM!\n\n` +
             `💰 Kazandım: ${tasteWon} TASTE\n` +
             `👛 Cüzdan: ${walletAddress || '(cüzdan bağlı değil)'}\n` +
             `🆔 Player ID: ${playerIdRef.current}\n\n` +
             `Tarih: ${new Date().toLocaleDateString('tr-TR')}`
+            :
+            `🏆 I WON TASTE ON THE WHEEL!\n\n` +
+            `💰 I won: ${tasteWon} TASTE\n` +
+            `👛 Wallet: ${walletAddress || '(wallet not connected)'}\n` +
+            `🆔 Player ID: ${playerIdRef.current}\n\n` +
+            `Date: ${new Date().toLocaleDateString()}`
         navigator.clipboard.writeText(msg).then(() => {
             setCopied(true)
             setTimeout(() => setCopied(false), 2500)
@@ -291,8 +306,8 @@ export function SpinWheel() {
         return (
             <div style={{ textAlign: 'center', padding: '40px 20px', color: '#64748b' }}>
                 <div style={{ fontSize: '40px', marginBottom: '12px', animation: 'pulse 1.5s infinite' }}>🎡</div>
-                <div style={{ fontWeight: 700, marginBottom: '4px', color: '#fff' }}>Durum kontrol ediliyor...</div>
-                <div style={{ fontSize: '12px' }}>Sunucu doğrulaması yapılıyor</div>
+                <div style={{ fontWeight: 700, marginBottom: '4px', color: '#fff' }}>{i18n.language === 'tr' ? 'Durum kontrol ediliyor...' : 'Checking status...'}</div>
+                <div style={{ fontSize: '12px' }}>{i18n.language === 'tr' ? 'Sunucu doğrulaması yapılıyor' : 'Performing server verification'}</div>
             </div>
         )
     }
@@ -307,7 +322,7 @@ export function SpinWheel() {
                     borderRadius: '12px', padding: '10px 14px', marginBottom: '16px',
                     fontSize: '12px', color: '#f59e0b', textAlign: 'center'
                 }}>
-                    ⚠️ Sunucuya bağlanılamadı — çevrimiçi mod kullanılıyor
+                    {i18n.language === 'tr' ? '⚠️ Sunucuya bağlanılamadı — çevrimiçi mod kullanılıyor' : '⚠️ Failed to connect to server — using offline mode'}
                 </div>
             )}
 
@@ -322,7 +337,7 @@ export function SpinWheel() {
                             fontSize: '13px', color: '#ef4444', textAlign: 'center', fontWeight: 600
                         }}
                     >
-                        🚫 Bugün zaten çevrildi — sunucu tarafından doğrulandı
+                        {i18n.language === 'tr' ? '🚫 Bugün zaten çevrildi — sunucu tarafından doğrulandı' : '🚫 Already spun today — verified by server'}
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -335,16 +350,16 @@ export function SpinWheel() {
                 style={{ textAlign: 'center', marginBottom: '20px' }}
             >
                 <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>
-                    Günlük Şans
+                    {i18n.language === 'tr' ? 'Günlük Şans' : 'Daily Luck'}
                 </div>
-                <h3 style={{ fontSize: '1.3rem', fontWeight: 900, margin: 0 }}>🎡 Çarkıfelek</h3>
+                <h3 style={{ fontSize: '1.3rem', fontWeight: 900, margin: 0 }}>{i18n.language === 'tr' ? '🎡 Çarkıfelek' : '🎡 Spin the Wheel'}</h3>
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    Günde 1 çevirme hakkı • 2.000 puan = <strong style={{ color: '#f59e0b' }}>{REWARD_TASTE} TASTE</strong>
-                    <br /><span style={{ color: '#fbbf24', fontSize: '11px' }}>🎁 Çarkta 1–3 TASTE doğrudan kazanabilirsin!</span>
+                    {i18n.language === 'tr' ? 'Günde 1 çevirme hakkı • 2.000 puan =' : '1 spin per day • 2,000 points ='} <strong style={{ color: '#f59e0b' }}>{REWARD_TASTE} TASTE</strong>
+                    <br /><span style={{ color: '#fbbf24', fontSize: '11px' }}>{i18n.language === 'tr' ? '🎁 Çarkta 1–3 TASTE doğrudan kazanabilirsin!' : '🎁 You can directly win 1–3 TASTE on the wheel!'}</span>
                 </p>
                 {/* Sunucu doğrulama rozeti */}
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', marginTop: '6px', background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '20px', padding: '3px 10px', fontSize: '10px', color: '#22c55e', fontWeight: 700 }}>
-                    🛡️ Sunucu Doğrulamalı
+                    {i18n.language === 'tr' ? '🛡️ Sunucu Doğrulamalı' : '🛡️ Server Verified'}
                 </div>
             </motion.div>
 
@@ -357,8 +372,8 @@ export function SpinWheel() {
                 marginBottom: '20px'
             }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '12px' }}>
-                    <span style={{ fontWeight: 700, color: '#fff' }}>⭐ {points.toLocaleString('tr-TR')} Puan</span>
-                    <span style={{ color: 'var(--text-muted)' }}>Hedef: {TARGET_POINTS.toLocaleString('tr-TR')}</span>
+                    <span style={{ fontWeight: 700, color: '#fff' }}>⭐ {points.toLocaleString(i18n.language === 'tr' ? 'tr-TR' : 'en-US')} {i18n.language === 'tr' ? 'Puan' : 'Points'}</span>
+                    <span style={{ color: 'var(--text-muted)' }}>{i18n.language === 'tr' ? 'Hedef:' : 'Target:'} {TARGET_POINTS.toLocaleString(i18n.language === 'tr' ? 'tr-TR' : 'en-US')}</span>
                 </div>
                 <div style={{ height: '8px', background: 'rgba(255,255,255,0.06)', borderRadius: '6px', overflow: 'hidden' }}>
                     <motion.div
@@ -376,7 +391,7 @@ export function SpinWheel() {
                     />
                 </div>
                 <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '5px', textAlign: 'right' }}>
-                    {remaining > 0 ? `${remaining.toLocaleString('tr-TR')} puan kaldı` : '🎉 ÖDÜL HAZIR!'}
+                    {remaining > 0 ? (i18n.language === 'tr' ? `${remaining.toLocaleString('tr-TR')} puan kaldı` : `${remaining.toLocaleString('en-US')} points left`) : (i18n.language === 'tr' ? '🎉 ÖDÜL HAZIR!' : '🎉 REWARD READY!')}
                 </div>
             </div>
 
@@ -423,7 +438,7 @@ export function SpinWheel() {
                         transition: 'all 0.2s'
                     }}
                 >
-                    {spinning ? '🌀 Dönüyor...' : canSpin ? '🎡 ÇEVİR!' : '✅ Bugün Çevrildi'}
+                    {spinning ? (i18n.language === 'tr' ? '🌀 Dönüyor...' : '🌀 Spinning...') : canSpin ? (i18n.language === 'tr' ? '🎡 ÇEVİR!' : '🎡 SPIN!') : (i18n.language === 'tr' ? '✅ Bugün Çevrildi' : '✅ Spun Today')}
                 </motion.button>
             </div>
 
@@ -447,11 +462,11 @@ export function SpinWheel() {
                         <div style={{ fontSize: '28px' }}>{lastResult.emoji}</div>
                         <div style={{ fontSize: '20px', fontWeight: '900', color: lastResult.color, marginTop: '4px' }}>
                             {lastResult.taste > 0
-                                ? `🎉 ${lastResult.taste} TASTE Kazandın!`
-                                : `+${lastResult.points} Puan!`}
+                                ? `🎉 ${lastResult.taste} ${i18n.language === 'tr' ? 'TASTE Kazandın!' : 'TASTE Won!'}`
+                                : `+${lastResult.points} ${i18n.language === 'tr' ? 'Puan!' : 'Points!'}`}
                         </div>
                         <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                            Yarın tekrar çevirebilirsin 🕐
+                            {i18n.language === 'tr' ? 'Yarın tekrar çevirebilirsin 🕐' : 'You can spin again tomorrow 🕐'}
                         </div>
                     </motion.div>
                 )}
@@ -460,12 +475,12 @@ export function SpinWheel() {
             {/* ── Info grid ── */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
                 <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '18px', fontWeight: '900', color: '#f59e0b' }}>{points.toLocaleString('tr-TR')}</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '3px' }}>Toplam Puan</div>
+                    <div style={{ fontSize: '18px', fontWeight: '900', color: '#f59e0b' }}>{points.toLocaleString(i18n.language === 'tr' ? 'tr-TR' : 'en-US')}</div>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '3px' }}>{i18n.language === 'tr' ? 'Toplam Puan' : 'Total Points'}</div>
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                     <div style={{ fontSize: '18px', fontWeight: '900', color: '#22c55e' }}>{totalClaimed}</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '3px' }}>Kazanılan TASTE</div>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '3px' }}>{i18n.language === 'tr' ? 'Kazanılan TASTE' : 'Earned TASTE'}</div>
                 </div>
             </div>
 
@@ -478,14 +493,14 @@ export function SpinWheel() {
                 fontSize: '12px'
             }}>
                 <div style={{ fontWeight: 700, color: 'var(--text-muted)', marginBottom: '10px', fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    Çark Dilimleri
+                    {i18n.language === 'tr' ? 'Çark Dilimleri' : 'Wheel Segments'}
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
                     {SEGMENTS.map((seg, i) => (
                         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <div style={{ width: 8, height: 8, borderRadius: '50%', background: seg.color, flexShrink: 0 }} />
                             <span style={{ color: seg.color, fontWeight: 700 }}>
-                                {seg.emoji} {seg.taste > 0 ? `${seg.label} 🎉` : `${seg.label} puan`}
+                                {seg.emoji} {seg.taste > 0 ? `${seg.label} 🎉` : (i18n.language === 'tr' ? `${seg.label} puan` : `${seg.label} points`)}
                             </span>
                         </div>
                     ))}
@@ -518,11 +533,11 @@ export function SpinWheel() {
                         >
                             <div style={{ fontSize: '54px', marginBottom: '12px' }}>🏆</div>
                             <h3 style={{ fontSize: '1.3rem', fontWeight: 900, marginBottom: '6px', color: '#fbbf24' }}>
-                                TEBRİKLER!
+                                {i18n.language === 'tr' ? 'TEBRİKLER!' : 'CONGRATULATIONS!'}
                             </h3>
                             <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '18px', lineHeight: 1.6 }}>
-                                <strong style={{ color: '#fff' }}>2.000 puan</strong> biriktirdin!<br />
-                                <strong style={{ color: '#fbbf24' }}>{REWARD_TASTE} TASTE</strong> ödülüne hak kazandın.
+                                <strong style={{ color: '#fff' }}>2.000 {i18n.language === 'tr' ? 'puan' : 'points'}</strong> {i18n.language === 'tr' ? 'biriktirdin!' : 'accumulated!'}<br />
+                                <strong style={{ color: '#fbbf24' }}>{REWARD_TASTE} TASTE</strong> {i18n.language === 'tr' ? 'ödülüne hak kazandın.' : 'reward unlocked.'}
                             </p>
 
                             {walletAddress ? (
@@ -540,7 +555,7 @@ export function SpinWheel() {
                                     borderRadius: '12px', padding: '10px 14px', marginBottom: '16px',
                                     fontSize: '12px', color: '#f59e0b'
                                 }}>
-                                    ⚠️ WhatsApp mesajına cüzdan adresini ekle!
+                                    {i18n.language === 'tr' ? '⚠️ WhatsApp mesajına cüzdan adresini ekle!' : '⚠️ Add your wallet address to the WhatsApp message!'}
                                 </div>
                             )}
 
@@ -549,10 +564,10 @@ export function SpinWheel() {
                                 padding: '12px', marginBottom: '18px', textAlign: 'left',
                                 fontSize: '12px', color: 'var(--text-muted)', lineHeight: 2
                             }}>
-                                <div>1️⃣ Mesajı kopyala</div>
-                                <div>2️⃣ WhatsApp grubuna git</div>
-                                <div>3️⃣ Mesajı yapıştır ve gönder</div>
-                                <div>4️⃣ TASTE cüzdanına gelecek! 🎉</div>
+                                <div>{i18n.language === 'tr' ? '1️⃣ Mesajı kopyala' : '1️⃣ Copy the message'}</div>
+                                <div>{i18n.language === 'tr' ? '2️⃣ WhatsApp grubuna git' : '2️⃣ Go to WhatsApp group'}</div>
+                                <div>{i18n.language === 'tr' ? '3️⃣ Mesajı yapıştır ve gönder' : '3️⃣ Paste the message and send'}</div>
+                                <div>{i18n.language === 'tr' ? '4️⃣ TASTE cüzdanına gelecek! 🎉' : '4️⃣ TASTE will arrive in your wallet! 🎉'}</div>
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -567,7 +582,7 @@ export function SpinWheel() {
                                         fontSize: '13px', fontWeight: 700, cursor: 'pointer'
                                     }}
                                 >
-                                    {copied ? '✅ Mesaj Kopyalandı!' : '📋 Mesajı Kopyala'}
+                                    {copied ? (i18n.language === 'tr' ? '✅ Mesaj Kopyalandı!' : '✅ Message Copied!') : (i18n.language === 'tr' ? '📋 Mesajı Kopyala' : '📋 Copy Message')}
                                 </motion.button>
 
                                 <motion.button
@@ -584,14 +599,14 @@ export function SpinWheel() {
                                         cursor: 'pointer', boxShadow: '0 4px 16px rgba(37,211,102,0.3)'
                                     }}
                                 >
-                                    💬 WhatsApp Grubuna Git
+                                    {i18n.language === 'tr' ? '💬 WhatsApp Grubuna Git' : '💬 Go to WhatsApp Group'}
                                 </motion.button>
 
                                 <button
                                     onClick={() => setShowReward(false)}
                                     style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '12px', cursor: 'pointer', padding: '6px' }}
                                 >
-                                    Sonra yapayım
+                                    {i18n.language === 'tr' ? 'Sonra yapayım' : 'I will do it later'}
                                 </button>
                             </div>
                         </motion.div>
@@ -627,12 +642,12 @@ export function SpinWheel() {
                                 {tasteWon === 1 ? '🎁' : '🏆'}
                             </div>
                             <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#2dd4bf', marginBottom: '6px' }}>
-                                🎉 {tasteWon} TASTE BONUSU!
+                                🎉 {tasteWon} TASTE {i18n.language === 'tr' ? 'BONUSU!' : 'BONUS!'}
                             </h3>
                             <p style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '18px', lineHeight: 1.7 }}>
-                                Çarkta <strong style={{ color: '#fbbf24' }}>{tasteWon} TASTE</strong> bonusu kazandın!<br />
-                                <span style={{ color: '#2dd4bf' }}>📌 Önemli:</span> Ödemeler minimum <strong style={{ color: '#fff' }}>25 TASTE</strong> eşiğinde yapılır.<br />
-                                Mesajını WhatsApp kanalına gönder, yönetici birikimi takip ederek gönderecek.
+                                {i18n.language === 'tr' ? 'Çarkta' : 'You won a'} <strong style={{ color: '#fbbf24' }}>{tasteWon} TASTE</strong> {i18n.language === 'tr' ? 'bonusu kazandın!' : 'bonus on the wheel!'}<br />
+                                <span style={{ color: '#2dd4bf' }}>📌 {i18n.language === 'tr' ? 'Önemli:' : 'Important:'}</span> {i18n.language === 'tr' ? 'Ödemeler minimum' : 'Payments are made at a minimum threshold of'} <strong style={{ color: '#fff' }}>25 TASTE</strong> {i18n.language === 'tr' ? 'eşiğinde yapılır.' : ''}<br />
+                                {i18n.language === 'tr' ? 'Mesajını WhatsApp grubuna gönder, yönetici birikimi takip ederek gönderecek.' : 'Send your message to the WhatsApp group, the admin will track the accumulation and send it.'}
                             </p>
                             {walletAddress && (
                                 <div style={{
@@ -656,7 +671,7 @@ export function SpinWheel() {
                                         fontSize: '13px', fontWeight: 700, cursor: 'pointer'
                                     }}
                                 >
-                                    {copied ? '✅ Mesaj Kopyalandı!' : '📋 Mesajı Kopyala'}
+                                    {copied ? (i18n.language === 'tr' ? '✅ Mesaj Kopyalandı!' : '✅ Message Copied!') : (i18n.language === 'tr' ? '📋 Mesajı Kopyala' : '📋 Copy Message')}
                                 </motion.button>
                                 <motion.button
                                     whileTap={{ scale: 0.97 }}
@@ -672,11 +687,11 @@ export function SpinWheel() {
                                         cursor: 'pointer', boxShadow: '0 4px 16px rgba(37,211,102,0.3)'
                                     }}
                                 >
-                                    💬 WhatsApp Kanalına Git
+                                    {i18n.language === 'tr' ? '💬 WhatsApp Kanalına Git' : '💬 Go to WhatsApp Channel'}
                                 </motion.button>
                                 <button onClick={() => setShowTasteWin(false)}
                                     style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '12px', cursor: 'pointer' }}
-                                >Sonra yapayım</button>
+                                >{i18n.language === 'tr' ? 'Sonra yapayım' : 'I will do it later'}</button>
                             </div>
                         </motion.div>
                     </>

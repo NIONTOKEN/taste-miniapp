@@ -219,9 +219,7 @@ function App() {
       if (!savedLang) {
         const userLang = tg.initDataUnsafe?.user?.language_code;
         if (userLang?.startsWith('tr')) i18n.changeLanguage('tr');
-        else if (userLang?.startsWith('ar')) i18n.changeLanguage('ar');
-        else if (userLang?.startsWith('ru')) i18n.changeLanguage('ru');
-        else if (userLang?.startsWith('hi')) i18n.changeLanguage('hi');
+        else i18n.changeLanguage('en');
       }
     }
   }, []);
@@ -254,14 +252,11 @@ function App() {
   const languages = [
     { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
     { code: 'en', label: 'English (US)', flag: '🇺🇸' },
-    { code: 'ar', label: 'العربية', flag: '🇦🇪' },
-    { code: 'ru', label: 'Русский', flag: '🇷🇺' },
-    { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
   ];
 
   const currentLangCode = i18n.language?.split('-')[0] || 'en';
   const currentLang = languages.find(l => l.code === currentLangCode) || languages[1];
-  const isRTL = currentLangCode === 'ar';
+  const isRTL = false; // Arabic removed
 
   const changeLanguage = (code: string) => {
     i18n.changeLanguage(code);
@@ -354,32 +349,38 @@ function App() {
 
             {/* FAQ Section */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-              <h3 style={{ marginBottom: '15px', fontSize: '1rem' }}>❓ Sıkça Sorulan Sorular</h3>
+              <h3 style={{ marginBottom: '15px', fontSize: '1rem' }}>{i18n.language === 'tr' ? '❓ Sıkça Sorulan Sorular' : '❓ Frequently Asked Questions'}</h3>
 
               <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>TASTE Nedir?</p>
+                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{i18n.language === 'tr' ? 'TASTE Nedir?' : 'What is TASTE?'}</p>
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-                  TASTE, TON blockchain üzerinde kurulmuş gastronomi ve eğitim odaklı bir utility token'dır. Restoranlar, oteller ve yeme-içme sektöründe gerçek kullanım hedefler.
+                  {i18n.language === 'tr' ? "TASTE, TON blockchain üzerinde kurulmuş gastronomi ve eğitim odaklı bir utility token'dır. Restoranlar, oteller ve yeme-içme sektöründe gerçek kullanım hedefler." : "TASTE is a gastronomy and education-focused utility token built on the TON blockchain. It targets real-world use in restaurants, hotels, and the food & beverage industry."}
                 </p>
               </div>
 
               <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>Nasıl Satın Alınır?</p>
+                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{i18n.language === 'tr' ? 'Nasıl Satın Alınır?' : 'How to Buy?'}</p>
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-                  1. TON cüzdanınıza (Tonkeeper, @wallet) TON yükleyin.<br />
-                  2. Yukarıdaki panelden istediğiniz miktarı seçin.<br />
-                  3. "TON ile Satın Al" butonuna basıp STON.fi üzerinden swap yapın.
+                  {i18n.language === 'tr' ? 
+                    <>1. TON cüzdanınıza (Tonkeeper, @wallet) TON yükleyin.<br />
+                    2. Yukarıdaki panelden istediğiniz miktarı seçin.<br />
+                    3. "TON ile Satın Al" butonuna basıp STON.fi üzerinden swap yapın.</>
+                    :
+                    <>1. Load TON into your TON wallet (Tonkeeper, @wallet).<br />
+                    2. Select the desired amount from the panel above.<br />
+                    3. Click "Buy with TON" and swap via STON.fi.</>
+                  }
                 </p>
               </div>
 
               <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '10px' }}>🔒 Neden Güvenilir? — Kanıtla Gör!</p>
+                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '10px' }}>{i18n.language === 'tr' ? '🔒 Neden Güvenilir? — Kanıtla Gör!' : '🔒 Why is it Safe? — See the Proof!'}</p>
                 {[
-                  { label: '🔒 JVault Kilit 1 — 10M TASTE (%40)', url: 'https://tonscan.org/nft/EQDKKeOpSEE_diuEGULjR-yrJwrGOSwoHvYVdAPmtbeNj0v2', color: '#22c55e' },
-                  { label: '🔒 JVault Kilit 2 — 8M TASTE (%32)', url: 'https://tonscan.org/nft/EQDZLpOUQHOF1C6ekwMl3ERhl-j--r3zprppGtgm287K-6sc', color: '#22c55e' },
-                  { label: '🔒 JVault Kilit 3 — 4.1M TASTE (%16.4)', url: 'https://tonscan.org/nft/EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co', color: '#22c55e' },
-                  { label: '💧 LP Kilidi — tinu-locker.ton (%81.6)', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
-                  { label: '🛡️ Güvenlik Denetimi Raporu', url: 'https://incandescent-gelato-cc11a4.netlify.app/audit.html', color: '#f59e0b' },
+                  { label: i18n.language === 'tr' ? '🔒 JVault Kilit 1 — 10M TASTE (%40)' : '🔒 JVault Lock 1 — 10M TASTE (40%)', url: 'https://tonscan.org/nft/EQDKKeOpSEE_diuEGULjR-yrJwrGOSwoHvYVdAPmtbeNj0v2', color: '#22c55e' },
+                  { label: i18n.language === 'tr' ? '🔒 JVault Kilit 2 — 8M TASTE (%32)' : '🔒 JVault Lock 2 — 8M TASTE (32%)', url: 'https://tonscan.org/nft/EQDZLpOUQHOF1C6ekwMl3ERhl-j--r3zprppGtgm287K-6sc', color: '#22c55e' },
+                  { label: i18n.language === 'tr' ? '🔒 JVault Kilit 3 — 4.1M TASTE (%16.4)' : '🔒 JVault Lock 3 — 4.1M TASTE (16.4%)', url: 'https://tonscan.org/nft/EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co', color: '#22c55e' },
+                  { label: i18n.language === 'tr' ? '💧 LP Kilidi — tinu-locker.ton (%81.6)' : '💧 LP Lock — tinu-locker.ton (81.6%)', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
+                  { label: i18n.language === 'tr' ? '🛡️ Güvenlik Denetimi Raporu' : '🛡️ Security Audit Report', url: 'https://incandescent-gelato-cc11a4.netlify.app/audit.html', color: '#f59e0b' },
                 ].map((item, i) => (
                   <motion.div key={i} whileTap={{ scale: 0.97 }} onClick={() => {
                     if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(item.url);
@@ -392,11 +393,15 @@ function App() {
               </div>
 
               <div>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>Token Dağılımı Nasıl?</p>
+                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{i18n.language === 'tr' ? 'Token Dağılımı Nasıl?' : 'How is the Token Distribution?'}</p>
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
+                  {i18n.language === 'tr' ? <>
                   Toplam arz: 25,000,000 TASTE<br />
                   🔒 %88.4 Kilitli (JVault) • 👥 %2 Ekip • 👑 %2 Kurucu<br />
-                  💧 %6.4 Likidite Havuzu (kademeli) • 🎁 %0.2 Airdrop • 💼 %1 Masraf/Ödül
+                  💧 %6.4 Likidite Havuzu (kademeli) • 🎁 %0.2 Airdrop • 💼 %1 Masraf/Ödül</> : <>
+                  Total supply: 25,000,000 TASTE<br />
+                  🔒 88.4% Locked (JVault) • 👥 2% Team • 👑 2% Founder<br />
+                  💧 6.4% Liquidity Pool (gradual) • 🎁 0.2% Airdrop • 💼 1% Ops/Rewards</>}
                 </p>
               </div>
             </motion.div>
@@ -453,8 +458,8 @@ function App() {
       case 'roadmap': return (
         <motion.div key="roadmap" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>Yol Haritası</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px' }}>🗺️ TASTE Yaptıklarımız</h3>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{i18n.language === 'tr' ? 'Yol Haritası' : 'Roadmap'}</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px' }}>{i18n.language === 'tr' ? '🗺️ TASTE Yaptıklarımız' : '🗺️ What TASTE Has Done'}</h3>
             <Roadmap />
           </div>
         </motion.div>
@@ -646,22 +651,22 @@ function App() {
             <span className="nav-icon"><Flame size={18} /></span><span className="nav-label">Manifesto</span>
           </button>
           <button className={`nav-item ${activeTab === 'community' ? 'active' : ''}`} onClick={() => setActiveTab('community')}>
-            <span className="nav-icon">🍽️</span><span className="nav-label">Yemek</span>
+            <span className="nav-icon">🍽️</span><span className="nav-label">{i18n.language === 'tr' ? 'Yemek' : 'Food'}</span>
           </button>
           <button className={`nav-item ${activeTab === 'spin' ? 'active' : ''}`} onClick={() => setActiveTab('spin')}>
-            <span className="nav-icon"><Gift size={18} /></span><span className="nav-label">Çark</span>
+            <span className="nav-icon"><Gift size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Çark' : 'Spin'}</span>
           </button>
           <button className={`nav-item ${activeTab === 'charity' ? 'active' : ''}`} onClick={() => setActiveTab('charity')}>
-            <span className="nav-icon"><Heart size={18} /></span><span className="nav-label">Hayır</span>
+            <span className="nav-icon"><Heart size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Hayır' : 'Charity'}</span>
           </button>
           <button className={`nav-item ${activeTab === 'roadmap' ? 'active' : ''}`} onClick={() => setActiveTab('roadmap')}>
-            <span className="nav-icon"><Map size={18} /></span><span className="nav-label">Yol</span>
+            <span className="nav-icon"><Map size={18} /></span><span className="nav-label">{t('nav.roadmap')}</span>
           </button>
           <button className={`nav-item ${activeTab === 'whitepaper' ? 'active' : ''}`} onClick={() => setActiveTab('whitepaper')}>
             <span className="nav-icon"><FileText size={18} /></span><span className="nav-label">WP</span>
           </button>
           <button className={`nav-item ${activeTab === 'legal' ? 'active' : ''}`} onClick={() => setActiveTab('legal')}>
-            <span className="nav-icon"><Scale size={18} /></span><span className="nav-label">Yasal</span>
+            <span className="nav-icon"><Scale size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Yasal' : 'Legal'}</span>
           </button>
         </nav>
 

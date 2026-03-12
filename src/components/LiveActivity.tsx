@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 
 // ─── Config ──────────────────────────────────────────────────────────────
 const JETTON_ADDRESS = 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
@@ -21,12 +22,13 @@ function shortAddr(addr: string) {
     return addr.slice(0, 6) + '…' + addr.slice(-4)
 }
 
-function timeAgo(ts: number) {
+function timeAgo(ts: number, lang: string) {
     const diff = Math.floor(Date.now() / 1000) - ts
-    if (diff < 60) return `${diff}s önce`
-    if (diff < 3600) return `${Math.floor(diff / 60)}dk önce`
-    if (diff < 86400) return `${Math.floor(diff / 3600)}sa önce`
-    return `${Math.floor(diff / 86400)}g önce`
+    const isTr = lang === 'tr'
+    if (diff < 60) return isTr ? `${diff}s önce` : `${diff}s ago`
+    if (diff < 3600) return isTr ? `${Math.floor(diff / 60)}dk önce` : `${Math.floor(diff / 60)}m ago`
+    if (diff < 86400) return isTr ? `${Math.floor(diff / 3600)}sa önce` : `${Math.floor(diff / 3600)}h ago`
+    return isTr ? `${Math.floor(diff / 86400)}g önce` : `${Math.floor(diff / 86400)}d ago`
 }
 
 function detectKind(sender: string, recipient: string): TxItem['kind'] {
@@ -67,14 +69,15 @@ async function fetchHolders(): Promise<number> {
 }
 
 // ─── Kind badge styles ────────────────────────────────────────────────────
-const KIND_STYLE: Record<TxItem['kind'], { label: string; color: string; bg: string }> = {
-    buy: { label: 'ALIM', color: '#22c55e', bg: 'rgba(34,197,94,0.12)' },
-    sell: { label: 'SATIM', color: '#ef4444', bg: 'rgba(239,68,68,0.12)' },
-    transfer: { label: 'TRANSFER', color: '#818cf8', bg: 'rgba(129,140,248,0.12)' },
+const KIND_STYLE: Record<TxItem['kind'], { labelTr: string; labelEn: string; color: string; bg: string }> = {
+    buy: { labelTr: 'ALIM', labelEn: 'BUY', color: '#22c55e', bg: 'rgba(34,197,94,0.12)' },
+    sell: { labelTr: 'SATIM', labelEn: 'SELL', color: '#ef4444', bg: 'rgba(239,68,68,0.12)' },
+    transfer: { labelTr: 'TRANSFER', labelEn: 'TRANSFER', color: '#818cf8', bg: 'rgba(129,140,248,0.12)' },
 }
 
 // ─── Component ────────────────────────────────────────────────────────────
 export function LiveActivity() {
+    const { i18n } = useTranslation()
     const [txs, setTxs] = useState<TxItem[]>([])
     const [holders, setHolders] = useState<number>(408)
     const [loading, setLoading] = useState(true)
@@ -100,7 +103,7 @@ export function LiveActivity() {
             {/* Stats — sadece gerçek veri */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
                 {[
-                    { label: 'Toplam Cüzdan', value: holders.toLocaleString(), emoji: '👛', color: '#f59e0b' },
+                    { label: i18n.language === 'tr' ? 'Toplam Cüzdan' : 'Total Wallets', value: holders.toLocaleString(), emoji: '👛', color: '#f59e0b' },
                     { label: 'Token', value: 'TASTE', emoji: '🪙', color: '#818cf8' },
                 ].map(s => (
                     <div key={s.label} style={{
@@ -122,15 +125,15 @@ export function LiveActivity() {
                     transition={{ duration: 2, repeat: Infinity }}
                     style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', flexShrink: 0, boxShadow: '0 0 6px #22c55e' }}
                 />
-                <span style={{ fontSize: '12px', fontWeight: 700, color: '#22c55e' }}>CANLI İŞLEM AKIŞI</span>
-                <span style={{ fontSize: '10px', color: '#475569', marginLeft: 'auto' }}>30s yenileniyor</span>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#22c55e' }}>{i18n.language === 'tr' ? 'CANLI İŞLEM AKIŞI' : 'LIVE TRANSACTIONS'}</span>
+                <span style={{ fontSize: '10px', color: '#475569', marginLeft: 'auto' }}>{i18n.language === 'tr' ? '30s yenileniyor' : 'refreshing in 30s'}</span>
             </div>
 
             {/* Transactions */}
             {loading ? (
-                <div style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '13px' }}>⏳ Yükleniyor...</div>
+                <div style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '13px' }}>{i18n.language === 'tr' ? '⏳ Yükleniyor...' : '⏳ Loading...'}</div>
             ) : txs.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '13px' }}>📭 Henüz işlem bulunamadı</div>
+                <div style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '13px' }}>{i18n.language === 'tr' ? '📭 Henüz işlem bulunamadı' : '📭 No transactions found yet'}</div>
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     <AnimatePresence>
@@ -150,16 +153,16 @@ export function LiveActivity() {
                                     }}
                                 >
                                     <div style={{ background: ks.bg, color: ks.color, borderRadius: '6px', padding: '2px 7px', fontSize: '9px', fontWeight: 800, flexShrink: 0, letterSpacing: '0.5px' }}>
-                                        {ks.label}
+                                        {i18n.language === 'tr' ? ks.labelTr : ks.labelEn}
                                     </div>
                                     <div style={{ flex: 1, minWidth: 0, fontSize: '11px', color: '#94a3b8', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                         {shortAddr(tx.sender)}
                                     </div>
                                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
                                         <div style={{ fontSize: '12px', fontWeight: 800, color: ks.color }}>
-                                            {tx.amount > 0 ? `${tx.amount.toLocaleString('tr-TR', { maximumFractionDigits: 0 })} T` : '—'}
+                                            {tx.amount > 0 ? `${tx.amount.toLocaleString(i18n.language === 'tr' ? 'tr-TR' : 'en-US', { maximumFractionDigits: 0 })} T` : '—'}
                                         </div>
-                                        <div style={{ fontSize: '9px', color: '#475569' }}>{timeAgo(tx.timestamp)}</div>
+                                        <div style={{ fontSize: '9px', color: '#475569' }}>{timeAgo(tx.timestamp, i18n.language)}</div>
                                     </div>
                                 </motion.div>
                             )
@@ -169,7 +172,7 @@ export function LiveActivity() {
             )}
 
             <div style={{ textAlign: 'center', marginTop: '10px', fontSize: '10px', color: '#334155' }}>
-                📡 Veriler TON API'den canlı çekiliyor
+                {i18n.language === 'tr' ? "📡 Veriler TON API'den canlı çekiliyor" : "📡 Data live sourced from TON API"}
             </div>
         </div>
     )
