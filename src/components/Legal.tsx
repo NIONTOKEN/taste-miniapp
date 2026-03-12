@@ -157,8 +157,7 @@ function HighlightBox({ color, children }: { color: string; children: React.Reac
 }
 
 function DisclaimerContent() {
-    const { t, i18n } = useTranslation()
-    const isTr = i18n.language === 'tr'
+    const { t } = useTranslation()
     return (
         <div>
             <div className="glass-panel" style={{ padding: '20px', marginBottom: '12px', borderColor: 'rgba(239,68,68,0.2)' }}>
@@ -169,43 +168,35 @@ function DisclaimerContent() {
 
             <LegalSection title={t('legal.disclaimer.section1.title')} subtitle={t('legal.disclaimer.section1.sub')}>
                 <div style={{ whiteSpace: 'pre-line' }}>{t('legal.disclaimer.section1.text')}</div>
-                {isTr && (
-                    <HighlightBox color="#ef4444">
-                        <Trans i18nKey="legal.disclaimer.section1.eng_note" components={{ 1: <strong style={{ color: '#fca5a5' }} /> }} />
-                    </HighlightBox>
-                )}
+                <HighlightBox color="#ef4444">
+                    <Trans i18nKey="legal.disclaimer.section1.eng_note" components={{ 1: <strong style={{ color: '#fca5a5' }} /> }} />
+                </HighlightBox>
             </LegalSection>
 
             <LegalSection title={t('legal.disclaimer.section2.title')} subtitle={t('legal.disclaimer.section2.sub')}>
                 <div style={{ whiteSpace: 'pre-line' }}>{t('legal.disclaimer.section2.text')}</div>
-                {isTr && (
-                    <HighlightBox color="#f59e0b">
-                        <Trans i18nKey="legal.disclaimer.section2.eng_note" components={{ 1: <strong style={{ color: '#fcd34d' }} /> }} />
-                    </HighlightBox>
-                )}
+                <HighlightBox color="#f59e0b">
+                    <Trans i18nKey="legal.disclaimer.section2.eng_note" components={{ 1: <strong style={{ color: '#fcd34d' }} /> }} />
+                </HighlightBox>
             </LegalSection>
 
             <LegalSection title={t('legal.disclaimer.section3.title')} subtitle={t('legal.disclaimer.section3.sub')}>
                 <div style={{ whiteSpace: 'pre-line' }}>{t('legal.disclaimer.section3.text')}</div>
-                {isTr && (
-                    <HighlightBox color="#22c55e">
-                        <Trans i18nKey="legal.disclaimer.section3.eng_note" components={{ 1: <strong style={{ color: '#86efac' }} /> }} />
-                    </HighlightBox>
-                )}
+                <HighlightBox color="#22c55e">
+                    <Trans i18nKey="legal.disclaimer.section3.eng_note" components={{ 1: <strong style={{ color: '#86efac' }} /> }} />
+                </HighlightBox>
             </LegalSection>
         </div>
     )
 }
 
 function TermsContent() {
-    const { t, i18n } = useTranslation()
-    const isEn = i18n.language === 'en'
+    const { t } = useTranslation()
     return (
         <div>
             <div className="glass-panel" style={{ padding: '20px', marginBottom: '12px' }}>
                 <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
                     {t('legal.terms.intro')}
-                    {!isEn && <><br /><span style={{ color: 'rgba(255,255,255,0.3)' }}>By using this application, you agree to the following terms.</span></>}
                 </p>
             </div>
 

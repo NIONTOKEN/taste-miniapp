@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TonConnectButton, useTonConnectUI } from '@tonconnect/ui-react'
 
@@ -30,7 +30,7 @@ const TASTE_LOGO = '/logo.jpg'
 
 
 function PriceTicker() {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [price, setPrice] = useState<string>('0.00135')
   const [tryPrice, setTryPrice] = useState<string>('0.0466')
   const [change, setChange] = useState<number>(0)
@@ -66,9 +66,9 @@ function PriceTicker() {
       <div className="ticker">
         <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
         <span className="ticker-item">🇹🇷 TASTE/TRY: ₺{tryPrice}</span>
-        <span className="ticker-item">🚀 {i18n.language === 'tr' ? 'SIRADAKİ HEDEF' : 'NEXT GOAL'}: $0.01</span>
-        <span className="ticker-item">🔥 {i18n.language === 'tr' ? 'TOPLAM ARZ' : 'TOTAL SUPPLY'}: 25,000,000</span>
-        <span className="ticker-item">{i18n.language === 'tr' ? '🌍 TOPLULUK ODAKLI' : '🌍 COMMUNITY DRIVEN'}</span>
+        <span className="ticker-item">🚀 {t('app.early_access_ending')} $0.01</span>
+        <span className="ticker-item">🔥 {t('app.units.supply')}: 25,000,000</span>
+        <span className="ticker-item">🌍 {i18n.language === 'tr' ? 'TOPLULUK ODAKLI' : 'COMMUNITY DRIVEN'}</span>
         <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
       </div>
     </div>
@@ -78,7 +78,7 @@ function PriceTicker() {
 
 // Countdown Timer Component - Erken erişim bitiş: 02.01.2027
 function CountdownTimer({ earlyAccessLabel }: { earlyAccessLabel: string }) {
-  const { i18n } = useTranslation()
+  const { t } = useTranslation()
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -110,19 +110,19 @@ function CountdownTimer({ earlyAccessLabel }: { earlyAccessLabel: string }) {
       <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.days}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{i18n.language === 'en' ? 'DAYS' : 'GÜN'}</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.day')}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.hours}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{i18n.language === 'en' ? 'HRS' : 'SAAT'}</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.hr')}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.minutes}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{i18n.language === 'en' ? 'MIN' : 'DAK'}</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.min')}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{String(timeLeft.seconds).padStart(2, '0')}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{i18n.language === 'en' ? 'SEC' : 'SN'}</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.sec')}</div>
         </div>
       </div>
     </div>
@@ -131,7 +131,7 @@ function CountdownTimer({ earlyAccessLabel }: { earlyAccessLabel: string }) {
 
 // Reward Countdown - Ödül dağıtımı bitiş: 20.05.2026
 function RewardCountdown() {
-  const { i18n } = useTranslation()
+  const { t } = useTranslation()
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -169,24 +169,24 @@ function RewardCountdown() {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '11px', color: '#4ade80', fontWeight: 700, marginBottom: '8px' }}>
         <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite', flexShrink: 0 }} />
-        {i18n.language === 'en' ? '🎁 Reward Distribution Ends — May 20, 2026' : '🎁 Ödül Dağıtımı Bitiyor — 20 Mayıs 2026'}
+        {t('app.reward_end')}
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.days}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{i18n.language === 'en' ? 'DAYS' : 'GÜN'}</div>
+          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{t('app.units.day')}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.hours}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{i18n.language === 'en' ? 'HRS' : 'SAAT'}</div>
+          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{t('app.units.hr')}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.minutes}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{i18n.language === 'en' ? 'MIN' : 'DAK'}</div>
+          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{t('app.units.min')}</div>
         </div>
         <div style={boxStyle}>
           <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{String(timeLeft.seconds).padStart(2, '0')}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{i18n.language === 'en' ? 'SEC' : 'SN'}</div>
+          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{t('app.units.sec')}</div>
         </div>
       </div>
     </div>
@@ -266,9 +266,6 @@ function App() {
     setShowLangMenu(false);
   };
 
-  // TASTE Address
-  const TASTE_ADDRESS = 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
-
   const handleBuy = () => {
     // Show ping notification with estimated TASTE amount
     setPingAmount(Math.round(amount * tastePerTon));
@@ -328,7 +325,7 @@ function App() {
 
               {/* Holders + STON.fi */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px', fontSize: '12px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>👥 {holdersCount} {i18n.language === 'tr' ? 'Yatırımcı' : 'Holders'}</span>
+                <span style={{ color: 'var(--text-muted)' }}>👥 {holdersCount} {t('app.units.holder')}</span>
                 <motion.a
                   whileHover={{ scale: 1.05 }}
                   href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
@@ -352,38 +349,30 @@ function App() {
 
             {/* FAQ Section */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-              <h3 style={{ marginBottom: '15px', fontSize: '1rem' }}>{i18n.language === 'tr' ? '❓ Sıkça Sorulan Sorular' : '❓ Frequently Asked Questions'}</h3>
+              <h3 style={{ marginBottom: '15px', fontSize: '1rem' }}>{t('app.faq.title')}</h3>
 
               <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{i18n.language === 'tr' ? 'TASTE Nedir?' : 'What is TASTE?'}</p>
+                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{t('app.faq.what_is')}</p>
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-                  {i18n.language === 'tr' ? "TASTE, TON blockchain üzerinde kurulmuş gastronomi ve eğitim odaklı bir utility token'dır. Restoranlar, oteller ve yeme-içme sektöründe gerçek kullanım hedefler." : "TASTE is a gastronomy and education-focused utility token built on the TON blockchain. It targets real-world use in restaurants, hotels, and the food & beverage industry."}
+                    {t('app.faq.what_is_ans')}
                 </p>
               </div>
 
               <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{i18n.language === 'tr' ? 'Nasıl Satın Alınır?' : 'How to Buy?'}</p>
-                <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-                  {i18n.language === 'tr' ? 
-                    <>1. TON cüzdanınıza (Tonkeeper, @wallet) TON yükleyin.<br />
-                    2. Yukarıdaki panelden istediğiniz miktarı seçin.<br />
-                    3. "TON ile Satın Al" butonuna basıp STON.fi üzerinden swap yapın.</>
-                    :
-                    <>1. Load TON into your TON wallet (Tonkeeper, @wallet).<br />
-                    2. Select the desired amount from the panel above.<br />
-                    3. Click "Buy with TON" and swap via STON.fi.</>
-                  }
-                </p>
+                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{t('app.faq.how_to')}</p>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
+                    <Trans i18nKey="app.faq.how_to_ans" />
+                </div>
               </div>
 
               <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '10px' }}>{i18n.language === 'tr' ? '🔒 Neden Güvenilir? — Kanıtla Gör!' : '🔒 Why is it Safe? — See the Proof!'}</p>
+                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '10px' }}>{t('whitepaper.summary.lock_reason_title')}</p>
                 {[
-                  { label: i18n.language === 'tr' ? '🔒 JVault Kilit 1 — 10M TASTE (%40)' : '🔒 JVault Lock 1 — 10M TASTE (40%)', url: 'https://tonscan.org/nft/EQDKKeOpSEE_diuEGULjR-yrJwrGOSwoHvYVdAPmtbeNj0v2', color: '#22c55e' },
-                  { label: i18n.language === 'tr' ? '🔒 JVault Kilit 2 — 8M TASTE (%32)' : '🔒 JVault Lock 2 — 8M TASTE (32%)', url: 'https://tonscan.org/nft/EQDZLpOUQHOF1C6ekwMl3ERhl-j--r3zprppGtgm287K-6sc', color: '#22c55e' },
-                  { label: i18n.language === 'tr' ? '🔒 JVault Kilit 3 — 4.1M TASTE (%16.4)' : '🔒 JVault Lock 3 — 4.1M TASTE (16.4%)', url: 'https://tonscan.org/nft/EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co', color: '#22c55e' },
-                  { label: i18n.language === 'tr' ? '💧 LP Kilidi — tinu-locker.ton (%81.6)' : '💧 LP Lock — tinu-locker.ton (81.6%)', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
-                  { label: i18n.language === 'tr' ? '🛡️ Güvenlik Denetimi Raporu' : '🛡️ Security Audit Report', url: 'https://incandescent-gelato-cc11a4.netlify.app/audit.html', color: '#f59e0b' },
+                  { label: `${t('whitepaper.summary.lock_prefix')} 1 — 10M TASTE (40%)`, url: 'https://tonscan.org/nft/EQDKKeOpSEE_diuEGULjR-yrJwrGOSwoHvYVdAPmtbeNj0v2', color: '#22c55e' },
+                  { label: `${t('whitepaper.summary.lock_prefix')} 2 — 8M TASTE (32%)`, url: 'https://tonscan.org/nft/EQDZLpOUQHOF1C6ekwMl3ERhl-j--r3zprppGtgm287K-6sc', color: '#22c55e' },
+                  { label: `${t('whitepaper.summary.lock_prefix')} 3 — 4.1M TASTE (16.4%)`, url: 'https://tonscan.org/nft/EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co', color: '#22c55e' },
+                  { label: `${t('whitepaper.summary.lp_lock_title')} (81.6%)`, url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
+                  { label: t('legal.nav.risk.label'), url: 'https://incandescent-gelato-cc11a4.netlify.app/audit.html', color: '#f59e0b' },
                 ].map((item, i) => (
                   <motion.div key={i} whileTap={{ scale: 0.97 }} onClick={() => {
                     if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(item.url);
@@ -396,22 +385,16 @@ function App() {
               </div>
 
               <div>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{i18n.language === 'tr' ? 'Token Dağılımı Nasıl?' : 'How is the Token Distribution?'}</p>
-                <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-                  {i18n.language === 'tr' ? <>
-                  Toplam arz: 25,000,000 TASTE<br />
-                  🔒 %88.4 Kilitli (JVault) • 👥 %2 Ekip • 👑 %2 Kurucu<br />
-                  💧 %6.4 Likidite Havuzu (kademeli) • 🎁 %0.2 Airdrop • 💼 %1 Masraf/Ödül</> : <>
-                  Total supply: 25,000,000 TASTE<br />
-                  🔒 88.4% Locked (JVault) • 👥 2% Team • 👑 2% Founder<br />
-                  💧 6.4% Liquidity Pool (gradual) • 🎁 0.2% Airdrop • 💼 1% Ops/Rewards</>}
-                </p>
+                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{t('whitepaper.tokenomics.title')}</p>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
+                    <Trans i18nKey="whitepaper.tokenomics.summary_text" />
+                </div>
               </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="glass-panel" style={{ padding: '18px', marginBottom: '20px' }}>
-              <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#22c55e', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>{i18n.language === 'tr' ? 'Canlı Veriler' : 'Live Activity'}</div>
-              <h3 style={{ fontWeight: 900, margin: '0 0 14px', fontSize: '1rem' }}>{i18n.language === 'tr' ? '📡 TASTE Aktivitesi' : '📡 TASTE Activity'}</h3>
+              <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#22c55e', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>{t('home.live_badge')}</div>
+              <h3 style={{ fontWeight: 900, margin: '0 0 14px', fontSize: '1rem' }}>{t('home.live_title')}</h3>
               <LiveActivity />
             </motion.div>
 
@@ -439,15 +422,15 @@ function App() {
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '20px' }}>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{holdersCount}</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{i18n.language === 'tr' ? 'Yatırımcı' : 'Holders'}</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{t('app.units.holder')}</div>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>25M</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{i18n.language === 'tr' ? 'Toplam Arz' : 'Total Supply'}</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{t('app.units.supply')}</div>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>88.4%</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{i18n.language === 'tr' ? 'Kilitli' : 'Locked'}</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{t('app.units.locked')}</div>
               </div>
             </motion.div>
 
@@ -460,8 +443,8 @@ function App() {
       case 'roadmap': return (
         <motion.div key="roadmap" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{i18n.language === 'tr' ? 'Yol Haritası' : 'Roadmap'}</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px' }}>{i18n.language === 'tr' ? '🗺️ TASTE Yaptıklarımız' : '🗺️ What TASTE Has Done'}</h3>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.roadmap')}</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px' }}>{t('roadmap.title')}</h3>
             <Roadmap />
           </div>
         </motion.div>
@@ -636,7 +619,7 @@ function App() {
                 poster={TASTE_LOGO}
                 style={{ width: '100%', borderRadius: '12px', maxHeight: '250px' }}
               />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>🎬 {i18n.language === 'tr' ? 'TASTE Tanıtım' : 'TASTE Intro'}</p>
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>🎬 TASTE Intro</p>
             </motion.div>
           </motion.div>
         )}
@@ -653,22 +636,22 @@ function App() {
             <span className="nav-icon"><Flame size={18} /></span><span className="nav-label">Manifesto</span>
           </button>
           <button className={`nav-item ${activeTab === 'community' ? 'active' : ''}`} onClick={() => setActiveTab('community')}>
-            <span className="nav-icon">🍽️</span><span className="nav-label">{i18n.language === 'tr' ? 'Yemek' : 'Food'}</span>
+            <span className="nav-icon">🍽️</span><span className="nav-label">{t('nav.community')}</span>
           </button>
           <button className={`nav-item ${activeTab === 'spin' ? 'active' : ''}`} onClick={() => setActiveTab('spin')}>
-            <span className="nav-icon"><Gift size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Çark' : 'Spin'}</span>
+            <span className="nav-icon"><Gift size={18} /></span><span className="nav-label">{t('nav.spin')}</span>
           </button>
           <button className={`nav-item ${activeTab === 'charity' ? 'active' : ''}`} onClick={() => setActiveTab('charity')}>
-            <span className="nav-icon"><Heart size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Hayır' : 'Charity'}</span>
+            <span className="nav-icon"><Heart size={18} /></span><span className="nav-label">{t('nav.charity')}</span>
           </button>
           <button className={`nav-item ${activeTab === 'roadmap' ? 'active' : ''}`} onClick={() => setActiveTab('roadmap')}>
             <span className="nav-icon"><Map size={18} /></span><span className="nav-label">{t('nav.roadmap')}</span>
           </button>
           <button className={`nav-item ${activeTab === 'whitepaper' ? 'active' : ''}`} onClick={() => setActiveTab('whitepaper')}>
-            <span className="nav-icon"><FileText size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Litepaper' : 'Litepaper'}</span>
+            <span className="nav-icon"><FileText size={18} /></span><span className="nav-label">{t('nav.whitepaper')}</span>
           </button>
           <button className={`nav-item ${activeTab === 'legal' ? 'active' : ''}`} onClick={() => setActiveTab('legal')}>
-            <span className="nav-icon"><Scale size={18} /></span><span className="nav-label">{i18n.language === 'tr' ? 'Yasal' : 'Legal'}</span>
+            <span className="nav-icon"><Scale size={18} /></span><span className="nav-label">{t('nav.legal')}</span>
           </button>
         </nav>
 
@@ -699,7 +682,7 @@ function App() {
               marginBottom: '10px'
             }}
           >
-            🔒 {i18n.language === 'tr' ? 'Güvenlik Denetim Raporu' : 'Security Audit Report'}
+            🔒 {t('legal.nav.risk.label')}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -727,9 +710,9 @@ function App() {
               marginBottom: '10px'
             }}
           >
-            📄 {i18n.language === 'tr' ? 'Litepaper' : 'Litepaper'}
+            📄 {t('nav.whitepaper')}
           </motion.button>
-          <p>{i18n.language === 'tr' ? 'The Open Network üzerinde kuruldu' : 'Built on The Open Network'}</p>
+          <p>{t('legal.footer.network')}</p>
 
           {/* ─── Footer Disclaimer ─────────────────────────── */}
           <div style={{
@@ -744,10 +727,7 @@ function App() {
               ⚠️ RİSK UYARISI / RISK WARNING
             </p>
             <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.7, margin: 0 }}>
-              Bu uygulama yatırım tavsiyesi içermez. TASTE Token bir utility token olup kripto para varlıkları yüksek risk taşır; yatırımınızın tamamını kaybedebilirsiniz.
-            </p>
-            <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', lineHeight: 1.7, margin: '4px 0 0' }}>
-              This app does not constitute investment advice. Crypto assets carry significant risk. You may lose your entire investment. Not financial advice (NFA).
+              {t('legal.risk.intro_text')}
             </p>
             <button
               onClick={() => setActiveTab('legal')}
@@ -756,7 +736,7 @@ function App() {
                 fontSize: '10px', cursor: 'pointer', padding: '6px 0 0', fontWeight: 600
               }}
             >
-              📋 Tam yasal metni görüntüle → Full Legal Disclaimer
+              📋 {t('legal.nav.disclaimer.label')} → Full Legal Disclaimer
             </button>
           </div>
         </div>
