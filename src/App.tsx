@@ -710,7 +710,7 @@ function App() {
               marginBottom: '10px'
             }}
           >
-            📄 {t('nav.whitepaper')}
+            📄 {t('nav.litepaper')}
           </motion.button>
           <p>{t('legal.footer.network')}</p>
 
