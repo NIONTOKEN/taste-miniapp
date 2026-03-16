@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { getPosts, insertPost, type SupaPost } from '../services/supabase'
+import { getPosts, insertPost, getMessages, sendMessage, type SupaPost } from '../services/supabase'
 
 // ─── Types ────────────────────────────────────────────────────────────────
-type PostType = 'yemek' | 'tarif' | 'menu' | 'career'
+type PostType = 'yemek' | 'tarif' | 'menu' | 'career' | 'chat'
 type FilterType = 'hepsi' | PostType
 
 interface Ingredient { name: string; amount: string }
@@ -14,6 +14,7 @@ interface Post {
     type: PostType
     authorName: string
     authorEmoji: string
+    authorUsername?: string
     createdAt: number
     text: string
     photo?: string
@@ -35,6 +36,7 @@ function mapPost(sp: SupaPost): Post {
         type: sp.type,
         authorName: sp.author_name,
         authorEmoji: sp.author_emoji,
+        authorUsername: sp.author_username,
         createdAt: new Date(sp.created_at).getTime(),
         text: sp.text,
         photo: sp.photo,
@@ -103,12 +105,9 @@ const DEMO_POSTS: Post[] = [
     }
 ]
 
-// ─── Chat Data ─────────────────────────────────────────────────────────────
-const CHAT_MESSAGES = [
-    { id: 1, user: 'Chef_Mert', msg: 'Selam millet, bugün TASTE şef robotu deneyen var mı?', time: '12:05' },
-    { id: 2, user: 'GourmetAli', msg: 'Ben denedim, tarifler çok profesyonel!', time: '12:07' },
-    { id: 3, user: 'Ayse92', msg: 'Beşiktaş tarafında güzel bir pideci önerisi olan?', time: '12:10' },
-    { id: 4, user: 'Usta_Yilmaz', msg: 'Beşiktaş Çarşıda yeni bir yer açılmış, ismi PideLand.', time: '12:12' },
+// ─── Chat Data (Local Cache/Mock fallback) ──────────────────────────────────
+const INITIAL_CHAT = [
+    { id: '1', author_name: 'System', text: 'Chat odasına hoş geldiniz! 🍕', created_at: new Date().toISOString() },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -147,6 +146,7 @@ const TYPE_META: Record<PostType, { key: string; emoji: string; color: string }>
     tarif: { key: 'recipe', emoji: '📖', color: '#22c55e' },
     menu:  { key: 'menu',   emoji: '🏪', color: '#818cf8' },
     career: { key: 'career', emoji: '🧑‍🍳', color: '#f59e0b' },
+    chat: { key: 'chat', emoji: '💬', color: '#3b82f6' },
 }
 
 const TAGS_BY_TYPE: Record<PostType, string[]> = {
@@ -154,13 +154,15 @@ const TAGS_BY_TYPE: Record<PostType, string[]> = {
     tarif: ['soup', 'meat', 'vegetables', 'dessert', 'traditional', 'practical', 'healthy'],
     menu:  ['breakfast', 'lunch', 'dinner', 'cafe', 'fastfood', 'finedining', 'seafood'],
     career: ['job_listing', 'job_seeking', 'chef', 'cook', 'waiter', 'master'],
+    chat: [],
 }
 
 function getTgUser(t: any) {
     const u = window.Telegram?.WebApp?.initDataUnsafe?.user
     const emojis = ['🧑‍🍳', '👩‍🍳', '👨‍🍳', '🍴', '🥘', '🫕', '🍳', '🥗', '🍜']
     return {
-        name: u ? u.first_name : t('app.guest') || 'Guest',
+        name: u ? (u.username ? `@${u.username}` : u.first_name) : t('app.guest') || 'Guest',
+        username: u?.username,
         emoji: emojis[Math.floor(Math.random() * emojis.length)]
     }
 }
@@ -242,10 +244,16 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
                 {isJob ? (
                     <motion.button
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => window.open(`https://t.me/taste_community`, '_blank')}
+                        onClick={() => {
+                            const link = post.authorUsername 
+                                ? `https://t.me/${post.authorUsername.replace('@', '')}` 
+                                : `https://t.me/taste_community`;
+                            if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(link);
+                            else window.open(link, '_blank');
+                        }}
                         style={{ width: '100%', background: '#f59e0b', color: '#000', border: 'none', borderRadius: '12px', padding: '12px', fontSize: '13px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                     >
-                        💬 {i18n.language === 'tr' ? 'İletişime Geç / Başvur' : 'Contact / Apply'}
+                        💬 {i18n.language === 'tr' ? 'İlan Verenle Yazış' : 'Chat with Poster'}
                     </motion.button>
                 ) : (
                     <div style={{ display: 'flex', gap: '10px' }}>
@@ -298,18 +306,41 @@ export function Community() {
     const [submitting, setSubmitting] = useState(false)
     const fileRef = useRef<HTMLInputElement>(null)
 
-    useEffect(() => {
-        const cached = sessionStorage.getItem('taste_posts_cache')
-        if (cached) {
-            try { setPosts(JSON.parse(cached)); setLoading(false) } catch { /* ignore */ }
+    const [chatMsgs, setChatMsgs] = useState<any[]>([])
+    const [cMsg, setCMsg] = useState('')
+
+    const refreshData = async () => {
+        try {
+            // 1. Fetch Posts
+            const rawPosts = await getPosts()
+            const mapped = rawPosts.map(mapPost)
+            setPosts(mapped.length > 0 ? mapped : DEMO_POSTS)
+            
+            // 2. Fetch Chat
+            const rawChat = await getMessages()
+            setChatMsgs(rawChat.reverse())
+        } catch (e) {
+            console.error('Refresh fail', e)
+        } finally {
+            setLoading(false)
         }
-        getPosts().then(data => {
-            const mapped = data.map(mapPost)
-            const result = mapped.length > 0 ? mapped : DEMO_POSTS.map(p => ({ ...p, createdAt: Date.now() - (Math.random() * 86400000) }))
-            setPosts(result)
-            sessionStorage.setItem('taste_posts_cache', JSON.stringify(result))
-        }).finally(() => setLoading(false))
+    }
+
+    useEffect(() => {
+        refreshData()
+        const interval = setInterval(refreshData, 10000) // 10 saniyede bir otomatik tazele (Canlılık için)
+        return () => clearInterval(interval)
     }, [])
+
+    async function handleChatSend() {
+        if (!cMsg.trim()) return
+        const tg = getTgUser(t)
+        const sent = await sendMessage(tg.name, tg.emoji, cMsg)
+        if (sent) {
+            setChatMsgs(prev => [...prev, mapPost(sent)])
+            setCMsg('')
+        }
+    }
 
     const filtered = posts
         .filter(p => filter === 'hepsi' || p.type === filter)
@@ -352,6 +383,7 @@ export function Community() {
             type: cType,
             author_name: tg.name,
             author_emoji: tg.emoji,
+            author_username: tg.username,
             text: cText,
             photo: cPhoto,
             tags: cTags,
@@ -378,6 +410,7 @@ export function Community() {
             type: cType,
             authorName: tg.name,
             authorEmoji: tg.emoji,
+            authorUsername: tg.username,
             createdAt: Date.now(),
             text: cText,
             photo: cPhoto,
@@ -569,20 +602,39 @@ export function Community() {
             </>
             ) : (
                 /* ── Chat View ── */
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '20px', padding: '16px', minHeight: '60vh', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {CHAT_MESSAGES.map(m => (
-                            <div key={m.id} style={{ alignSelf: m.user === 'You' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
-                                <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '2px', marginLeft: '4px' }}>{m.user} • {m.time}</div>
-                                <div style={{ background: m.user === 'You' ? '#3b82f6' : 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '10px 14px', fontSize: '13px', color: '#fff' }}>
-                                    {m.msg}
-                                </div>
-                            </div>
-                        ))}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '20px', padding: '16px', minHeight: '60vh', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', maxHeight: '50vh', padding: '10px' }}>
+                        {chatMsgs.length === 0 ? (
+                             <div style={{ textAlign: 'center', color: '#64748b', fontSize: '12px', marginTop: '40px' }}>Sohbet başlatılıyor... 🔋</div>
+                        ) : (
+                            chatMsgs.map(m => {
+                                const isMe = m.authorName === getTgUser(t).name
+                                return (
+                                    <div key={m.id} style={{ alignSelf: isMe ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
+                                        <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '2px', marginLeft: '4px', textAlign: isMe ? 'right' : 'left' }}>
+                                            {m.authorEmoji} {m.authorName} • {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div>
+                                        <div style={{ background: isMe ? '#f59e0b' : 'rgba(255,255,255,0.05)', borderRadius: '16px', border: isMe ? 'none' : '1px solid rgba(255,255,255,0.1)', padding: '10px 14px', fontSize: '13px', color: isMe ? '#000' : '#fff', fontWeight: isMe ? 700 : 400 }}>
+                                            {m.text}
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        )}
                     </div>
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
-                        <input placeholder={i18n.language === 'tr' ? 'Bir şeyler yaz...' : 'Type something...'} style={{ flex: 1, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px', color: '#fff', fontSize: '13px', outline: 'none' }} />
-                        <button style={{ background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '12px', width: '44px', fontWeight: 900 }}>{'>'}</button>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '20px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '16px' }}>
+                        <input 
+                            value={cMsg}
+                            onChange={e => setCMsg(e.target.value)}
+                            onKeyPress={e => e.key === 'Enter' && handleChatSend()}
+                            placeholder={i18n.language === 'tr' ? 'Mesaj yaz...' : 'Type a message...'} 
+                            style={{ flex: 1, background: 'transparent', border: 'none', padding: '12px', color: '#fff', fontSize: '14px', outline: 'none' }} 
+                        />
+                        <button 
+                            onClick={handleChatSend}
+                            style={{ background: '#f59e0b', color: '#000', border: 'none', borderRadius: '12px', width: '48px', height: '48px', fontWeight: 900, cursor: 'pointer' }}>
+                            🚀
+                        </button>
                     </div>
                 </motion.div>
             )}
