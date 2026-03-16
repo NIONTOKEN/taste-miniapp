@@ -15,7 +15,7 @@ const H = {
 
 export interface SupaPost {
     id: string
-    type: 'yemek' | 'tarif' | 'menu'
+    type: 'yemek' | 'tarif' | 'menu' | 'career'
     author_name: string
     author_emoji: string
     created_at: string
@@ -26,6 +26,11 @@ export interface SupaPost {
     ingredients?: { name: string; amount: string }[]
     steps?: string[]
     venue_name?: string
+    city?: string
+    allergens?: string[]
+    likes?: number
+    calories?: string
+    reward_wallet?: string
 }
 
 export async function getPosts(): Promise<SupaPost[]> {

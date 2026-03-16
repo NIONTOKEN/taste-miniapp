@@ -37,7 +37,9 @@ export function TasteChef() {
     const [tonConnectUI] = useTonConnectUI()
     const userAddress = useTonAddress()
     const [balance, setBalance] = useState<number>(0)
+    const [kasaBalance, setKasaBalance] = useState<number>(0)
     const [loading, setLoading] = useState(false)
+    const [fillingKasa, setFillingKasa] = useState(false)
     const [success, setSuccess] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [tastePrice, setTastePrice] = useState<number>(0.00135)
@@ -78,6 +80,10 @@ export function TasteChef() {
             try {
                 const bal = await apiService.getJettonBalance(userAddress, JETTON_MASTER_ADDRESS)
                 setBalance(bal)
+                
+                // Fetch Kasa Balance
+                const kBal = await apiService.getJettonBalance(KASA_ADDRESS, JETTON_MASTER_ADDRESS)
+                setKasaBalance(kBal)
             } catch (e) {
                 console.error('Failed to fetch balance', e)
             }
@@ -149,9 +155,60 @@ export function TasteChef() {
         }
     }
 
+    const handleFillSafe = async () => {
+        if (!userAddress) return
+        setFillingKasa(true)
+        try {
+            const jettonWalletAddress = await apiService.getJettonWalletAddress(userAddress, JETTON_MASTER_ADDRESS)
+            const body = beginCell()
+                .storeUint(0xf8a7ea5, 32)
+                .storeUint(0, 64)
+                .storeCoins(toNano('1000')) // Default fill amount
+                .storeAddress(Address.parse(KASA_ADDRESS))
+                .storeAddress(Address.parse(userAddress))
+                .storeUint(0, 1)
+                .storeCoins(toNano('0.05'))
+                .storeUint(0, 1)
+                .endCell()
+
+            const transaction = {
+                validUntil: Math.floor(Date.now() / 1000) + 360,
+                messages: [{
+                    address: jettonWalletAddress,
+                    amount: toNano('0.1').toString(),
+                    payload: body.toBoc().toString('base64')
+                }]
+            }
+            await tonConnectUI.sendTransaction(transaction)
+            setSuccess(true)
+        } catch (e) {
+            console.error('Fill failed', e)
+        } finally {
+            setFillingKasa(false)
+        }
+    }
+
     return (
         <div className="teste-chef-container">
             {/* Status Card */}
+            {/* Main Safe Status */}
+            <div className="glass-panel" style={{ padding: '20px', marginBottom: '16px', background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                        <div style={{ fontSize: '11px', fontWeight: 800, color: '#10b981', textTransform: 'uppercase' }}>🛡️ {i18n.language === 'tr' ? 'TOPLULUK ANA KASASI' : 'COMMUNITY MAIN SAFE'}</div>
+                        <div style={{ fontSize: '20px', fontWeight: 900, marginTop: '4px' }}>{kasaBalance.toLocaleString()} TASTE</div>
+                    </div>
+                    <motion.button 
+                        whileTap={{ scale: 0.95 }}
+                        disabled={fillingKasa}
+                        onClick={handleFillSafe}
+                        style={{ background: '#10b981', color: '#000', border: 'none', borderRadius: '10px', padding: '8px 14px', fontSize: '12px', fontWeight: 900, cursor: 'pointer' }}
+                    >
+                        {fillingKasa ? '...' : (i18n.language === 'tr' ? 'KASAYI DOLDUR' : 'FILL SAFE')}
+                    </motion.button>
+                </div>
+            </div>
+
             <div className="glass-panel" style={{ 
                 padding: '24px', 
                 marginBottom: '16px', 

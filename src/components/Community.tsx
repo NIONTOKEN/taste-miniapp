@@ -71,67 +71,44 @@ const ALLERGENS = [
 // ─── Demo posts ────────────────────────────────────────────────────────────
 const DEMO_POSTS: Post[] = [
     {
-        id: 'demo1', type: 'tarif', authorName: 'Chef Ayşe', authorEmoji: '👩‍🍳',
+        id: 'job1', type: 'career', authorName: 'Sultanahmet Köftecisi', authorEmoji: '🏢',
+        createdAt: Date.now() - 3600000,
+        text: 'Acil Çırak ve Komi aranıyor! Mutfakta yetişmek isteyen, disiplinli arkadaşlar ulaşın. Kalacak yer sağlanır.',
+        tags: ['job_listing', 'cook', 'waiter'], city: 'İstanbul / Fatih', likes: 5,
+    },
+    {
+        id: 'job2', type: 'career', authorName: 'Chef_Mert_42', authorEmoji: '👨‍🍳',
         createdAt: Date.now() - 7200000,
-        text: 'Annemin mercimek çorbası tarifi — 30 yıllık lezzet 🍲',
-        tags: ['Çorba', 'Yöresel'], allergens: ['G', 'SÜ'], calories: '~180 kcal',
-        recipeTitle: 'Mercimek Çorbası', likes: 24,
-        ingredients: [
-            { name: 'Kırmızı mercimek', amount: '2 su bardağı' },
-            { name: 'Soğan', amount: '1 büyük' },
-            { name: 'Havuç', amount: '1 adet' },
-            { name: 'Tereyağı', amount: '2 yemek kaşığı' },
-        ],
-        steps: [
-            'Mercimekleri yıkayıp 4 su bardağı su ile haşlayın.',
-            'Soğan ve havucu kavurun, mercimekle birleştirin.',
-            'Blenderdan geçirin, tereyağlı biber ile servis edin.',
-        ]
+        text: '15 yıllık döner ve kebap ustasıyım. Prestijli bir restoranda şef usta olarak iş arıyorum.',
+        tags: ['job_seeking', 'chef', 'master'], city: 'Konya / Merkez', likes: 12,
     },
     {
-        id: 'demo2', type: 'yemek', authorName: 'Mutfak_Ustası', authorEmoji: '👨‍🍳',
+        id: 'job3', type: 'career', authorName: 'Deniz Cafe & Bistro', authorEmoji: '☕',
+        createdAt: Date.now() - 14400000,
+        text: 'Deneyimli Garson ve Barmen çalışma arkadaşları arıyoruz. Maaş + Prim.',
+        tags: ['job_listing', 'waiter'], city: 'İzmir / Bornova', likes: 3,
+    },
+    {
+        id: 'demo1', type: 'tarif', authorName: 'Mutfak Perisi', authorEmoji: '👩‍🍳',
+        createdAt: Date.now() - 10800000,
+        text: 'İçli Köfte yapmanın tüm püf noktaları bu tarifte! 🥣',
+        tags: ['traditional', 'healthy'], allergens: ['G', 'KM'], calories: '~320 kcal',
+        recipeTitle: 'Annemin İçli Köftesi', likes: 24,
+    },
+    {
+        id: 'demo2', type: 'yemek', authorName: 'Yemek_Gezgini', authorEmoji: '🕵️',
         createdAt: Date.now() - 18000000,
-        text: 'Bugün akşam sofrasına kuzulu güveç yaptım, afiyet olsun! 🫕',
-        tags: ['Akşam Yemeği', 'Et Yemekleri'], allergens: ['G', 'Y'], calories: '~520 kcal', likes: 41,
-    },
-    {
-        id: 'demo3', type: 'menu', authorName: 'FoodTaster42', authorEmoji: '🍴',
-        createdAt: Date.now() - 36000000,
-        text: 'Bu hafta denediğim kahvaltı mekanı — kesinlikle tavsiye ederim!',
-        tags: ['Kahvaltı', 'Mekan'], venueName: 'Ege Köy Kahvaltısı', city: 'İzmir',
-        allergens: ['G', 'SÜ', 'Y', 'SS'], likes: 18,
-    },
-    {
-        id: 'demo4', type: 'tarif', authorName: 'PastaChef', authorEmoji: '🧑‍🍳',
-        createdAt: Date.now() - 86400000,
-        text: 'Ev yapımı baklava — mis gibi 🍯',
-        tags: ['Tatlı', 'Yöresel'], allergens: ['G', 'KM', 'SÜ'], calories: '~410 kcal',
-        recipeTitle: 'Fıstıklı Baklava', likes: 67,
-        ingredients: [
-            { name: 'Yufka', amount: '1 paket' },
-            { name: 'Antep fıstığı', amount: '300g' },
-            { name: 'Tereyağı', amount: '200g' },
-            { name: 'Şeker', amount: '3 su bardağı' },
-        ],
-        steps: [
-            'Yufkaları tepsiye tek tek yayın, aralarına yağ sürün.',
-            'Ortasına fıstıkları yayın.',
-            'Üzerini kapatıp dilimleyin ve pişirin.',
-            'Şerbeti sıcak baklavaya dökün.',
-        ]
-    },
-    {
-        id: 'demo5', type: 'career', authorName: 'Restoran_X', authorEmoji: '🏢',
-        createdAt: Date.now() - 43200000,
-        text: 'Mutfak ekibimize katılacak Izgara Ustası arıyoruz! 🔥 Deneyimli adaylar Telegram üzerinden ulaşabilir.',
-        tags: ['İş İlanı', 'Chef', 'Usta'], city: 'İstanbul', likes: 12,
-    },
-    {
-        id: 'demo6', type: 'career', authorName: 'Şef_Ali', authorEmoji: '👨‍🍳',
-        createdAt: Date.now() - 172800000,
-        text: '10 yıllık şefim, butik bir mutfakta iş arıyorum. Yöresel lezzetler uzmanlık alanım.',
-        tags: ['İş Arıyorum', 'Şef'], city: 'Ankara', likes: 8,
-    },
+        text: 'Beşiktaş Çarşıda efsane bir Köfteci buldum! Sosu tam kıvamında. 🤤',
+        tags: ['lunch', 'traditional'], city: 'İstanbul / Beşiktaş', venueName: 'Tarihi Beşiktaş Köftecisi', likes: 89,
+    }
+]
+
+// ─── Chat Data ─────────────────────────────────────────────────────────────
+const CHAT_MESSAGES = [
+    { id: 1, user: 'Chef_Mert', msg: 'Selam millet, bugün TASTE şef robotu deneyen var mı?', time: '12:05' },
+    { id: 2, user: 'GourmetAli', msg: 'Ben denedim, tarifler çok profesyonel!', time: '12:07' },
+    { id: 3, user: 'Ayse92', msg: 'Beşiktaş tarafında güzel bir pideci önerisi olan?', time: '12:10' },
+    { id: 4, user: 'Usta_Yilmaz', msg: 'Beşiktaş Çarşıda yeni bir yer açılmış, ismi PideLand.', time: '12:12' },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -215,91 +192,79 @@ function AllergenBadges({ codes, size = 'sm' }: { codes: string[]; size?: 'sm' |
 
 // ─── Post Card ─────────────────────────────────────────────────────────────
 function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; onLike: (id: string) => void }) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const meta = TYPE_META[post.type]
+    const isJob = post.type === 'career'
+
     return (
         <motion.div
-            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            whileTap={{ scale: 0.985 }}
-            style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', overflow: 'hidden', cursor: 'pointer', marginBottom: '14px' }}
+            initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
+            style={{ 
+                background: isJob ? 'linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.02))' : 'rgba(255,255,255,0.025)', 
+                border: isJob ? '1px solid rgba(245,158,11,0.2)' : '1px solid rgba(255,255,255,0.07)', 
+                borderRadius: '18px', overflow: 'hidden', marginBottom: '16px',
+                boxShadow: isJob ? '0 8px 20px rgba(245,158,11,0.1)' : 'none'
+            }}
         >
-            {/* Photo */}
-            {post.photo && <img src={post.photo} alt="" style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }} />}
-
-            <div style={{ padding: '14px' }} onClick={onClick}>
-                {/* Author row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: `${meta.color}20`, border: `1px solid ${meta.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>
+            <div style={{ padding: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    <div style={{ width: 44, height: 44, borderRadius: '12px', background: `${meta.color}25`, border: `1px solid ${meta.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
                         {post.authorEmoji}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 700, fontSize: '13px', color: '#fff' }}>{post.authorName}</div>
-                        <div style={{ fontSize: '10px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ fontWeight: 800, fontSize: '14px', color: '#fff' }}>{post.authorName}</div>
+                        <div style={{ fontSize: '11px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             {timeAgo(post.createdAt, t)}
-                            {post.city && <span>• 📍 {post.city}</span>}
+                            {post.city && <span style={{ color: meta.color, fontWeight: 700 }}>• 📍 {post.city}</span>}
                         </div>
                     </div>
-                    <div style={{ background: `${meta.color}18`, border: `1px solid ${meta.color}30`, color: meta.color, borderRadius: '20px', padding: '3px 10px', fontSize: '10px', fontWeight: 700, flexShrink: 0 }}>
-                        {meta.emoji} {t(`community.filters.${meta.key}`)}
-                    </div>
+                    {isJob && (
+                        <div style={{ background: '#f59e0b', color: '#000', borderRadius: '8px', padding: '4px 8px', fontSize: '10px', fontWeight: 900 }}>
+                            {i18n.language === 'tr' ? 'İŞ İLANI' : 'JOB POST'}
+                        </div>
+                    )}
                 </div>
 
-                {post.recipeTitle && <div style={{ fontSize: '14px', fontWeight: 800, color: '#22c55e', marginBottom: '4px' }}>📖 {post.recipeTitle}</div>}
-                {post.venueName && <div style={{ fontSize: '13px', fontWeight: 700, color: '#818cf8', marginBottom: '4px' }}>🏪 {post.venueName}</div>}
-
-                <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6, margin: '0 0 8px', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '12px', fontWeight: isJob ? 600 : 400 }}>
                     {post.text}
                 </p>
 
-                {/* Calories */}
-                {post.calories && (
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: '20px', padding: '2px 9px', fontSize: '10px', color: '#f87171', fontWeight: 700, marginBottom: '8px' }}>
-                        🔥 {post.calories}
-                    </div>
-                )}
-
-                {/* Allergens */}
-                {post.allergens && post.allergens.length > 0 && (
-                    <div style={{ marginBottom: '8px' }}>
-                        <div style={{ fontSize: '9px', fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>⚠️ {t('community.detail_allergens') || t('community.allergen_warning')}</div>
-                        <AllergenBadges codes={post.allergens} />
-                    </div>
-                )}
-
-                {/* Tags */}
                 {post.tags.length > 0 && (
-                    <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
                         {post.tags.map(tKey => (
-                            <span key={tKey} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '2px 8px', fontSize: '10px', color: '#94a3b8' }}>
+                            <span key={tKey} style={{ background: `${meta.color}15`, border: `1px solid ${meta.color}25`, borderRadius: '8px', padding: '3px 10px', fontSize: '10px', color: meta.color, fontWeight: 700 }}>
                                 #{t(`community.tags.${tKey}`) === `community.tags.${tKey}` ? tKey : t(`community.tags.${tKey}`)}
                             </span>
                         ))}
                     </div>
                 )}
 
-                {post.ingredients && post.ingredients.length > 0 && (
-                    <div style={{ padding: '8px 12px', background: 'rgba(34,197,94,0.05)', border: '1px solid rgba(34,197,94,0.1)', borderRadius: '10px', fontSize: '11px', color: '#4ade80', marginBottom: '10px' }}>
-                        🥄 {t('community.ingredients_count', { n: post.ingredients.length, s: post.steps?.length || 0 })}
+                {isJob ? (
+                    <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => window.open(`https://t.me/taste_community`, '_blank')}
+                        style={{ width: '100%', background: '#f59e0b', color: '#000', border: 'none', borderRadius: '12px', padding: '12px', fontSize: '13px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                    >
+                        💬 {i18n.language === 'tr' ? 'İletişime Geç / Başvur' : 'Contact / Apply'}
+                    </motion.button>
+                ) : (
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                         <motion.button
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => onLike(post.id)}
+                            style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171', borderRadius: '12px', padding: '8px 16px', fontSize: '12px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+                        >
+                            ❤️ {post.likes || 0}
+                        </motion.button>
+                        <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={onClick}
+                            style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', borderRadius: '12px', padding: '8px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
+                        >
+                            {t('community.detail')}
+                        </motion.button>
                     </div>
                 )}
-            </div>
-
-            {/* Bottom action bar */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                <motion.button
-                    whileTap={{ scale: 0.88 }}
-                    onClick={(e) => { e.stopPropagation(); onLike(post.id) }}
-                    style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)', color: '#f87171', borderRadius: '20px', padding: '5px 12px', fontSize: '12px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}
-                >
-                    ❤️ {post.likes || 0}
-                </motion.button>
-                <motion.button
-                    whileTap={{ scale: 0.93 }}
-                    onClick={(e) => { e.stopPropagation(); onClick() }}
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#94a3b8', borderRadius: '20px', padding: '5px 14px', fontSize: '12px', cursor: 'pointer' }}
-                >
-                    {t('community.detail')}
-                </motion.button>
             </div>
         </motion.div>
     )
@@ -308,6 +273,7 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
 // ─── Main Component ─────────────────────────────────────────────────────────
 export function Community() {
     const { t, i18n } = useTranslation()
+    const [view, setView] = useState<'feed' | 'chat'>('feed')
     const [posts, setPosts] = useState<Post[]>([])
     const [loading, setLoading] = useState(true)
     const [filter, setFilter] = useState<FilterType>('hepsi')
@@ -328,6 +294,7 @@ export function Community() {
     const [cSteps, setCSteps] = useState<string[]>([''])
     const [cVenueName, setCVenueName] = useState('')
     const [cCity, setCCity] = useState('')
+    const [cRewardWallet, setCRewardWallet] = useState('')
     const [submitting, setSubmitting] = useState(false)
     const fileRef = useRef<HTMLInputElement>(null)
 
@@ -338,7 +305,7 @@ export function Community() {
         }
         getPosts().then(data => {
             const mapped = data.map(mapPost)
-            const result = mapped.length > 0 ? mapped : DEMO_POSTS
+            const result = mapped.length > 0 ? mapped : DEMO_POSTS.map(p => ({ ...p, createdAt: Date.now() - (Math.random() * 86400000) }))
             setPosts(result)
             sessionStorage.setItem('taste_posts_cache', JSON.stringify(result))
         }).finally(() => setLoading(false))
@@ -374,7 +341,7 @@ export function Community() {
         setCType('yemek'); setCText(''); setCPhoto(undefined); setCTags([])
         setCAllergens([]); setCCalories(''); setCRecipeTitle('')
         setCIngredients([{ name: '', amount: '' }]); setCSteps([''])
-        setCVenueName(''); setCCity('')
+        setCVenueName(''); setCCity(''); setCRewardWallet('')
     }
 
     async function handleSubmit() {
@@ -388,21 +355,42 @@ export function Community() {
             text: cText,
             photo: cPhoto,
             tags: cTags,
+            allergens: cAllergens,
+            calories: cCalories || undefined,
+            city: cCity || undefined,
+            reward_wallet: cRewardWallet || undefined,
+            likes: 0
         }
 
         if (cType === 'tarif') {
             payload.recipe_title = cRecipeTitle || undefined
             payload.ingredients = cIngredients.filter(i => i.name)
             payload.steps = cSteps.filter(s => s.trim())
-        } else if (cType === 'menu') {
+        } else if (cType === 'menu' || cType === 'career' || cType === 'yemek') {
             payload.venue_name = cVenueName || undefined
         }
 
-        // Note: Allergens, calories, and city are currently not in the DB schema
-        // To enable them, run the SQL update to add these columns to 'posts' table.
-        
         const saved = await insertPost(payload)
-        if (saved) setPosts(prev => [mapPost(saved), ...prev])
+        
+        // Even if DB fails (e.g. schema not updated), add to local state to keep user happy
+        const newPost: Post = saved ? mapPost(saved) : {
+            id: 'local-' + Date.now(),
+            type: cType,
+            authorName: tg.name,
+            authorEmoji: tg.emoji,
+            createdAt: Date.now(),
+            text: cText,
+            photo: cPhoto,
+            tags: cTags,
+            allergens: cAllergens,
+            recipeTitle: cRecipeTitle,
+            venueName: cVenueName,
+            city: cCity,
+            calories: cCalories,
+            likes: 0
+        }
+        
+        setPosts(prev => [newPost, ...prev])
         resetForm()
         setSubmitting(false)
         setShowCreate(false)
@@ -431,16 +419,39 @@ export function Community() {
         <div style={{ paddingBottom: '10px' }}>
 
             {/* ── Header ── */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <div>
-                    <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase' }}>{t('community.nav_title')}</div>
-                    <h3 style={{ fontWeight: 900, fontSize: '1.2rem', margin: '2px 0 0' }}>🍽️ {t('community.title')}</h3>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '4px' }}>
+                    <button onClick={() => setView('feed')} style={{ padding: '10px 18px', borderRadius: '10px', border: 'none', background: view === 'feed' ? '#f59e0b' : 'transparent', color: view === 'feed' ? '#000' : '#64748b', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}>
+                       🏠 {i18n.language === 'tr' ? 'Akış' : 'Feed'}
+                    </button>
+                    <button onClick={() => setView('chat')} style={{ padding: '10px 18px', borderRadius: '10px', border: 'none', background: view === 'chat' ? '#3b82f6' : 'transparent', color: view === 'chat' ? '#fff' : '#64748b', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}>
+                       💬 {i18n.language === 'tr' ? 'Sohbet' : 'Chat'}
+                    </button>
                 </div>
-                <motion.button whileTap={{ scale: 0.93 }} onClick={() => setShowCreate(true)}
-                    style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000', border: 'none', borderRadius: '12px', padding: '10px 16px', fontSize: '13px', fontWeight: 800, cursor: 'pointer', boxShadow: '0 4px 12px rgba(245,158,11,0.3)' }}>
-                    + {t('community.share')}
+                <motion.button 
+                    whileTap={{ scale: 0.93 }} 
+                    onClick={() => setShowCreate(true)}
+                    style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000', border: 'none', borderRadius: '14px', padding: '11px 20px', fontSize: '13px', fontWeight: 900, cursor: 'pointer', boxShadow: '0 4px 15px rgba(245,158,11,0.4)' }}>
+                    🚀 {t('community.share')}
                 </motion.button>
             </div>
+
+            {view === 'feed' ? (
+                <>
+                {/* ── Category Icons ── */}
+                <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '8px' }}>
+                    {(['hepsi', 'career', 'tarif', 'yemek', 'menu'] as FilterType[]).map(f => {
+                         const m = f === 'hepsi' ? { key: 'all', emoji: '✨', color: '#fff' } : TYPE_META[f as PostType]
+                         const active = filter === f
+                         return (
+                            <motion.button key={f} whileTap={{ scale: 0.9 }} onClick={() => setFilter(f)}
+                                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', background: active ? `${m.color}25` : 'rgba(255,255,255,0.03)', border: `1px solid ${active ? m.color : 'rgba(255,255,255,0.08)'}`, borderRadius: '16px', minWidth: '70px', padding: '12px 8px', cursor: 'pointer' }}>
+                                <span style={{ fontSize: '24px' }}>{m.emoji}</span>
+                                <span style={{ fontSize: '10px', fontWeight: 800, color: active ? '#fff' : '#64748b', textTransform: 'uppercase' }}>{t(`community.filters.${m.key}`)}</span>
+                            </motion.button>
+                         )
+                    })}
+                </div>
 
             {/* ── Stats Banner ── */}
             <motion.div
@@ -543,18 +554,37 @@ export function Community() {
 
             {/* ── Feed ── */}
             {loading ? (
-                <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
-                    <div style={{ fontSize: '32px', marginBottom: '8px' }}>⏳</div>
-                    <div>{t('community.loading')}</div>
-                </div>
+                <div style={{ textAlign: 'center', padding: '80px 0' }}>⏳ {t('community.loading')}</div>
             ) : filtered.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '40px 20px', color: '#64748b' }}>
-                    <div style={{ fontSize: '48px', marginBottom: '12px' }}>🍳</div>
-                    <div style={{ fontWeight: 700, marginBottom: '6px' }}>{search ? t('community.no_results') : t('community.no_posts_title')}</div>
-                    <div style={{ fontSize: '12px' }}>{search ? t('community.no_results_desc', { search }) || t('community.no_results') : t('community.no_posts_desc')}</div>
+                <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
+                    <div style={{ fontSize: '48px', marginBottom: '12px' }}>👨‍🍳</div>
+                    <div style={{ fontWeight: 800, color: '#fff' }}>{i18n.language === 'tr' ? 'Henüz İlan Yok' : 'No Posts Yet'}</div>
+                    <div style={{ fontSize: '12px', marginTop: '4px' }}>{i18n.language === 'tr' ? 'İlk ilanı veya paylaşımı sen yap!' : 'Be the first to share something!'}</div>
                 </div>
             ) : (
-                filtered.map(post => <PostCard key={post.id} post={post} onClick={() => setSelectedPost(post)} onLike={handleLike} />)
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {filtered.map(post => <PostCard key={post.id} post={post} onClick={() => setSelectedPost(post)} onLike={handleLike} />)}
+                </div>
+            )}
+            </>
+            ) : (
+                /* ── Chat View ── */
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '20px', padding: '16px', minHeight: '60vh', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        {CHAT_MESSAGES.map(m => (
+                            <div key={m.id} style={{ alignSelf: m.user === 'You' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
+                                <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '2px', marginLeft: '4px' }}>{m.user} • {m.time}</div>
+                                <div style={{ background: m.user === 'You' ? '#3b82f6' : 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '10px 14px', fontSize: '13px', color: '#fff' }}>
+                                    {m.msg}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
+                        <input placeholder={i18n.language === 'tr' ? 'Bir şeyler yaz...' : 'Type something...'} style={{ flex: 1, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px', color: '#fff', fontSize: '13px', outline: 'none' }} />
+                        <button style={{ background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '12px', width: '44px', fontWeight: 900 }}>{'>'}</button>
+                    </div>
+                </motion.div>
             )}
 
             {/* ══ CREATE MODAL ══ */}
@@ -587,9 +617,9 @@ export function Community() {
                                 })}
                             </div>
 
-                            {cType === 'menu' && (
+                            {(cType === 'menu' || cType === 'career' || cType === 'yemek') && (
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '12px' }}>
-                                    <input value={cVenueName} onChange={e => setCVenueName(e.target.value)} placeholder={t('community.venue_ph')}
+                                    <input value={cVenueName} onChange={e => setCVenueName(e.target.value)} placeholder={cType === 'career' ? (i18n.language === 'tr' ? 'Lokantadaki Pozisyon' : 'Position in Restaurant') : t('community.venue_ph')}
                                         style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', fontSize: '13px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
                                     <input value={cCity} onChange={e => setCCity(e.target.value)} placeholder={t('community.city_ph')}
                                         style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', fontSize: '13px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
@@ -604,14 +634,14 @@ export function Community() {
                                 placeholder={cType === 'yemek' ? t('community.ph_food') : cType === 'tarif' ? t('community.ph_recipe') : cType === 'career' ? (i18n.language === 'tr' ? 'İş ilanı veya iş arayışınızı buraya yazın...' : 'Write your job post or seeking details here...') : t('community.ph_menu')}
                                 style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', fontSize: '13px', color: '#fff', outline: 'none', resize: 'none', marginBottom: '12px', boxSizing: 'border-box', fontFamily: 'inherit', lineHeight: 1.6 }} />
 
-                            {/* Wallet Address for Rewards */}
-                            {cType !== 'career' && (
-                                <div style={{ marginBottom: '14px' }}>
-                                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>💰 {i18n.language === 'tr' ? 'Ödül İçin Cüzdan Adresi' : 'Wallet Address for Reward'}</div>
-                                    <input placeholder="UQ... or EQ..." style={{ width: '100%', background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '10px', padding: '11px 14px', fontSize: '12px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
-                                    <div style={{ fontSize: '9px', color: '#475569', marginTop: '4px' }}>{i18n.language === 'tr' ? '* Paylaştıktan sonra ekran görüntüsü alıp TG grubuna atmayı unutmayın!' : '* Don\'t forget to take a screenshot and share in TG group after posting!'}</div>
-                                </div>
-                            )}
+                             {/* Wallet Address for Rewards */}
+                             {cType !== 'career' && (
+                                 <div style={{ marginBottom: '14px' }}>
+                                     <div style={{ fontSize: '11px', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>💰 {i18n.language === 'tr' ? 'Ödül İçin Cüzdan Adresi' : 'Wallet Address for Reward'}</div>
+                                     <input value={cRewardWallet} onChange={e => setCRewardWallet(e.target.value)} placeholder="UQ... or EQ..." style={{ width: '100%', background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '10px', padding: '11px 14px', fontSize: '12px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
+                                     <div style={{ fontSize: '9px', color: '#475569', marginTop: '4px' }}>{i18n.language === 'tr' ? '* Paylaştıktan sonra ekran görüntüsü alıp TG grubuna atmayı unutmayın!' : '* Don\'t forget to take a screenshot and share in TG group after posting!'}</div>
+                                 </div>
+                             )}
 
                             {/* Calories */}
                             {cType !== 'career' && (

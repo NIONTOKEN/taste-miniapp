@@ -173,33 +173,9 @@ export const WalletTransfer = () => {
             </button>
             
             <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <button 
-                onClick={() => {
-                  setRecipientAddress(KASA_ADDRESS)
-                  setTokenType('TASTE')
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '10px',
-                  border: '1px solid var(--primary)',
-                  background: 'rgba(245,158,11,0.05)',
-                  color: 'var(--primary)',
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px'
-                }}
-              >
-                <ArrowDownLeft size={14} /> {i18n.language === 'tr' ? 'ANA KASAYI OTOMATİK DOLDUR' : 'AUTO-FILL MAIN KASA'}
-              </button>
-              
-              <div style={{ padding: '10px', background: 'rgba(245,158,11,0.05)', borderRadius: '10px', display: 'flex', gap: '8px', alignItems: 'center' }}>
-                 <Info size={14} color="#f59e0b" />
-                 <span style={{ fontSize: '10px', color: '#f59e0b', lineHeight: 1.4 }}>Transfer için cüzdanınızda en az 0.15 TON bulunmalıdır. Kasa işlemleri anlık merkezileştirilir.</span>
+              <div style={{ padding: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                 <Info size={14} color="#94a3b8" />
+                 <span style={{ fontSize: '10px', color: '#94a3b8', lineHeight: 1.4 }}>Transfer için cüzdanınızda en az 0.15 TON bulunmalıdır. İşlemler blokzincir üzerinde anlık gerçekleşir.</span>
               </div>
             </div>
           </motion.div>
