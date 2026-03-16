@@ -27,6 +27,7 @@ interface Post {
     venueName?: string
     city?: string
     calories?: string
+    rewardWallet?: string
 }
 
 // ─── Supabase mapper ──────────────────────────────────────────────────────
@@ -47,8 +48,9 @@ function mapPost(sp: SupaPost): Post {
         ingredients: sp.ingredients,
         steps: sp.steps,
         venueName: sp.venue_name,
-        city: (sp as any).city || '',
-        calories: (sp as any).calories || '',
+        city: sp.city || '',
+        calories: sp.calories || '',
+        rewardWallet: sp.reward_wallet || '',
     }
 }
 
@@ -230,6 +232,16 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
                 <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '12px', fontWeight: isJob ? 600 : 400 }}>
                     {post.text}
                 </p>
+
+                {post.rewardWallet && (
+                    <div style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '10px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '14px' }}>💰</span>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontSize: '9px', color: '#10b981', fontWeight: 800, textTransform: 'uppercase' }}>{i18n.language === 'tr' ? 'ÖDÜL CÜZDANI' : 'REWARD WALLET'}</div>
+                            <div style={{ fontSize: '10px', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis' }}>{post.rewardWallet}</div>
+                        </div>
+                    </div>
+                )}
 
                 {post.tags.length > 0 && (
                     <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
@@ -427,6 +439,14 @@ export function Community() {
         resetForm()
         setSubmitting(false)
         setShowCreate(false)
+        
+        // Show success alert
+        const tgApp = (window as any).Telegram?.WebApp
+        if (tgApp?.showAlert) {
+            tgApp.showAlert(i18n.language === 'tr' ? 'Harika! İlanın paylaşıldı ve tüm dünyaya duyuruldu. 🚀' : 'Great! Your post has been shared globally! 🚀')
+        } else {
+            alert(i18n.language === 'tr' ? 'İlanın Paylaşıldı! 🚀' : 'Post Shared! 🚀')
+        }
     }
 
     function shareToTelegram(post: Post) {

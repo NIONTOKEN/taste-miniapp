@@ -58,8 +58,10 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 4. **Charity Platform** — Support stray animal shelters
 5. **Food Allergen System** — 14 mandatory EU & Turkey allergens integrated
 6. **Live Activity** — Real-time blockchain activity tracker
-7. **Leaderboard** — Community rankings
-8. **Documentation** — Full technical details at tastetoken.net
+7. **Global Live Chat** — Real-time community chat accessible to everyone worldwide.
+8. **Job Board / Career** — Post job openings (chef, waiter, etc.) and contact posters directly via Telegram.
+9. **Leaderboard** — Community rankings
+10. **Documentation** — Full technical details at tastetoken.net
 
 ## Target Use Cases
 🍽️ Restaurant payments & loyalty rewards
@@ -110,7 +112,8 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 ✅ Mini App v2 update (March 2026) — PoweredBy SVG logos, TASTE summary card, reward countdown, likes/search/trending in Food Feed
 ✅ Mini App v2.2 Content & Compliance — March 2026 — TASTE Manifesto, full i18n support, legal framework.
 ✅ Mini App v2.3 Wallet & QR Update — March 2026 — Quick Wallet & Transfer system, balances, QR scanning and secure TASTE/TON sending.
-✅ Mini App v2.4 Taste Şef Dijital İndirim — Mart 2026 — Yeni nesil sadakat sistemi. Çırak'tan Şef'e uzanan ustalık yolculuğu ve özel indirimler.
+✅ Mini App v2.4 Taste Chef Digital Discount — March 2026 — Next-gen loyalty system. Apprenticeship to Master Chef journey.
+✅ Mini App v2.5 Community 3.0 — March 2026 — Global Real-time Food Feed & Job Board with direct Telegram contact and live global chat.
 
 ## Taste Şef (Dijital İndirim Sistemi)
 - **Ustalık Seviyeleri**: 🥉 Çırak (2k+), 🥈 Kalfa (4k+), 🥇 Usta (7.5k+), 👨‍🍳 Şef (15k+).

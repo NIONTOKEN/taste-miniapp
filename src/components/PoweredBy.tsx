@@ -321,7 +321,7 @@ export function PoweredBy() {
         { name: 'Telegram', color: '#229ED9', category: 'Tech', url: 'https://telegram.org', Logo: TelegramLogo },
         { name: 'React', color: '#61DAFB', category: 'Tech', Logo: ReactLogo },
         { name: 'Vite', color: '#646CFF', category: 'Tech', Logo: ViteLogo },
-        { name: 'Supabase', color: '#3ECF8E', category: 'Tech', url: 'https://supabase.com', Logo: SupabaseLogo },
+        { name: 'Supabase', color: '#3ECF8E', category: 'Tech', url: 'https://supabase.com', Logo: SupabaseLogo, badge: 'Real-time DB' },
     ]
 
     const categories = [
