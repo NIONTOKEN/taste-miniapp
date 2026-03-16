@@ -9,23 +9,23 @@ interface Leader {
 }
 
 export function Leaderboard() {
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const [activeTab, setActiveTab] = useState<'balance' | 'referrals'>('balance');
 
     const balanceLeaders: Leader[] = [
-        { name: "TasteWhale...4j2", value: 1420.5, rank: 1 },
-        { name: "TonMaster...x91", value: 890.2, rank: 2 },
-        { name: "EarlyAdopter...z12", value: 540.0, rank: 3 },
-        { name: "ChefTaste...k88", value: 310.5, rank: 4 },
-        { name: "CryptoFoodie...m21", value: 215.0, rank: 5 },
+        { name: "WhaleSahi...4j2", value: 1420.5, rank: 1 },
+        { name: "SefUsta...x91", value: 890.2, rank: 2 },
+        { name: "ErkenErisim...z12", value: 540.0, rank: 3 },
+        { name: "MekanSahibi...k88", value: 310.5, rank: 4 },
+        { name: "GurmePaylas...m21", value: 215.0, rank: 5 },
     ]
 
     const refLeaders: Leader[] = [
-        { name: "ViralKing...7x8", value: 142, rank: 1 },
-        { name: "Networker...22k", value: 89, rank: 2 },
-        { name: "TasteAmbassador", value: 54, rank: 3 },
-        { name: "John_Doe_TON", value: 31, rank: 4 },
-        { name: "CryptoDavet", value: 25, rank: 5 },
+        { name: "ViralKral...7x8", value: 142, rank: 1 },
+        { name: "Toplulukcu...22k", value: 89, rank: 2 },
+        { name: "TasteElcisi", value: 54, rank: 3 },
+        { name: "LezzetDostu", value: 31, rank: 4 },
+        { name: "Davetci", value: 25, rank: 5 },
     ]
 
     const leaders = activeTab === 'balance' ? balanceLeaders : refLeaders;
@@ -83,7 +83,7 @@ export function Leaderboard() {
                                     <span style={{ fontSize: '14px', fontWeight: '500' }}>{user.name}</span>
                                 </div>
                                 <div style={{ fontWeight: 'bold', color: 'var(--primary)' }}>
-                                    {user.value} <span style={{ fontSize: '10px' }}>{activeTab === 'balance' ? 'TASTE' : 'Invite'}</span>
+                                    {user.value} <span style={{ fontSize: '10px' }}>{activeTab === 'balance' ? (i18n.language === 'tr' ? 'Birim' : 'Units') : (i18n.language === 'tr' ? 'Davet' : 'Invite')}</span>
                                 </div>
                             </div>
                         ))}

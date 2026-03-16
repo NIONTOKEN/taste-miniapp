@@ -13,8 +13,11 @@ import { Charity } from './components/Charity'
 import { Community } from './components/Community'
 import { LiveActivity } from './components/LiveActivity'
 import { Legal } from './components/Legal'
+import { TasteAI } from './components/TasteAI'
+import { TasteChef } from './components/TasteChef'
 import { DisclaimerModal, shouldShowDisclaimer } from './components/DisclaimerModal'
 import { PoweredBy } from './components/PoweredBy'
+import { WalletTransfer } from './components/WalletTransfer'
 import {
   Home,
   Map,
@@ -22,7 +25,15 @@ import {
   Flame,
   Gift,
   Heart,
-  Scale
+  Scale,
+  Bot,
+  LayoutGrid,
+  X,
+  HelpCircle,
+  Cpu,
+  ExternalLink,
+  QrCode,
+  ChefHat
 } from 'lucide-react'
 import { apiService } from './services/api'
 
@@ -197,7 +208,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'community' | 'legal'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin'  | 'community' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef'>('home');
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
   const [tonConnectUI] = useTonConnectUI();
   const [showPing, setShowPing] = useState(false);
@@ -206,6 +217,7 @@ function App() {
   const [tonUsdPrice, setTonUsdPrice] = useState(3.5); // live TON price
 
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Language Persistence & Initialization
   useEffect(() => {
@@ -214,8 +226,8 @@ function App() {
       tg.ready();
       tg.expand();
       try {
-        tg.setHeaderColor('#0f172a');
-        tg.setBackgroundColor('#0f172a');
+        tg.setHeaderColor('#0a0f1c');
+        tg.setBackgroundColor('#0a0f1c');
       } catch (e) { }
 
       const savedLang = localStorage.getItem('i18nextLng');
@@ -287,158 +299,167 @@ function App() {
       case 'home':
         return (
           <motion.div key="home" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-
-            {/* Buy Panel */}
-            <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-              <h3 style={{ marginBottom: '15px', textAlign: 'center' }}>{t('app.buy_title')}</h3>
-
-              {/* Countdown Timer */}
-              <CountdownTimer earlyAccessLabel={t('app.early_access_ending')} />
-
-              {/* Reward Countdown */}
-              <RewardCountdown />
-
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: '5px', marginBottom: '10px' }}>
-                <AnimatePresence mode="wait">
-                  <motion.span key={amount} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} style={{ fontSize: '32px', fontWeight: 'bold' }}>
-                    {amount}
-                  </motion.span>
-                </AnimatePresence>
-                <span style={{ color: 'var(--primary)', fontWeight: '600' }}>TON</span>
-              </div>
-
-              {/* Estimated TASTE */}
-              <div style={{ textAlign: 'center', marginBottom: '20px', fontSize: '13px', color: 'var(--text-muted)' }}>
-                ≈ <span style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '15px' }}>{Math.round(amount * tastePerTon).toLocaleString()}</span> TASTE {t('app.you_get')}
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '25px' }}>
-                {[0.5, 1, 3, 5, 10, 15].map((val) => (
-                  <motion.button key={val} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setAmount(val)} style={{ background: amount === val ? 'var(--primary)' : 'rgba(255,255,255,0.05)', color: amount === val ? '#000' : 'var(--text-main)', border: '1px solid var(--bg-card-border)', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: '500' }}>
-                    {val} TON
-                  </motion.button>
-                ))}
-              </div>
-              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="glass-button primary-glow" style={{ width: '100%', fontSize: '1.1rem', background: 'var(--gradient-gold)', color: '#000', border: 'none' }} onClick={handleBuy}>
-                {t('app.buy_with')}
-              </motion.button>
-
-              {/* Holders + STON.fi */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px', fontSize: '12px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>👥 {holdersCount} {t('app.units.holder')}</span>
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '600' }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const url = 'https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
-                    if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(url);
-                    else window.open(url, '_blank');
+            {/* Hero (Logo & Intro) */}
+            <div style={{ textAlign: 'center', marginBottom: '20px', marginTop: '10px' }}>
+              <div style={{ position: 'relative', width: '140px', height: '140px', margin: '0 auto 10px' }}>
+                <svg viewBox="0 0 180 180" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', animation: 'spin-text 12s linear infinite' }}>
+                  <defs>
+                    <path id="circlePath" d="M 90,90 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#f59e0b" /><stop offset="50%" stopColor="#fbbf24" /><stop offset="100%" stopColor="#f59e0b" />
+                    </linearGradient>
+                  </defs>
+                  <text fill="url(#goldGradient)" fontSize="13" fontWeight="800" letterSpacing="5">
+                    <textPath href="#circlePath" startOffset="0%">TASTE • TOKEN • TASTE • TOKEN •</textPath>
+                  </text>
+                </svg>
+                <motion.div
+                  animate={{ y: [0, -6, 0], scale: [1, 1.03, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{
+                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                    width: '85px', height: '85px', borderRadius: '50%', boxShadow: '0 0 30px var(--primary-glow)',
+                    border: '4px solid rgba(245, 159, 11, 0.3)', overflow: 'hidden'
                   }}
                 >
-                  📊 STON.fi →
-                </motion.a>
+                  <video src="/logo-gif.mp4" autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                </motion.div>
+              </div>
+              <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '13px' }}>{t('app.description')}</p>
+            </div>
+
+            {/* Intro Video - Compact Card */}
+            <motion.div className="glass-panel" style={{ padding: '8px', borderRadius: '20px', marginBottom: '20px', background: 'rgba(15, 23, 42, 0.6)' }}>
+              <video
+                src="/taste-intro.mp4" controls playsInline preload="metadata" poster={TASTE_LOGO}
+                style={{ width: '100%', borderRadius: '16px', maxHeight: '200px', objectFit: 'cover' }}
+              />
+            </motion.div>
+
+            {/* Compact Swap Widget */}
+            <div className="glass-panel" style={{ padding: '20px', marginBottom: '16px', borderRadius: '24px', background: 'linear-gradient(145deg, rgba(30,41,59,0.7), rgba(15,23,42,0.9))', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ fontSize: '20px' }}>🪙</div>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 800 }}>TASTE Swap</h3>
+                  </div>
+                </div>
+                <div style={{ fontSize: '11px', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '4px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                  TON: ${tonUsdPrice.toFixed(2)}
+                </div>
+              </div>
+
+              {/* Input Area */}
+              <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '16px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 700 }}>{t('app.units.pay')}</div>
+                  <AnimatePresence mode="wait">
+                    <motion.span key={amount} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} style={{ fontSize: '28px', fontWeight: '900', color: '#fff' }}>
+                      {amount}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: '20px' }}>
+                  <img src="https://ton.org/download/ton_symbol.png" alt="TON" style={{ width: 16, height: 16 }} />
+                  <span style={{ fontSize: '14px', fontWeight: 700 }}>TON</span>
+                </div>
+              </div>
+
+              {/* Output Info */}
+              <div style={{ textAlign: 'center', margin: '12px 0', fontSize: '13px', color: 'var(--text-muted)' }}>
+                ↓ {t('app.you_get')} ≈ <span style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '16px' }}>{Math.round(amount * tastePerTon).toLocaleString()}</span> TASTE
+              </div>
+
+              {/* Quick Selectors */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '6px', marginBottom: '16px' }}>
+                {[1, 3, 5, 10, 20].map((val) => (
+                  <button key={val} onClick={() => setAmount(val)} style={{ background: amount === val ? 'var(--primary)' : 'rgba(255,255,255,0.04)', color: amount === val ? '#000' : 'var(--text-main)', border: amount === val ? 'none' : '1px solid rgba(255,255,255,0.08)', padding: '8px 0', borderRadius: '10px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', transition: 'all 0.2s' }}>
+                    {val}
+                  </button>
+                ))}
+              </div>
+
+              {/* Buy Button & Link */}
+              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={handleBuy} style={{ width: '100%', fontSize: '15px', fontWeight: 800, background: 'var(--gradient-gold)', color: '#000', border: 'none', padding: '16px', borderRadius: '16px', boxShadow: '0 4px 15px rgba(245, 159, 11, 0.3)', cursor: 'pointer', marginBottom: '12px' }}>
+                {t('app.buy_with')}
+              </motion.button>
+              <div style={{ textAlign: 'center' }}>
+                <a href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '11px', fontWeight: 600 }}>
+                  Powered by <span style={{ color: '#00c896' }}>STON.fi</span> →
+                </a>
               </div>
             </div>
 
-            <LiveMarketData />
-            <SocialTasks />
-
-            {/* FAQ Section */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-              <h3 style={{ marginBottom: '15px', fontSize: '1rem' }}>{t('app.faq.title')}</h3>
-
-              <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{t('app.faq.what_is')}</p>
-                <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-                    {t('app.faq.what_is_ans')}
-                </p>
+            {/* Compact Live Data & Activity Tabs */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px', marginBottom: '16px' }}>
+              <div className="glass-panel" style={{ padding: '0', overflow: 'hidden', borderRadius: '24px' }}>
+                <LiveMarketData />
               </div>
+              <div className="glass-panel" style={{ padding: '16px', borderRadius: '24px' }}>
+                 <LiveActivity />
+              </div>
+            </div>
 
-              <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{t('app.faq.how_to')}</p>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-                    <Trans i18nKey="app.faq.how_to_ans" />
+            {/* Quick Status Bar */}
+            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '12px 20px', marginBottom: '20px' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--primary)' }}>{holdersCount}</div>
+                  <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.holder').toUpperCase()}</div>
                 </div>
-              </div>
-
-              <div style={{ marginBottom: '15px' }}>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '10px' }}>{t('whitepaper.summary.lock_reason_title')}</p>
-                {[
-                  { label: `${t('whitepaper.summary.lock_prefix')} 1 — 10M TASTE (40%)`, url: 'https://tonscan.org/nft/EQDKKeOpSEE_diuEGULjR-yrJwrGOSwoHvYVdAPmtbeNj0v2', color: '#22c55e' },
-                  { label: `${t('whitepaper.summary.lock_prefix')} 2 — 8M TASTE (32%)`, url: 'https://tonscan.org/nft/EQDZLpOUQHOF1C6ekwMl3ERhl-j--r3zprppGtgm287K-6sc', color: '#22c55e' },
-                  { label: `${t('whitepaper.summary.lock_prefix')} 3 — 4.1M TASTE (16.4%)`, url: 'https://tonscan.org/nft/EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co', color: '#22c55e' },
-                  { label: `${t('whitepaper.summary.lp_lock_title')} (81.6%)`, url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
-                  { label: t('legal.nav.risk.label'), url: 'https://incandescent-gelato-cc11a4.netlify.app/audit.html', color: '#f59e0b' },
-                ].map((item, i) => (
-                  <motion.div key={i} whileTap={{ scale: 0.97 }} onClick={() => {
-                    if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(item.url);
-                    else window.open(item.url, '_blank');
-                  }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: `${item.color}08`, border: `1px solid ${item.color}25`, borderRadius: '10px', padding: '9px 12px', marginBottom: '6px', cursor: 'pointer' }}>
-                    <span style={{ fontSize: '11px', color: item.color, fontWeight: 600 }}>{item.label}</span>
-                    <span style={{ fontSize: '11px', color: item.color }}>→</span>
-                  </motion.div>
-                ))}
-              </div>
-
-              <div>
-                <p style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '13px', marginBottom: '5px' }}>{t('whitepaper.tokenomics.title')}</p>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-                    <Trans i18nKey="whitepaper.tokenomics.summary_text" />
+                <div style={{ width: '1px', background: 'rgba(255,255,255,0.05)' }} />
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--primary)' }}>25M</div>
+                  <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.supply').toUpperCase()}</div>
                 </div>
-              </div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="glass-panel" style={{ padding: '18px', marginBottom: '20px' }}>
-              <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#22c55e', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>{t('home.live_badge')}</div>
-              <h3 style={{ fontWeight: 900, margin: '0 0 14px', fontSize: '1rem' }}>{t('home.live_title')}</h3>
-              <LiveActivity />
-            </motion.div>
-
-            {/* Invite Section */}
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-                <span style={{ fontSize: '24px' }}>🤝</span>
-                <div>
-                  <h3 style={{ fontSize: '1rem' }}>{t('app.invite_friend')}</h3>
-                  <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{t('app.invite_desc')}</p>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--primary)' }}>88.4%</div>
+                  <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>LOCKED</div>
                 </div>
-              </div>
-
-              <motion.button whileHover={{ scale: 1.02, background: 'var(--primary)', color: '#000' }} whileTap={{ scale: 0.98 }} className="glass-button" style={{ width: '100%', background: 'var(--secondary)' }} onClick={() => {
-                const userId = tonConnectUI.account?.address || 'user';
-                const inviteLink = `https://t.me/taste_launch_bot/app?startapp=${userId}`;
-                const message = encodeURIComponent(t('app.referral_message'));
-                if (window.Telegram?.WebApp) window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${inviteLink}&text=${message}`);
-              }}>
-                {t('app.share_link')}
-              </motion.button>
             </motion.div>
-
-            {/* Community Stats - Subtle */}
-            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '20px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
-                <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{holdersCount}</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{t('app.units.holder')}</div>
-              </div>
-              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
-                <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>25M</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{t('app.units.supply')}</div>
-              </div>
-              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
-                <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>88.4%</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>{t('app.units.locked')}</div>
-              </div>
-            </motion.div>
-
-            {/* Powered By Section */}
-            <PoweredBy />
 
           </motion.div>
         );
+      case 'faq': return (
+        <motion.div key="faq" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <div className="glass-panel" style={{ padding: '24px', marginBottom: '20px' }}>
+            <h3 style={{ marginBottom: '20px', fontSize: '1.2rem', fontWeight: 900, textAlign: 'center' }}>🙋 {t('app.faq.title')}</h3>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div>
+                <p style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '14px', marginBottom: '8px' }}>{t('app.faq.what_is')}</p>
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.7' }}>{t('app.faq.what_is_ans')}</p>
+              </div>
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)' }} />
+              <div>
+                <p style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '14px', marginBottom: '8px' }}>{t('app.faq.how_to')}</p>
+                <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.7' }}><Trans i18nKey="app.faq.how_to_ans" /></div>
+              </div>
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)' }} />
+              <div>
+                <p style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '14px', marginBottom: '12px' }}>🔗 {i18n.language?.startsWith('tr') ? 'Hızlı Bağlantılar' : 'Quick Links'}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[
+                    { label: 'Token Locks', url: 'https://tonscan.org/jetton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-', color: '#22c55e' },
+                    { label: 'LP Lock (81.6%)', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
+                    { label: 'Audit & Safety', url: 'https://incandescent-gelato-cc11a4.netlify.app/audit.html', color: '#f59e0b' },
+                    { label: 'TASTE Website', url: 'https://tastetoken.net', color: '#3b82f6' },
+                  ].map((item, i) => (
+                    <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${item.color}30`, borderRadius: '14px', padding: '12px 16px', fontSize: '12px', color: item.color, textDecoration: 'none', fontWeight: 600, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      {item.label} <ExternalLink size={14} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      );
+      case 'tech': return (
+        <motion.div key="tech" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <PoweredBy />
+        </motion.div>
+      );
       case 'manifesto': return <Manifesto />;
       case 'roadmap': return (
         <motion.div key="roadmap" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
@@ -472,6 +493,33 @@ function App() {
         </motion.div>
       );
       case 'legal': return <Legal />;
+      case 'ai': return (
+        <motion.div key="ai" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE AI</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>🤖 {i18n.language?.startsWith('tr') ? 'Proje Asistanı' : 'Project Assistant'}</h3>
+            <TasteAI />
+          </div>
+        </motion.div>
+      );
+      case 'wallet': return (
+        <motion.div key="wallet" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.wallet')}</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>💰 {i18n.language?.startsWith('tr') ? 'Hızlı Cüzdan & Transfer' : 'Quick Wallet & Transfer'}</h3>
+            <WalletTransfer />
+          </div>
+        </motion.div>
+      );
+      case 'chef': return (
+        <motion.div key="chef" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.chef')}</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👨‍🍳 {i18n.language?.startsWith('tr') ? 'Taste Şef Dijital İndirim' : 'Taste Chef Digital Discount'}</h3>
+            <TasteChef />
+          </div>
+        </motion.div>
+      );
       default: return null;
     }
   };
@@ -540,118 +588,130 @@ function App() {
           </AnimatePresence>
         </motion.div>
 
-        {activeTab === 'home' && (
-          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', damping: 15 }} style={{ textAlign: 'center', marginBottom: '30px', marginTop: '10px' }}>
-            {/* Logo + Rotating Text */}
-            <div style={{ position: 'relative', width: '180px', height: '180px', margin: '0 auto 15px' }}>
-              {/* Rotating SVG Text */}
-              <svg
-                viewBox="0 0 180 180"
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  animation: 'spin-text 12s linear infinite'
-                }}
-              >
-                <defs>
-                  <path
-                    id="circlePath"
-                    d="M 90,90 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0"
-                  />
-                  <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#f59e0b" />
-                    <stop offset="50%" stopColor="#fbbf24" />
-                    <stop offset="100%" stopColor="#f59e0b" />
-                  </linearGradient>
-                </defs>
-                <text fill="url(#goldGradient)" fontSize="13" fontWeight="800" letterSpacing="5">
-                  <textPath href="#circlePath" startOffset="0%">
-                    TASTE • TOKEN • TASTE • TOKEN •
-                  </textPath>
-                </text>
-              </svg>
-
-              {/* Logo Video */}
-              <motion.div
-                animate={{ y: [0, -6, 0], scale: [1, 1.03, 1] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '110px',
-                  height: '110px',
-                  borderRadius: '50%',
-                  boxShadow: '0 0 30px var(--primary-glow)',
-                  border: '4px solid rgba(245, 159, 11, 0.3)',
-                  overflow: 'hidden'
-                }}
-              >
-                <video
-                  src="/logo-gif.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
-                />
-              </motion.div>
-            </div>
-            <p style={{ color: 'var(--text-muted)', marginTop: '5px', fontSize: '14px' }}>{t('app.description')}</p>
-
-            {/* Tanıtım Videosu */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="glass-panel"
-              style={{ marginTop: '20px', padding: '12px', borderRadius: '16px' }}
-            >
-              <video
-                src="/taste-intro.mp4"
-                controls
-                playsInline
-                preload="metadata"
-                poster={TASTE_LOGO}
-                style={{ width: '100%', borderRadius: '12px', maxHeight: '250px' }}
-              />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>🎬 TASTE Intro</p>
-            </motion.div>
-          </motion.div>
-        )}
 
         <main style={{ marginTop: activeTab === 'home' ? '0' : '20px' }}>
           <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
         </main>
 
-        <nav className="bottom-nav" style={{ overflowX: 'auto', justifyContent: 'flex-start', gap: '4px', paddingLeft: '8px', paddingRight: '8px' }}>
-          <button className={`nav-item ${activeTab === 'home' ? 'active' : ''}`} onClick={() => setActiveTab('home')}>
-            <span className="nav-icon"><Home size={18} /></span><span className="nav-label">{t('nav.home')}</span>
+        {/* Secondary Menu Drawer */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  position: 'fixed',
+                  top: 0, left: 0, right: 0, bottom: 0,
+                  background: 'rgba(15, 23, 42, 0.7)',
+                  backdropFilter: 'blur(4px)',
+                  zIndex: 998
+                }}
+              />
+              {/* Drawer Container */}
+              <motion.div
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                style={{
+                  position: 'fixed',
+                  left: 0, right: 0, bottom: '70px', /* just above the bottom nav */
+                  background: 'rgba(30, 41, 59, 0.95)',
+                  backdropFilter: 'blur(16px)',
+                  borderTopLeftRadius: '24px',
+                  borderTopRightRadius: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderBottom: 'none',
+                  padding: '24px 20px 30px',
+                  zIndex: 999,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '20px'
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <LayoutGrid size={20} color="#f59e0b" />
+                    {i18n.language?.startsWith('tr') ? 'Keşfet' : 'Discover'}
+                  </h3>
+                  <button onClick={() => setIsMenuOpen(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}>
+                    <X size={24} />
+                  </button>
+                </div>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+                   {[
+                    { id: 'manifesto', label: 'Manifesto', icon: Flame, color: '#f97316' },
+                    { id: 'roadmap', label: t('nav.roadmap'), icon: Map, color: '#8b5cf6' },
+                    { id: 'whitepaper', label: t('nav.whitepaper'), icon: FileText, color: '#3b82f6' },
+                    { id: 'spin', label: t('nav.spin'), icon: Gift, color: '#ec4899' },
+                    { id: 'charity', label: t('nav.charity'), icon: Heart, color: '#f43f5e' },
+                    { id: 'chef', label: t('nav.chef'), icon: ChefHat, color: '#10b981', isDemo: true },
+                    { id: 'wallet', label: t('nav.wallet'), icon: QrCode, color: '#f59e0b' },
+                    { id: 'faq', label: i18n.language?.startsWith('tr') ? 'S.S.S.' : 'F.A.Q.', icon: HelpCircle, color: '#22c55e' },
+                    { id: 'tech', label: i18n.language?.startsWith('tr') ? 'Teknoloji' : 'Tech', icon: Cpu, color: '#10b981' },
+                    { id: 'legal', label: t('nav.legal'), icon: Scale, color: '#64748b' }
+                  ].map((item: any) => (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id as any);
+                        setIsMenuOpen(false);
+                      }}
+                      style={{
+                        background: activeTab === item.id ? `linear-gradient(145deg, ${item.color}33, ${item.color}11)` : 'rgba(255,255,255,0.03)',
+                        border: `1px solid ${activeTab === item.id ? item.color : 'rgba(255,255,255,0.05)'}`,
+                        borderRadius: '14px',
+                        padding: '12px 4px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '6px',
+                        color: activeTab === item.id ? '#fff' : '#94a3b8',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      {activeTab === item.id && (
+                         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: item.color, boxShadow: `0 0 8px ${item.color}` }} />
+                      )}
+                      {item.isDemo && (
+                         <div style={{ position: 'absolute', top: '2px', right: '2px', background: '#ef4444', color: '#fff', fontSize: '6px', fontWeight: 900, padding: '1px 3px', borderRadius: '4px', zIndex: 2 }}>DEMO</div>
+                      )}
+                      <item.icon size={20} color={activeTab === item.id ? item.color : '#64748b'} />
+                      <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.2px', textAlign: 'center', textTransform: 'uppercase' }}>{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Primary Bottom Navigation */}
+        <nav className="bottom-nav" style={{ padding: '0 10px' }}>
+          <button className={`nav-item ${activeTab === 'home' ? 'active' : ''}`} onClick={() => { setActiveTab('home'); setIsMenuOpen(false); }}>
+            <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
-          <button className={`nav-item ${activeTab === 'manifesto' ? 'active' : ''}`} onClick={() => setActiveTab('manifesto')}>
-            <span className="nav-icon"><Flame size={18} /></span><span className="nav-label">Manifesto</span>
-          </button>
-          <button className={`nav-item ${activeTab === 'community' ? 'active' : ''}`} onClick={() => setActiveTab('community')}>
+          
+          <button className={`nav-item ${activeTab === 'community' ? 'active' : ''}`} onClick={() => { setActiveTab('community'); setIsMenuOpen(false); }}>
             <span className="nav-icon">🍽️</span><span className="nav-label">{t('nav.community')}</span>
           </button>
-          <button className={`nav-item ${activeTab === 'spin' ? 'active' : ''}`} onClick={() => setActiveTab('spin')}>
-            <span className="nav-icon"><Gift size={18} /></span><span className="nav-label">{t('nav.spin')}</span>
+
+          <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
+            <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>
+            <span style={{ position: 'absolute', top: '4px', right: '14px', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', animation: 'pulse 2s infinite' }} />
           </button>
-          <button className={`nav-item ${activeTab === 'charity' ? 'active' : ''}`} onClick={() => setActiveTab('charity')}>
-            <span className="nav-icon"><Heart size={18} /></span><span className="nav-label">{t('nav.charity')}</span>
-          </button>
-          <button className={`nav-item ${activeTab === 'roadmap' ? 'active' : ''}`} onClick={() => setActiveTab('roadmap')}>
-            <span className="nav-icon"><Map size={18} /></span><span className="nav-label">{t('nav.roadmap')}</span>
-          </button>
-          <button className={`nav-item ${activeTab === 'whitepaper' ? 'active' : ''}`} onClick={() => setActiveTab('whitepaper')}>
-            <span className="nav-icon"><FileText size={18} /></span><span className="nav-label">{t('nav.whitepaper')}</span>
-          </button>
-          <button className={`nav-item ${activeTab === 'legal' ? 'active' : ''}`} onClick={() => setActiveTab('legal')}>
-            <span className="nav-icon"><Scale size={18} /></span><span className="nav-label">{t('nav.legal')}</span>
+          
+          <button className={`nav-item ${isMenuOpen ? 'active' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <span className="nav-icon"><LayoutGrid size={22} /></span><span className="nav-label">{i18n.language?.startsWith('tr') ? 'Menü' : 'Menu'}</span>
           </button>
         </nav>
 

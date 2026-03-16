@@ -85,19 +85,35 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '22px' }}>
 
                     <DisclaimerItem
+                        emoji="🔞"
+                        color="#ef4444"
+                        title={isEn ? "Age Requirement" : "Yaş Sınırı"}
+                        subtitle="18+"
+                        text={isEn ? "You must be 18 years of age or older to use this application and its services." : "Bu uygulamayı ve sunulan hizmetleri kullanabilmek için 18 yaşından büyük olmanız gerekmektedir."}
+                    />
+
+                    <DisclaimerItem
+                        emoji="🚫"
+                        color="#fca5a5"
+                        title={isEn ? "No Crypto Payment" : "Kripto Ödeme Yasağı"}
+                        subtitle="Legal"
+                        text={isEn ? "TASTE is NOT a payment method. It is a loyalty asset used strictly for discounts and community benefits. All legal payments must be made in local fiat currency." : "TASTE bir ödeme aracı DEĞİLDİR. Sadece sadakat programı ve indirimler için kullanılan bir dijital varlıktır. Tüm yasal ödemeler yerel para birimi (TL) ile yapılmalıdır."}
+                    />
+
+                    <DisclaimerItem
                         emoji="🚫"
                         color="#ef4444"
-                        title={isEn ? "Not Investment Advice" : "Yatırım Tavsiyesi Değildir"}
+                        title={isEn ? "Not Financial Advice" : "Finansal Öneri Değildir"}
                         subtitle="Disclaimer"
-                        text={isEn ? "Nothing in this application constitutes investment advice, financial guidance, or an offer to buy/sell any security or crypto asset." : "Bu uygulama içindeki hiçbir içerik, grafik, fiyat bilgisi veya ifade yatırım tavsiyesi, finansal öneri veya alım-satım teklifi olarak yorumlanamaz."}
+                        text={isEn ? "Nothing in this application constitutes financial guidance or an offer to buy/sell any digital asset." : "Bu uygulama içindeki hiçbir içerik, grafik veya ifade finansal öneri veya alım-satım teklifi olarak yorumlanamaz."}
                     />
 
                     <DisclaimerItem
                         emoji="⚠️"
                         color="#f59e0b"
-                        title={isEn ? "High Risk Warning" : "Yüksek Risk Tespiti"}
+                        title={isEn ? "Digital Asset Risk" : "Dijital Varlık Riski"}
                         subtitle="Risk Level"
-                        text={isEn ? "Cryptocurrency assets carry high risk. You may lose all of your investment. Only invest what you can afford to lose." : "Kripto para varlıkları son derece yüksek risk içerir. Yatırımınızın tamamını kaybedebilirsiniz. Yalnızca kaybetmeyi göze aldığınız miktarı yatırın."}
+                        text={isEn ? "Digital assets carry high technological risk. You should only hold what you are comfortable with." : "Dijital varlıklar yüksek teknolojik risk içerir. Sadece kaybetmeyi göze aldığınız miktarları bulundurun."}
                     />
 
                     <DisclaimerItem
@@ -105,7 +121,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         color="#818cf8"
                         title={isEn ? "Limitation of Liability" : "Sorumluluk Reddi"}
                         subtitle="Liability"
-                        text={isEn ? "The TASTE Token team cannot be held responsible for any financial loss or damage resulting from decisions based on this application." : "TASTE Token ekibi, bu uygulamaya dayanarak alınan kararlar sonucunda oluşabilecek herhangi bir mali kayıp, zarar veya kayıptan sorumlu tutulamaz."}
+                        text={isEn ? "The TASTE team cannot be held responsible for any damage resulting from decisions based on this application." : "TASTE ekibi, bu uygulamaya dayanarak alınan kararlar sonucunda oluşabilecek herhangi bir zarardan sorumlu tutulamaz."}
                     />
 
                     <DisclaimerItem
@@ -113,7 +129,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         color="#22c55e"
                         title={isEn ? "Regulatory Notice" : "Yasal Uyarı"}
                         subtitle="Compliance"
-                        text={isEn ? "Crypto transactions may be restricted in your country. Users are solely responsible for complying with local laws." : "Kripto para işlemleri bulunduğunuz ülkede kısıtlı veya yasak olabilir. Yerel mevzuata uygun hareket etmek tamamen kullanıcının sorumluluğundadır."}
+                        text={isEn ? "Digital asset transactions may be restricted in some jurisdictions. Users are solely responsible for compliance." : "Dijital varlık işlemleri bazı bölgelerde kısıtlı olabilir. Mevzuata uygun hareket etmek kullanıcının sorumluluğundadır."}
                     />
                 </div>
 
@@ -149,7 +165,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         {checked && '✓'}
                     </div>
                     <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
-                        {isEn ? 'I have read and understood the risk warnings above. I accept that this application does not contain investment advice.' : 'Yukarıdaki risk uyarılarını okudum ve anladım. Bu uygulamanın yatırım tavsiyesi içermediğini kabul ediyorum.'}
+                        {isEn ? 'I am over 18 years old and I have read and understood the risk warnings. I accept that TASTE is not a payment method.' : '18 yaşından büyüğüm, risk uyarılarını okudum ve anladım. TASTE\'in bir ödeme aracı olmadığını kabul ediyorum.'}
                     </span>
                 </motion.label>
 
@@ -179,7 +195,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                 </motion.button>
 
                 <p style={{ textAlign: 'center', fontSize: '10px', color: 'rgba(255,255,255,0.2)', marginTop: '12px' }}>
-                    TASTE Token © 2025 · Built on The Open Network
+                    TASTE © 2026 · Built on The Open Network
                 </p>
             </motion.div>
         </motion.div>

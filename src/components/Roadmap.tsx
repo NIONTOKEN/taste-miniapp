@@ -19,6 +19,10 @@ export function Roadmap() {
         { emoji: '👛', key: 'wallets' },
         { emoji: '⚠️', key: 'allergen' },
         { emoji: '🚀', key: 'v2' },
+        { emoji: '💎', key: 'v2_1' },
+        { emoji: '📜', key: 'v2_2' },
+        { emoji: '💳', key: 'v2_3' },
+        { emoji: '👨‍🍳', key: 'v2_4' },
     ]
 
     // ─── Devam eden & yakın plan (gerçekçi) ──────────────────────────────────

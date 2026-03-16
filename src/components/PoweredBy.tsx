@@ -97,6 +97,20 @@ const GeminiLogo = () => (
     </svg>
 )
 
+const GroqLogo = () => (
+    <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <rect width="100" height="100" rx="20" fill="#f55036" />
+        <text x="50%" y="62%" textAnchor="middle" fill="white" fontSize="32" fontWeight="900" fontFamily="Arial, sans-serif">GROQ</text>
+    </svg>
+)
+
+const LlamaLogo = () => (
+    <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <rect width="100" height="100" rx="20" fill="#0668E1" />
+        <text x="50%" y="66%" textAnchor="middle" fill="white" fontSize="56" fontFamily="Arial, sans-serif">🦙</text>
+    </svg>
+)
+
 const AntigravityLogo = () => (
     <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
         <defs>
@@ -293,46 +307,27 @@ export function PoweredBy() {
     const tools: Tool[] = [
         // 🤖 AI
         { name: 'Antigravity', color: '#818cf8', category: 'AI', Logo: AntigravityLogo, badge: isEn ? 'Code Author' : 'Kod Yazarı' },
-        { name: 'Gemini', color: '#4285F4', category: 'AI', Logo: GeminiLogo, badge: isEn ? 'LLM Engine' : 'LLM Motoru' },
+        { name: 'Groq', color: '#f55036',   category: 'AI', url: 'https://groq.com', Logo: GroqLogo, badge: 'Ultra-Fast LPU' },
+        { name: 'Llama 3.3', color: '#0668E1', category: 'AI', url: 'https://llama.meta.com', Logo: LlamaLogo, badge: 'TASTE AI Brain' },
+        { name: 'Gemini', color: '#4285F4', category: 'AI', url: 'https://gemini.google.com', Logo: GeminiLogo, badge: 'Assist' },
     
-        // 👛 Wallets
-        { name: 'Tonkeeper', color: '#45AEF5', category: 'Wallet', url: 'https://tonkeeper.com', Logo: TonkeeperLogo },
-        { name: 'OKX Wallet', color: '#ffffff', category: 'Wallet', url: 'https://web3.okx.com', Logo: OKXLogo },
-        { name: 'Bitget Wallet', color: '#00C6A2', category: 'Wallet', url: 'https://web3.bitget.com', Logo: BitgetLogo },
-        { name: 'Binance Wallet', color: '#F0B90B', category: 'Wallet', url: 'https://www.binance.com/en/web3wallet', Logo: BinanceLogo },
-        { name: '@wallet', color: '#229ED9', category: 'Wallet', url: 'https://t.me/wallet', Logo: TelegramLogo },
-    
-        // 📱 Platform
-        { name: 'Telegram', color: '#229ED9', category: 'Platform', url: 'https://telegram.org', Logo: TelegramLogo },
-        { name: 'Google', color: '#4285F4', category: 'Platform', url: 'https://google.com', Logo: GoogleLogo },
-    
-        // ⛓️ Blockchain
+        // ⛓️ Blockchain & Web3
         { name: 'TON Network', color: '#0098EA', category: 'Blockchain', url: 'https://ton.org', Logo: TonLogo },
-        { name: 'TonConnect', color: '#0098EA', category: 'Blockchain', url: 'https://tonconnect.io', Logo: TonConnectLogo },
         { name: 'STON.fi', color: '#00c896', category: 'Blockchain', url: 'https://ston.fi', Logo: StonFiLogo },
-        { name: 'JVault', color: '#22c55e', category: 'Blockchain', url: 'https://jvault.xyz', Logo: JVaultLogo, badge: isEn ? 'Token Lock' : 'Token Kilidi' },
-        { name: 'TonScan', color: '#38bdf8', category: 'Blockchain', url: 'https://tonscan.org', Logo: TonScanLogo, badge: isEn ? 'Explorer' : 'Explorer' },
-        { name: 'tinu-locker.ton', color: '#6366f1', category: 'Blockchain', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', Logo: LockerLogo, badge: isEn ? 'LP Lock' : 'LP Kilidi' },
+        { name: 'Tonkeeper', color: '#45AEF5', category: 'Blockchain', url: 'https://tonkeeper.com', Logo: TonkeeperLogo },
+        { name: 'TonConnect', color: '#0098EA', category: 'Blockchain', url: 'https://tonconnect.io', Logo: TonConnectLogo },
     
-        // 🏗️ Infrastructure
-        { name: 'Netlify', color: '#00AD9F', category: 'Infra', url: 'https://netlify.com', Logo: NetlifyLogo },
-        { name: 'Railway', color: '#B044F8', category: 'Infra', url: 'https://railway.app', Logo: RailwayLogo },
-        { name: 'GitHub', color: '#ffffff', category: 'Infra', url: 'https://github.com', Logo: GithubLogo },
-        { name: 'Supabase', color: '#3ECF8E', category: 'Infra', url: 'https://supabase.com', Logo: SupabaseLogo },
-    
-        // ⚛️ Tech
+        // ⚡ Tech & Frameworks
+        { name: 'Telegram', color: '#229ED9', category: 'Tech', url: 'https://telegram.org', Logo: TelegramLogo },
         { name: 'React', color: '#61DAFB', category: 'Tech', Logo: ReactLogo },
         { name: 'Vite', color: '#646CFF', category: 'Tech', Logo: ViteLogo },
-        { name: 'GeckoTerminal', color: '#6fcc75', category: 'Tech', url: 'https://geckoterminal.com', Logo: GeckoTerminalLogo },
+        { name: 'Supabase', color: '#3ECF8E', category: 'Tech', url: 'https://supabase.com', Logo: SupabaseLogo },
     ]
 
     const categories = [
-        { id: 'AI',         label: isEn ? '🤖 Artificial Intelligence' : '🤖 Yapay Zeka',              color: '#818cf8', glow: 'rgba(129,140,248,0.15)' },
-        { id: 'Wallet',     label: isEn ? '👛 Supported Wallets' : '👛 Desteklenen Cüzdanlar',    color: '#f59e0b', glow: 'rgba(245,159,11,0.15)' },
-        { id: 'Platform',   label: isEn ? '📱 Platforms' : '📱 Platformlar',              color: '#229ED9', glow: 'rgba(34,158,217,0.15)' },
-        { id: 'Blockchain', label: isEn ? '⛓️ Blockchain' : '⛓️ Blockchain',               color: '#0098EA', glow: 'rgba(0,152,234,0.15)' },
-        { id: 'Infra',      label: isEn ? '🏗️ Infrastructure' : '🏗️ Altyapı & Barındırma',    color: '#00AD9F', glow: 'rgba(0,173,159,0.15)' },
-        { id: 'Tech',       label: isEn ? '⚛️ Technology Stack' : '⚛️ Teknoloji Yığını',        color: '#646CFF', glow: 'rgba(100,108,255,0.15)' },
+        { id: 'AI',         label: isEn ? '🤖 Artificial Intelligence' : '🤖 Yapay Zeka',            color: '#818cf8', glow: 'rgba(129,140,248,0.12)' },
+        { id: 'Blockchain', label: isEn ? '⛓️ Blockchain & Web3' : '⛓️ Blockchain & Web3',           color: '#0098EA', glow: 'rgba(0,152,234,0.12)' },
+        { id: 'Tech',       label: isEn ? '⚡ Tech & Frameworks' : '⚡ Teknoloji & Altyapı',          color: '#34d399', glow: 'rgba(52,211,153,0.12)' },
     ]
     return (
         <motion.div
@@ -384,10 +379,13 @@ export function PoweredBy() {
                         transition={{ delay: ci * 0.07 }}
                         style={{
                             marginBottom: '14px',
-                            background: cat.glow,
-                            borderRadius: '18px',
-                            padding: '14px',
-                            border: `1px solid ${cat.color}18`,
+                            background: `linear-gradient(180deg, ${cat.glow} 0%, transparent 100%)`,
+                            borderRadius: '20px',
+                            padding: '16px',
+                            border: `1px solid ${cat.color}20`,
+                            borderTop: `1px solid ${cat.color}40`,
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}
                     >
                         {/* Category title */}
@@ -444,13 +442,14 @@ export function PoweredBy() {
                         Antigravity — Google DeepMind AI
                     </div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>
-                        {isEn ? 'All codes of this mini app were written with ' : 'Bu mini uygulamanın tüm kodları '}
+                        {isEn ? 'Developed & Powered by ' : 'Geliştiren ve Destekleyen: '}
                         <span style={{ color: '#c4b5fd', fontWeight: 700 }}>Google DeepMind</span>{' '}
-                        {isEn ? 'developed ' : 'tarafından geliştirilen '}
-                        <span style={{ color: '#a5b4fc', fontWeight: 700 }}>Antigravity AI</span>
-                        {' '}& {' '}
-                        <span style={{ color: '#60a5fa', fontWeight: 700 }}>Gemini</span>
-                        {' '}{isEn ? '.' : 'ile yazıldı.'} 🚀
+                        <span style={{ color: '#a5b4fc', fontWeight: 700 }}>Antigravity AI</span>,{' '}
+                        <span style={{ color: '#60a5fa', fontWeight: 700 }}>Gemini</span>,{' '}
+                        <span style={{ color: '#fca5a5', fontWeight: 700 }}>Groq</span>
+                        {' '}&{' '}
+                        <span style={{ color: '#93c5fd', fontWeight: 700 }}>Llama 3</span>
+                        {' '}🚀
                     </div>
                 </div>
             </motion.div>

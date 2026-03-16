@@ -12,19 +12,18 @@ import {
 // ─── Config ────────────────────────────────────────────────────
 const WHATSAPP_GROUP = 'https://chat.whatsapp.com/G2Q6xjoYt94GzseLmFnUtO'
 const TARGET_POINTS = 2_000
+const TARGET_TON = 5
 const REWARD_TASTE = 25
 const STORAGE_KEY = 'taste_spin_data'
-
-// ─── Wheel Segments ────────────────────────────────────────────
 const SEGMENTS = [
-    { label: '200', points: 200, taste: 0, color: '#f59e0b', bg: '#78350f', emoji: '⭐' },
-    { label: '100', points: 100, taste: 0, color: '#818cf8', bg: '#1e1b4b', emoji: '✨' },
-    { label: '500', points: 500, taste: 0, color: '#22c55e', bg: '#14532d', emoji: '💚' },
-    { label: '150', points: 150, taste: 0, color: '#f472b6', bg: '#831843', emoji: '🌸' },
-    { label: '750', points: 750, taste: 0, color: '#fb923c', bg: '#7c2d12', emoji: '🔥' },
-    { label: '300', points: 300, taste: 0, color: '#a78bfa', bg: '#2e1065', emoji: '💜' },
-    { label: '1 TASTE', points: 0, taste: 1, color: '#fbbf24', bg: '#92400e', emoji: '🎁' },
-    { label: '3 TASTE', points: 0, taste: 3, color: '#2dd4bf', bg: '#134e4a', emoji: '🏆' },
+    { label: '200', points: 200, taste: 0, ton: 0, color: '#f59e0b', bg: '#78350f', emoji: '⭐' },
+    { label: '0.1 TON', points: 0, taste: 0, ton: 0.1, color: '#60a5fa', bg: '#1e3a8a', emoji: '💎' },
+    { label: '500', points: 500, taste: 0, ton: 0, color: '#22c55e', bg: '#14532d', emoji: '💚' },
+    { label: '0.2 TON', points: 0, taste: 0, ton: 0.2, color: '#3b82f6', bg: '#1e40af', emoji: '⚡' },
+    { label: '750', points: 750, taste: 0, ton: 0, color: '#fb923c', bg: '#7c2d12', emoji: '🔥' },
+    { label: '1 TASTE', points: 0, taste: 1, ton: 0, color: '#fbbf24', bg: '#92400e', emoji: '🎁' },
+    { label: '0.25 TON', points: 0, taste: 0, ton: 0.25, color: '#2563eb', bg: '#1e3a8a', emoji: '🚀' },
+    { label: '3 TASTE', points: 0, taste: 3, ton: 0, color: '#2dd4bf', bg: '#134e4a', emoji: '🏆' },
 ]
 
 const N = SEGMENTS.length
@@ -55,14 +54,14 @@ function getTextPos(i: number) {
 function loadLocalData() {
     try {
         const raw = localStorage.getItem(STORAGE_KEY)
-        if (!raw) return { points: 0, lastSpin: '', totalClaimed: 0 }
+        if (!raw) return { points: 0, lastSpin: '', totalClaimed: 0, tonBalance: 0 }
         return JSON.parse(raw)
-    } catch { return { points: 0, lastSpin: '', totalClaimed: 0 } }
+    } catch { return { points: 0, lastSpin: '', totalClaimed: 0, tonBalance: 0 } }
 }
 
 // Weighted random — TASTE dilimleri nadir
 function pickWinner() {
-    const weights = [24, 28, 10, 20, 4, 19, 8, 3] // 1 TASTE: ~%8, 3 TASTE: ~%3
+    const weights = [30, 6, 20, 4, 15, 8, 2, 3] // TON dilimleri (0.1, 0.2, 0.25) nadir: ~%6, ~%4, ~%2
     const total = weights.reduce((a, b) => a + b, 0)
     let r = Math.random() * total
     for (let i = 0; i < weights.length; i++) {
@@ -130,11 +129,15 @@ export function SpinWheel() {
     const [rotation, setRotation] = useState(0)
     const [points, setPoints] = useState(0)
     const [totalClaimed, setTotalClaimed] = useState(0)
+    const [tonBalance, setTonBalance] = useState(0)
     const [lastResult, setLastResult] = useState<(typeof SEGMENTS)[0] | null>(null)
     const [showResult, setShowResult] = useState(false)
     const [showReward, setShowReward] = useState(false)
+    const [showTonReward, setShowTonReward] = useState(false)
     const [showTasteWin, setShowTasteWin] = useState(false)
+    const [showTonWin, setShowTonWin] = useState(false)
     const [tasteWon, setTasteWon] = useState(0)
+    const [tonWon, setTonWon] = useState(0)
     const [copied, setCopied] = useState(false)
 
     // Sunucu kaynaklı durum
@@ -158,6 +161,10 @@ export function SpinWheel() {
                 setCanSpin(status.canSpin)
                 setPoints(status.totalPoints)
                 setTotalClaimed(status.totalClaimed)
+                // Sunucu tabanlı ton_balance eklendiğinde buradan çekilir
+                // ŞimdilikLocalStorage
+                const local = loadLocalData()
+                setTonBalance(local.tonBalance ?? 0)
                 setServerError(false)
             } catch {
                 // Sunucu alınamazsa localStorage'a dön
@@ -166,6 +173,7 @@ export function SpinWheel() {
                 setCanSpin(local.lastSpin !== today)
                 setPoints(local.points ?? 0)
                 setTotalClaimed(local.totalClaimed ?? 0)
+                setTonBalance(local.tonBalance ?? 0)
                 setServerError(true)
             } finally {
                 setServerLoading(false)
@@ -198,6 +206,7 @@ export function SpinWheel() {
 
         setTimeout(async () => {
             const isTaste = seg.taste > 0
+            const isTon = seg.ton > 0
 
             // Sunucuya kaydet
             const result = await recordSpin(
@@ -209,11 +218,18 @@ export function SpinWheel() {
             )
 
             if (!result.success) {
-                // Sunucu reddetti (duplikasyon girişimi)
                 setBlockedByServer(true)
                 setSpinning(false)
                 setCanSpin(false)
                 return
+            }
+
+            // TON kazanıldıysa yerel bakiyeye ekle
+            if (isTon) {
+                const newTonBal = Number((tonBalance + seg.ton).toFixed(2))
+                setTonBalance(newTonBal)
+                const local = loadLocalData()
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...local, tonBalance: newTonBal }))
             }
 
             setPoints(result.newTotal)
@@ -227,8 +243,16 @@ export function SpinWheel() {
                     setTasteWon(seg.taste)
                     setShowTasteWin(true)
                 }, 800)
+            } else if (isTon) {
+                setTimeout(() => {
+                    setTonWon(seg.ton)
+                    setShowTonWin(true)
+                }, 800)
             } else if (result.newTotal >= TARGET_POINTS) {
                 setTimeout(() => setShowReward(true), 800)
+            } else if (tonBalance >= TARGET_TON) {
+                // Bu check her çevirmede yapılır
+                setTimeout(() => setShowTonReward(true), 800)
             }
         }, 4200)
     }
@@ -256,6 +280,23 @@ export function SpinWheel() {
         setPoints(result.newPoints)
         setTotalClaimed(result.newClaimed)
         setShowTasteWin(false)
+    }
+
+    async function handleClaimTonReward() {
+        // TON bakiyesini sıfırla ve claim işaretle (sunucu tarafı hazır olmadığında local devam eder)
+        const newTonBal = 0
+        setTonBalance(newTonBal)
+        const local = loadLocalData()
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...local, tonBalance: newTonBal }))
+        setShowTonReward(false)
+    }
+
+    async function handleClaimTonWin() {
+        // Sadece modalı kapat, bakiye zaten handleSpin içinde eklendi
+        setShowTonWin(false)
+        if (tonBalance >= TARGET_TON) {
+            setTimeout(() => setShowTonReward(true), 500)
+        }
     }
 
     // WhatsApp direct group link
@@ -292,6 +333,46 @@ export function SpinWheel() {
             :
             `🏆 I WON TASTE ON THE WHEEL!\n\n` +
             `💰 I won: ${tasteWon} TASTE\n` +
+            `👛 Wallet: ${walletAddress || '(wallet not connected)'}\n` +
+            `🆔 Player ID: ${playerIdRef.current}\n\n` +
+            `Date: ${new Date().toLocaleDateString()}`
+        navigator.clipboard.writeText(msg).then(() => {
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2500)
+        })
+    }
+
+    function copyTonRewardMessage() {
+        const msg = i18n.language === 'tr' ?
+            `🎉 TON ÖDÜL TALEBİ\n\n` +
+            `Merhaba! 5 TON biriktirdim.\n\n` +
+            `💰 Talep: 5 TON\n` +
+            `👛 Cüzdan: ${walletAddress || '(cüzdan bağlı değil)'}\n` +
+            `🆔 Player ID: ${playerIdRef.current}\n\n` +
+            `Tarih: ${new Date().toLocaleDateString('tr-TR')}`
+            :
+            `🎉 TON REWARD CLAIM\n\n` +
+            `Hello! I accumulated 5 TON.\n\n` +
+            `💰 Claim: 5 TON\n` +
+            `👛 Wallet: ${walletAddress || '(wallet not connected)'}\n` +
+            `🆔 Player ID: ${playerIdRef.current}\n\n` +
+            `Date: ${new Date().toLocaleDateString()}`
+        navigator.clipboard.writeText(msg).then(() => {
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2500)
+        })
+    }
+
+    function copyTonWinMessage() {
+        const msg = i18n.language === 'tr' ?
+            `🏆 ÇARKTA TON KAZANDIM!\n\n` +
+            `💰 Kazandım: ${tonWon} TON\n` +
+            `👛 Cüzdan: ${walletAddress || '(cüzdan bağlı değil)'}\n` +
+            `🆔 Player ID: ${playerIdRef.current}\n\n` +
+            `Tarih: ${new Date().toLocaleDateString('tr-TR')}`
+            :
+            `🏆 I WON TON ON THE WHEEL!\n\n` +
+            `💰 I won: ${tonWon} TON\n` +
             `👛 Wallet: ${walletAddress || '(wallet not connected)'}\n` +
             `🆔 Player ID: ${playerIdRef.current}\n\n` +
             `Date: ${new Date().toLocaleDateString()}`
@@ -354,8 +435,11 @@ export function SpinWheel() {
                 </div>
                 <h3 style={{ fontSize: '1.3rem', fontWeight: 900, margin: 0 }}>{i18n.language === 'tr' ? '🎡 Çarkıfelek' : '🎡 Spin the Wheel'}</h3>
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    {i18n.language === 'tr' ? 'Günde 1 çevirme hakkı • 2.000 puan =' : '1 spin per day • 2,000 points ='} <strong style={{ color: '#f59e0b' }}>{REWARD_TASTE} TASTE</strong>
-                    <br /><span style={{ color: '#fbbf24', fontSize: '11px' }}>{i18n.language === 'tr' ? '🎁 Çarkta 1–3 TASTE doğrudan kazanabilirsin!' : '🎁 You can directly win 1–3 TASTE on the wheel!'}</span>
+                    {i18n.language === 'tr' ? 'Günde 1 çevirme hakkı' : '1 spin per day'}
+                    <br />
+                    <span style={{ color: '#f59e0b', fontSize: '11px', fontWeight: 700 }}>🎁 {i18n.language === 'tr' ? '2.000 Puan = 25 TASTE' : '2,000 Points = 25 TASTE'}</span>
+                    <br />
+                    <span style={{ color: '#60a5fa', fontSize: '11px', fontWeight: 700 }}>💎 {i18n.language === 'tr' ? '5 TON Biriktir = Çekim Yap!' : 'Accumulate 5 TON = Withdraw!'}</span>
                 </p>
                 {/* Sunucu doğrulama rozeti */}
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', marginTop: '6px', background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '20px', padding: '3px 10px', fontSize: '10px', color: '#22c55e', fontWeight: 700 }}>
@@ -363,35 +447,38 @@ export function SpinWheel() {
                 </div>
             </motion.div>
 
-            {/* ── Progress Bar ── */}
-            <div style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: '14px',
-                padding: '14px 16px',
-                marginBottom: '20px'
-            }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '12px' }}>
-                    <span style={{ fontWeight: 700, color: '#fff' }}>⭐ {points.toLocaleString(i18n.language === 'tr' ? 'tr-TR' : 'en-US')} {i18n.language === 'tr' ? 'Puan' : 'Points'}</span>
-                    <span style={{ color: 'var(--text-muted)' }}>{i18n.language === 'tr' ? 'Hedef:' : 'Target:'} {TARGET_POINTS.toLocaleString(i18n.language === 'tr' ? 'tr-TR' : 'en-US')}</span>
+            {/* ── Progress Grid (TASTE & TON) ── */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+                {/* TASTE Progress */}
+                <div style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(245,158,11,0.2)',
+                    borderRadius: '14px',
+                    padding: '12px'
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '11px' }}>
+                        <span style={{ fontWeight: 700, color: '#f59e0b' }}>⭐ {points.toLocaleString()}</span>
+                        <span style={{ color: 'var(--text-muted)' }}>/ 2k</span>
+                    </div>
+                    <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <motion.div animate={{ width: `${Math.min((points / TARGET_POINTS) * 100, 100)}%` }} style={{ height: '100%', background: '#f59e0b' }} />
+                    </div>
                 </div>
-                <div style={{ height: '8px', background: 'rgba(255,255,255,0.06)', borderRadius: '6px', overflow: 'hidden' }}>
-                    <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${pct}%` }}
-                        transition={{ duration: 1, ease: 'easeOut' }}
-                        style={{
-                            height: '100%',
-                            background: pct >= 100
-                                ? 'linear-gradient(90deg, #22c55e, #16a34a)'
-                                : 'linear-gradient(90deg, #f59e0b, #fbbf24)',
-                            borderRadius: '6px',
-                            boxShadow: pct >= 100 ? '0 0 12px rgba(34,197,94,0.5)' : '0 0 8px rgba(245,158,11,0.4)'
-                        }}
-                    />
-                </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '5px', textAlign: 'right' }}>
-                    {remaining > 0 ? (i18n.language === 'tr' ? `${remaining.toLocaleString('tr-TR')} puan kaldı` : `${remaining.toLocaleString('en-US')} points left`) : (i18n.language === 'tr' ? '🎉 ÖDÜL HAZIR!' : '🎉 REWARD READY!')}
+
+                {/* TON Progress */}
+                <div style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(37,99,235,0.2)',
+                    borderRadius: '14px',
+                    padding: '12px'
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '11px' }}>
+                        <span style={{ fontWeight: 700, color: '#60a5fa' }}>💎 {tonBalance} TON</span>
+                        <span style={{ color: 'var(--text-muted)' }}>/ 5</span>
+                    </div>
+                    <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <motion.div animate={{ width: `${Math.min((tonBalance / TARGET_TON) * 100, 100)}%` }} style={{ height: '100%', background: '#2563eb' }} />
+                    </div>
                 </div>
             </div>
 
@@ -463,7 +550,9 @@ export function SpinWheel() {
                         <div style={{ fontSize: '20px', fontWeight: '900', color: lastResult.color, marginTop: '4px' }}>
                             {lastResult.taste > 0
                                 ? `🎉 ${lastResult.taste} ${i18n.language === 'tr' ? 'TASTE Kazandın!' : 'TASTE Won!'}`
-                                : `+${lastResult.points} ${i18n.language === 'tr' ? 'Puan!' : 'Points!'}`}
+                                : lastResult.ton > 0
+                                    ? `💎 ${lastResult.ton} TON Kazandın!`
+                                    : `+${lastResult.points} ${i18n.language === 'tr' ? 'Puan!' : 'Points!'}`}
                         </div>
                         <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
                             {i18n.language === 'tr' ? 'Yarın tekrar çevirebilirsin 🕐' : 'You can spin again tomorrow 🕐'}
@@ -475,8 +564,8 @@ export function SpinWheel() {
             {/* ── Info grid ── */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
                 <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '18px', fontWeight: '900', color: '#f59e0b' }}>{points.toLocaleString(i18n.language === 'tr' ? 'tr-TR' : 'en-US')}</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '3px' }}>{i18n.language === 'tr' ? 'Toplam Puan' : 'Total Points'}</div>
+                    <div style={{ fontSize: '18px', fontWeight: '900', color: '#60a5fa' }}>{tonBalance}</div>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '3px' }}>{i18n.language === 'tr' ? 'TON Bakiyesi' : 'TON Balance'}</div>
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                     <div style={{ fontSize: '18px', fontWeight: '900', color: '#22c55e' }}>{totalClaimed}</div>
@@ -500,7 +589,7 @@ export function SpinWheel() {
                         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <div style={{ width: 8, height: 8, borderRadius: '50%', background: seg.color, flexShrink: 0 }} />
                             <span style={{ color: seg.color, fontWeight: 700 }}>
-                                {seg.emoji} {seg.taste > 0 ? `${seg.label} 🎉` : (i18n.language === 'tr' ? `${seg.label} puan` : `${seg.label} points`)}
+                                {seg.emoji} {seg.ton > 0 ? `${seg.label} 💎` : seg.taste > 0 ? `${seg.label} 🎉` : (i18n.language === 'tr' ? `${seg.label} puan` : `${seg.label} points`)}
                             </span>
                         </div>
                     ))}
@@ -692,6 +781,145 @@ export function SpinWheel() {
                                 <button onClick={() => setShowTasteWin(false)}
                                     style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '12px', cursor: 'pointer' }}
                                 >{i18n.language === 'tr' ? 'Sonra yapayım' : 'I will do it later'}</button>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+            {/* ══ TON REWARD MODAL ══ */}
+            <AnimatePresence>
+                {showTonReward && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            onClick={() => setShowTonReward(false)}
+                            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', zIndex: 2000 }}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8, y: 40 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.8, y: 40 }}
+                            style={{
+                                position: 'fixed', top: '50%', left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 'min(90vw, 380px)',
+                                background: 'linear-gradient(135deg, #0d1e3a, #1a2d4e)',
+                                border: '1px solid rgba(37,99,235,0.3)',
+                                borderRadius: '24px', padding: '28px 24px',
+                                zIndex: 2001, textAlign: 'center',
+                                boxShadow: '0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(37,99,235,0.1)'
+                            }}
+                        >
+                            <div style={{ fontSize: '54px', marginBottom: '12px' }}>💎</div>
+                            <h3 style={{ fontSize: '1.3rem', fontWeight: 900, marginBottom: '6px', color: '#60a5fa' }}>
+                                {i18n.language === 'tr' ? 'TEBRİKLER!' : 'CONGRATULATIONS!'}
+                            </h3>
+                            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '18px', lineHeight: 1.6 }}>
+                                <strong style={{ color: '#fff' }}>5 TON</strong> {i18n.language === 'tr' ? 'biriktirdin!' : 'accumulated!'}<br />
+                                {i18n.language === 'tr' ? 'Ödülünü çekmek için WhatsApp grubuna mesaj gönder.' : 'Send a message to WhatsApp group to withdraw your reward.'}
+                            </p>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                                    onClick={copyTonRewardMessage}
+                                    style={{
+                                        background: copied ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.06)',
+                                        border: copied ? '1px solid rgba(34,197,94,0.4)' : '1px solid rgba(255,255,255,0.1)',
+                                        color: copied ? '#22c55e' : '#fff',
+                                        borderRadius: '12px', padding: '12px',
+                                        fontSize: '13px', fontWeight: 700, cursor: 'pointer'
+                                    }}
+                                >
+                                    {copied ? (i18n.language === 'tr' ? '✅ Mesaj Kopyalandı!' : '✅ Message Copied!') : (i18n.language === 'tr' ? '📋 Mesajı Kopyala' : '📋 Copy Message')}
+                                </motion.button>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                                    onClick={() => {
+                                        handleClaimTonReward()
+                                        if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(whatsappLink)
+                                        else window.open(whatsappLink, '_blank')
+                                    }}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #25d366, #128c7e)',
+                                        color: '#fff', border: 'none', borderRadius: '12px',
+                                        padding: '13px', fontSize: '13px', fontWeight: 800,
+                                        cursor: 'pointer', boxShadow: '0 4px 16px rgba(37,211,102,0.3)'
+                                    }}
+                                >
+                                    {i18n.language === 'tr' ? '💬 WhatsApp Grubuna Git' : '💬 Go to WhatsApp Group'}
+                                </motion.button>
+                                <button onClick={() => setShowTonReward(false)} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '12px', cursor: 'pointer' }}>{i18n.language === 'tr' ? 'Kapat' : 'Close'}</button>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+
+            {/* ══ TON WIN MODAL ══ */}
+            <AnimatePresence>
+                {showTonWin && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            onClick={() => setShowTonWin(false)}
+                            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', zIndex: 2000 }}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.7, y: 50 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.7 }}
+                            style={{
+                                position: 'fixed', top: '50%', left: '50%',
+                                transform: 'translate(-50%,-50%)',
+                                width: 'min(90vw, 360px)',
+                                background: 'linear-gradient(135deg, #1e3a8a, #1e40af)',
+                                border: '2px solid rgba(96,165,250,0.5)',
+                                borderRadius: '24px', padding: '28px 22px',
+                                zIndex: 2001, textAlign: 'center',
+                                boxShadow: '0 20px 60px rgba(0,0,0,0.8), 0 0 50px rgba(96,165,250,0.2)'
+                            }}
+                        >
+                            <div style={{ fontSize: '60px', marginBottom: '8px' }}>💎</div>
+                            <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#60a5fa', marginBottom: '6px' }}>
+                                🎉 {tonWon} TON {i18n.language === 'tr' ? 'BONUSU!' : 'BONUS!'}
+                            </h3>
+                            <p style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '18px', lineHeight: 1.7 }}>
+                                {i18n.language === 'tr' ? 'TON Bakiyene' : 'Added'} <strong style={{ color: '#fff' }}>{tonWon} TON</strong> {i18n.language === 'tr' ? 'eklendi!' : 'to your TON balance!'}<br />
+                                <span style={{ color: '#60a5fa' }}>📌 {i18n.language === 'tr' ? 'Önemli:' : 'Important:'}</span> {i18n.language === 'tr' ? 'Ödemeler' : 'Payments at'} <strong style={{ color: '#fff' }}>5 TON</strong> {i18n.language === 'tr' ? 'birikince yapılır.' : 'threshold.'}
+                            </p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <motion.button
+                                    whileTap={{ scale: 0.97 }}
+                                    onClick={copyTonWinMessage}
+                                    style={{
+                                        background: copied ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.07)',
+                                        border: copied ? '1px solid #22c55e' : '1px solid rgba(255,255,255,0.12)',
+                                        color: copied ? '#22c55e' : '#fff',
+                                        borderRadius: '12px', padding: '12px',
+                                        fontSize: '13px', fontWeight: 700, cursor: 'pointer'
+                                    }}
+                                >
+                                    {copied ? '✅ Mesaj Kopyalandı!' : '📋 Mesajı Kopyala'}
+                                </motion.button>
+                                <motion.button
+                                    whileTap={{ scale: 0.97 }}
+                                    onClick={() => {
+                                        handleClaimTonWin()
+                                        if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(WHATSAPP_GROUP)
+                                        else window.open(WHATSAPP_GROUP, '_blank')
+                                    }}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #25d366, #128c7e)',
+                                        color: '#fff', border: 'none', borderRadius: '12px',
+                                        padding: '13px', fontSize: '13px', fontWeight: 800,
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {i18n.language === 'tr' ? '💬 Gruba Bildir' : '💬 Notify Group'}
+                                </motion.button>
+                                <button onClick={() => setShowTonWin(false)} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '12px', cursor: 'pointer' }}>{i18n.language === 'tr' ? 'Kapat' : 'Close'}</button>
                             </div>
                         </motion.div>
                     </>

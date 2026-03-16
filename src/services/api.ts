@@ -187,6 +187,39 @@ class ApiService {
     }
 
     /**
+     * Get Jetton Wallet Address for a user
+     */
+    async getJettonWalletAddress(userAddress: string, jettonMaster: string): Promise<string> {
+        try {
+            const data = await this.fetchWithRetry(
+                `https://tonapi.io/v2/jettons/${jettonMaster}/wallets/${userAddress}`,
+                { timeout: 8000, retries: 2, fallbackValue: null }
+            );
+            return data?.address || '';
+        } catch {
+            return '';
+        }
+    }
+
+    /**
+     * Get Jetton Balance directly for a user
+     */
+    async getJettonBalance(userAddress: string, jettonMaster: string): Promise<number> {
+        if (!userAddress || !jettonMaster) return 0;
+        try {
+            const data = await this.fetchWithRetry(
+                `https://tonapi.io/v2/accounts/${userAddress}/jettons/${jettonMaster}`,
+                { timeout: 8000, retries: 2, fallbackValue: null }
+            );
+            // Balance is returned in nano
+            const balanceNano = data?.balance || '0';
+            return parseFloat(balanceNano) / 1000000000;
+        } catch {
+            return 0;
+        }
+    }
+
+    /**
      * Health check for API connectivity
      */
     async checkConnectivity(): Promise<boolean> {

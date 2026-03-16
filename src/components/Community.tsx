@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { getPosts, insertPost, type SupaPost } from '../services/supabase'
 
 // ─── Types ────────────────────────────────────────────────────────────────
-type PostType = 'yemek' | 'tarif' | 'menu'
+type PostType = 'yemek' | 'tarif' | 'menu' | 'career'
 type FilterType = 'hepsi' | PostType
 
 interface Ingredient { name: string; amount: string }
@@ -120,6 +120,18 @@ const DEMO_POSTS: Post[] = [
             'Şerbeti sıcak baklavaya dökün.',
         ]
     },
+    {
+        id: 'demo5', type: 'career', authorName: 'Restoran_X', authorEmoji: '🏢',
+        createdAt: Date.now() - 43200000,
+        text: 'Mutfak ekibimize katılacak Izgara Ustası arıyoruz! 🔥 Deneyimli adaylar Telegram üzerinden ulaşabilir.',
+        tags: ['İş İlanı', 'Chef', 'Usta'], city: 'İstanbul', likes: 12,
+    },
+    {
+        id: 'demo6', type: 'career', authorName: 'Şef_Ali', authorEmoji: '👨‍🍳',
+        createdAt: Date.now() - 172800000,
+        text: '10 yıllık şefim, butik bir mutfakta iş arıyorum. Yöresel lezzetler uzmanlık alanım.',
+        tags: ['İş Arıyorum', 'Şef'], city: 'Ankara', likes: 8,
+    },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -157,12 +169,14 @@ const TYPE_META: Record<PostType, { key: string; emoji: string; color: string }>
     yemek: { key: 'food',   emoji: '🍽️', color: '#f97316' },
     tarif: { key: 'recipe', emoji: '📖', color: '#22c55e' },
     menu:  { key: 'menu',   emoji: '🏪', color: '#818cf8' },
+    career: { key: 'career', emoji: '🧑‍🍳', color: '#f59e0b' },
 }
 
 const TAGS_BY_TYPE: Record<PostType, string[]> = {
     yemek: ['breakfast', 'lunch', 'dinner', 'snack', 'dessert', 'vegan', 'vegetarian'],
     tarif: ['soup', 'meat', 'vegetables', 'dessert', 'traditional', 'practical', 'healthy'],
     menu:  ['breakfast', 'lunch', 'dinner', 'cafe', 'fastfood', 'finedining', 'seafood'],
+    career: ['job_listing', 'job_seeking', 'chef', 'cook', 'waiter', 'master'],
 }
 
 function getTgUser(t: any) {
@@ -367,24 +381,26 @@ export function Community() {
         if (!cText.trim()) return
         setSubmitting(true)
         const tg = getTgUser(t)
-        const payload: Omit<SupaPost, 'id' | 'created_at'> = {
+        const payload: any = {
             type: cType,
             author_name: tg.name,
             author_emoji: tg.emoji,
             text: cText,
             photo: cPhoto,
             tags: cTags,
-            ...(cType === 'tarif' && {
-                recipe_title: cRecipeTitle || undefined,
-                ingredients: cIngredients.filter(i => i.name),
-                steps: cSteps.filter(s => s.trim())
-            }),
-            ...(cType === 'menu' && { venue_name: cVenueName || undefined }),
-        } as any
-        ;(payload as any).allergens = cAllergens
-        ;(payload as any).calories = cCalories || undefined
-        ;(payload as any).city = cCity || undefined
-        ;(payload as any).likes = 0
+        }
+
+        if (cType === 'tarif') {
+            payload.recipe_title = cRecipeTitle || undefined
+            payload.ingredients = cIngredients.filter(i => i.name)
+            payload.steps = cSteps.filter(s => s.trim())
+        } else if (cType === 'menu') {
+            payload.venue_name = cVenueName || undefined
+        }
+
+        // Note: Allergens, calories, and city are currently not in the DB schema
+        // To enable them, run the SQL update to add these columns to 'posts' table.
+        
         const saved = await insertPost(payload)
         if (saved) setPosts(prev => [mapPost(saved), ...prev])
         resetForm()

@@ -6,8 +6,8 @@ const resources = {
     en: {
         translation: {
             "app": {
-                "title": "TASTE Token",
-                "description": "The Art and Education of Culinary Utility Token",
+                "title": "TASTE",
+                "description": "The Art and Education of Culinary Digital Assets",
                 "buy_title": "🔥 Early Access — Buy TASTE",
                 "buy_with": "Buy with TON",
                 "holders": "Holders",
@@ -37,7 +37,7 @@ const resources = {
                 "faq": {
                     "title": "❓ Frequently Asked Questions",
                     "what_is": "What is TASTE?",
-                    "what_is_ans": "TASTE is a gastronomy and education-focused utility token built on the TON blockchain. It targets real-world use in restaurants, hotels, and the food & beverage industry.",
+                    "what_is_ans": "TASTE is a gastronomy and education-focused digital loyalty asset built on the TON blockchain. It targets real-world use in restaurants, hotels, and the food & beverage industry.",
                     "how_to": "How to Buy?",
                     "how_to_ans": "1. Load TON into your TON wallet (Tonkeeper, @wallet).<br />2. Select the desired amount from the panel above.<br />3. Click 'Buy with TON' and swap via STON.fi."
                 }
@@ -59,7 +59,9 @@ const resources = {
                 "charity": "Charity",
                 "legal": "Legal",
                 "leaderboard": "Leaderboard",
-                "play": "Play"
+                "play": "Play",
+                "wallet": "Wallet",
+                "chef": "Taste Chef"
             },
             "game": {
                 "title": "Chef Career",
@@ -69,7 +71,7 @@ const resources = {
                 "excellent": "Excellent!",
                 "success_message": "You've successfully prepared {{dish}}.",
                 "return_map": "Back to Map",
-                "complete_info": "Complete levels to earn TASTE tokens! 🍳💎"
+                "complete_info": "Complete levels to earn TASTE assets! 🍳💎"
             },
             "roadmap": {
                 "title": "Roadmap 2026",
@@ -85,9 +87,9 @@ const resources = {
                 "footer_text": "This roadmap is a living document — completed tasks are added, unpromised ones are not.",
                 "footer_bold": "TASTE builds trust, doesn't sell dreams.",
                 "items": {
-                    "mint": { "title": "Token Mint & Launch", "desc": "TASTE token was minted on the TON blockchain and started trading on STON.fi." },
+                    "mint": { "title": "Asset Genesis & Launch", "desc": "TASTE assets were generated on the TON blockchain and started trading on STON.fi." },
                     "lp": { "title": "Liquidity Pool", "desc": "TON/TASTE liquidity pool was created and activated on STON.fi." },
-                    "lock": { "title": "Token & LP Lock", "desc": "88.4% of the total supply is locked in JVault with 3 separate locks. Additionally, 81.6% of STON.fi pTON-TASTE LP tokens are locked with tinu-locker.ton. Both locks are publicly verifiable on the blockchain." },
+                    "lock": { "title": "Asset & LP Lock", "desc": "88.4% of the total supply is locked in JVault with 3 separate locks. Additionally, 81.6% of STON.fi pTON-TASTE LP units are locked with tinu-locker.ton. Both locks are publicly verifiable on the blockchain." },
                     "security": { "title": "Security Scan", "desc": "The smart contract has passed a security audit." },
                     "miniapp": { "title": "Telegram Mini App", "desc": "A full-featured mini app running on Telegram was launched." },
                     "airdrop": { "title": "Airdrop & Rewards", "desc": "TASTE airdrop was performed for 443 wallets and is growing every day. The spinning wheel reward system is active." },
@@ -98,10 +100,26 @@ const resources = {
                     "wallets": { "title": "Reaching 500 Wallets", "desc": "First quarter goal: 500 unique wallet owners. The community continues to grow." },
                     "allergen": { "title": "Food Allergen Notification System", "desc": "The 14 mandatory allergens in EU & Turkey food legislation (Gluten, Milk, Eggs, Fish, etc.) were integrated into the Food Feed. Allergen tags can be added to every share, and calorie information is displayed." },
                     "v2": { "title": "Mini App v2 Update — March 2026", "desc": "PoweredBy section was renewed with SVG logos (OKX, Bitget, Binance, Telegram, Google, Gemini). TASTE summary card added to Whitepaper. Reward distribution end timer (May 20, 2026) added. Likes, search, and trending foods brought to Food Feed." },
+                    "v2_1": { "title": "Mini App v2.1 Redesign — March 2026", "desc": "Premium Dark UI & UX overhaul. New 'Explore' Menu Drawer implemented. FAQ section added. AI engine upgraded to Llama 3.3 70B via Groq. Global Telegram theme colors synchronized for premium feel." },
+                    "v2_2": { "title": "Mini App v2.2 Content & Compliance — March 2026", "desc": "TASTE Manifesto published explaining the project's soul. Full Internationalization (i18n) support for English & Turkish languages. Comprehensive Legal Framework (Terms, Privacy, Risk Disclosure) and first-launch Disclaimer Modal implemented for user safety." },
+                    "v2_3": { "title": "Mini App v2.3 Wallet & QR Update — March 2026", "desc": "Quick Wallet & Transfer system launched. Users can now view TON & TASTE balances, scan QR codes for instant payments, and send both TON and TASTE tokens securely with optimized gas fees." },
+                    "v2_4": { "title": "Mini App v2.4 Taste Şef — March 2026", "desc": "Digital Loyalty & Discount system. Apprenticeship tiers to Master Chef status. Symbolic fee for discount validation at cashiers." },
                     "growth": { "title": "Community Growth", "desc": "Every day new users, every day new shares. Focused on organic growth." },
                     "visibility": { "title": "Greater DEX Visibility", "desc": "Presence in other TON ecosystem platforms alongside STON.fi." },
                     "reporting": { "title": "Transparent Reporting", "desc": "Holder count, transaction volume, and community growth will be shared regularly." },
                     "dev": { "title": "Mini App Development", "desc": "New features are being added based on user feedback." }
+                },
+                "spin": {
+                    "ton_balance": "TON Balance",
+                    "ton_target": "Target: 5 TON",
+                    "ton_claim_ready": "🎉 TON REWARD READY!",
+                    "ton_left": "{{n}} TON left",
+                    "win_ton": "🎉 {{n}} TON Won!",
+                    "reward_claim_ton": "🎉 TON REWARD CLAIM",
+                    "accumulated_ton": "Hello! I accumulated 5 TON.",
+                    "won_ton_msg": "🏆 I WON TON ON THE WHEEL!",
+                    "ton_win_bonus": "🎉 {{n}} TON BONUS!",
+                    "ton_important": "Payments are made at a minimum threshold of 5 TON."
                 }
             },
             "manifesto": {
@@ -346,7 +364,8 @@ const resources = {
                     "all": "All",
                     "food": "Food",
                     "recipe": "Recipe",
-                    "menu": "Menu"
+                    "menu": "Menu",
+                    "career": "Career / Jobs"
                 },
                 "trending": "Most Liked",
                 "loading": "Loading posts...",
@@ -400,7 +419,13 @@ const resources = {
                     "cafe": "Cafe",
                     "fastfood": "Fast Food",
                     "finedining": "Fine Dining",
-                    "seafood": "Seafood"
+                    "seafood": "Seafood",
+                    "job_listing": "Job Listing",
+                    "job_seeking": "Job Seeking",
+                    "chef": "Chef",
+                    "cook": "Cook",
+                    "waiter": "Waiter",
+                    "master": "Master"
                 },
                 "allergens": {
                     "G": "Gluten",
@@ -424,11 +449,11 @@ const resources = {
     tr: {
         translation: {
             "app": {
-                "title": "TASTE Token",
-                "description": "Gastronomi ve Eğitim Odaklı Utility Token",
+                "title": "TASTE",
+                "description": "Gastronomi ve Eğitim Odaklı Dijital Varlıklar",
                 "buy_title": "🔥 Erken Erişim — TASTE Satın Al",
-                "buy_with": "TON ile Satın Al",
-                "holders": "Yatırımcılar",
+                "buy_with": "TON ile Edinin",
+                "holders": "Sahipler",
                 "my_balance": "Bakiyem",
                 "invite_friend": "Arkadaşını Davet Et",
                 "invite_gain": "Topluluğu birlikte büyütelim",
@@ -448,14 +473,14 @@ const resources = {
                     "hr": "SAAT",
                     "min": "DAK",
                     "sec": "SN",
-                    "holder": "Yatırımcı",
+                    "holder": "Sahipler",
                     "supply": "Toplam Arz",
                     "locked": "Kilitli"
                 },
                 "faq": {
                     "title": "❓ Sıkça Sorulan Sorular",
                     "what_is": "TASTE Nedir?",
-                    "what_is_ans": "TASTE, TON blockchain üzerinde kurulmuş gastronomi ve eğitim odaklı bir utility token'dır. Restoranlar, oteller ve yeme-içme sektöründe gerçek kullanım hedefler.",
+                    "what_is_ans": "TASTE, TON blockchain üzerinde kurulmuş gastronomi ve eğitim odaklı bir dijital sadakat varlığıdır. Restoranlar, oteller ve yeme-içme sektöründe gerçek kullanım hedefler.",
                     "how_to": "Nasıl Satın Alınır?",
                     "how_to_ans": "1. TON cüzdanınıza (Tonkeeper, @wallet) TON yükleyin.<br />2. Yukarıdaki panelden istediğiniz miktarı seçin.<br />3. 'TON ile Satın Al' butonuna basıp STON.fi üzerinden swap yapın."
                 }
@@ -477,7 +502,9 @@ const resources = {
                 "charity": "Hayır Platformu",
                 "legal": "Yasal Bilgiler",
                 "leaderboard": "Sıralama",
-                "play": "Oyun"
+                "play": "Oyun",
+                "wallet": "Cüzdan",
+                "chef": "Taste Şef"
             },
             "game": {
                 "title": "Şef Kariyeri",
@@ -487,7 +514,7 @@ const resources = {
                 "excellent": "Harika!",
                 "success_message": "{{dish}} başarıyla hazırlandı.",
                 "return_map": "Haritaya Dön",
-                "complete_info": "Bölümleri geçerek TASTE token kazanın! 🍳💎"
+                "complete_info": "Bölümleri geçerek TASTE sadakat birimi kazanın! 🍳💎"
             },
             "roadmap": {
                 "title": "Yol Haritası 2026",
@@ -503,9 +530,9 @@ const resources = {
                 "footer_text": "Bu yol haritası yaşayan bir belgedir — tamamlananlar eklenir, söz verilmeyenler eklenmez.",
                 "footer_bold": "TASTE güveni inşa eder, hayal satmaz.",
                 "items": {
-                    "mint": { "title": "Token Mint & Piyasaya Sürüm", "desc": "TASTE token TON blockchain üzerinde mint edildi, STON.fi'de işlem görmeye başladı." },
+                    "mint": { "title": "Varlık Oluşumu & Piyasaya Sürüm", "desc": "TASTE varlıkları TON blockchain üzerinde oluşturuldu, STON.fi'de işlem görmeye başladı." },
                     "lp": { "title": "Likidite Havuzu", "desc": "STON.fi'de TON/TASTE likidite havuzu oluşturuldu ve aktif." },
-                    "lock": { "title": "Token & LP Kilidi", "desc": "Toplam arzın %88.4'ü JVault'ta 3 ayrı kilidle kilitlendi. Ek olarak STON.fi pTON-TASTE LP tokenlerinin %81.6'sı tinu-locker.ton ile kilitlendi. Her iki kilit blockchain'de herkese açık doğrulanabilir." },
+                    "lock": { "title": "Varlık & LP Kilidi", "desc": "Toplam arzın %88.4'ü JVault'ta 3 ayrı kilidle kilitlendi. Ek olarak STON.fi pTON-TASTE LP birimlerinin %81.6'sı tinu-locker.ton ile kilitlendi. Her iki kilit blockchain'de herkese açık doğrulanabilir." },
                     "security": { "title": "Güvenlik Taraması", "desc": "Akıllı sözleşme güvenlik denetiminden geçirildi." },
                     "miniapp": { "title": "Telegram Mini App", "desc": "Telegram üzerinde çalışan tam özellikli mini uygulama yayına girdi." },
                     "airdrop": { "title": "Airdrop & Ödül Dağıtımı", "desc": "TASTE airdrop gerçekleştirildi ve her gün büyüyor. Çarkıfelek ödül sistemi aktif." },
@@ -515,11 +542,27 @@ const resources = {
                     "food_sharing": { "title": "Günlük Yemek Paylaşım Platformu", "desc": "Kullanıcılar tarif, yemek ve mekan paylaşabiliyor. Gerçek zamanlı (Supabase ile)." },
                     "wallets": { "title": "500 Cüzdana Ulaşma", "desc": "İlk çeyrek hedefi: 500 benzersiz cüzdan sahibi. Topluluk büyümeye devam ediyor." },
                     "allergen": { "title": "Gıda Alerjeni Bildirim Sistemi", "desc": "AB & Türkiye gıda mevzuatındaki 14 zorunlu alerjen (Gluten, Süt, Yumurta, Balık vb.) Yemek Akışı'na entegre edildi. Her paylaşıma alerjen etiketi eklenebiliyor, kalori bilgisi gösteriliyor." },
-                    "v2": { "title": "Mini App v2 Güncellemesi — Mart 2026", "desc": "PoweredBy bölümü SVG logolarla yenilendi (OKX, Bitget, Binance, Telegram, Google, Gemini). Beyaz Kağıt'a TASTE özet kartı eklendi. Ödül dağıtımı bitiş sayacı (20 Mayıs 2026) eklendi. Yemek Akışı'na beğeni, arama ve trend yemekler getirildi." },
+                    "v2": { "title": "Mini App v2 Güncellemesi — Mart 2026", "desc": "PoweredBy bölümü SVG logolarla yenilendi. Beyaz Kağıt'a TASTE özet kartı eklendi. Ödül dağıtımı bitiş sayacı (20 Mayıs 2026) eklendi. Yemek Akışı'na beğeni, arama ve trend yemekler getirildi." },
+                    "v2_1": { "title": "Mini App v2.1 Yenilenme — Mart 2026", "desc": "Premium Karanlık Tema UI/UX revizyonu. Yeni 'Keşfet' Menüsü ve S.S.S. bölümü eklendi. AI motoru Groq üzerinden Llama 3.3 70B'ye yükseltildi. Telegram tema renkleri lüks konsept ile senkronize edildi." },
+                    "v2_2": { "title": "Mini App v2.2 İçerik & Uyumluluk — Mart 2026", "desc": "Projenin felsefesi olan TASTE Manifesto yayınlandı. Tüm bileşenlerde tam Türkçe ve İngilizce (i18n) dil desteği sağlandı. Kapsamlı Yasal Altyapı (Kullanım Koşulları, Gizlilik, Risk Bildirimi) ve ilk açılış yasal uyarı modülü (Disclaimer) devreye alındı." },
+                    "v2_3": { "title": "Mini App v2.3 Cüzdan & Adres Güncellemesi — Mart 2026", "desc": "Hızlı Cüzdan & Transfer sistemi yayına alındı. Kullanıcılar artık TON ve TASTE bakiyelerini görebilir, QR kod ile anında işlem yapabilir ve her iki varlığı optimize edilmiş komisyonlarla güvenle gönderebilir." },
+                    "v2_4": { "title": "Mini App v2.4 Taste Şef — Mart 2026", "desc": "Dijital Sadakat ve İndirim sistemi yayına alındı. Çıraklıktan ustalığa giden yolda özel indirim hakları ve dijital onay sistemi tanımlandı." },
                     "growth": { "title": "Topluluk Büyütme", "desc": "Her gün yeni kullanıcılar, her gün yeni paylaşımlar. Organik büyüme odaklı." },
                     "visibility": { "title": "Daha Fazla DEX Görünürlüğü", "desc": "STON.fi'nin yanı sıra diğer TON ekosistem platformlarında varlık." },
                     "reporting": { "title": "Şeffaf Raporlama", "desc": "Holder sayısı, işlem hacmi ve topluluk büyümesi düzenli paylaşılacak." },
                     "dev": { "title": "Mini App Geliştirme", "desc": "Kullanıcı geri bildirimlerine göre yeni özellikler ekleniyor." }
+                },
+                "spin": {
+                    "ton_balance": "TON Bakiyesi",
+                    "ton_target": "Hedef: 5 TON",
+                    "ton_claim_ready": "🎉 TON ÖDÜLÜ HAZIR!",
+                    "ton_left": "{{n}} TON kaldı",
+                    "win_ton": "🎉 {{n}} TON Kazandın!",
+                    "reward_claim_ton": "🎉 TON ÖDÜL TALEBİ",
+                    "accumulated_ton": "Merhaba! 5 TON biriktirdim.",
+                    "won_ton_msg": "🏆 ÇARKTA TON KAZANDIM!",
+                    "ton_win_bonus": "🎉 {{n}} TON BONUSU!",
+                    "ton_important": "Ödemeler minimum 5 TON eşiğinde yapılır."
                 }
             },
             "manifesto": {
@@ -764,7 +807,8 @@ const resources = {
                     "all": "Hepsi",
                     "food": "Yemek",
                     "recipe": "Tarif",
-                    "menu": "Menü"
+                    "menu": "Menü",
+                    "career": "Kariyer / İş"
                 },
                 "trending": "En Çok Beğenilen",
                 "loading": "Paylaşımlar yükleniyor...",
@@ -818,7 +862,13 @@ const resources = {
                     "cafe": "Kafe",
                     "fastfood": "Fast Food",
                     "finedining": "Fine Dining",
-                    "seafood": "Deniz"
+                    "seafood": "Deniz",
+                    "job_listing": "İş İlanı",
+                    "job_seeking": "İş Arıyorum",
+                    "chef": "Şef",
+                    "cook": "Aşçı",
+                    "waiter": "Garson",
+                    "master": "Usta"
                 },
                 "allergens": {
                     "G": "Gluten",
