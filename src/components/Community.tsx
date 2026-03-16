@@ -32,25 +32,29 @@ interface Post {
 
 // ─── Supabase mapper ──────────────────────────────────────────────────────
 function mapPost(sp: SupaPost): Post {
+    // Defensive extraction from text if columns are missing
+    const extractedWallet = (sp.text.match(/💰 Wallet: ([\w]+)/) || [])[1]
+    const extractedCity = (sp.text.match(/📍 ([\wÜİÖÇŞĞüıöçşğ\s]+)/) || [])[1]
+    
     return {
         id: sp.id,
-        type: sp.type,
+        type: sp.type as PostType,
         authorName: sp.author_name,
         authorEmoji: sp.author_emoji,
         authorUsername: sp.author_username,
-        createdAt: new Date(sp.created_at).getTime(),
-        text: sp.text,
+        createdAt: new Date(sp.created_at).getTime() || Date.now(),
+        text: sp.text.split('\n📍')[0].split('\n🏪')[0].split('\n💰')[0].split('\n🔗')[0], // Strip the fallback info from text visibility
         photo: sp.photo,
-        tags: sp.tags || [],
+        tags: Array.isArray(sp.tags) ? sp.tags : [],
         allergens: (sp as any).allergens || [],
-        likes: (sp as any).likes || 0,
+        likes: sp.likes || 0,
         recipeTitle: sp.recipe_title,
         ingredients: sp.ingredients,
         steps: sp.steps,
         venueName: sp.venue_name,
-        city: sp.city || '',
+        city: sp.city || extractedCity || '',
         calories: sp.calories || '',
-        rewardWallet: sp.reward_wallet || '',
+        rewardWallet: sp.reward_wallet || extractedWallet || '',
     }
 }
 
@@ -233,6 +237,12 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
                     {post.text}
                 </p>
 
+                {post.venueName && (
+                    <div style={{ fontSize: '12px', color: meta.color, fontWeight: 700, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        🏪 {post.venueName}
+                    </div>
+                )}
+
                 {post.rewardWallet && (
                     <div style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '10px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ fontSize: '14px' }}>💰</span>
@@ -294,8 +304,11 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
 export function Community() {
     const { t, i18n } = useTranslation()
     const [view, setView] = useState<'feed' | 'chat'>('feed')
-    const [posts, setPosts] = useState<Post[]>([])
-    const [loading, setLoading] = useState(true)
+    const [posts, setPosts] = useState<Post[]>(() => {
+        const cached = localStorage.getItem('taste_community_posts')
+        return cached ? JSON.parse(cached) : []
+    })
+    const [loading, setLoading] = useState(!posts.length)
     const [filter, setFilter] = useState<FilterType>('hepsi')
     const [search, setSearch] = useState('')
     const [showCreate, setShowCreate] = useState(false)
@@ -318,21 +331,20 @@ export function Community() {
     const [submitting, setSubmitting] = useState(false)
     const fileRef = useRef<HTMLInputElement>(null)
 
-    const [chatMsgs, setChatMsgs] = useState<any[]>([])
+    const [chatMsgs, setChatMsgs] = useState<Post[]>([])
     const [cMsg, setCMsg] = useState('')
 
-    const refreshData = async () => {
+    async function refreshData() {
         try {
-            // 1. Fetch Posts
-            const rawPosts = await getPosts()
-            const mapped = rawPosts.map(mapPost)
-            setPosts(mapped.length > 0 ? mapped : DEMO_POSTS)
-            
-            // 2. Fetch Chat
-            const rawChat = await getMessages()
-            setChatMsgs(rawChat.reverse())
-        } catch (e) {
-            console.error('Refresh fail', e)
+            const [p, m] = await Promise.all([getPosts(), getMessages()])
+            if (p && Array.isArray(p)) {
+                const mapped = p.map(mapPost)
+                setPosts(mapped)
+                localStorage.setItem('taste_community_posts', JSON.stringify(mapped))
+            }
+            if (m && Array.isArray(m)) setChatMsgs(m.map(mapPost))
+        } catch (err) {
+            console.error('[Community] Refresh failed:', err)
         } finally {
             setLoading(false)
         }

@@ -30,62 +30,62 @@ export interface SupaPost {
     reward_wallet?: string
 }
 
+const KNOWN_COLUMNS = ['type', 'author_name', 'author_emoji', 'author_username', 'text', 'photo', 'tags', 'recipe_title', 'ingredients', 'steps', 'venue_name', 'city', 'allergens', 'likes', 'calories', 'reward_wallet']
+
 // ─── POSTS ───
 export async function getPosts(): Promise<SupaPost[]> {
     try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?type=not.eq.chat&order=created_at.desc&limit=50`, { headers: H })
-        if (!res.ok) {
-            console.error('[Supabase] Fetch failed:', res.statusText)
-            return []
-        }
+        if (!res.ok) return []
         return res.json()
-    } catch (e) { 
-        console.error('[Supabase] Fetch catch:', e)
-        return [] 
-    }
+    } catch { return [] }
 }
 
 export async function insertPost(post: any): Promise<SupaPost | null> {
     try {
-        // Try creating a minimal payload first to avoid schema errors if columns don't exist
-        // But for now, we try full payload and catch error
         const res = await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
             method: 'POST',
             headers: H,
             body: JSON.stringify(post)
         })
         
-        if (!res.ok) {
-            const err = await res.json()
-            console.error('[Supabase] Insert failed:', err)
-            // If error is about missing columns, we might want to try again with minimal payload?
-            // "Could not find column 'city' in model 'posts'"
-            if (err.message?.includes('column')) {
-                console.warn('[Supabase] retrying with minimal payload...')
-                const minimal = {
-                    type: post.type,
-                    author_name: post.author_name,
-                    author_emoji: post.author_emoji,
-                    text: post.text,
-                    tags: post.tags || []
-                }
-                const res2 = await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
-                    method: 'POST',
-                    headers: H,
-                    body: JSON.stringify(minimal)
-                })
-                if (res2.ok) {
-                    const data2 = await res2.json()
-                    return Array.isArray(data2) ? data2[0] : data2
-                }
-            }
-            return null
+        if (res.ok) {
+            const data = await res.json()
+            return Array.isArray(data) ? data[0] : data
         }
 
-        const data = await res.json()
-        return Array.isArray(data) ? data[0] : data
-    } catch (e) { 
-        console.error('[Supabase] Insert catch:', e)
+        // FAIL? Probably missing columns in Supabase. Let's try to strip extra fields.
+        const err = await res.json()
+        console.error('[Supabase Error]', err)
+
+        // Try stripping to the very basic columns that usually exist
+        const minimalCols = ['type', 'author_name', 'author_emoji', 'text', 'tags']
+        const minimalPayload: any = {}
+        minimalCols.forEach(col => { if (post[col] !== undefined) minimalPayload[col] = post[col] })
+        
+        // Append extra info to text so it's not totally lost
+        let extraInfo = ''
+        if (post.city) extraInfo += `\n📍 ${post.city}`
+        if (post.venue_name) extraInfo += `\n🏪 ${post.venue_name}`
+        if (post.reward_wallet) extraInfo += `\n💰 Wallet: ${post.reward_wallet}`
+        if (post.author_username) extraInfo += `\n🔗 @${post.author_username.replace('@','')}`
+        
+        if (extraInfo) minimalPayload.text += extraInfo
+
+        const res2 = await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
+            method: 'POST',
+            headers: H,
+            body: JSON.stringify(minimalPayload)
+        })
+
+        if (res2.ok) {
+            const data2 = await res2.json()
+            return Array.isArray(data2) ? data2[0] : data2
+        }
+
+        return null
+    } catch (e) {
+        console.error('[Supabase Catch]', e)
         return null 
     }
 }
