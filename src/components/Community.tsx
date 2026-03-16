@@ -460,6 +460,31 @@ export function Community() {
                 ))}
             </motion.div>
 
+            {/* ── Reward Banner ── */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                style={{ 
+                    background: 'linear-gradient(135deg, rgba(34,197,94,0.1), rgba(16,185,129,0.05))',
+                    border: '1px solid rgba(34,197,94,0.2)',
+                    borderRadius: '16px', padding: '12px 16px', marginBottom: '16px',
+                    display: 'flex', alignItems: 'center', gap: '12px'
+                }}
+            >
+                <div style={{ fontSize: '24px' }}>📸</div>
+                <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#10b981' }}>{i18n.language === 'tr' ? 'PAYLAŞ VE KAZAN!' : 'SHARE AND WIN!'}</div>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', lineHeight: 1.4 }}>
+                        {i18n.language === 'tr' 
+                            ? 'Yemek, Tarif veya Menü paylaş, ekran görüntüsü al ve cüzdan adresini bırak, 20 TASTE kazan!' 
+                            : 'Share Food, Recipe or Menu, take a screenshot & drop your wallet address to win 20 TASTE!'}
+                    </div>
+                </div>
+                <div style={{ background: '#10b981', color: '#000', padding: '4px 8px', borderRadius: '8px', fontSize: '10px', fontWeight: 900 }}>
+                    +20 T
+                </div>
+            </motion.div>
+
             {/* ── Search ── */}
             <div style={{ position: 'relative', marginBottom: '14px' }}>
                 <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px' }}>🔍</span>
@@ -473,7 +498,7 @@ export function Community() {
 
             {/* ── Filter tabs ── */}
             <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '4px' }}>
-                {(['hepsi', 'yemek', 'tarif', 'menu'] as FilterType[]).map(f => {
+                {(['hepsi', 'yemek', 'tarif', 'menu', 'career'] as FilterType[]).map(f => {
                     const meta = f === 'hepsi' ? { key: 'all', emoji: '🍴', color: '#f59e0b' } : TYPE_META[f as PostType]
                     const active = filter === f
                     return (
@@ -548,8 +573,8 @@ export function Community() {
                             <div style={{ fontWeight: 900, fontSize: '1.1rem', marginBottom: '16px' }}>✨ {t('community.create_title')}</div>
 
                             {/* Type selector */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '16px' }}>
-                                {(['yemek', 'tarif', 'menu'] as PostType[]).map(tKey => {
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', marginBottom: '16px' }}>
+                                {(['yemek', 'tarif', 'menu', 'career'] as PostType[]).map(tKey => {
                                     const m = TYPE_META[tKey]; const active = cType === tKey
                                     return (
                                         <motion.button key={tKey} whileTap={{ scale: 0.94 }}
@@ -576,12 +601,23 @@ export function Community() {
                             )}
 
                             <textarea value={cText} onChange={e => setCText(e.target.value)} rows={3}
-                                placeholder={cType === 'yemek' ? t('community.ph_food') : cType === 'tarif' ? t('community.ph_recipe') : t('community.ph_menu')}
+                                placeholder={cType === 'yemek' ? t('community.ph_food') : cType === 'tarif' ? t('community.ph_recipe') : cType === 'career' ? (i18n.language === 'tr' ? 'İş ilanı veya iş arayışınızı buraya yazın...' : 'Write your job post or seeking details here...') : t('community.ph_menu')}
                                 style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', fontSize: '13px', color: '#fff', outline: 'none', resize: 'none', marginBottom: '12px', boxSizing: 'border-box', fontFamily: 'inherit', lineHeight: 1.6 }} />
 
+                            {/* Wallet Address for Rewards */}
+                            {cType !== 'career' && (
+                                <div style={{ marginBottom: '14px' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>💰 {i18n.language === 'tr' ? 'Ödül İçin Cüzdan Adresi' : 'Wallet Address for Reward'}</div>
+                                    <input placeholder="UQ... or EQ..." style={{ width: '100%', background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '10px', padding: '11px 14px', fontSize: '12px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
+                                    <div style={{ fontSize: '9px', color: '#475569', marginTop: '4px' }}>{i18n.language === 'tr' ? '* Paylaştıktan sonra ekran görüntüsü alıp TG grubuna atmayı unutmayın!' : '* Don\'t forget to take a screenshot and share in TG group after posting!'}</div>
+                                </div>
+                            )}
+
                             {/* Calories */}
-                            <input value={cCalories} onChange={e => setCCalories(e.target.value)} placeholder={t('community.calories_ph')}
-                                style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '10px', padding: '9px 14px', fontSize: '13px', color: '#fff', outline: 'none', marginBottom: '14px', boxSizing: 'border-box' }} />
+                            {cType !== 'career' && (
+                                <input value={cCalories} onChange={e => setCCalories(e.target.value)} placeholder={t('community.calories_ph')}
+                                    style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '10px', padding: '9px 14px', fontSize: '13px', color: '#fff', outline: 'none', marginBottom: '14px', boxSizing: 'border-box' }} />
+                            )}
 
                             {/* Allergen Picker */}
                             <div style={{ marginBottom: '14px' }}>
