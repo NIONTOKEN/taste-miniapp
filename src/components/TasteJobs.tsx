@@ -5,7 +5,7 @@ import {
     getJobs, insertJob, applyToJob,
     type SupaJob
 } from '../services/supabase'
-import { Search, MapPin, Briefcase, Building, ArrowRight, MessageCircle, Clock, Users, PlusCircle, CheckCircle2 } from 'lucide-react'
+import { Search, MapPin, Briefcase, Building, ArrowRight, MessageCircle, Clock, Users, PlusCircle, Check } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────
 type JobView = 'board' | 'add_job' | 'reviews' | 'profile' | 'add_review'
@@ -113,7 +113,7 @@ function ApplyModal({ job, onClose, onSuccess }: { job: SupaJob; onClose: () => 
                 </div>
 
                 <div style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '12px', padding: '12px', marginBottom: '16px', fontSize: '12px', color: '#60a5fa', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                    <CheckCircle2 size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <Check size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
                     <span>Hızlı başvuru ekranı. İşverene deneyimlerinden ve neden bu pozisyona uygun olduğundan kısaca bahset.</span>
                 </div>
 
@@ -235,7 +235,7 @@ function AddJobForm({ onSuccess, onBack }: { onSuccess: () => void; onBack: () =
 
                 <motion.button whileTap={{ scale: 0.98 }} onClick={handleSubmit} disabled={!title.trim() || !description.trim() || !city || submitting}
                     style={{ width: '100%', marginTop: '24px', background: (title && description && city) ? '#f59e0b' : 'rgba(255,255,255,0.05)', color: (title && description && city) ? '#000' : '#64748b', border: 'none', borderRadius: '12px', padding: '18px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                    {submitting ? 'Kaydediliyor...' : <><CheckCircle2 size={20} /> İlanı Ücretsiz Yayınla</>}
+                    {submitting ? 'Kaydediliyor...' : <><Check size={20} /> İlanı Ücretsiz Yayınla</>}
                 </motion.button>
 
             </div>
@@ -347,7 +347,7 @@ export function TasteJobs() {
                                 </span>
                                 {job.salary && (
                                     <span style={{ padding: '6px 12px', background: 'rgba(16,185,129,0.1)', color: '#34d399', borderRadius: '8px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <CheckCircle2 size={14} /> {job.salary}
+                                        <Check size={14} /> {job.salary}
                                     </span>
                                 )}
                                 <span style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', borderRadius: '8px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
