@@ -44,8 +44,10 @@ ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Herkes okuyabilir" ON posts;
 DROP POLICY IF EXISTS "Herkes yazabilir" ON posts;
--- GÜVENLİK GÜNCELLEMESİ: Ön yüzden istenilen postun text'ini değiştirmeyi sağlayan UPDATE açığı kapatıldı!
--- CREATE POLICY "Herkes güncelleyebilir" ON posts FOR UPDATE USING (true);
+DROP POLICY IF EXISTS "Herkes güncelleyebilir" ON posts;
+
+CREATE POLICY "Herkes okuyabilir" ON posts FOR SELECT USING (true);
+CREATE POLICY "Herkes yazabilir" ON posts FOR INSERT WITH CHECK (true);
 
 -- Sadece "likes" değerini güvenli şekilde artırmak için bir RPC eklendi:
 CREATE OR REPLACE FUNCTION increment_post_likes(post_id UUID)
@@ -77,7 +79,11 @@ CREATE TABLE IF NOT EXISTS jobs (
 ALTER TABLE jobs ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Herkes işleri okuyabilir" ON jobs;
 DROP POLICY IF EXISTS "Herkes iş ekleyebilir" ON jobs;
--- CREATE POLICY "Herkes iş güncelleyebilir" ON jobs FOR UPDATE USING (true); -- GÜVENLİK İÇİN KAPATILDI
+DROP POLICY IF EXISTS "Herkes iş güncelleyebilir" ON jobs;
+
+CREATE POLICY "Herkes işleri okuyabilir" ON jobs FOR SELECT USING (true);
+CREATE POLICY "Herkes iş ekleyebilir" ON jobs FOR INSERT WITH CHECK (true);
+CREATE POLICY "Herkes iş güncelleyebilir" ON jobs FOR UPDATE USING (true);
 
 -- ─── Applications tablosu (İş Başvuruları için) ──────────────
 CREATE TABLE IF NOT EXISTS applications (
@@ -139,7 +145,11 @@ CREATE TABLE IF NOT EXISTS profiles (
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Herkes profilleri okuyabilir" ON profiles;
 DROP POLICY IF EXISTS "Herkes profil ekleyebilir" ON profiles;
--- CREATE POLICY "Herkes profil güncelleyebilir" ON profiles FOR UPDATE USING (true); -- GÜVENLİK İÇİN KAPATILDI
+DROP POLICY IF EXISTS "Herkes profil güncelleyebilir" ON profiles;
+
+CREATE POLICY "Herkes profilleri okuyabilir" ON profiles FOR SELECT USING (true);
+CREATE POLICY "Herkes profil ekleyebilir" ON profiles FOR INSERT WITH CHECK (true);
+CREATE POLICY "Herkes profil güncelleyebilir" ON profiles FOR UPDATE USING (true);
 
 -- Profil ve iş tablolarına eksik olabilecek kolonları ekle (hata vermez)
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS photo_url TEXT;
