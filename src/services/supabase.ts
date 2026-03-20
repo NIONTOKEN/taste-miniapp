@@ -102,6 +102,11 @@ async function safePost(table: string, payload: any): Promise<any | null> {
         }
         const err = await res.json()
         console.error(`[Supabase ${table} Error]`, err)
+        if (window.Telegram?.WebApp?.showAlert) {
+            window.Telegram.WebApp.showAlert(`DB Hatası (${table}): ` + (err.message || JSON.stringify(err)))
+        } else {
+            alert(`Sistem Hatası (${table}): ` + (err.message || JSON.stringify(err)))
+        }
         return null
     } catch (e) {
         console.error(`[Supabase ${table} Catch]`, e)
