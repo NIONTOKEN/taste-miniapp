@@ -255,10 +255,22 @@ export function TasteJobs() {
     const [searchQuery, setSearchQuery] = useState('')
 
     useEffect(() => {
-        getJobs().then(j => {
-            setJobs(j.length > 0 ? j : DEMO_JOBS)
-            setLoading(false)
-        })
+        let isMounted = true;
+        const fetchJobs = async () => {
+            try {
+                const j = await getJobs();
+                if (isMounted) {
+                    setJobs(j?.length > 0 ? j : DEMO_JOBS);
+                }
+            } catch (err) {
+                console.error(err);
+                if (isMounted) setJobs(DEMO_JOBS);
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+        fetchJobs();
+        return () => { isMounted = false; };
     }, [view])
 
     if (view === 'add_job') {
