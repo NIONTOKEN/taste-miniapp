@@ -10,12 +10,10 @@ import { Manifesto } from './components/Manifesto'
 import { LiveMarketData } from './components/LiveMarketData'
 import { SpinWheel } from './components/SpinWheel'
 import { Charity } from './components/Charity'
-import { Community } from './components/Community'
 import { LiveActivity } from './components/LiveActivity'
 import { Legal } from './components/Legal'
 import { TasteAI } from './components/TasteAI'
 import { TasteChef } from './components/TasteChef'
-import { TasteJobs } from './components/TasteJobs'
 import { DisclaimerModal, shouldShowDisclaimer } from './components/DisclaimerModal'
 import { PoweredBy } from './components/PoweredBy'
 import { WalletTransfer } from './components/WalletTransfer'
@@ -50,7 +48,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin'  | 'community' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef'>('home');
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
   const [tonConnectUI] = useTonConnectUI();
   const [showPing, setShowPing] = useState(false);
@@ -337,13 +335,7 @@ function App() {
           </div>
         </motion.div>
       );
-      case 'community': return (
-        <motion.div key="community" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <Community />
-          </div>
-        </motion.div>
-      );
+
       case 'legal': return <Legal />;
       case 'ai': return (
         <motion.div key="ai" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
@@ -553,10 +545,7 @@ function App() {
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
           
-          <button className={`nav-item ${activeTab === 'community' ? 'active' : ''}`} onClick={() => { setActiveTab('community'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
-            <span className="nav-icon">🍽️</span><span className="nav-label">{i18n.language?.startsWith('tr') ? 'Topluluk' : 'Community'}</span>
-            <span style={{ position: 'absolute', top: '4px', right: '8px', width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 8px #f59e0b', animation: 'pulse 2s infinite' }} />
-          </button>
+
 
           <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
             <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>
