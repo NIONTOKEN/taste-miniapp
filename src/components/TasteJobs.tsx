@@ -5,21 +5,21 @@ import {
     getJobs, insertJob, applyToJob, getReviews, insertReview, getProfiles, upsertProfile,
     type SupaJob, type SupaReview, type SupaProfile
 } from '../services/supabase'
+import { Search, MapPin, Briefcase, Star, Building, ArrowRight, MessageCircle, Clock, Users, PlusCircle, CheckCircle2 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────
-type JobView = 'board' | 'add_job' | 'reviews' | 'profile' | 'add_review' | 'today'
+type JobView = 'board' | 'add_job' | 'reviews' | 'profile' | 'add_review'
 
 // ─── Constants ────────────────────────────────────────────────────────────
-const CITIES = ['İstanbul', 'Ankara', 'İzmir', 'Antalya', 'Bursa', 'Adana', 'Konya', 'Gaziantep', 'Mersin', 'Kayseri', 'Diğer']
+const CITIES = ['İstanbul', 'Ankara', 'İzmir', 'Antalya', 'Bursa', 'Adana', 'Konya', 'Gaziantep', 'Mersin', 'Kayseri', 'Diğer', 'Yurt Dışı']
 const PROFESSIONS = ['Aşçı / Şef', 'Pastane Ustası', 'Garson', 'Barmen / Barista', 'Kasap', 'Fırıncı', 'Mutfak Yardımcısı', 'Komi', 'Restoran Müdürü', 'Dondurma Ustası', 'Diğer']
-
 const EMOJIS = ['👨‍🍳', '👩‍🍳', '🧑‍🍳', '🏢', '☕', '🔪', '🍽️', '🥘', '🫕', '🍳']
 
 function getTgUser() {
     const u = window.Telegram?.WebApp?.initDataUnsafe?.user
     const emoji = EMOJIS[Math.floor(Math.random() * EMOJIS.length)]
     return {
-        name: u ? (u.username ? `@${u.username}` : u.first_name) : 'Misafir',
+        name: u ? (u.username ? `@${u.username}` : u.first_name) : 'Kullanıcı',
         username: u?.username || '',
         emoji
     }
@@ -31,24 +31,40 @@ function timeAgo(dateStr: string) {
     if (m < 1) return 'az önce'
     if (m < 60) return `${m} dk önce`
     const h = Math.floor(m / 60)
-    if (h < 24) return `${h} sa önce`
+    if (h < 24) return `${h} saat önce`
     return `${Math.floor(h / 24)} gün önce`
 }
 
-function StarRating({ value, onChange, size = 20 }: { value: number; onChange?: (v: number) => void; size?: number }) {
+function StarRating({ value, onChange, size = 18 }: { value: number; onChange?: (v: number) => void; size?: number }) {
     return (
-        <div style={{ display: 'flex', gap: '4px' }}>
+        <div style={{ display: 'flex', gap: '3px' }}>
             {[1, 2, 3, 4, 5].map(s => (
                 <span
                     key={s}
                     onClick={() => onChange?.(s)}
                     style={{
                         fontSize: size, cursor: onChange ? 'pointer' : 'default',
-                        filter: s <= value ? 'brightness(1.2)' : 'brightness(0.3)',
-                        transition: 'filter 0.15s'
+                        color: s <= value ? '#f59e0b' : '#334155',
+                        transition: 'color 0.2s',
+                        lineHeight: 1
                     }}
-                >⭐</span>
+                >
+                    ★
+                </span>
             ))}
+        </div>
+    )
+}
+
+function ScoreBar({ label, score }: { label: string; score: number }) {
+    const pct = (score / 5) * 100
+    return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+            <span style={{ fontSize: '11px', color: '#94a3b8', width: '50px' }}>{label}</span>
+            <div style={{ flex: 1, height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ width: `${pct}%`, height: '100%', background: '#f59e0b', borderRadius: '3px' }} />
+            </div>
+            <span style={{ fontSize: '11px', color: '#fff', width: '20px', textAlign: 'right', fontWeight: 700 }}>{score.toFixed(1)}</span>
         </div>
     )
 }
@@ -56,133 +72,16 @@ function StarRating({ value, onChange, size = 20 }: { value: number; onChange?: 
 // ─── DEMO DATA ────────────────────────────────────────────────────────────
 const DEMO_JOBS: SupaJob[] = [
     {
-        id: 'demo1', title: 'Deneyimli Garson Aranıyor', description: 'Kalacak yer sağlanır. Deneyimli, güler yüzlü bir çalışma arkadaşı arıyoruz.',
-        city: 'İstanbul / Fatih', salary: '', employer_name: 'Sultanahmet Köftecisi', employer_emoji: '🏢',
-        is_active: true, created_at: new Date(Date.now() - 3600000).toISOString(), applications_count: 7, job_type: 'listing'
+        id: 'demo1', title: 'A la Carte Şefi (Fine Dining)', description: 'Uluslararası otel zincirimizde görev alacak, fine dining tecrübesi olan lider bir şef arıyoruz. Tüm yan haklar ve dolgun maaş mevcuttur.',
+        city: 'İstanbul', salary: 'Dolgun Maaş', employer_name: 'The Grand ModHotel', employer_emoji: '🏢',
+        is_active: true, created_at: new Date(Date.now() - 3600000).toISOString(), applications_count: 14, job_type: 'listing'
     },
     {
-        id: 'demo2', title: 'Şef Usta Olarak İş Arıyorum', description: '15 yıl döner ve kebap tecrübem var. Prestijli bir restoran veya otel arıyorum.',
-        city: 'Konya', salary: '', employer_name: 'Chef_Mert_42', employer_emoji: '👨‍🍳',
-        is_active: true, created_at: new Date(Date.now() - 7200000).toISOString(), applications_count: 3, job_type: 'seeking'
-    },
-    {
-        id: 'demo3', title: 'BUGÜN Barista Lazım!', description: 'Acil! Bugün için deneyimli barista arıyoruz. Günlük ödeme yapılacaktır.',
-        city: 'İzmir / Alsancak', salary: '', employer_name: 'Deniz Cafe & Bistro', employer_emoji: '☕',
-        is_active: true, created_at: new Date(Date.now() - 1800000).toISOString(), applications_count: 12, job_type: 'today'
+        id: 'demo3', title: 'Barista (Hemen Başla)', description: 'Yeni nesil kahve dükkanımıza yoğun tempoya ayak uyduracak deneyimli barista arıyoruz. Günlük veya aylık ödeme yapılabilir.',
+        city: 'İzmir', salary: '25.000 TL', employer_name: 'Brew Co.', employer_emoji: '☕',
+        is_active: true, created_at: new Date(Date.now() - 1800000).toISOString(), applications_count: 32, job_type: 'today'
     }
 ]
-
-const DEMO_REVIEWS: SupaReview[] = [
-    {
-        id: 'r1', business_name: 'XYZ Restaurant', city: 'İstanbul', rating: 4,
-        salary_score: 3, environment_score: 5, management_score: 4,
-        comment: 'Genel olarak iyi bir yer. Yönetim tutarsız ama ekip güzel.',
-        user_name: '@mutfak_ustasi', user_emoji: '⭐', created_at: new Date(Date.now() - 86400000).toISOString()
-    },
-    {
-        id: 'r2', business_name: 'Lüks Otel Mutfağı', city: 'Antalya', rating: 5,
-        salary_score: 5, environment_score: 5, management_score: 4,
-        comment: 'Harika bir çalışma ortamı. Maaşlar zamanında ödeniyor.',
-        user_name: 'Aşçı_Ayşe', user_emoji: '👩‍🍳', created_at: new Date(Date.now() - 172800000).toISOString()
-    }
-]
-
-// ─── Job Card ──────────────────────────────────────────────────────────────
-function JobCard({ job, onApply }: { job: SupaJob; onApply: (job: SupaJob) => void }) {
-    const typeColors: Record<string, string> = {
-        listing: '#f59e0b',
-        seeking: '#3b82f6',
-        today: '#ef4444'
-    }
-    const typeLabels: Record<string, string> = {
-        listing: 'İŞ İLANI',
-        seeking: 'İŞ ARIYOR',
-        today: '🔥 BUGÜN'
-    }
-    const color = typeColors[job.job_type] || '#f59e0b'
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{
-                background: job.job_type === 'today'
-                    ? 'linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.04))'
-                    : 'rgba(255,255,255,0.025)',
-                border: `1px solid ${color}30`,
-                borderRadius: '18px',
-                padding: '16px',
-                marginBottom: '12px',
-                position: 'relative',
-                overflow: 'hidden'
-            }}
-        >
-            {job.job_type === 'today' && (
-                <div style={{
-                    position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-                    background: 'linear-gradient(90deg, #ef4444, #f97316)'
-                }} />
-            )}
-
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px' }}>
-                <div style={{
-                    width: 44, height: 44, borderRadius: '12px',
-                    background: `${color}20`, border: `1px solid ${color}40`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '22px', flexShrink: 0
-                }}>
-                    {job.employer_emoji}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 800, fontSize: '14px', color: '#fff', marginBottom: '2px' }}>{job.title}</div>
-                    <div style={{ fontSize: '11px', color: '#64748b' }}>{job.employer_name} • {timeAgo(job.created_at)}</div>
-                </div>
-                <div style={{
-                    background: color, color: '#000', borderRadius: '8px',
-                    padding: '4px 8px', fontSize: '9px', fontWeight: 900,
-                    flexShrink: 0
-                }}>
-                    {typeLabels[job.job_type] || 'LAN'}
-                </div>
-            </div>
-
-            <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '12px' }}>{job.description}</p>
-
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
-                <span style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '4px 10px', fontSize: '11px', color: '#94a3b8' }}>
-                    📍 {job.city}
-                </span>
-                {job.salary && (
-                    <span style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px', padding: '4px 10px', fontSize: '11px', color: '#10b981', fontWeight: 700 }}>
-                        💰 {job.salary}
-                    </span>
-                )}
-                {(job.applications_count || 0) > 0 && (
-                    <span style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '8px', padding: '4px 10px', fontSize: '11px', color: '#64748b' }}>
-                        👥 {job.applications_count} başvuru
-                    </span>
-                )}
-            </div>
-
-            <motion.button
-                whileTap={{ scale: 0.96 }}
-                onClick={() => onApply(job)}
-                style={{
-                    width: '100%',
-                    background: job.job_type === 'today'
-                        ? 'linear-gradient(135deg, #ef4444, #dc2626)'
-                        : `linear-gradient(135deg, ${color}, ${color}cc)`,
-                    color: '#000', border: 'none', borderRadius: '12px',
-                    padding: '12px', fontSize: '13px', fontWeight: 800,
-                    cursor: 'pointer', display: 'flex', alignItems: 'center',
-                    justifyContent: 'center', gap: '8px'
-                }}
-            >
-                {job.job_type === 'seeking' ? '💬 Mesaj Gönder' : job.job_type === 'today' ? '⚡ Hemen Katıl' : '📩 Başvur'}
-            </motion.button>
-        </motion.div>
-    )
-}
 
 // ─── Apply Modal ──────────────────────────────────────────────────────────
 function ApplyModal({ job, onClose, onSuccess }: { job: SupaJob; onClose: () => void; onSuccess: () => void }) {
@@ -194,7 +93,6 @@ function ApplyModal({ job, onClose, onSuccess }: { job: SupaJob; onClose: () => 
         setSending(true)
         const user = getTgUser()
 
-        // ALWAYS redirect to Telegram if employer username exists, so the exact message goes to the employer directly!
         if (job.employer_username) {
             const safeMsg = encodeURIComponent(`Merhaba, "${job.title}" ilanı için ulaşıyorum:\n\n${message}`)
             const link = `https://t.me/${job.employer_username.replace('@', '')}?text=${safeMsg}`
@@ -213,74 +111,84 @@ function ApplyModal({ job, onClose, onSuccess }: { job: SupaJob; onClose: () => 
         setSending(false)
         onSuccess()
         onClose()
-        const msgStr = job.employer_username ? 'Başvurunuz Telegram üzerinden iletiliyor...' : 'Başvurunuz sisteme kaydedildi!'
-        if (window.Telegram?.WebApp?.showAlert) {
-            window.Telegram.WebApp.showAlert(msgStr)
-        } else {
-            alert(msgStr)
-        }
+        const msgStr = job.employer_username ? 'Başvurunuz Telegram üzerinden iletiliyor...' : 'Profiliniz ve başvurunuz işletmeye iletildi!'
+        if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert(msgStr)
+        else alert(msgStr)
     }
 
     return (
-        <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                onClick={onClose}
-                style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(6px)', zIndex: 3000 }} />
+        <AnimatePresence>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}
+                style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', zIndex: 3000 }} />
             <motion.div
                 initial={{ opacity: 0, y: '100%' }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: '100%' }}
-                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                 style={{
                     position: 'fixed', bottom: 0, left: 0, right: 0,
-                    background: 'linear-gradient(180deg, #111420, #0d1020)',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '24px 24px 0 0',
-                    padding: '24px 20px 40px', zIndex: 3001
+                    background: '#0f172a', borderTop: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '24px 24px 0 0', padding: '24px 20px 40px', zIndex: 3001,
+                    boxShadow: '0 -10px 40px rgba(0,0,0,0.5)'
                 }}
             >
-                <div style={{ width: 40, height: 4, background: 'rgba(255,255,255,0.15)', borderRadius: 2, margin: '0 auto 20px' }} />
-                <h3 style={{ margin: '0 0 6px', fontSize: '16px' }}>📩 {job.title}</h3>
-                <p style={{ margin: '0 0 16px', color: '#64748b', fontSize: '12px' }}>{job.employer_name} • {job.city}</p>
+                <div style={{ width: 40, height: 4, background: 'rgba(255,255,255,0.2)', borderRadius: 2, margin: '0 auto 20px' }} />
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+                    <div style={{ width: 48, height: 48, borderRadius: '12px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
+                        {job.employer_emoji}
+                    </div>
+                    <div>
+                        <h3 style={{ margin: '0 0 4px', fontSize: '18px', color: '#fff', fontWeight: 800 }}>{job.title}</h3>
+                        <p style={{ margin: 0, color: '#94a3b8', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Building size={12} /> {job.employer_name} • <MapPin size={12} /> {job.city}
+                        </p>
+                    </div>
+                </div>
+
+                <div style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '12px', padding: '12px', marginBottom: '16px', fontSize: '12px', color: '#60a5fa', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                    <CheckCircle2 size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span>Hızlı başvuru ekranı. İşverene deneyimlerinden ve neden bu pozisyona uygun olduğundan kısaca bahset.</span>
+                </div>
 
                 <textarea
-                    value={message}
-                    onChange={e => setMessage(e.target.value)}
-                    placeholder={job.job_type === 'today' ? 'Neden katılmak istiyorsunuz? (Kısa bir not)' : 'Başvuru mesajınızı yazın... Deneyimlerinizi, pozisyonu neden istediğinizi kısaca belirtin.'}
+                    value={message} onChange={e => setMessage(e.target.value)}
+                    placeholder="Merhaba, incelediğim bu açık pozisyon için yeteneklerimin uygun olduğunu düşünüyorum..."
                     rows={4}
                     style={{
-                        width: '100%', background: 'rgba(0,0,0,0.3)',
+                        width: '100%', background: 'rgba(0,0,0,0.4)',
                         border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px',
-                        padding: '14px', fontSize: '14px', color: '#fff',
-                        outline: 'none', resize: 'none', marginBottom: '14px',
-                        boxSizing: 'border-box', fontFamily: 'inherit'
+                        padding: '16px', fontSize: '14px', color: '#f8fafc',
+                        outline: 'none', resize: 'none', marginBottom: '16px',
+                        boxSizing: 'border-box', fontFamily: 'inherit',
+                        transition: 'border 0.2s',
                     }}
+                    onFocus={e => e.target.style.borderColor = '#f59e0b'}
+                    onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                 />
 
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <button onClick={onClose} style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', borderRadius: '12px', padding: '14px', fontSize: '14px', cursor: 'pointer' }}>
-                        İptal
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <button onClick={onClose} style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: 'none', color: '#94a3b8', borderRadius: '12px', padding: '16px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
+                        Vazgeç
                     </button>
                     <motion.button
-                        whileTap={{ scale: 0.97 }}
-                        onClick={handleApply}
-                        disabled={!message.trim() || sending}
+                        whileTap={{ scale: 0.97 }} onClick={handleApply} disabled={!message.trim() || sending}
                         style={{
-                            flex: 2, background: message.trim() ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'rgba(255,255,255,0.05)',
+                            flex: 2, background: message.trim() ? '#f59e0b' : 'rgba(255,255,255,0.05)',
                             color: message.trim() ? '#000' : '#64748b', border: 'none',
-                            borderRadius: '12px', padding: '14px', fontSize: '14px',
-                            fontWeight: 800, cursor: 'pointer'
+                            borderRadius: '12px', padding: '16px', fontSize: '15px',
+                            fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
                         }}
                     >
-                        {sending ? '⏳ Gönderiliyor...' : '🚀 Başvur (+2 TASTE)'}
+                        {sending ? 'Gönderiliyor...' : (job.employer_username ? <><MessageCircle size={18} /> Telegrada İlet</> : 'Başvuruyu Tamamla')}
                     </motion.button>
                 </div>
             </motion.div>
-        </>
+        </AnimatePresence>
     )
 }
 
 // ─── Add Job Form ─────────────────────────────────────────────────────────
 function AddJobForm({ onSuccess, onBack }: { onSuccess: () => void; onBack: () => void }) {
-    const [jobType, setJobType] = useState<'listing' | 'seeking' | 'today'>('listing')
+    const [jobType, setJobType] = useState<'listing' | 'today'>('listing')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [city, setCity] = useState('')
@@ -292,462 +200,77 @@ function AddJobForm({ onSuccess, onBack }: { onSuccess: () => void; onBack: () =
         setSubmitting(true)
         const user = getTgUser()
 
-        await insertJob({
-            title,
-            description,
-            city,
-            salary,
-            employer_name: user.name,
-            employer_emoji: user.emoji,
-            employer_username: user.username,
-            is_active: true,
-            job_type: jobType
+        const res = await insertJob({
+            title, description, city, salary,
+            employer_name: user.name, employer_emoji: user.emoji, employer_username: user.username,
+            is_active: true, job_type: jobType
         })
 
         setSubmitting(false)
-        onSuccess()
-
-        const msg = `İlanınız başarıyla yayınlandı! 🎉`
-        if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert(msg)
-        else alert(msg)
-    }
-
-    return (
-        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-            <button onClick={onBack} style={{ background: 'none', border: 'none', color: '#f59e0b', fontSize: '14px', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}>
-                ← Geri
-            </button>
-            <h2 style={{ margin: '0 0 20px', fontSize: '18px', fontWeight: 900 }}>📋 İlan Ekle</h2>
-
-            {/* İlan tipi seç */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '16px' }}>
-                {([
-                    { type: 'listing', emoji: '📢', label: 'Eleman Arıyorum', color: '#f59e0b' },
-                    { type: 'seeking', emoji: '🙋', label: 'İş Arıyorum', color: '#3b82f6' },
-                    { type: 'today', emoji: '⚡', label: 'Bugün Lazım', color: '#ef4444' },
-                ] as const).map(t => (
-                    <motion.button key={t.type} whileTap={{ scale: 0.93 }}
-                        onClick={() => setJobType(t.type)}
-                        style={{
-                            background: jobType === t.type ? `${t.color}20` : 'rgba(255,255,255,0.03)',
-                            border: `1px solid ${jobType === t.type ? t.color : 'rgba(255,255,255,0.08)'}`,
-                            borderRadius: '12px', padding: '12px 6px', cursor: 'pointer',
-                            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-                            color: jobType === t.type ? t.color : '#64748b'
-                        }}
-                    >
-                        <span style={{ fontSize: '20px' }}>{t.emoji}</span>
-                        <span style={{ fontSize: '10px', fontWeight: 700 }}>{t.label}</span>
-                    </motion.button>
-                ))}
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <input
-                    value={title} onChange={e => setTitle(e.target.value)}
-                    placeholder="İlan başlığı (örn: Deneyimli Garson Aranıyor)"
-                    style={{
-                        background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: '12px', padding: '14px', fontSize: '14px',
-                        color: '#fff', outline: 'none', boxSizing: 'border-box', width: '100%'
-                    }}
-                />
-                <textarea
-                    value={description} onChange={e => setDescription(e.target.value)}
-                    placeholder="Detayları yazın... (deneyim, çalışma saatleri, avantajlar vb.)"
-                    rows={3}
-                    style={{
-                        background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: '12px', padding: '14px', fontSize: '14px', color: '#fff',
-                        outline: 'none', resize: 'none', boxSizing: 'border-box',
-                        width: '100%', fontFamily: 'inherit'
-                    }}
-                />
-                <select
-                    value={city} onChange={e => setCity(e.target.value)}
-                    style={{
-                        background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: '12px', padding: '14px', fontSize: '14px',
-                        color: city ? '#fff' : '#64748b', outline: 'none', width: '100%'
-                    }}
-                >
-                    <option value="">📍 Şehir seçin</option>
-                    {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-                <input
-                    value={salary} onChange={e => setSalary(e.target.value)}
-                    placeholder="💰 Maaş (örn: 25.000 TL veya belirlenir)"
-                    style={{
-                        background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: '12px', padding: '14px', fontSize: '14px',
-                        color: '#fff', outline: 'none', boxSizing: 'border-box', width: '100%'
-                    }}
-                />
-            </div>
-
-            <motion.button
-                whileTap={{ scale: 0.97 }}
-                onClick={handleSubmit}
-                disabled={!title.trim() || !description.trim() || !city || submitting}
-                style={{
-                    width: '100%',
-                    background: (title.trim() && description.trim() && city) ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'rgba(255,255,255,0.05)',
-                    color: (title.trim() && description.trim() && city) ? '#000' : '#64748b',
-                    border: 'none', borderRadius: '14px', padding: '16px',
-                    fontSize: '15px', fontWeight: 800, cursor: 'pointer',
-                    boxShadow: (title.trim()) ? '0 4px 16px rgba(245,158,11,0.3)' : 'none'
-                }}
-            >
-                {submitting ? '⏳ Yayınlanıyor...' : '🚀 Yayınla'}
-            </motion.button>
-        </motion.div>
-    )
-}
-
-// ─── Reviews View ─────────────────────────────────────────────────────────
-function ReviewsView({ onAddReview }: { onAddReview: () => void }) {
-    const [reviews, setReviews] = useState<SupaReview[]>(DEMO_REVIEWS)
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        getReviews().then(r => {
-            setReviews(r.length > 0 ? r : DEMO_REVIEWS)
-            setLoading(false)
-        })
-    }, [])
-
-    return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 900 }}>⭐ İşletme Değerlendirmeleri</h2>
-                <motion.button
-                    whileTap={{ scale: 0.94 }}
-                    onClick={onAddReview}
-                    style={{
-                        background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                        color: '#000', border: 'none', borderRadius: '12px',
-                        padding: '10px 16px', fontSize: '12px', fontWeight: 900, cursor: 'pointer'
-                    }}
-                >
-                    + Yorum Yap
-                </motion.button>
-            </div>
-
-            <div style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '14px', padding: '12px', marginBottom: '16px', fontSize: '12px', color: '#94a3b8' }}>
-                💡 Çalıştığın işletmeyi değerlendir. Topluluk daha bilinçli kararlar alsın! <strong style={{ color: '#f59e0b' }}>+5 TASTE</strong> kazanırsın.
-            </div>
-
-            {loading ? (
-                <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>⏳ Yükleniyor...</div>
-            ) : (
-                reviews.map(r => (
-                    <motion.div
-                        key={r.id}
-                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}
-                    >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                            <div>
-                                <div style={{ fontWeight: 800, fontSize: '15px', color: '#fff' }}>{r.business_name}</div>
-                                <div style={{ fontSize: '11px', color: '#64748b' }}>{r.user_emoji} {r.user_name} • {r.city} • {timeAgo(r.created_at)}</div>
-                            </div>
-                            <StarRating value={r.rating} />
-                        </div>
-
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '12px' }}>
-                            {[
-                                { label: 'Maaş', score: r.salary_score },
-                                { label: 'Ortam', score: r.environment_score },
-                                { label: 'Yönetim', score: r.management_score }
-                            ].map(s => (
-                                <div key={s.label} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '10px', padding: '8px', textAlign: 'center' }}>
-                                    <div style={{ fontSize: '9px', color: '#64748b', marginBottom: '4px' }}>{s.label}</div>
-                                    <StarRating value={s.score || 0} size={12} />
-                                </div>
-                            ))}
-                        </div>
-
-                        <p style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6, margin: 0 }}>{r.comment}</p>
-                    </motion.div>
-                ))
-            )}
-        </motion.div>
-    )
-}
-
-// ─── Add Review Form ──────────────────────────────────────────────────────
-function AddReviewForm({ onSuccess, onBack }: { onSuccess: () => void; onBack: () => void }) {
-    const [businessName, setBusinessName] = useState('')
-    const [city, setCity] = useState('')
-    const [rating, setRating] = useState(0)
-    const [salaryScore, setSalaryScore] = useState(0)
-    const [envScore, setEnvScore] = useState(0)
-    const [mgmtScore, setMgmtScore] = useState(0)
-    const [comment, setComment] = useState('')
-    const [submitting, setSubmitting] = useState(false)
-
-    async function handleSubmit() {
-        if (!businessName.trim() || !comment.trim() || rating === 0) return
-        setSubmitting(true)
-        const user = getTgUser()
-
-        await insertReview({
-            business_name: businessName,
-            city,
-            rating,
-            salary_score: salaryScore || undefined,
-            environment_score: envScore || undefined,
-            management_score: mgmtScore || undefined,
-            comment,
-            user_name: user.name,
-            user_emoji: user.emoji,
-            user_username: user.username
-        })
-
-        setSubmitting(false)
-        onSuccess()
-        const msg = 'Yorumun yayınlandı! +5 TASTE kazandın 🎉'
-        if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert(msg)
-        else alert(msg)
-    }
-
-    return (
-        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-            <button onClick={onBack} style={{ background: 'none', border: 'none', color: '#f59e0b', fontSize: '14px', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}>
-                ← Geri
-            </button>
-            <h2 style={{ margin: '0 0 20px', fontSize: '18px', fontWeight: 900 }}>⭐ İşletme Değerlendir</h2>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
-                <input value={businessName} onChange={e => setBusinessName(e.target.value)}
-                    placeholder="İşletme adı (örn: XYZ Restoran)"
-                    style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px', fontSize: '14px', color: '#fff', outline: 'none', boxSizing: 'border-box', width: '100%' }} />
-                <select value={city} onChange={e => setCity(e.target.value)}
-                    style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px', fontSize: '14px', color: city ? '#fff' : '#64748b', outline: 'none', width: '100%' }}>
-                    <option value="">📍 Şehir (opsiyonel)</option>
-                    {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-            </div>
-
-            {/* Genel Puan */}
-            <div style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '14px', padding: '14px', marginBottom: '16px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#f59e0b', marginBottom: '8px' }}>GENEL PUAN</div>
-                <StarRating value={rating} onChange={setRating} size={28} />
-            </div>
-
-            {/* Detay Puanları */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '16px' }}>
-                {[
-                    { label: '💰 Maaş', value: salaryScore, onChange: setSalaryScore },
-                    { label: '🌿 Ortam', value: envScore, onChange: setEnvScore },
-                    { label: '👔 Yönetim', value: mgmtScore, onChange: setMgmtScore }
-                ].map(s => (
-                    <div key={s.label} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '10px', color: '#94a3b8', marginBottom: '6px' }}>{s.label}</div>
-                        <StarRating value={s.value} onChange={s.onChange} size={14} />
-                    </div>
-                ))}
-            </div>
-
-            <textarea value={comment} onChange={e => setComment(e.target.value)}
-                placeholder="Yorumunuzu yazın... (çalışma koşulları, yönetim, tavsiye eder misiniz?)"
-                rows={4}
-                style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', padding: '14px', fontSize: '14px', color: '#fff', outline: 'none', resize: 'none', marginBottom: '16px', boxSizing: 'border-box', fontFamily: 'inherit' }}
-            />
-
-            <motion.button whileTap={{ scale: 0.97 }} onClick={handleSubmit}
-                disabled={!businessName.trim() || !comment.trim() || rating === 0 || submitting}
-                style={{
-                    width: '100%',
-                    background: (businessName.trim() && comment.trim() && rating > 0) ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'rgba(255,255,255,0.05)',
-                    color: (businessName.trim() && comment.trim() && rating > 0) ? '#000' : '#64748b',
-                    border: 'none', borderRadius: '14px', padding: '16px',
-                    fontSize: '15px', fontWeight: 800, cursor: 'pointer'
-                }}
-            >
-                {submitting ? '⏳ Kaydediliyor...' : '⭐ Yorum Yap (+5 TASTE)'}
-            </motion.button>
-        </motion.div>
-    )
-}
-
-// ─── Profile / CV View ────────────────────────────────────────────────────
-function ProfileView() {
-    const [profiles, setProfiles] = useState<SupaProfile[]>([])
-    const [showForm, setShowForm] = useState(false)
-    const [profession, setProfession] = useState('')
-    const [experience, setExperience] = useState('')
-    const [bio, setBio] = useState('')
-    const [city, setCity] = useState('')
-    const [skills, setSkills] = useState<string[]>([])
-    const [photo, setPhoto] = useState<string>('')
-    const [saving, setSaving] = useState(false)
-
-    const SKILL_OPTIONS = ['Izgara', 'Tatlı', 'Pasta & Börek', 'Seafood', 'Vegan Mutfak', 'Fast Food', 'Fast-Casual', 'Fine Dining', 'Kahve & Barista', 'Et Ürünleri', 'Sushi', 'Pizza']
-
-    useEffect(() => {
-        getProfiles().then(p => setProfiles(p))
-    }, [])
-
-    async function handleSaveProfile() {
-        if (!profession) return
-        setSaving(true)
-        const user = getTgUser()
-
-        const starLevel = (pts: number) => {
-            if (pts >= 100) return 5
-            if (pts >= 50) return 4
-            if (pts >= 20) return 3
-            if (pts >= 5) return 2
-            return 1
+        if (res) {
+            onSuccess()
+            if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert(`İlan yayınlandı! 🎉`)
+        } else {
+            console.error("Ilan eklenemedi, insertJob null dondu.")
         }
-
-        await upsertProfile({
-            user_name: user.name,
-            user_emoji: user.emoji,
-            user_username: user.username,
-            profession,
-            experience,
-            bio,
-            city,
-            skills,
-            photo_url: photo,
-            stars: starLevel(10), // default
-            taste_points: 10
-        })
-
-        // Also publish as a "Seeking" job so it appears on the TasteJobs list!
-        await insertJob({
-            title: profession,
-            description: `${experience ? experience + ' deneyim.' : ''} ${bio}`,
-            city: city || 'Belirtilmemiş',
-            salary: 'Belirtilecek',
-            employer_name: user.name,
-            employer_emoji: user.emoji,
-            employer_username: user.username,
-            is_active: true,
-            job_type: 'seeking'
-        })
-
-        const p = await getProfiles()
-        setProfiles(p)
-        setSaving(false)
-        setShowForm(false)
-        const msg = 'CV\'n yayınlandı! Diğer üyeler seni görebilir 🎉'
-        if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert(msg)
-        else alert(msg)
-    }
-
-    function toggleSkill(s: string) {
-        setSkills(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s])
     }
 
     return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 900 }}>👤 Profiller & CV</h2>
-                <motion.button whileTap={{ scale: 0.94 }} onClick={() => setShowForm(!showForm)}
-                    style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000', border: 'none', borderRadius: '12px', padding: '10px 16px', fontSize: '12px', fontWeight: 900, cursor: 'pointer' }}>
-                    {showForm ? '← Liste' : '+ CV Ekle'}
-                </motion.button>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ padding: '10px 0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                <button onClick={onBack} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', cursor: 'pointer' }}>
+                    <ArrowRight size={20} style={{ transform: 'rotate(180deg)' }} />
+                </button>
+                <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#f8fafc' }}>Yeni İş İlanı</h2>
             </div>
 
-            {showForm ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <select value={profession} onChange={e => setProfession(e.target.value)}
-                        style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px', fontSize: '14px', color: profession ? '#fff' : '#64748b', outline: 'none', width: '100%' }}>
-                        <option value="">Meslek seçin</option>
-                        {PROFESSIONS.map(p => <option key={p} value={p}>{p}</option>)}
-                    </select>
-                    <input value={experience} onChange={e => setExperience(e.target.value)}
-                        placeholder="Deneyim (örn: 5 yıl)" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px', fontSize: '14px', color: '#fff', outline: 'none', boxSizing: 'border-box', width: '100%' }} />
-                    <select value={city} onChange={e => setCity(e.target.value)}
-                        style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px', fontSize: '14px', color: city ? '#fff' : '#64748b', outline: 'none', width: '100%' }}>
-                        <option value="">Şehir (opsiyonel)</option>
-                        {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
-                    <textarea value={bio} onChange={e => setBio(e.target.value)}
-                        placeholder="Kısa biyografi..." rows={3}
-                        style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px', fontSize: '14px', color: '#fff', outline: 'none', resize: 'none', boxSizing: 'border-box', width: '100%', fontFamily: 'inherit' }} />
-
-                    {/* Fotoğraf Ekleme */}
-                    <div>
-                        <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase' }}>📸 Profil Fotoğrafı</div>
-                        <label style={{ display: 'block', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px', textAlign: 'center', cursor: 'pointer', color: '#f59e0b', fontSize: '14px', fontWeight: 700 }}>
-                            {photo ? '✅ Fotoğraf Seçildi (Değiştir)' : '📷 Galeriden Fotoğraf Seç'}
-                            <input type="file" accept="image/*" style={{ display: 'none' }}
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0]
-                                    if (file) {
-                                        const r = new FileReader()
-                                        r.onload = ev => setPhoto(ev.target?.result as string)
-                                        r.readAsDataURL(file)
-                                    }
-                                }}
-                            />
-                        </label>
-                        {photo && <img src={photo} alt="Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '50%', marginTop: '10px', display: 'block' }} />}
-                    </div>
-
-                    <div>
-                        <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase' }}>🛠️ Yetenekler</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                            {SKILL_OPTIONS.map(s => (
-                                <motion.button key={s} whileTap={{ scale: 0.94 }} onClick={() => toggleSkill(s)}
-                                    style={{ background: skills.includes(s) ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.04)', border: `1px solid ${skills.includes(s) ? 'rgba(245,158,11,0.5)' : 'rgba(255,255,255,0.08)'}`, color: skills.includes(s) ? '#f59e0b' : '#64748b', borderRadius: '20px', padding: '5px 12px', fontSize: '12px', cursor: 'pointer' }}>
-                                    {s}
-                                </motion.button>
-                            ))}
+            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px' }}>
+                
+                <div style={{ marginBottom: '20px' }}>
+                    <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, marginBottom: '8px' }}>İLAN TİPİ</div>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                        <div onClick={() => setJobType('listing')} style={{ flex: 1, padding: '14px', borderRadius: '12px', border: `2px solid ${jobType === 'listing' ? '#3b82f6' : 'rgba(255,255,255,0.05)'}`, background: jobType === 'listing' ? 'rgba(59,130,246,0.1)' : 'rgba(0,0,0,0.2)', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+                            <div style={{ fontSize: '20px', marginBottom: '4px' }}>🏢</div>
+                            <div style={{ fontSize: '12px', fontWeight: 700, color: jobType === 'listing' ? '#60a5fa' : '#94a3b8' }}>Normal İlan</div>
+                        </div>
+                        <div onClick={() => setJobType('today')} style={{ flex: 1, padding: '14px', borderRadius: '12px', border: `2px solid ${jobType === 'today' ? '#ef4444' : 'rgba(255,255,255,0.05)'}`, background: jobType === 'today' ? 'rgba(239,68,68,0.1)' : 'rgba(0,0,0,0.2)', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+                            <div style={{ fontSize: '20px', marginBottom: '4px' }}>⚡</div>
+                            <div style={{ fontSize: '12px', fontWeight: 700, color: jobType === 'today' ? '#f87171' : '#94a3b8' }}>Acil İş (Bugün)</div>
                         </div>
                     </div>
-
-                    <motion.button whileTap={{ scale: 0.97 }} onClick={handleSaveProfile}
-                        disabled={!profession || saving}
-                        style={{ background: profession ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'rgba(255,255,255,0.05)', color: profession ? '#000' : '#64748b', border: 'none', borderRadius: '14px', padding: '16px', fontSize: '15px', fontWeight: 800, cursor: 'pointer' }}>
-                        {saving ? '⏳ Kaydediliyor...' : '💾 CV\'mi Yayınla'}
-                    </motion.button>
                 </div>
-            ) : (
-                <>
-                    {profiles.length === 0 ? (
-                        <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
-                            <div style={{ fontSize: '48px', marginBottom: '12px' }}>👤</div>
-                            <div style={{ fontWeight: 700 }}>Henüz profil yok</div>
-                            <div style={{ fontSize: '12px', marginTop: '4px' }}>İlk CV'yi ekleyen sen ol!</div>
-                        </div>
-                    ) : (
-                        profiles.map(p => (
-                            <motion.div key={p.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                                style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
-                                <div style={{ display: 'flex', gap: '12px' }}>
-                                    <div style={{ width: 44, height: 44, borderRadius: '12px', background: 'rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>
-                                        {p.user_emoji}
-                                    </div>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ fontWeight: 800, fontSize: '14px' }}>{p.user_name}</div>
-                                        <div style={{ fontSize: '12px', color: '#f59e0b', fontWeight: 700 }}>{p.profession}</div>
-                                        <div style={{ display: 'flex', gap: '4px', marginTop: '2px' }}>
-                                            {Array.from({ length: p.stars }).map((_, i) => <span key={i} style={{ fontSize: '10px' }}>⭐</span>)}
-                                        </div>
-                                    </div>
-                                    {p.photo_url && (
-                                        <img src={p.photo_url} alt="" style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover' }} />
-                                    )}
-                                    {p.city && <span style={{ fontSize: '11px', color: '#64748b', marginLeft: 'auto' }}>📍 {p.city}</span>}
-                                </div>
-                                {p.bio && <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '10px', lineHeight: 1.5 }}>{p.bio}</p>}
-                                {p.skills.length > 0 && (
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '10px' }}>
-                                        {p.skills.map(s => (
-                                            <span key={s} style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '20px', padding: '3px 10px', fontSize: '10px', color: '#f59e0b' }}>{s}</span>
-                                        ))}
-                                    </div>
-                                )}
-                            </motion.div>
-                        ))
-                    )}
-                </>
-            )}
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div>
+                        <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, marginBottom: '8px' }}>ARANAN POZİSYON *</div>
+                        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Örn: Master Şef, Garson, Yönetici" style={{ width: '100%', padding: '14px 16px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '15px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
+                    </div>
+
+                    <div>
+                        <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, marginBottom: '8px' }}>LOKASYON *</div>
+                        <select value={city} onChange={e => setCity(e.target.value)} style={{ width: '100%', padding: '14px 16px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '15px', color: city ? '#fff' : '#64748b', outline: 'none', boxSizing: 'border-box', appearance: 'none' }}>
+                            <option value="">Şehir Seçiniz</option>
+                            {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
+
+                    <div>
+                        <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, marginBottom: '8px' }}>AYLIK MAAŞ / ÜCRET (Opsiyonel)</div>
+                        <input value={salary} onChange={e => setSalary(e.target.value)} placeholder="Örn: 40.000 TL + Prim + Ticket" style={{ width: '100%', padding: '14px 16px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '15px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
+                    </div>
+
+                    <div>
+                        <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, marginBottom: '8px' }}>İŞ DETAYLARI VE BEKLENTİLER *</div>
+                        <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Mesai saatleri, aranan tecrübe, yan haklar..." rows={5} style={{ width: '100%', padding: '14px 16px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '15px', color: '#fff', outline: 'none', boxSizing: 'border-box', resize: 'none', fontFamily: 'inherit' }} />
+                    </div>
+                </div>
+
+                <motion.button whileTap={{ scale: 0.98 }} onClick={handleSubmit} disabled={!title.trim() || !description.trim() || !city || submitting}
+                    style={{ width: '100%', marginTop: '24px', background: (title && description && city) ? '#f59e0b' : 'rgba(255,255,255,0.05)', color: (title && description && city) ? '#000' : '#64748b', border: 'none', borderRadius: '12px', padding: '18px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    {submitting ? 'Kaydediliyor...' : <><CheckCircle2 size={20} /> İlanı Ücretsiz Yayınla</>}
+                </motion.button>
+
+            </div>
         </motion.div>
     )
 }
@@ -757,196 +280,125 @@ export function TasteJobs() {
     const { i18n } = useTranslation()
     const isTr = i18n.language?.startsWith('tr')
 
-    const [view, setView] = useState<JobView>('board')
+    const [view, setView] = useState<'board' | 'add_job'>('board')
     const [jobs, setJobs] = useState<SupaJob[]>(DEMO_JOBS)
     const [loading, setLoading] = useState(true)
-    const [filter, setFilter] = useState<'all' | 'listing' | 'seeking' | 'today'>('all')
     const [applyingTo, setApplyingTo] = useState<SupaJob | null>(null)
+    const [searchQuery, setSearchQuery] = useState('')
 
     useEffect(() => {
         getJobs().then(j => {
             setJobs(j.length > 0 ? j : DEMO_JOBS)
             setLoading(false)
         })
-    }, [])
+    }, [view])
 
-    function refreshJobs() {
-        getJobs().then(j => setJobs(j.length > 0 ? j : DEMO_JOBS))
+    if (view === 'add_job') {
+        return <AddJobForm onBack={() => setView('board')} onSuccess={() => setView('board')} />
     }
 
-    const filtered = jobs.filter(j => filter === 'all' || j.job_type === filter)
-
-    const todayCount = jobs.filter(j => j.job_type === 'today').length
-    const listingCount = jobs.filter(j => j.job_type === 'listing').length
-    const seekingCount = jobs.filter(j => j.job_type === 'seeking').length
+    const filteredJobs = jobs.filter(j => 
+        (j.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+         j.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+         j.employer_name.toLowerCase().includes(searchQuery.toLowerCase())) &&
+         j.job_type !== 'seeking' // profilleri buraya dahil etmiyoruz
+    )
 
     return (
-        <div style={{ paddingBottom: '10px' }}>
-
-            {/* ── Header ── */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                <div style={{
-                    width: 48, height: 48, borderRadius: '14px',
-                    background: 'linear-gradient(135deg, rgba(245,158,11,0.3), rgba(245,158,11,0.1))',
-                    border: '1px solid rgba(245,158,11,0.4)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'
-                }}>
-                    🧑‍🍳
-                </div>
-                <div>
-                    <div style={{ fontWeight: 900, fontSize: '18px' }}>TASTE Jobs</div>
-                    <div style={{ fontSize: '11px', color: '#64748b' }}>
-                        {isTr ? 'Gastronomi Sektöründe Kariyer' : 'Gastronomy Career Platform'}
+        <div style={{ paddingBottom: '20px' }}>
+            {/* Header & Search - "İsinolsun" Style */}
+            <div style={{ background: 'linear-gradient(135deg, #0f172a, #1e293b)', borderRadius: '20px', padding: '24px 20px', marginBottom: '24px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <h1 style={{ margin: '0 0 16px', fontSize: '24px', fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Briefcase size={26} color="#f59e0b" /> Kariyer <span style={{ color: '#f59e0b' }}>&</span> İş
+                </h1>
+                
+                <div style={{ background: '#fff', borderRadius: '14px', display: 'flex', padding: '4px', gap: '4px' }}>
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', padding: '0 12px' }}>
+                        <Search size={18} color="#64748b" />
+                        <input 
+                            value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                            placeholder={isTr ? "İş, şef, mekan ara..." : "Search jobs..."}
+                            style={{ width: '100%', border: 'none', background: 'transparent', outline: 'none', padding: '12px 0', fontSize: '15px', color: '#0f172a', fontWeight: 500 }}
+                        />
                     </div>
                 </div>
-            </div>
-
-            {/* ── Tab Navigation ── */}
-            <div style={{ display: 'flex', background: 'rgba(255,255,255,0.04)', borderRadius: '16px', padding: '4px', gap: '4px', marginBottom: '20px', overflowX: 'auto' }}>
-                {[
-                    { id: 'board', emoji: '📋', label: 'İlanlar' },
-                    { id: 'today', emoji: '⚡', label: 'Bugün' },
-                    { id: 'reviews', emoji: '⭐', label: 'Yorumlar' },
-                    { id: 'profile', emoji: '👤', label: 'Profiller' },
-                ].map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setView(tab.id as JobView)}
-                        style={{
-                            flex: 1, minWidth: '70px', padding: '10px 8px',
-                            borderRadius: '12px', border: 'none',
-                            background: view === tab.id ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'transparent',
-                            color: view === tab.id ? '#000' : '#64748b',
-                            fontWeight: 800, fontSize: '11px', cursor: 'pointer',
-                            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px'
-                        }}
-                    >
-                        <span style={{ fontSize: '16px' }}>{tab.emoji}</span>
-                        {tab.label}
+                
+                <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
+                    <button onClick={() => setView('add_job')} style={{ flex: 1, background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)', color: '#f59e0b', padding: '12px', borderRadius: '10px', fontWeight: 700, fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}>
+                        <PlusCircle size={16} /> İlan Ver
                     </button>
-                ))}
+                    <button style={{ flex: 1, background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: '#60a5fa', padding: '12px', borderRadius: '10px', fontWeight: 700, fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}>
+                        <Users size={16} /> CV Havuzu
+                    </button>
+                </div>
             </div>
 
-            {/* ── Stats ── */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '16px' }}>
-                {[
-                    { icon: '📢', value: listingCount, label: 'Eleman Arıyor', color: '#f59e0b' },
-                    { icon: '🙋', value: seekingCount, label: 'İş Arıyor', color: '#3b82f6' },
-                    { icon: '⚡', value: todayCount, label: 'Bugün', color: '#ef4444' },
-                ].map(s => (
-                    <div key={s.label} style={{ background: `${s.color}08`, border: `1px solid ${s.color}20`, borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '18px' }}>{s.icon}</div>
-                        <div style={{ fontSize: '18px', fontWeight: 900, color: s.color }}>{s.value}</div>
-                        <div style={{ fontSize: '9px', color: '#64748b', textTransform: 'uppercase' }}>{s.label}</div>
-                    </div>
-                ))}
-            </div>
+            {/* Title */}
+            <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                Güncel İlanlar <span style={{ background: '#334155', padding: '2px 8px', borderRadius: '10px', fontSize: '11px' }}>{filteredJobs.length}</span>
+            </h2>
 
-            {/* ── Content ── */}
-            <AnimatePresence mode="wait">
-                {(view === 'board' || view === 'today') && (
-                    <motion.div key="board" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-
-                        {/* Add Job Button */}
-                        <motion.button whileTap={{ scale: 0.96 }}
-                            onClick={() => setView('add_job')}
-                            style={{
-                                width: '100%', background: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05))',
-                                border: '1px dashed rgba(245,158,11,0.4)', borderRadius: '16px',
-                                padding: '14px', marginBottom: '16px', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'
+            {/* Job Cards - "Indeed / Isinolsun" Hybrid structure */}
+            {loading ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>Yükleniyor...</div>
+            ) : filteredJobs.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>Aramaya uygun ilan bulunamadı.</div>
+            ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {filteredJobs.map(job => (
+                        <motion.div key={job.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+                            style={{ 
+                                background: job.job_type === 'today' ? 'linear-gradient(180deg, rgba(239,68,68,0.05), rgba(30,41,59,0.5))' : '#1e293b', 
+                                border: job.job_type === 'today' ? '1px solid rgba(239,68,68,0.2)' : '1px solid rgba(255,255,255,0.05)', 
+                                borderRadius: '16px', padding: '20px', position: 'relative', overflow: 'hidden'
                             }}
                         >
-                            <span style={{ fontSize: '20px' }}>➕</span>
-                            <div style={{ textAlign: 'left' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 800, color: '#f59e0b' }}>İlan Ekle</div>
-                                <div style={{ fontSize: '10px', color: '#64748b' }}>Eleman ara veya iş ilanı bırak</div>
-                            </div>
-                        </motion.button>
-
-                        {/* Filter pills */}
-                        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '4px' }}>
-                            {([
-                                { id: 'all', emoji: '✨', label: 'Tümü' },
-                                { id: 'listing', emoji: '📢', label: 'Eleman' },
-                                { id: 'seeking', emoji: '🙋', label: 'İş Arıyor' },
-                                { id: 'today', emoji: '⚡', label: 'Bugün' },
-                            ] as const).map(f => (
-                                <motion.button key={f.id} whileTap={{ scale: 0.94 }}
-                                    onClick={() => setFilter(f.id)}
-                                    style={{
-                                        background: filter === f.id ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.03)',
-                                        border: `1px solid ${filter === f.id ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.07)'}`,
-                                        color: filter === f.id ? '#f59e0b' : '#64748b',
-                                        borderRadius: '20px', padding: '6px 14px', fontSize: '12px',
-                                        fontWeight: 700, cursor: 'pointer', flexShrink: 0
-                                    }}
-                                >
-                                    {f.emoji} {f.label}
-                                </motion.button>
-                            ))}
-                        </div>
-
-                        {/* "Bugün" acil banner */}
-                        {view === 'today' || filter === 'today' ? (
-                            <div style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.04))', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '14px', padding: '12px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <span style={{ fontSize: '24px' }}>⚡</span>
-                                <div>
-                                    <div style={{ fontWeight: 800, fontSize: '13px', color: '#ef4444' }}>BUGÜN ÇALIŞ SİSTEMİ</div>
-                                    <div style={{ fontSize: '11px', color: '#94a3b8' }}>Günlük acil işler — TON/TL günlük ödeme!</div>
+                            {job.job_type === 'today' && <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: '#ef4444' }} />}
+                            
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                                <div style={{ display: 'flex', gap: '14px' }}>
+                                    <div style={{ width: 52, height: 52, borderRadius: '12px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>
+                                        {job.employer_emoji}
+                                    </div>
+                                    <div>
+                                        <h3 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 800, color: '#f8fafc' }}>{job.title}</h3>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#94a3b8' }}>
+                                            <Building size={14} /> {job.employer_name}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        ) : null}
 
-                        {loading ? (
-                            <div style={{ textAlign: 'center', padding: '60px', color: '#64748b' }}>⏳ Yükleniyor...</div>
-                        ) : filtered.length === 0 ? (
-                            <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
-                                <div style={{ fontSize: '48px', marginBottom: '12px' }}>🧑‍🍳</div>
-                                <div style={{ fontWeight: 700 }}>Henüz ilan yok</div>
-                                <div style={{ fontSize: '12px', marginTop: '4px' }}>İlk ilanı sen ekle!</div>
+                            <p style={{ margin: '0 0 16px', fontSize: '14px', color: '#cbd5e1', lineHeight: 1.6, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                {job.description}
+                            </p>
+
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '20px' }}>
+                                <span style={{ padding: '6px 12px', background: 'rgba(245,158,11,0.1)', color: '#fcd34d', borderRadius: '8px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <MapPin size={14} /> {job.city}
+                                </span>
+                                {job.salary && (
+                                    <span style={{ padding: '6px 12px', background: 'rgba(16,185,129,0.1)', color: '#34d399', borderRadius: '8px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <BadgeCheck size={14} /> {job.salary}
+                                    </span>
+                                )}
+                                <span style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', borderRadius: '8px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <Clock size={14} /> {timeAgo(job.created_at)}
+                                </span>
                             </div>
-                        ) : (
-                            filtered.map(job => <JobCard key={job.id} job={job} onApply={setApplyingTo} />)
-                        )}
-                    </motion.div>
-                )}
 
-                {view === 'add_job' && (
-                    <motion.div key="add-job" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                        <AddJobForm onSuccess={refreshJobs} onBack={() => setView('board')} />
-                    </motion.div>
-                )}
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <motion.button whileTap={{ scale: 0.98 }} onClick={() => setApplyingTo(job)}
+                                    style={{ flex: 1, padding: '14px', background: job.job_type === 'today' ? '#ef4444' : '#f59e0b', color: job.job_type === 'today' ? '#fff' : '#000', border: 'none', borderRadius: '12px', fontSize: '14px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                    Hemen Başvur <ArrowRight size={16} />
+                                </motion.button>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            )}
 
-                {view === 'reviews' && (
-                    <motion.div key="reviews" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                        <ReviewsView onAddReview={() => setView('add_review')} />
-                    </motion.div>
-                )}
-
-                {view === 'add_review' && (
-                    <motion.div key="add-review" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                        <AddReviewForm onSuccess={() => setView('reviews')} onBack={() => setView('reviews')} />
-                    </motion.div>
-                )}
-
-                {view === 'profile' && (
-                    <motion.div key="profile" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                        <ProfileView />
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Apply Modal */}
-            <AnimatePresence>
-                {applyingTo && (
-                    <ApplyModal
-                        job={applyingTo}
-                        onClose={() => setApplyingTo(null)}
-                        onSuccess={refreshJobs}
-                    />
-                )}
-            </AnimatePresence>
+            {applyingTo && <ApplyModal job={applyingTo} onClose={() => setApplyingTo(null)} onSuccess={() => setApplyingTo(null)} />}
         </div>
     )
 }
