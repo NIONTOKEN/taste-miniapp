@@ -12,6 +12,14 @@ interface Window {
       setBackgroundColor: (color: string) => void
       openLink: (url: string, options?: { try_instant_view?: boolean }) => void
       openTelegramLink: (url: string) => void
+      showAlert: (message: string, callback?: () => void) => void
+      showConfirm: (message: string, callback: (confirmed: boolean) => void) => void
+      showPopup: (params: { title?: string; message: string; buttons?: any[] }, callback?: (id: string) => void) => void
+      HapticFeedback: {
+        impactOccurred: (style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => void
+        notificationOccurred: (type: 'error' | 'success' | 'warning') => void
+        selectionChanged: () => void
+      }
       MainButton: {
         text: string
         show: () => void

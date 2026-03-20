@@ -60,8 +60,9 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 6. **Live Activity** — Real-time blockchain activity tracker
 7. **Global Live Chat** — Real-time community chat accessible to everyone worldwide.
 8. **Job Board / Career** — Post job openings (chef, waiter, etc.) and contact posters directly via Telegram.
-9. **Leaderboard** — Community rankings
-10. **Documentation** — Full technical details at tastetoken.net
+9. **CV / Profile** — Culinary CV system with photo uploads and direct linking.
+10. **Leaderboard** — Community rankings
+11. **Documentation** — Full technical details at tastetoken.net
 
 ## Target Use Cases
 🍽️ Restaurant payments & loyalty rewards
@@ -103,7 +104,7 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 ✅ 88.4% token locked in JVault, 81.6% LP locked
 ✅ Security audit passed
 ✅ Telegram Mini App launched
-✅ Airdrop for 443+ wallets completed
+✅ Airdrop for 521+ wallets completed
 ✅ Whitepaper & Litepaper published
 ✅ All social media channels established
 ✅ Stray animal charity platform added
@@ -113,7 +114,7 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 ✅ Mini App v2.2 Content & Compliance — March 2026 — TASTE Manifesto, full i18n support, legal framework.
 ✅ Mini App v2.3 Wallet & QR Update — March 2026 — Quick Wallet & Transfer system, balances, QR scanning and secure TASTE/TON sending.
 ✅ Mini App v2.4 Taste Chef Digital Discount — March 2026 — Next-gen loyalty system. Apprenticeship to Master Chef journey.
-✅ Mini App v2.5 Community 3.0 — March 2026 — Global Real-time Food Feed & Job Board with direct Telegram contact and live global chat.
+✅ Mini App v2.5 Community 3.0 — March 2026 — Global Real-time Food Feed & Job Board with direct Telegram contact and live global chat. CV photo uploads active. Tech stack (PoweredBy) updated with JVault, LP Locks, Railway, Netlify, Google, and Socials.
 
 ## Taste Şef (Dijital İndirim Sistemi)
 - **Ustalık Seviyeleri**: 🥉 Çırak (2k+), 🥈 Kalfa (4k+), 🥇 Usta (7.5k+), 👨‍🍳 Şef (15k+).
@@ -201,11 +202,6 @@ export function TasteAI() {
   }, [messages])
 
   const callGroqAPI = async (userMessage: string): Promise<string> => {
-    const apiKey = import.meta.env.VITE_GROQ_API_KEY
-    if (!apiKey || apiKey === 'BURAYA_GROQ_API_KEY_YAZ') {
-      throw new Error('GROQ_KEY_MISSING')
-    }
-
     const realHistory = messages.filter((m) => m.id !== '0').slice(-8)
 
     const mappedMessages = realHistory.map((m) => ({
@@ -219,23 +215,11 @@ export function TasteAI() {
       { role: 'user', content: userMessage }
     ]
 
-    const response = await fetch(
-      'https://api.groq.com/openai/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: reqMessages,
-          temperature: 0.7,
-          max_tokens: 600,
-          top_p: 0.9,
-        }),
-      }
-    )
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: reqMessages }),
+    })
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))

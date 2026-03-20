@@ -15,9 +15,13 @@ import { LiveActivity } from './components/LiveActivity'
 import { Legal } from './components/Legal'
 import { TasteAI } from './components/TasteAI'
 import { TasteChef } from './components/TasteChef'
+import { TasteJobs } from './components/TasteJobs'
 import { DisclaimerModal, shouldShowDisclaimer } from './components/DisclaimerModal'
 import { PoweredBy } from './components/PoweredBy'
 import { WalletTransfer } from './components/WalletTransfer'
+import { PriceTicker } from './components/PriceTicker'
+import { CountdownTimer } from './components/CountdownTimer'
+import { RewardCountdown } from './components/RewardCountdown'
 import {
   Home,
   Map,
@@ -33,176 +37,14 @@ import {
   Cpu,
   ExternalLink,
   QrCode,
-  ChefHat
+  ChefHat,
+  Briefcase
 } from 'lucide-react'
 import { apiService } from './services/api'
 
 const TASTE_LOGO = '/logo.jpg'
 
 
-function PriceTicker() {
-  const { t, i18n } = useTranslation()
-  const [price, setPrice] = useState<string>('0.00135')
-  const [tryPrice, setTryPrice] = useState<string>('0.0466')
-  const [change, setChange] = useState<number>(0)
-
-  useEffect(() => {
-    const fetchLivePrice = async () => {
-      try {
-        const [priceData, rateData] = await Promise.all([
-          apiService.getTastePrice(),
-          apiService.getExchangeRate()
-        ])
-        if (priceData.price > 0) {
-          setPrice(priceData.price.toFixed(5))
-          setChange(priceData.change)
-          setTryPrice((priceData.price * rateData.usdToTry).toFixed(4))
-        }
-      } catch (e) {
-        console.warn('[PriceTicker] API fetch failed, keeping current values')
-      }
-    }
-
-    fetchLivePrice()
-    // Refresh every 60 seconds (GeckoTerminal rate limit friendly)
-    const interval = setInterval(fetchLivePrice, 60000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const changeColor = change >= 0 ? 'price-up' : 'price-down'
-  const changeSign = change >= 0 ? '+' : ''
-
-  return (
-    <div className="ticker-wrap">
-      <div className="ticker">
-        <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
-        <span className="ticker-item">🇹🇷 TASTE/TRY: ₺{tryPrice}</span>
-        <span className="ticker-item">🚀 {t('app.early_access_ending')} $0.01</span>
-        <span className="ticker-item">🔥 {t('app.units.supply')}: 25,000,000</span>
-        <span className="ticker-item">🌍 {i18n.language === 'tr' ? 'TOPLULUK ODAKLI' : 'COMMUNITY DRIVEN'}</span>
-        <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
-      </div>
-    </div>
-  )
-}
-
-
-// Countdown Timer Component - Erken erişim bitiş: 02.01.2027
-function CountdownTimer({ earlyAccessLabel }: { earlyAccessLabel: string }) {
-  const { t } = useTranslation()
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-  useEffect(() => {
-    const target = new Date('2027-01-02T00:00:00').getTime();
-    const update = () => {
-      const now = Date.now();
-      const diff = target - now;
-      if (diff <= 0) return;
-      setTimeLeft({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / (1000 * 60)) % 60),
-        seconds: Math.floor((diff / 1000) % 60)
-      });
-    };
-    update();
-    const interval = setInterval(update, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const boxStyle = { background: 'rgba(245, 159, 11, 0.1)', border: '1px solid rgba(245, 159, 11, 0.2)', borderRadius: '8px', padding: '6px 10px', textAlign: 'center' as const, minWidth: '50px' };
-
-  return (
-    <div style={{ marginBottom: '12px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px' }}>
-        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444', animation: 'pulse 2s infinite' }} />
-        {earlyAccessLabel}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
-        <div style={boxStyle}>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.days}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.day')}</div>
-        </div>
-        <div style={boxStyle}>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.hours}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.hr')}</div>
-        </div>
-        <div style={boxStyle}>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{timeLeft.minutes}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.min')}</div>
-        </div>
-        <div style={boxStyle}>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{String(timeLeft.seconds).padStart(2, '0')}</div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{t('app.units.sec')}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Reward Countdown - Ödül dağıtımı bitiş: 20.05.2026
-function RewardCountdown() {
-  const { t } = useTranslation()
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-  useEffect(() => {
-    const target = new Date('2026-05-20T00:00:00').getTime();
-    const update = () => {
-      const now = Date.now();
-      const diff = target - now;
-      if (diff <= 0) return;
-      setTimeLeft({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / (1000 * 60)) % 60),
-        seconds: Math.floor((diff / 1000) % 60)
-      });
-    };
-    update();
-    const interval = setInterval(update, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const boxStyle = {
-    background: 'rgba(34, 197, 94, 0.08)',
-    border: '1px solid rgba(34, 197, 94, 0.2)',
-    borderRadius: '8px', padding: '6px 10px',
-    textAlign: 'center' as const, minWidth: '50px'
-  };
-
-  return (
-    <div style={{
-      marginBottom: '15px',
-      background: 'rgba(34,197,94,0.04)',
-      border: '1px solid rgba(34,197,94,0.12)',
-      borderRadius: '12px',
-      padding: '12px 10px',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '11px', color: '#4ade80', fontWeight: 700, marginBottom: '8px' }}>
-        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite', flexShrink: 0 }} />
-        {t('app.reward_end')}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
-        <div style={boxStyle}>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.days}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{t('app.units.day')}</div>
-        </div>
-        <div style={boxStyle}>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.hours}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{t('app.units.hr')}</div>
-        </div>
-        <div style={boxStyle}>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{timeLeft.minutes}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{t('app.units.min')}</div>
-        </div>
-        <div style={boxStyle}>
-          <div style={{ fontSize: '16px', fontWeight: '800', color: '#22c55e' }}>{String(timeLeft.seconds).padStart(2, '0')}</div>
-          <div style={{ fontSize: '9px', color: '#4ade8080' }}>{t('app.units.sec')}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
 function App() {
   const { t, i18n } = useTranslation();
 
@@ -232,9 +74,19 @@ function App() {
 
       const savedLang = localStorage.getItem('i18nextLng');
       if (!savedLang) {
-        const userLang = tg.initDataUnsafe?.user?.language_code;
-        if (userLang?.startsWith('tr')) i18n.changeLanguage('tr');
-        else i18n.changeLanguage('en');
+        // 1) Try Telegram user language
+        const tgLang = tg.initDataUnsafe?.user?.language_code;
+        // 2) Fallback: browser/system language
+        const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
+        const detectedLang = tgLang || browserLang;
+        
+        if (detectedLang?.startsWith('tr')) {
+          i18n.changeLanguage('tr');
+        } else {
+          // For all other languages (Arabic, Russian, German, etc.) — use English
+          // as we don't have translations yet, but detect & store for future
+          i18n.changeLanguage('en');
+        }
       }
     }
   }, []);
@@ -701,8 +553,9 @@ function App() {
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
           
-          <button className={`nav-item ${activeTab === 'community' ? 'active' : ''}`} onClick={() => { setActiveTab('community'); setIsMenuOpen(false); }}>
-            <span className="nav-icon">🍽️</span><span className="nav-label">{t('nav.community')}</span>
+          <button className={`nav-item ${activeTab === 'community' ? 'active' : ''}`} onClick={() => { setActiveTab('community'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
+            <span className="nav-icon">🍽️</span><span className="nav-label">{i18n.language?.startsWith('tr') ? 'Topluluk' : 'Community'}</span>
+            <span style={{ position: 'absolute', top: '4px', right: '8px', width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 8px #f59e0b', animation: 'pulse 2s infinite' }} />
           </button>
 
           <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>

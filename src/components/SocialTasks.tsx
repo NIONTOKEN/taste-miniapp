@@ -29,15 +29,15 @@ export function SocialTasks() {
             icon: '💬',
             label: isEn ? 'Community Chat' : 'Topluluk Sohbeti',
             sublabel: '@taste_miniapp',
-            link: 'https://t.me/taste_miniapp',
+            link: 'https://t.me/taste_miniapp/1',
             isTelegram: true,
         },
         {
             id: 'tg_miniapp',
             icon: '🤖',
-            label: 'Mini App',
+            label: 'Taste Launch Bot',
             sublabel: '@taste_launch_bot',
-            link: 'https://t.me/taste_launch_bot/app',
+            link: 'https://t.me/taste_launch_bot',
             isTelegram: true,
         },
         {
@@ -59,6 +59,12 @@ export function SocialTasks() {
             link: 'https://x.com/taste_token',
         },
         {
+            id: 'whatsapp',
+            icon: '🟢',
+            label: 'WhatsApp Community',
+            link: 'https://chat.whatsapp.com/G2Q6xjoYt94GzseLmFnUtO?mode=gi_t',
+        },
+        {
             id: 'post_x',
             icon: '🚀',
             label: 'Tweet About Us',
@@ -66,27 +72,27 @@ export function SocialTasks() {
         },
         {
             id: 'facebook',
-            icon: '👥',
+            icon: '📘',
             label: 'Facebook',
-            link: 'https://www.facebook.com/share/1BC81LDmjg/',
+            link: 'https://www.facebook.com/share/1DGWE1ZQoR/',
         },
         {
             id: 'instagram',
             icon: '📸',
             label: 'Instagram',
-            link: 'https://www.instagram.com/taste_ton_taste?utm_source=qr&igsh=Y2c0eWk5emRxMXU0',
+            link: 'https://www.instagram.com/taste_ton_taste',
         },
         {
             id: 'tiktok',
             icon: '🎵',
             label: 'TikTok',
-            link: 'https://www.tiktok.com/@taste_ton?_r=1&_t=ZS-92m0N4HLmAp',
+            link: 'https://www.tiktok.com/@taste_ton',
         },
         {
             id: 'website',
             icon: '🌐',
-            label: 'Website',
-            link: 'https://www.tastetoken.net',
+            label: 'Official Website',
+            link: 'https://tastetoken.net',
         }
     ]
 

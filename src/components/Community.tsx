@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { getPosts, insertPost, getMessages, sendMessage, type SupaPost } from '../services/supabase'
+import { getPosts, insertPost, getMessages, sendMessage, updatePostLikes, type SupaPost } from '../services/supabase'
+import { TasteJobs } from './TasteJobs'
 
 // ─── Types ────────────────────────────────────────────────────────────────
 type PostType = 'yemek' | 'tarif' | 'menu' | 'career' | 'chat'
 type FilterType = 'hepsi' | PostType
+type CommunityView = 'feed' | 'chat' | 'jobs'
 
 interface Ingredient { name: string; amount: string }
 
@@ -303,7 +305,7 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
 // ─── Main Component ─────────────────────────────────────────────────────────
 export function Community() {
     const { t, i18n } = useTranslation()
-    const [view, setView] = useState<'feed' | 'chat'>('feed')
+    const [view, setView] = useState<CommunityView>('feed')
     const [posts, setPosts] = useState<Post[]>(() => {
         const cached = localStorage.getItem('taste_community_posts')
         return cached ? JSON.parse(cached) : []
@@ -339,10 +341,17 @@ export function Community() {
             const [p, m] = await Promise.all([getPosts(), getMessages()])
             if (p && Array.isArray(p)) {
                 const mapped = p.map(mapPost)
-                setPosts(mapped)
+                // Merge with local state to preserve liked posts
+                setPosts(prev => {
+                    const likedMap = new Map(prev.map(x => [x.id, x.likes]))
+                    return mapped.map(post => ({ ...post, likes: Math.max(post.likes || 0, likedMap.get(post.id) || 0) }))
+                })
                 localStorage.setItem('taste_community_posts', JSON.stringify(mapped))
             }
-            if (m && Array.isArray(m)) setChatMsgs(m.map(mapPost))
+            // Chat mesajları - yenileri sona ekle (ascending)
+            if (m && Array.isArray(m)) {
+                setChatMsgs(m.map(mapPost))
+            }
         } catch (err) {
             console.error('[Community] Refresh failed:', err)
         } finally {
@@ -352,17 +361,31 @@ export function Community() {
 
     useEffect(() => {
         refreshData()
-        const interval = setInterval(refreshData, 10000) // 10 saniyede bir otomatik tazele (Canlılık için)
+        const interval = setInterval(refreshData, 8000)
         return () => clearInterval(interval)
     }, [])
 
     async function handleChatSend() {
         if (!cMsg.trim()) return
         const tg = getTgUser(t)
-        const sent = await sendMessage(tg.name, tg.emoji, cMsg)
+        // Optimistic update
+        const tempMsg: Post = {
+            id: 'temp-' + Date.now(),
+            type: 'chat',
+            authorName: tg.name,
+            authorEmoji: tg.emoji,
+            authorUsername: tg.username,
+            createdAt: Date.now(),
+            text: cMsg,
+            tags: [],
+            likes: 0
+        }
+        setChatMsgs(prev => [...prev, tempMsg])
+        setCMsg('')
+        const sent = await sendMessage(tg.name, tg.emoji, cMsg, tg.username)
         if (sent) {
-            setChatMsgs(prev => [...prev, mapPost(sent)])
-            setCMsg('')
+            // Replace temp with real
+            setChatMsgs(prev => prev.map(m => m.id === tempMsg.id ? mapPost(sent) : m))
         }
     }
 
@@ -389,7 +412,12 @@ export function Community() {
     function handleLike(id: string) {
         if (likedIds.has(id)) return
         setLikedIds(prev => new Set([...prev, id]))
-        setPosts(prev => prev.map(p => p.id === id ? { ...p, likes: (p.likes || 0) + 1 } : p))
+        setPosts(prev => {
+            const updated = prev.map(p => p.id === id ? { ...p, likes: (p.likes || 0) + 1 } : p)
+            const post = updated.find(p => p.id === id)
+            if (post) updatePostLikes(id, post.likes || 0).catch(() => {})
+            return updated
+        })
     }
 
     function resetForm() {
@@ -485,23 +513,33 @@ export function Community() {
 
             {/* ── Header ── */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '4px' }}>
-                    <button onClick={() => setView('feed')} style={{ padding: '10px 18px', borderRadius: '10px', border: 'none', background: view === 'feed' ? '#f59e0b' : 'transparent', color: view === 'feed' ? '#000' : '#64748b', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}>
-                       🏠 {i18n.language === 'tr' ? 'Akış' : 'Feed'}
+                <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '4px', gap: '2px' }}>
+                    <button onClick={() => setView('feed')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'feed' ? '#f59e0b' : 'transparent', color: view === 'feed' ? '#000' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+                       <span style={{ fontSize: '14px' }}>🍽️</span> {i18n.language === 'tr' ? 'Akış' : 'Feed'}
                     </button>
-                    <button onClick={() => setView('chat')} style={{ padding: '10px 18px', borderRadius: '10px', border: 'none', background: view === 'chat' ? '#3b82f6' : 'transparent', color: view === 'chat' ? '#fff' : '#64748b', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}>
-                       💬 {i18n.language === 'tr' ? 'Sohbet' : 'Chat'}
+                    <button onClick={() => setView('jobs')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'jobs' ? '#f59e0b' : 'transparent', color: view === 'jobs' ? '#000' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', position: 'relative' }}>
+                       <span style={{ fontSize: '14px' }}>💼</span> {i18n.language === 'tr' ? 'İş İlanı' : 'Jobs'}
+                       <span style={{ position: 'absolute', top: '4px', right: '4px', width: '6px', height: '6px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 6px #f59e0b' }} />
+                    </button>
+                    <button onClick={() => setView('chat')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'chat' ? '#3b82f6' : 'transparent', color: view === 'chat' ? '#fff' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+                       <span style={{ fontSize: '14px' }}>💬</span> {i18n.language === 'tr' ? 'Sohbet' : 'Chat'}
                     </button>
                 </div>
-                <motion.button 
-                    whileTap={{ scale: 0.93 }} 
-                    onClick={() => setShowCreate(true)}
-                    style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000', border: 'none', borderRadius: '14px', padding: '11px 20px', fontSize: '13px', fontWeight: 900, cursor: 'pointer', boxShadow: '0 4px 15px rgba(245,158,11,0.4)' }}>
-                    🚀 {t('community.share')}
-                </motion.button>
+                {view !== 'jobs' && (
+                    <motion.button 
+                        whileTap={{ scale: 0.93 }} 
+                        onClick={() => setShowCreate(true)}
+                        style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000', border: 'none', borderRadius: '14px', padding: '11px 16px', fontSize: '12px', fontWeight: 900, cursor: 'pointer', boxShadow: '0 4px 15px rgba(245,158,11,0.4)' }}>
+                        🚀 {t('community.share')}
+                    </motion.button>
+                )}
             </div>
 
-            {view === 'feed' ? (
+            {view === 'jobs' ? (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <TasteJobs />
+                </motion.div>
+            ) : view === 'feed' ? (
                 <>
                 {/* ── Category Icons ── */}
                 <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '8px' }}>
@@ -537,29 +575,35 @@ export function Community() {
             </motion.div>
 
             {/* ── Reward Banner ── */}
-            <motion.div
+            <motion.button
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setShowCreate(true)}
                 style={{ 
-                    background: 'linear-gradient(135deg, rgba(34,197,94,0.1), rgba(16,185,129,0.05))',
-                    border: '1px solid rgba(34,197,94,0.2)',
+                    width: '100%',
+                    background: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.04))',
+                    border: '1px solid rgba(16,185,129,0.3)',
                     borderRadius: '16px', padding: '12px 16px', marginBottom: '16px',
-                    display: 'flex', alignItems: 'center', gap: '12px'
+                    display: 'flex', alignItems: 'center', gap: '12px',
+                    cursor: 'pointer'
                 }}
             >
-                <div style={{ fontSize: '24px' }}>📸</div>
-                <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#10b981' }}>{i18n.language === 'tr' ? 'PAYLAŞ VE KAZAN!' : 'SHARE AND WIN!'}</div>
-                    <div style={{ fontSize: '10px', color: '#94a3b8', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '24px' }}>🎁</div>
+                <div style={{ flex: 1, textAlign: 'left' }}>
+                    <div style={{ fontSize: '13px', fontWeight: 900, color: '#10b981' }}>
+                        {i18n.language === 'tr' ? '🚀 PAYLAŞ & 5 TASTE KAZAN!' : '🚀 SHARE & WIN 5 TASTE!'}
+                    </div>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', lineHeight: 1.5, marginTop: '2px' }}>
                         {i18n.language === 'tr' 
-                            ? 'Yemek, Tarif veya Menü paylaş, ekran görüntüsü al ve cüzdan adresini bırak, 20 TASTE kazan!' 
-                            : 'Share Food, Recipe or Menu, take a screenshot & drop your wallet address to win 20 TASTE!'}
+                            ? 'Yemek/Tarif/Menü paylaş → Ekran görüntüsü al → TG grubuna gönder → 5 TASTE kazan!' 
+                            : 'Share Food/Recipe/Menu → Screenshot → Send to TG group → Win 5 TASTE!'}
                     </div>
                 </div>
-                <div style={{ background: '#10b981', color: '#000', padding: '4px 8px', borderRadius: '8px', fontSize: '10px', fontWeight: 900 }}>
-                    +20 T
+                <div style={{ background: 'linear-gradient(135deg, #10b981, #059669)', color: '#000', padding: '6px 10px', borderRadius: '10px', fontSize: '11px', fontWeight: 900, flexShrink: 0 }}>
+                    +5<br/>TASTE
                 </div>
-            </motion.div>
+            </motion.button>
 
             {/* ── Search ── */}
             <div style={{ position: 'relative', marginBottom: '14px' }}>
@@ -684,7 +728,13 @@ export function Community() {
                             style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'linear-gradient(180deg, #111420, #0d1020)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px 24px 0 0', padding: '20px 18px 34px', zIndex: 2001, maxHeight: '92vh', overflowY: 'auto' }}
                         >
                             <div style={{ width: 40, height: 4, background: 'rgba(255,255,255,0.15)', borderRadius: 2, margin: '0 auto 18px' }} />
-                            <div style={{ fontWeight: 900, fontSize: '1.1rem', marginBottom: '16px' }}>✨ {t('community.create_title')}</div>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                                <div style={{ fontWeight: 900, fontSize: '1.1rem' }}>✨ {t('community.create_title')}</div>
+                                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowCreate(false)}
+                                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', color: '#94a3b8', borderRadius: '10px', width: '36px', height: '36px', cursor: 'pointer', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    ×
+                                </motion.button>
+                            </div>
 
                             {/* Type selector */}
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', marginBottom: '16px' }}>
