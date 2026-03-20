@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import {
-    getJobs, insertJob, applyToJob, getReviews, insertReview, getProfiles, upsertProfile,
-    type SupaJob, type SupaReview, type SupaProfile
+    getJobs, insertJob, applyToJob,
+    type SupaJob
 } from '../services/supabase'
-import { Search, MapPin, Briefcase, Star, Building, ArrowRight, MessageCircle, Clock, Users, PlusCircle, CheckCircle2 } from 'lucide-react'
+import { Search, MapPin, Briefcase, Building, ArrowRight, MessageCircle, Clock, Users, PlusCircle, CheckCircle2 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────
 type JobView = 'board' | 'add_job' | 'reviews' | 'profile' | 'add_review'
@@ -35,39 +35,7 @@ function timeAgo(dateStr: string) {
     return `${Math.floor(h / 24)} gün önce`
 }
 
-function StarRating({ value, onChange, size = 18 }: { value: number; onChange?: (v: number) => void; size?: number }) {
-    return (
-        <div style={{ display: 'flex', gap: '3px' }}>
-            {[1, 2, 3, 4, 5].map(s => (
-                <span
-                    key={s}
-                    onClick={() => onChange?.(s)}
-                    style={{
-                        fontSize: size, cursor: onChange ? 'pointer' : 'default',
-                        color: s <= value ? '#f59e0b' : '#334155',
-                        transition: 'color 0.2s',
-                        lineHeight: 1
-                    }}
-                >
-                    ★
-                </span>
-            ))}
-        </div>
-    )
-}
 
-function ScoreBar({ label, score }: { label: string; score: number }) {
-    const pct = (score / 5) * 100
-    return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-            <span style={{ fontSize: '11px', color: '#94a3b8', width: '50px' }}>{label}</span>
-            <div style={{ flex: 1, height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
-                <div style={{ width: `${pct}%`, height: '100%', background: '#f59e0b', borderRadius: '3px' }} />
-            </div>
-            <span style={{ fontSize: '11px', color: '#fff', width: '20px', textAlign: 'right', fontWeight: 700 }}>{score.toFixed(1)}</span>
-        </div>
-    )
-}
 
 // ─── DEMO DATA ────────────────────────────────────────────────────────────
 const DEMO_JOBS: SupaJob[] = [
@@ -379,7 +347,7 @@ export function TasteJobs() {
                                 </span>
                                 {job.salary && (
                                     <span style={{ padding: '6px 12px', background: 'rgba(16,185,129,0.1)', color: '#34d399', borderRadius: '8px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <BadgeCheck size={14} /> {job.salary}
+                                        <CheckCircle2 size={14} /> {job.salary}
                                     </span>
                                 )}
                                 <span style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', borderRadius: '8px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
