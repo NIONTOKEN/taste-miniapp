@@ -266,9 +266,9 @@ export function TasteJobs() {
     }
 
     const filteredJobs = jobs.filter(j => 
-        (j.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-         j.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-         j.employer_name.toLowerCase().includes(searchQuery.toLowerCase())) &&
+        ((j.title || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+         (j.city || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+         (j.employer_name || '').toLowerCase().includes(searchQuery.toLowerCase())) &&
          j.job_type !== 'seeking' // profilleri buraya dahil etmiyoruz
     )
 
