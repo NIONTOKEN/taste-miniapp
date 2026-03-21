@@ -96,6 +96,52 @@ export function SocialTasks() {
         }
     ]
 
+    // Voting and Listing Platforms
+    const votingLinks: SocialLink[] = [
+        {
+            id: 'coinmooner',
+            icon: '🌕',
+            label: 'CoinMooner',
+            sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
+            link: 'https://coinmooner.com/coins/taste-taste',
+        },
+        {
+            id: 'coinsniper',
+            icon: '🎯',
+            label: 'CoinSniper',
+            sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
+            link: 'https://coinsniper.net/coin/89667',
+        },
+        {
+            id: 'gemfinder',
+            icon: '💎',
+            label: 'GemFinder',
+            sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
+            link: 'https://gemfinder.cc/gem/28909',
+        },
+        {
+            id: 'coinscope',
+            icon: '🔭',
+            label: 'CoinScope',
+            sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
+            link: 'https://www.coinscope.co/coin/taste',
+        },
+        {
+            id: 'coinvote',
+            icon: '🗳️',
+            label: 'CoinVote',
+            sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
+            link: 'https://coinvote.cc/en/coin/TASTE',
+        },
+        {
+            id: 'coingem',
+            icon: '✨',
+            label: 'CoinGem',
+            sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
+            link: 'https://coingem.com/ton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+        }
+    ]
+
     const handleLinkClick = (link: string, isTelegram?: boolean) => {
         if (window.Telegram?.WebApp) {
             if (isTelegram) {
@@ -179,6 +225,33 @@ export function SocialTasks() {
                     {socialLinks.map((item, idx) => renderLinkItem(item, idx))}
                 </div>
             </div>
+
+            {/* Voting & Rating Platforms */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="glass-panel"
+                style={{
+                    padding: '20px',
+                    background: 'linear-gradient(135deg, rgba(255, 185, 0, 0.08), rgba(255, 185, 0, 0.02))',
+                    border: '1px solid rgba(255, 185, 0, 0.15)',
+                }}
+            >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                    <span style={{ fontSize: '24px' }}>🏆</span>
+                    <div>
+                        <h3 style={{ fontSize: '1rem', margin: 0, color: 'var(--text-accent, #ffcc00)' }}>
+                            {isEn ? 'Vote & Discovery Platforms' : 'Oylama ve Keşif Platformları'}
+                        </h3>
+                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>
+                            {isEn ? 'Support us on listing platforms' : 'Listeleme platformlarında bizi destekle'}
+                        </p>
+                    </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {votingLinks.map((item, idx) => renderLinkItem(item, idx, 'rgba(255, 185, 0, 0.20)'))}
+                </div>
+            </motion.div>
         </div>
     )
 }
