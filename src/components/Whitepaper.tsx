@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import { motion } from 'framer-motion'
 
 export function Whitepaper() {
@@ -109,6 +109,62 @@ export function Whitepaper() {
                             }}>{tag}</span>
                         ))}
                     </div>
+                </div>
+            </motion.div>
+
+            {/* Asansör Konuşması (Pitch) */}
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                style={{ 
+                    marginBottom: '25px',
+                    padding: '20px',
+                    background: 'linear-gradient(135deg, rgba(245,159,11,0.1), rgba(0,0,0,0.2))',
+                    border: '1px solid rgba(245,159,11,0.2)',
+                    borderRadius: '16px',
+                }}
+            >
+                <div style={{ textAlign: 'center', marginBottom: '15px' }}>
+                    <div style={{ fontSize: '28px', marginBottom: '8px' }}>🤔</div>
+                    <h4 style={{ color: '#f59e0b', fontSize: '18px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        {t('whitepaper.pitch.title')}
+                    </h4>
+                </div>
+                
+                <p style={{ fontSize: '14px', color: 'var(--text-main)', lineHeight: '1.7', whiteSpace: 'pre-line', marginBottom: '12px', textAlign: 'center' }}>
+                    {t('whitepaper.pitch.text1')}
+                </p>
+                
+                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '15px', borderRadius: '12px', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <p style={{ fontSize: '14px', color: '#fcd34d', lineHeight: '1.7', margin: 0 }}>
+                        <Trans
+                            i18nKey="whitepaper.pitch.text2"
+                            components={{ highlight: <span style={{ color: '#f59e0b', fontWeight: 800 }} /> }}
+                        />
+                    </p>
+                </div>
+
+                <p style={{ fontSize: '14px', color: 'var(--text-main)', lineHeight: '1.7', marginBottom: '8px', textAlign: 'center' }}>
+                    {t('whitepaper.pitch.text3')}
+                </p>
+
+                <div style={{ textAlign: 'center', margin: '15px 0' }}>
+                    <Trans
+                        i18nKey="whitepaper.pitch.text4"
+                        components={{ highlight: <span style={{ color: '#22c55e', fontWeight: 900, fontSize: '15px', display: 'block', marginBottom: '5px' }} /> }}
+                    />
+                </div>
+
+                <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.7', marginBottom: '15px', fontStyle: 'italic', textAlign: 'center' }}>
+                    {t('whitepaper.pitch.text5')}
+                </p>
+
+                <div style={{ textAlign: 'center', background: 'var(--gradient-gold)', padding: '15px', borderRadius: '12px', color: '#000' }}>
+                    <Trans
+                        i18nKey="whitepaper.pitch.text6"
+                        components={{ highlight: <strong style={{ display: 'block', fontSize: '15px', marginTop: '6px', fontWeight: 900 }} /> }}
+                    />
                 </div>
             </motion.div>
 

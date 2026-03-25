@@ -3,19 +3,21 @@ import { useTranslation, Trans } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TonConnectButton, useTonConnectUI } from '@tonconnect/ui-react'
 
-import { SocialTasks } from './components/SocialTasks'
+import { VoteDiscovery } from './components/VoteDiscovery'
 import { Roadmap } from './components/Roadmap'
 import { Whitepaper } from './components/Whitepaper'
 import { Manifesto } from './components/Manifesto'
 import { LiveMarketData } from './components/LiveMarketData'
 import { SpinWheel } from './components/SpinWheel'
 import { Charity } from './components/Charity'
-import { LiveActivity } from './components/LiveActivity'
+import { TokenAllocation } from './components/TokenAllocation'
 import { Legal } from './components/Legal'
 import { TasteAI } from './components/TasteAI'
 import { TasteChef } from './components/TasteChef'
 import { DisclaimerModal, shouldShowDisclaimer } from './components/DisclaimerModal'
 import { PoweredBy } from './components/PoweredBy'
+import { Community } from './components/Community'
+import { TasteJobs } from './components/TasteJobs'
 import { WalletTransfer } from './components/WalletTransfer'
 import { PriceTicker } from './components/PriceTicker'
 import { CountdownTimer } from './components/CountdownTimer'
@@ -36,7 +38,10 @@ import {
   ExternalLink,
   QrCode,
   ChefHat,
-  Briefcase
+  Briefcase,
+  Trophy,
+  Users,
+  ArrowDown
 } from 'lucide-react'
 import { apiService } from './services/api'
 
@@ -48,7 +53,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community'>('home');
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
   const [tonConnectUI] = useTonConnectUI();
   const [showPing, setShowPing] = useState(false);
@@ -186,60 +191,206 @@ function App() {
               />
             </motion.div>
 
-            {/* Compact Swap Widget */}
-            <div className="glass-panel" style={{ padding: '20px', marginBottom: '16px', borderRadius: '24px', background: 'linear-gradient(145deg, rgba(30,41,59,0.7), rgba(15,23,42,0.9))', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ fontSize: '20px' }}>🪙</div>
+            {/* Asansör Konuşması (Pitch) - Ana Sayfa Versiyonu */}
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                style={{ 
+                    marginBottom: '25px',
+                    padding: '20px',
+                    background: 'linear-gradient(135deg, rgba(245,159,11,0.08), rgba(0,0,0,0.3))',
+                    border: '1px solid rgba(245,159,11,0.2)',
+                    borderRadius: '24px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
+                }}
+            >
+                <div style={{ textAlign: 'center', marginBottom: '12px' }}>
+                    <h4 style={{ color: '#f59e0b', fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        🤔 {t('whitepaper.pitch.title')}
+                    </h4>
+                </div>
+                
+                <p style={{ fontSize: '13px', color: 'var(--text-main)', lineHeight: '1.6', whiteSpace: 'pre-line', marginBottom: '12px', textAlign: 'center' }}>
+                    {t('whitepaper.pitch.text1')}
+                </p>
+                
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '12px', borderRadius: '12px', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <p style={{ fontSize: '13px', color: '#fcd34d', lineHeight: '1.6', margin: 0 }}>
+                        <Trans
+                            i18nKey="whitepaper.pitch.text2"
+                            components={{ highlight: <span style={{ color: '#f59e0b', fontWeight: 800 }} /> }}
+                        />
+                    </p>
+                </div>
+
+                <div style={{ textAlign: 'center', margin: '15px 0' }}>
+                    <Trans
+                        i18nKey="whitepaper.pitch.text4"
+                        components={{ highlight: <span style={{ color: '#22c55e', fontWeight: 900, fontSize: '14px', display: 'block' }} /> }}
+                    />
+                </div>
+
+                <div style={{ textAlign: 'center', background: 'var(--gradient-gold)', padding: '12px', borderRadius: '12px', color: '#000' }}>
+                    <Trans
+                        i18nKey="whitepaper.pitch.text6"
+                        components={{ highlight: <strong style={{ display: 'block', fontSize: '14px', marginTop: '4px', fontWeight: 900 }} /> }}
+                    />
+                </div>
+            </motion.div>
+
+            {/* Premium Swap Widget */}
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="glass-panel swap-widget-premium" 
+              style={{ 
+                padding: '24px', 
+                marginBottom: '20px', 
+                borderRadius: '28px', 
+                background: 'linear-gradient(160deg, rgba(20,30,48,0.9), rgba(36,59,85,0.9))', 
+                border: '1px solid rgba(245, 159, 11, 0.4)',
+                boxShadow: '0 10px 40px rgba(245, 159, 11, 0.2), inset 0 0 20px rgba(245, 159, 11, 0.05)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Glow effects */}
+              <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(245, 159, 11, 0.25) 0%, rgba(0,0,0,0) 70%)', borderRadius: '50%', filter: 'blur(20px)', pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', bottom: '-50px', left: '-50px', width: '150px', height: '150px', background: 'radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(0,0,0,0) 70%)', borderRadius: '50%', filter: 'blur(20px)', pointerEvents: 'none' }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', position: 'relative', zIndex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <motion.div 
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ 
+                      fontSize: '24px', 
+                      background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      filter: 'drop-shadow(0 2px 5px rgba(245,159,11,0.5))'
+                    }}
+                  >
+                    ⚡
+                  </motion.div>
                   <div>
-                    <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 800 }}>TASTE Swap</h3>
+                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 900, letterSpacing: '0.5px' }}>TASTE SWAP</h3>
                   </div>
                 </div>
-                <div style={{ fontSize: '11px', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '4px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                <div style={{ fontSize: '12px', color: '#10b981', background: 'rgba(16,185,129,0.15)', padding: '6px 12px', borderRadius: '14px', fontWeight: 800, border: '1px solid rgba(16,185,129,0.3)', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 0 10px rgba(16,185,129,0.2)' }}>
+                  <span style={{ position: 'relative', display: 'flex', width: '8px', height: '8px' }}>
+                    <span style={{ animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite', position: 'absolute', display: 'inline-flex', height: '100%', width: '100%', borderRadius: '50%', backgroundColor: '#10b981', opacity: 0.75 }}></span>
+                    <span style={{ position: 'relative', display: 'inline-flex', borderRadius: '50%', height: '8px', width: '8px', backgroundColor: '#10b981' }}></span>
+                  </span>
                   TON: ${tonUsdPrice.toFixed(2)}
                 </div>
               </div>
 
-              {/* Input Area */}
-              <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '16px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
+              {/* Pay Area */}
+              <div style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '20px', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(255,255,255,0.08)', position: 'relative', zIndex: 1 }}>
                 <div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 700 }}>{t('app.units.pay')}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 800 }}>{t('app.units.pay')}</div>
                   <AnimatePresence mode="wait">
-                    <motion.span key={amount} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} style={{ fontSize: '28px', fontWeight: '900', color: '#fff' }}>
+                    <motion.span key={amount} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} style={{ fontSize: '32px', fontWeight: '900', color: '#fff', textShadow: '0 2px 15px rgba(255,255,255,0.2)' }}>
                       {amount}
                     </motion.span>
                   </AnimatePresence>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: '20px' }}>
-                  <img src="https://ton.org/download/ton_symbol.png" alt="TON" style={{ width: 16, height: 16 }} />
-                  <span style={{ fontSize: '14px', fontWeight: 700 }}>TON</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(59, 130, 246, 0.15)', padding: '8px 14px', borderRadius: '16px', border: '1px solid rgba(59, 130, 246, 0.3)', boxShadow: '0 4px 10px rgba(59, 130, 246, 0.2)' }}>
+                  <img src="https://ton.org/download/ton_symbol.png" alt="TON" style={{ width: 22, height: 22, filter: 'drop-shadow(0 2px 5px rgba(59, 130, 246, 0.5))' }} />
+                  <span style={{ fontSize: '16px', fontWeight: 800, color: '#60a5fa' }}>TON</span>
                 </div>
               </div>
 
-              {/* Output Info */}
-              <div style={{ textAlign: 'center', margin: '12px 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                ↓ {t('app.you_get')} ≈ <span style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '16px' }}>{Math.round(amount * tastePerTon).toLocaleString()}</span> TASTE
+              {/* Swap Arrow Icon */}
+              <div style={{ display: 'flex', justifyContent: 'center', margin: '-14px 0', position: 'relative', zIndex: 2 }}>
+                <motion.div 
+                  animate={{ y: [0, 4, 0] }} 
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{ background: '#0f172a', padding: '8px', borderRadius: '50%', border: '2px solid rgba(245, 159, 11, 0.5)', boxShadow: '0 4px 15px rgba(0,0,0,0.6)' }}
+                >
+                  <ArrowDown size={18} color="#f59e0b" />
+                </motion.div>
+              </div>
+
+              {/* Receive Area */}
+              <div style={{ background: 'rgba(245, 159, 11, 0.08)', borderRadius: '20px', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(245, 159, 11, 0.25)', position: 'relative', zIndex: 1, marginTop: '2px' }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: '#f59e0b', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 800 }}>{t('app.you_get')} ≈</div>
+                  <motion.span style={{ fontSize: '26px', fontWeight: '900', color: '#fbbf24', textShadow: '0 2px 15px rgba(245, 159, 11, 0.4)' }}>
+                    {Math.round(amount * tastePerTon).toLocaleString()}
+                  </motion.span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(245, 159, 11, 0.2)', padding: '8px 14px', borderRadius: '16px', border: '1px solid rgba(245, 159, 11, 0.4)', boxShadow: '0 4px 10px rgba(245, 159, 11, 0.3)' }}>
+                  <img src="/logo.jpg" alt="TASTE" style={{ width: 24, height: 24, borderRadius: '50%', border: '2px solid #f59e0b', boxShadow: '0 0 10px rgba(245,159,11,0.5)' }} />
+                  <span style={{ fontSize: '16px', fontWeight: 900, color: '#fbbf24' }}>TASTE</span>
+                </div>
               </div>
 
               {/* Quick Selectors */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '6px', marginBottom: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', margin: '20px 0', position: 'relative', zIndex: 1 }}>
                 {[1, 3, 5, 10, 20].map((val) => (
-                  <button key={val} onClick={() => setAmount(val)} style={{ background: amount === val ? 'var(--primary)' : 'rgba(255,255,255,0.04)', color: amount === val ? '#000' : 'var(--text-main)', border: amount === val ? 'none' : '1px solid rgba(255,255,255,0.08)', padding: '8px 0', borderRadius: '10px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', transition: 'all 0.2s' }}>
+                  <motion.button 
+                    key={val} 
+                    whileHover={{ scale: 1.05, y: -2 }} 
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setAmount(val)} 
+                    style={{ 
+                      background: amount === val ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'rgba(255,255,255,0.03)', 
+                      color: amount === val ? '#000' : '#cbd5e1', 
+                      border: amount === val ? '1px solid #fbbf24' : '1px solid rgba(255,255,255,0.1)', 
+                      padding: '12px 0', 
+                      borderRadius: '14px', 
+                      cursor: 'pointer', 
+                      fontWeight: '800', 
+                      fontSize: '15px', 
+                      boxShadow: amount === val ? '0 6px 20px rgba(245, 159, 11, 0.4)' : 'none',
+                      transition: 'all 0.2s' 
+                    }}
+                  >
                     {val}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
 
               {/* Buy Button & Link */}
-              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={handleBuy} style={{ width: '100%', fontSize: '15px', fontWeight: 800, background: 'var(--gradient-gold)', color: '#000', border: 'none', padding: '16px', borderRadius: '16px', boxShadow: '0 4px 15px rgba(245, 159, 11, 0.3)', cursor: 'pointer', marginBottom: '12px' }}>
-                {t('app.buy_with')}
+              <motion.button 
+                whileHover={{ scale: 1.02 }} 
+                whileTap={{ scale: 0.98 }} 
+                animate={{ boxShadow: ['0 4px 15px rgba(245, 159, 11, 0.4)', '0 4px 30px rgba(245, 159, 11, 0.8)', '0 4px 15px rgba(245, 159, 11, 0.4)'] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                onClick={handleBuy} 
+                className="taste-buy-btn-premium"
+                style={{ 
+                  width: '100%', 
+                  fontSize: '18px', 
+                  fontWeight: 900, 
+                  background: 'linear-gradient(135deg, #f59e0b, #d97706)', 
+                  color: '#000', 
+                  border: '1px solid #fde68a', 
+                  padding: '20px', 
+                  borderRadius: '18px', 
+                  cursor: 'pointer', 
+                  marginBottom: '16px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  zIndex: 1
+                }}
+              >
+                <span style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', letterSpacing: '0.5px' }}>
+                   {t('app.buy_with')} 🚀
+                </span>
+                <div style={{ position: 'absolute', top: 0, left: '-100%', width: '100%', height: '100%', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)', animation: 'shimmer 2.5s infinite' }} />
               </motion.button>
-              <div style={{ textAlign: 'center' }}>
-                <a href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '11px', fontWeight: 600 }}>
-                  Powered by <span style={{ color: '#00c896' }}>STON.fi</span> →
+              
+              <div style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                <a href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: '13px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 12px', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', transition: 'all 0.2s' }}>
+                  ⚡ Powered by <span style={{ color: '#00c896', fontWeight: 800 }}>STON.fi</span> →
                 </a>
               </div>
-            </div>
+            </motion.div>
 
             {/* Compact Live Data & Activity Tabs */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px', marginBottom: '16px' }}>
@@ -247,7 +398,7 @@ function App() {
                 <LiveMarketData />
               </div>
               <div className="glass-panel" style={{ padding: '16px', borderRadius: '24px' }}>
-                 <LiveActivity />
+                 <TokenAllocation />
               </div>
             </div>
 
@@ -310,6 +461,11 @@ function App() {
           <PoweredBy />
         </motion.div>
       );
+      case 'vote': return (
+        <motion.div key="vote" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+            <VoteDiscovery />
+        </motion.div>
+      );
       case 'manifesto': return <Manifesto />;
       case 'roadmap': return (
         <motion.div key="roadmap" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
@@ -361,6 +517,17 @@ function App() {
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.chef')}</div>
             <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👨‍🍳 {i18n.language?.startsWith('tr') ? 'Taste Şef Dijital İndirim' : 'Taste Chef Digital Discount'}</h3>
             <TasteChef />
+          </div>
+        </motion.div>
+      );
+      case 'community': return (
+        <motion.div key="community" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE JOBS</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>
+              🧑‍🍳 {i18n.language?.startsWith('tr') ? 'Gastronomi Kariyer & Topluluk' : 'Gastronomy Career & Community'}
+            </h3>
+            <TasteJobs />
           </div>
         </motion.div>
       );
@@ -490,6 +657,8 @@ function App() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
+                    { id: 'community', label: 'Taste Jobs', icon: Briefcase, color: '#f97316', isNew: true },
+                    { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', icon: Trophy, color: '#eab308' },
                     { id: 'manifesto', label: 'Manifesto', icon: Flame, color: '#f97316' },
                     { id: 'roadmap', label: t('nav.roadmap'), icon: Map, color: '#8b5cf6' },
                     { id: 'whitepaper', label: t('nav.whitepaper'), icon: FileText, color: '#3b82f6' },
@@ -528,6 +697,9 @@ function App() {
                       )}
                       {item.isDemo && (
                          <div style={{ position: 'absolute', top: '2px', right: '2px', background: '#ef4444', color: '#fff', fontSize: '6px', fontWeight: 900, padding: '1px 3px', borderRadius: '4px', zIndex: 2 }}>DEMO</div>
+                      )}
+                      {item.isNew && (
+                         <div style={{ position: 'absolute', top: '2px', right: '2px', background: 'linear-gradient(135deg, #f97316, #ea580c)', color: '#fff', fontSize: '6px', fontWeight: 900, padding: '1px 3px', borderRadius: '4px', zIndex: 2 }}>YENİ</div>
                       )}
                       <item.icon size={20} color={activeTab === item.id ? item.color : '#64748b'} />
                       <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.2px', textAlign: 'center', textTransform: 'uppercase' }}>{item.label}</span>

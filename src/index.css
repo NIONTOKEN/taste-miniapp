@@ -343,3 +343,25 @@ h3 {
     transform: scale(1.02);
   }
 }
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes border-glow {
+  0%, 100% { border-color: rgba(245, 159, 11, 0.2); }
+  50% { border-color: rgba(245, 159, 11, 0.6); }
+}
+
+.swap-widget-premium {
+  animation: border-glow 4s linear infinite;
+}
+
+.taste-buy-btn-premium {
+  background-size: 200% auto;
+  transition: all 0.5s ease;
+}
+.taste-buy-btn-premium:hover {
+  background-position: right center;
+}

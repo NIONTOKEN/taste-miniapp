@@ -199,6 +199,15 @@ const resources = {
             },
             "whitepaper": {
                 "title": "Whitepaper",
+                "pitch": {
+                    "title": "Why TASTE?",
+                    "text1": "The world is changing rapidly. As the era of paper money slowly comes to an end, the digital economy is taking its place.\n\nSo what does TASTE do in this new order?",
+                    "text2": "TASTE is not just a cryptocurrency (token) — it is building a massive ecosystem with real-world utility behind it. You will now be able to pay directly with TASTE at partner businesses, and enjoy <highlight>TASTE holder-exclusive</highlight> discounts and privileges while paying. 🛍️🤝",
+                    "text3": "This is where the biggest difference separating TASTE from tens of thousands of other projects emerges:",
+                    "text4": "<highlight>Not just a speculative investment, real-life use + instant advantage!</highlight> 🔥",
+                    "text5": "Those who hold TASTE in their wallets today will not just be spectators in tomorrow's digital economy; they will be one step ahead.",
+                    "text6": "A brand new era has begun in the Web3 world…\n<highlight>And TASTE is now on this stage.</highlight> 🚀💎"
+                },
                 "summary": {
                     "badge": "💎 On TON Blockchain",
                     "subtitle": "Gastronomy and education focused, targeting real-world use utility token",
@@ -444,6 +453,124 @@ const resources = {
                     "AB": "Lupin",
                     "YU": "Molluscs"
                 }
+            },
+            "jobs": {
+                "title": "Taste Jobs",
+                "subtitle": "Gastronomy Career & Community",
+                "tabs": {
+                    "feed": "Feed",
+                    "board": "Board",
+                    "reviews": "Reviews",
+                    "profiles": "Profiles"
+                },
+                "types": {
+                    "listing": "JOB LISTING",
+                    "seeking": "SEEKING JOB",
+                    "today": "🔥 TODAY"
+                },
+                "actions": {
+                    "apply": "Apply",
+                    "message": "Send Message",
+                    "join_now": "Join Now",
+                    "add_job": "Add Listing",
+                    "add_review": "Add Review",
+                    "add_cv": "Add CV",
+                    "back": "Back",
+                    "cancel": "Cancel",
+                    "submit": "Submit",
+                    "publishing": "Publishing...",
+                    "sending": "Sending...",
+                    "saving": "Saving...",
+                    "submit_review": "⭐ Add Review (+5 TASTE)",
+                    "submit_cv": "💾 Publish My CV",
+                    "success_listing": "Listing published successfully! 🎉",
+                    "success_apply": "Application sent!",
+                    "tg_redirect": "Redirecting to Telegram..."
+                },
+                "placeholders": {
+                    "title": "Job title (e.g. Experienced Waiter)",
+                    "desc": "Details (experience, hours, etc.)",
+                    "city": "Select City",
+                    "salary": "Salary (e.g. 25k TL)",
+                    "why_join": "Why do you want to join?",
+                    "apply_msg": "Write your application message...",
+                    "city_opt": "Select City",
+                    "profession": "Select Profession",
+                    "business_name": "Business name (e.g. XYZ Restaurant)",
+                    "review_msg": "Write your review... (work conditions, management etc.)",
+                    "experience": "Experience (e.g. 5 years Hotel Kitchen)",
+                    "bio": "Tell about yourself..."
+                },
+                "reviews": {
+                    "title": "Business Reviews",
+                    "tip": "Review your workplace. Help the community! Earn <1>+5 TASTE</1>.",
+                    "business_ph": "Business name",
+                    "overall": "OVERALL SCORE",
+                    "salary": "Salary",
+                    "env": "Env",
+                    "mgmt": "Mgmt",
+                    "comment_ph": "Your comment...",
+                    "success": "Review published! +5 TASTE won 🎉"
+                },
+                "profiles": {
+                    "title": "Profiles & CV",
+                    "add_btn": "+ Add CV",
+                    "profession_ph": "Select profession",
+                    "exp_ph": "Experience (e.g. 5 years)",
+                    "bio_ph": "Short bio...",
+                    "photo_label": "Profile Photo",
+                    "photo_btn": "Select Photo from Gallery",
+                    "skills_label": "Skills",
+                    "success": "CV published! Others can see you 🎉",
+                    "empty": "No profiles yet. Be the first!"
+                },
+                "feed": {
+                    "title": "Kitchen Feed",
+                    "new_post": "New Post",
+                    "success_post": "Post published! Share screenshot to TG Group → +5 TASTE! 🎉",
+                    "types": {
+                        "food": "Food",
+                        "recipe": "Recipe",
+                        "menu": "Menu"
+                    },
+                    "placeholders": {
+                        "food": "Tell about your dish...",
+                        "recipe": "Share your recipe...",
+                        "menu": "Describe your menu..."
+                    }
+                }
+            },
+            "chef": {
+                "title": "Taste Chef",
+                "subtitle": "Digital Loyalty & Discount",
+                "safe_title": "COMMUNITY MAIN SAFE",
+                "fill_safe": "FILL SAFE",
+                "discount_right": "DISCOUNT RIGHT",
+                "min_hold_warning": "You must hold at least 2,000 TASTE to enjoy discounts.",
+                "next_level": "Next Level:",
+                "units_needed": "units more needed",
+                "connect_warning": "Connect wallet to use discount.",
+                "get_discount": "GET DISCOUNT AT CASHIER",
+                "success_title": "Transaction Successful!",
+                "success_desc": "Discount approved. Show this to the staff.",
+                "mastery_levels": "Mastery Levels & Benefits",
+                "nearby_venues": "Partner Restaurants (Nearby)",
+                "nearby_branch": "Closest branch to you",
+                "nav_tip": "* Our navigation automatically scans TASTE-valid spots in your area.",
+                "legal_title": "Legal Requirements & Rules",
+                "legal_points": [
+                    "This system is for loyalty purposes only. It does not contain investment advice or financial instruments.",
+                    "Discount rights are automatically defined based on your ownership status in your wallet.",
+                    "The fee sent during the process is a system usage and verification fee.",
+                    "TASTE IS NOT A PAYMENT METHOD. Crypto payments are not accepted. The bill is paid in local currency.",
+                    "18+ age limit is mandatory. User is responsible for false statements."
+                ],
+                "tiers": {
+                    "bronze": "Apprentice",
+                    "silver": "Journeyman",
+                    "gold": "Master",
+                    "diamond": "Chef"
+                }
             }
         }
     },
@@ -643,6 +770,15 @@ const resources = {
             },
             "whitepaper": {
                 "title": "Beyaz Kağıt",
+                "pitch": {
+                    "title": "Neden TASTE?",
+                    "text1": "Dünya hızla değişiyor. Kağıt para dönemi yavaş yavaş sona ererken, yerini tam anlamıyla dijital ekonomi alıyor.\n\nPeki bu yeni düzende TASTE ne yapıyor?",
+                    "text2": "TASTE, sadece bir kripto para (token) değil — arkasında gerçek kullanım alanı olan devasa bir ekosistem kuruyor. Artık anlaşmalı işletmelerde ödemelerinizi doğrudan TASTE ile yapabilecek, üstelik ödeme yaparken <highlight>TASTE tutucularına özel</highlight> indirimlerden ve ayrıcalıklardan faydalanabileceksiniz. 🛍️🤝",
+                    "text3": "İşte TASTE’i diğer on binlerce projeden ayıran en büyük fark burada ortaya çıkıyor:",
+                    "text4": "<highlight>Sadece spekülatif bir yatırım değil, gerçek hayatta kullanım + anında avantaj!</highlight> 🔥",
+                    "text5": "Bugün cüzdanında TASTE tutanlar, yarının dijital ekonomisinde sadece seyirci kalmayacak; bir adım önde olacak.",
+                    "text6": "Web3 dünyasında yepyeni bir dönem başladı…\n<highlight>Ve bu sahnede artık TASTE var.</highlight> 🚀💎"
+                },
                 "summary": {
                     "badge": "💎 TON Blockchain Üzerinde",
                     "subtitle": "Gastronomi ve eğitim odaklı, gerçek dünya kullanımı hedefleyen utility token",
@@ -887,6 +1023,124 @@ const resources = {
                     "KE": "Kereviz",
                     "AB": "Acı Bakla",
                     "YU": "Yumuşakça"
+                }
+            },
+            "jobs": {
+                "title": "Taste Jobs",
+                "subtitle": "Gastronomi Kariyer & Topluluk",
+                "tabs": {
+                    "feed": "Akış",
+                    "board": "İlanlar",
+                    "reviews": "Yorumlar",
+                    "profiles": "Profiller"
+                },
+                "types": {
+                    "listing": "İŞ İLANI",
+                    "seeking": "İŞ ARIYOR",
+                    "today": "🔥 BUGÜN"
+                },
+                "actions": {
+                    "apply": "Başvur",
+                    "message": "Mesaj Gönder",
+                    "join_now": "Hemen Katıl",
+                    "add_job": "İlan Ekle",
+                    "add_review": "Yorum Yap",
+                    "add_cv": "CV Ekle",
+                    "back": "Geri",
+                    "cancel": "İptal",
+                    "submit": "Yayınla",
+                    "publishing": "Yayınlanıyor...",
+                    "sending": "Gönderiliyor...",
+                    "saving": "Kaydediliyor...",
+                    "submit_review": "⭐ Yorum Yap (+5 TASTE)",
+                    "submit_cv": "💾 CV'mi Yayınla",
+                    "success_listing": "İlanınız başarıyla yayınlandı! 🎉",
+                    "success_apply": "Başvuru iletildi!",
+                    "tg_redirect": "Telegram'a yönlendiriliyor..."
+                },
+                "placeholders": {
+                    "title": "İlan başlığı (örn: Deneyimli Garson Aranıyor)",
+                    "desc": "Detayları yazın... (deneyim, saatler vb.)",
+                    "city": "Şehir Seçin",
+                    "salary": "Maaş (örn: 25.000 TL)",
+                    "why_join": "Neden katılmak istiyorsunuz?",
+                    "apply_msg": "Başvuru mesajınızı yazın...",
+                    "city_opt": "📍 Şehir Seçin",
+                    "profession": "Meslek seçin",
+                    "business_name": "İşletme adı (örn: XYZ Restoran)",
+                    "review_msg": "Yorumunuzu yazın... (çalışma koşulları, yönetim vb.)",
+                    "experience": "Deneyim (örn: 5 yıl Otel Mutfağı)",
+                    "bio": "Kendinden bahset..."
+                },
+                "reviews": {
+                    "title": "İşletme Değerlendirmeleri",
+                    "tip": "Çalıştığın işletmeyi değerlendir. Topluluğa yardım et! <1>+5 TASTE</1> kazan.",
+                    "business_ph": "İşletme adı",
+                    "overall": "GENEL PUAN",
+                    "salary": "Maaş",
+                    "env": "Ortam",
+                    "mgmt": "Yönetim",
+                    "comment_ph": "Yorumunuz...",
+                    "success": "Yorumun yayınlandı! +5 TASTE kazandın 🎉"
+                },
+                "profiles": {
+                    "title": "Profiller & CV",
+                    "add_btn": "+ CV Ekle",
+                    "profession_ph": "Meslek seçin",
+                    "exp_ph": "Deneyim (örn: 5 yıl)",
+                    "bio_ph": "Kısa biyografi...",
+                    "photo_label": "Profil Fotoğrafı",
+                    "photo_btn": "Galeriden Fotoğraf Seç",
+                    "skills_label": "Yetenekler",
+                    "success": "CV'n yayınlandı! Diğerleri seni görebilir 🎉",
+                    "empty": "Henüz profil yok. İlk CV'yi sen ekle!"
+                },
+                "feed": {
+                    "title": "Mutfak Akışı",
+                    "new_post": "Yeni Paylaşım",
+                    "success_post": "Paylaşımın yayınlandı! Ekran görüntüsü alıp TG grubuna gönder → +5 TASTE! 🎉",
+                    "types": {
+                        "food": "Yemek",
+                        "recipe": "Tarif",
+                        "menu": "Menü"
+                    },
+                    "placeholders": {
+                        "food": "Yediğin yemeği anlat...",
+                        "recipe": "Tarifini paylaş...",
+                        "menu": "Menünü anlat..."
+                    }
+                }
+            },
+            "chef": {
+                "title": "Taste Şef",
+                "subtitle": "Dijital Sadakat ve İndirim",
+                "safe_title": "TOPLULUK ANA KASASI",
+                "fill_safe": "KASAYI DOLDUR",
+                "discount_right": "İNDİRİM HAKKI",
+                "min_hold_warning": "İndirimlerden yararlanmak için en az 2.000 TASTE tutmalısın.",
+                "next_level": "Sonraki Seviye:",
+                "units_needed": "birim daha lazım",
+                "connect_warning": "İndirimi kullanmak için cüzdanını bağla.",
+                "get_discount": "KASADA İNDİRİM AL",
+                "success_title": "İşlem Başarılı!",
+                "success_desc": "İndirim onaylandı. Garsona bu ekranı göster.",
+                "mastery_levels": "Ustalık Seviyeleri ve Avantajlar",
+                "nearby_venues": "Anlaşmalı Restoranlar (Yakınındakiler)",
+                "nearby_branch": "Konumuna en yakın şube",
+                "nav_tip": "* Navigasyon sistemimiz bulunduğun bölgedeki TASTE geçerli noktaları otomatik tarar.",
+                "legal_title": "Yasal Zorunluluk ve Kurallar",
+                "legal_points": [
+                    "Bu sistem sadece sadakat programı amaçlıdır. Hiçbir şekilde yatırım tavsiyesi veya finansal araç içermez.",
+                    "İndirim hakkı, cüzdanınızdaki sahiplik durumuna göre otomatik tanımlanır.",
+                    "İşlem sırasında gönderilen bedel, sistem kullanım ve doğrulama ücretidir.",
+                    "TASTE BİR ÖDEME ARACI DEĞİLDİR. Kripto paralarla ödeme kabul edilmez. Hesap yerel para birimi (TL) ile kapatılır.",
+                    "18 yaş sınırı zorunludur. Yanlış beyanlardan kullanıcı sorumludur."
+                ],
+                "tiers": {
+                    "bronze": "Çırak",
+                    "silver": "Kalfa",
+                    "gold": "Usta",
+                    "diamond": "Şef"
                 }
             }
         }

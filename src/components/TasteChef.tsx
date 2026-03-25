@@ -195,7 +195,7 @@ export function TasteChef() {
             <div className="glass-panel" style={{ padding: '20px', marginBottom: '16px', background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                        <div style={{ fontSize: '11px', fontWeight: 800, color: '#10b981', textTransform: 'uppercase' }}>🛡️ {i18n.language === 'tr' ? 'TOPLULUK ANA KASASI' : 'COMMUNITY MAIN SAFE'}</div>
+                        <div style={{ fontSize: '11px', fontWeight: 800, color: '#10b981', textTransform: 'uppercase' }}>🛡️ {t('chef.safe_title')}</div>
                         <div style={{ fontSize: '20px', fontWeight: 900, marginTop: '4px' }}>{kasaBalance.toLocaleString()} TASTE</div>
                     </div>
                     <motion.button 
@@ -204,7 +204,7 @@ export function TasteChef() {
                         onClick={handleFillSafe}
                         style={{ background: '#10b981', color: '#000', border: 'none', borderRadius: '10px', padding: '8px 14px', fontSize: '12px', fontWeight: 900, cursor: 'pointer' }}
                     >
-                        {fillingKasa ? '...' : (i18n.language === 'tr' ? 'KASAYI DOLDUR' : 'FILL SAFE')}
+                        {fillingKasa ? '...' : t('chef.fill_safe')}
                     </motion.button>
                 </div>
             </div>
@@ -255,15 +255,13 @@ export function TasteChef() {
                         <div style={{ marginBottom: '20px' }}>
                             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                                 <span style={{ fontSize: '32px', fontWeight: 900, color: currentTier.color }}>%{currentTier.discount}</span>
-                                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-muted)' }}>{i18n.language === 'tr' ? 'İNDİRİM HAKKI' : 'DISCOUNT RIGHT'}</span>
+                            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-muted)' }}>{t('chef.discount_right')}</span>
                             </div>
                         </div>
                     ) : (
                         <div style={{ marginBottom: '20px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px' }}>
                             <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                                {i18n.language === 'tr' 
-                                    ? 'İndirimlerden yararlanmak için en az 2.000 TASTE tutmalısın.' 
-                                    : 'You must hold at least 2,000 TASTE to enjoy discounts.'}
+                                {t('chef.min_hold_warning')}
                             </p>
                         </div>
                     )}
@@ -271,7 +269,7 @@ export function TasteChef() {
                     {nextTier && (
                         <div style={{ marginBottom: '16px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '6px' }}>
-                                <span style={{ color: 'var(--text-muted)' }}>{i18n.language === 'tr' ? 'Sonraki Seviye:' : 'Next Level:'} {nextTier.name}</span>
+                                <span style={{ color: 'var(--text-muted)' }}>{t('chef.next_level')} {t(`chef.tiers.${nextTier.id}`)}</span>
                                 <span>{Math.round((balance / nextTier.minAmount) * 100)}%</span>
                             </div>
                             <div style={{ height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden' }}>
@@ -282,7 +280,7 @@ export function TasteChef() {
                                 />
                             </div>
                             <p style={{ marginTop: '6px', fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center' }}>
-                                {(nextTier.minAmount - balance).toLocaleString()} {i18n.language === 'tr' ? 'birim daha lazım' : 'units more needed'}
+                                {(nextTier.minAmount - balance).toLocaleString()} {t('chef.units_needed')}
                             </p>
                         </div>
                     )}
@@ -291,7 +289,7 @@ export function TasteChef() {
                         <div style={{ padding: '12px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '12px', display: 'flex', gap: '10px', alignItems: 'center' }}>
                             <AlertCircle size={18} color="#ef4444" />
                             <span style={{ fontSize: '12px', color: '#fca5a5' }}>
-                                {i18n.language === 'tr' ? 'İndirimi kullanmak için cüzdanını bağla.' : 'Connect wallet to use discount.'}
+                                {t('chef.connect_warning')}
                             </span>
                         </div>
                     )}
@@ -326,7 +324,7 @@ export function TasteChef() {
                             ) : (
                                 <>
                                     <UserCheck size={20} />
-                                    {i18n.language === 'tr' ? 'KASADA İNDİRİM AL' : 'GET DISCOUNT AT CASHIER'}
+                                    {t('chef.get_discount')}
                                 </>
                             )}
                         </motion.button>
@@ -355,10 +353,10 @@ export function TasteChef() {
                         <CheckCircle2 color="#22c55e" size={24} />
                         <div>
                             <div style={{ fontWeight: 800, fontSize: '14px', color: '#4ade80' }}>
-                                {i18n.language === 'tr' ? 'İşlem Başarılı!' : 'Transaction Successful!'}
+                                {t('chef.success_title')}
                             </div>
                             <div style={{ fontSize: '12px', color: 'rgba(34, 197, 94, 0.8)' }}>
-                                {i18n.language === 'tr' ? 'İndirim onaylandı. Garsona bu ekranı göster.' : 'Discount approved. Show this to the staff.'}
+                                {t('chef.success_desc')}
                             </div>
                         </div>
                     </motion.div>
@@ -386,7 +384,7 @@ export function TasteChef() {
                         <AlertCircle color="#ef4444" size={24} />
                         <div>
                             <div style={{ fontWeight: 800, fontSize: '14px', color: '#fca5a5' }}>
-                                {i18n.language === 'tr' ? 'Hata!' : 'Error!'}
+                                {t('chef.error_title', { defaultValue: 'Error!' })}
                             </div>
                             <div style={{ fontSize: '12px', color: 'rgba(239, 68, 68, 0.8)' }}>
                                 {error}
@@ -398,7 +396,7 @@ export function TasteChef() {
 
             {/* Tiers Info Grid */}
             <h5 style={{ margin: '20px 0 10px', fontSize: '13px', fontWeight: 800, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Info size={14} /> {i18n.language === 'tr' ? 'Ustalık Seviyeleri ve Avantajlar' : 'Mastery Levels & Benefits'}
+                <Info size={14} /> {t('chef.mastery_levels')}
             </h5>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -431,7 +429,7 @@ export function TasteChef() {
             {/* Venue Navigation */}
             <div style={{ marginTop: '20px' }}>
                 <h5 style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: 800, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <MapPin size={14} /> {i18n.language === 'tr' ? 'Anlaşmalı Restoranlar (Yakınındakiler)' : 'Partner Restaurants (Nearby)'}
+                    <MapPin size={14} /> {t('chef.nearby_venues')}
                 </h5>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <motion.div 
@@ -448,15 +446,13 @@ export function TasteChef() {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
                                 <div style={{ fontSize: '14px', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>Taste Gourmet & Lounge</div>
-                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{i18n.language === 'tr' ? 'Konumuna en yakın şube' : 'Closest branch to you'} • 1.2 km</div>
+                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{t('chef.nearby_branch')} • 1.2 km</div>
                             </div>
                             <div style={{ color: 'var(--primary)' }}><ExternalLink size={18} /></div>
                         </div>
                     </motion.div>
                     <p style={{ margin: '8px 4px 0', fontSize: '10px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                        {i18n.language === 'tr' 
-                          ? '* Navigasyon sistemimiz bulunduğun bölgedeki TASTE geçerli noktaları otomatik tarar.' 
-                          : '* Our navigation automatically scans TASTE-valid spots in your area.'}
+                        {t('chef.nav_tip')}
                     </p>
                 </div>
             </div>
@@ -469,13 +465,11 @@ export function TasteChef() {
                 borderRadius: '16px', 
                 border: '2px solid rgba(239, 68, 68, 0.2)' 
             }}>
-                <h6 style={{ margin: '0 0 8px', fontSize: '12px', fontWeight: 800, color: '#fca5a5' }}>⚖️ {i18n.language === 'tr' ? 'Yasal Zorunluluk ve Kurallar' : 'Legal Requirements & Rules'}</h6>
+                <h6 style={{ margin: '0 0 8px', fontSize: '12px', fontWeight: 800, color: '#fca5a5' }}>⚖️ {t('chef.legal_title')}</h6>
                 <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '11px', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <li style={{ color: '#fca5a5', fontWeight: 700 }}>{i18n.language === 'tr' ? 'Bu sistem sadece sadakat programı amaçlıdır. Hiçbir şekilde yatırım tavsiyesi veya finansal araç içermez.' : 'This system is for loyalty purposes only. It does not contain investment advice or financial instruments.'}</li>
-                    <li>{i18n.language === 'tr' ? 'İndirim hakkı, cüzdanınızdaki sahiplik durumuna göre otomatik tanımlanır.' : 'Discount rights are automatically defined based on your ownership status in your wallet.'}</li>
-                    <li>{i18n.language === 'tr' ? 'İşlem sırasında gönderilen bedel, sistem kullanım ve doğrulama ücretidir.' : 'The fee sent during the process is a system usage and verification fee.'}</li>
-                    <li style={{ color: '#ef4444', fontWeight: 800 }}>{i18n.language === 'tr' ? 'TASTE BİR ÖDEME ARACI DEĞİLDİR. Kripto paralarla ödeme kabul edilmez. Hesap yerel para birimi (TL) ile kapatılır.' : 'TASTE IS NOT A PAYMENT METHOD. Crypto payments are not accepted. The bill is paid in local currency.'}</li>
-                    <li>{i18n.language === 'tr' ? '18 yaş sınırı zorunludur. Yanlış beyanlardan kullanıcı sorumludur.' : '18+ age limit is mandatory. User is responsible for false statements.'}</li>
+                    {(t('chef.legal_points', { returnObjects: true }) as string[]).map((point, idx) => (
+                        <li key={idx} style={idx === 0 ? { color: '#fca5a5', fontWeight: 700 } : idx === 3 ? { color: '#ef4444', fontWeight: 800 } : {}}>{point}</li>
+                    ))}
                 </ul>
             </div>
         </div>
