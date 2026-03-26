@@ -241,6 +241,44 @@ function App() {
                 </div>
             </motion.div>
 
+            {/* Quick Partner Banner */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              style={{
+                background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15))',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '16px',
+                padding: '16px',
+                marginBottom: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+              }}
+              onClick={() => {
+                setActiveTab('partners');
+                if (window.scrollTo) window.scrollTo(0, 0);
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '10px', fontWeight: 800, color: '#3b82f6', textTransform: 'uppercase', marginBottom: '2px' }}>
+                  {i18n.language?.startsWith('tr') ? 'Resmi Web3 Partneri' : 'Official Web3 Partner'}
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff' }}>
+                  🤝 Panoda Şehir
+                </div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  {i18n.language?.startsWith('tr') ? "Şehrin dijital panosu TASTE'e katıldı!" : 'The digital city board joined TASTE!'}
+                </div>
+              </div>
+              <div style={{ background: 'rgba(59, 130, 246, 0.2)', padding: '8px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 700, color: '#60a5fa' }}>
+                {i18n.language?.startsWith('tr') ? 'İncele' : 'View'} →
+              </div>
+            </motion.div>
+
             {/* Premium Swap Widget */}
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}

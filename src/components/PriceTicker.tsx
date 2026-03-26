@@ -38,9 +38,10 @@ export function PriceTicker() {
       <div className="ticker">
         <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
         <span className="ticker-item">🇹🇷 TASTE/TRY: ₺{tryPrice}</span>
+        <span className="ticker-item" style={{ color: '#60a5fa', fontWeight: 800 }}>🤝 {i18n.language?.startsWith('tr') ? 'YENİ PARTNER: Panoda Şehir (Şehrin Dijital Panosu)' : 'NEW PARTNER: Panoda Sehir'}</span>
         <span className="ticker-item">🚀 {t('app.early_access_ending')} $0.01</span>
         <span className="ticker-item">🔥 {t('app.units.supply')}: 25,000,000</span>
-        <span className="ticker-item">🌍 {i18n.language === 'tr' ? 'TOPLULUK ODAKLI' : 'COMMUNITY DRIVEN'}</span>
+        <span className="ticker-item">🌍 {i18n.language?.startsWith('tr') ? 'TOPLULUK ODAKLI' : 'COMMUNITY DRIVEN'}</span>
         <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
       </div>
     </div>
