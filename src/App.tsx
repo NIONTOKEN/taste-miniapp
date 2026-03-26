@@ -22,6 +22,7 @@ import { WalletTransfer } from './components/WalletTransfer'
 import { PriceTicker } from './components/PriceTicker'
 import { CountdownTimer } from './components/CountdownTimer'
 import { RewardCountdown } from './components/RewardCountdown'
+import { Partners } from './components/Partners'
 import {
   Home,
   Map,
@@ -41,7 +42,8 @@ import {
   Briefcase,
   Trophy,
   Users,
-  ArrowDown
+  ArrowDown,
+  Handshake
 } from 'lucide-react'
 import { apiService } from './services/api'
 
@@ -53,7 +55,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners'>('home');
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
   const [tonConnectUI] = useTonConnectUI();
   const [showPing, setShowPing] = useState(false);
@@ -531,6 +533,17 @@ function App() {
           </div>
         </motion.div>
       );
+      case 'partners': return (
+        <motion.div key="partners" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{i18n.language?.startsWith('tr') ? 'Web3 & İş Ortakları' : 'Web3 & Partners'}</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>
+              🤝 {i18n.language?.startsWith('tr') ? 'Ortak Projeler' : 'Joint Projects'}
+            </h3>
+            <Partners />
+          </div>
+        </motion.div>
+      );
       default: return null;
     }
   };
@@ -657,7 +670,8 @@ function App() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
-                    { id: 'community', label: 'Taste Jobs', icon: Briefcase, color: '#f97316', isNew: true },
+                    { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', icon: Handshake, color: '#3b82f6', isNew: true },
+                    { id: 'community', label: 'Taste Jobs', icon: Briefcase, color: '#f97316' },
                     { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', icon: Trophy, color: '#eab308' },
                     { id: 'manifesto', label: 'Manifesto', icon: Flame, color: '#f97316' },
                     { id: 'roadmap', label: t('nav.roadmap'), icon: Map, color: '#8b5cf6' },
