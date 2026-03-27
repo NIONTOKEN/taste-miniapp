@@ -65,6 +65,13 @@ export function VoteDiscovery() {
             link: 'https://dex.coinmarketcap.com/token/ton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
         },
         {
+            id: 'dextools',
+            icon: '📊',
+            label: 'DEXTools',
+            sublabel: isEn ? 'Live Chart & Favorites' : 'Canlı Grafik, Favoriye Al!',
+            link: 'https://www.dextools.io/app/ton/pair-explorer/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
+        },
+        {
             id: 'geckoterminal',
             icon: '🦎',
             label: 'GeckoTerminal',

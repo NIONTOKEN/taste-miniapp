@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export function RewardCountdown() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -38,9 +38,9 @@ export function RewardCountdown() {
       borderRadius: '12px',
       padding: '12px 10px',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '11px', color: '#4ade80', fontWeight: 700, marginBottom: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '11px', color: '#4ade80', fontWeight: 900, marginBottom: '8px' }}>
         <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite', flexShrink: 0 }} />
-        {t('app.reward_end')}
+        {i18n.language?.startsWith('tr') ? '20 MAYIS BÜYÜK AİRDROP SON!!' : 'MAY 20 BIG AIRDROP DEADLINE!!'}
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
         <div style={boxStyle}>

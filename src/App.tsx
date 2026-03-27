@@ -279,6 +279,9 @@ function App() {
               </div>
             </motion.div>
 
+            {/* Airdrop Countdown */}
+            <RewardCountdown />
+
             {/* Premium Swap Widget */}
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
