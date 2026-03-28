@@ -440,8 +440,43 @@ function App() {
               <div className="glass-panel" style={{ padding: '0', overflow: 'hidden', borderRadius: '24px' }}>
                 <LiveMarketData />
               </div>
-              <div className="glass-panel" style={{ padding: '16px', borderRadius: '24px' }}>
-                 <TokenAllocation />
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'linear-gradient(135deg, rgba(245,159,11,0.06), rgba(0,0,0,0.3))' }}>
+                {/* Spinning Logo Animation */}
+                <div style={{ position: 'relative', width: '180px', height: '180px', margin: '0 auto 16px' }}>
+                  <svg viewBox="0 0 180 180" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', animation: 'spin-text 10s linear infinite' }}>
+                    <defs>
+                      <path id="circlePath2" d="M 90,90 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
+                      <linearGradient id="goldGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#f59e0b" />
+                        <stop offset="50%" stopColor="#fbbf24" />
+                        <stop offset="100%" stopColor="#f59e0b" />
+                      </linearGradient>
+                    </defs>
+                    <text fill="url(#goldGradient2)" fontSize="13" fontWeight="800" letterSpacing="5">
+                      <textPath href="#circlePath2" startOffset="0%">TASTE • TOKEN • TASTE • TOKEN •</textPath>
+                    </text>
+                  </svg>
+                  <motion.div
+                    animate={{ y: [0, -6, 0], scale: [1, 1.03, 1] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{
+                      position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                      width: '105px', height: '105px', borderRadius: '50%',
+                      boxShadow: '0 0 40px rgba(245,159,11,0.5), 0 0 80px rgba(245,159,11,0.2)',
+                      border: '4px solid rgba(245,159,11,0.4)', overflow: 'hidden'
+                    }}
+                  >
+                    <video src="/logo-gif.mp4" autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                  </motion.div>
+                </div>
+                <motion.div
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{ fontSize: '13px', color: '#f59e0b', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase' }}
+                >
+                  ✦ TASTE TOKEN ✦
+                </motion.div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>TON Blockchain</div>
               </div>
             </div>
 
