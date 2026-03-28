@@ -441,8 +441,21 @@ function App() {
                 <LiveMarketData />
               </div>
               <div className="glass-panel" style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'linear-gradient(135deg, rgba(245,159,11,0.06), rgba(0,0,0,0.3))' }}>
-                {/* Spinning Logo Animation */}
-                <div style={{ position: 'relative', width: '180px', height: '180px', margin: '0 auto 16px' }}>
+                {/* Spinning Logo Animation - NOW CLICKABLE */}
+                <motion.div 
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                        // Toggle allocation info
+                        const el = document.getElementById('allocation-info');
+                        if (el) {
+                            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+                            if (el.style.display === 'block') {
+                                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }
+                    }}
+                    style={{ position: 'relative', width: '180px', height: '180px', margin: '0 auto 16px', cursor: 'pointer' }}
+                >
                   <svg viewBox="0 0 180 180" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', animation: 'spin-text 10s linear infinite' }}>
                     <defs>
                       <path id="circlePath2" d="M 90,90 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
@@ -468,15 +481,22 @@ function App() {
                   >
                     <video src="/logo-gif.mp4" autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                   </motion.div>
-                </div>
+                </motion.div>
+                
                 <motion.div
                   animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  style={{ fontSize: '13px', color: '#f59e0b', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase' }}
+                  style={{ fontSize: '13px', color: '#f59e0b', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}
+                  onClick={() => document.getElementById('allocation-info')?.click()}
                 >
-                  ✦ TASTE TOKEN ✦
+                  ✦ {i18n.language?.startsWith('tr') ? 'BİLGİ İÇİN DOKUN' : 'TAP FOR INFO'} ✦
                 </motion.div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>TON Blockchain</div>
+
+                {/* Hidden Allocation Info - appears on click */}
+                <div id="allocation-info" style={{ display: 'none', width: '100%', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <TokenAllocation />
+                </div>
               </div>
             </div>
 
