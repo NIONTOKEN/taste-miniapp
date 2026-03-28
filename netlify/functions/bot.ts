@@ -1,9 +1,36 @@
 import { Handler } from '@netlify/functions';
 
 const WEB_APP_URL = 'https://incandescent-gelato-cc11a4.netlify.app/';
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
+const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
+
+async function saveUser(chatId: number, username: string, firstName: string, languageCode: string) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/telegram_users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        username: username || null,
+        first_name: firstName || 'Kullanıcı',
+        language_code: languageCode || 'en',
+        last_seen: new Date().toISOString(),
+        notifications_enabled: true
+      })
+    });
+  } catch (e) {
+    console.error('Kullanıcı kaydedilemedi:', e);
+  }
+}
 
 export const handler: Handler = async (event) => {
-  // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
@@ -17,57 +44,51 @@ export const handler: Handler = async (event) => {
       return { statusCode: 500, body: 'Server Error' };
     }
 
-    // Process only text messages
     if (update.message && update.message.text) {
       const text = update.message.text;
       const chatId = update.message.chat.id;
-      const lang = update.message.from?.language_code || 'en';
+      const from = update.message.from || {};
+      const lang = from.language_code || 'en';
 
-      // Check if the user sent /start
+      // Kullanıcıyı Supabase'e kaydet (her mesajda güncelle)
+      await saveUser(
+        chatId,
+        from.username || '',
+        from.first_name || '',
+        lang
+      );
+
       if (text.startsWith('/start')) {
         let replyText = '';
         let buttonText = '';
 
-        // Set response based on language
         switch (lang.slice(0, 2)) {
           case 'tr':
-            replyText = "Tadını çıkarmaya hazır mısın? TASTE Mini App'e hoş geldin! 👇";
+            replyText = `Merhaba${from.first_name ? ' ' + from.first_name : ''}! 👋\n\nTASTE Mini App'e hoş geldin!\n🎡 Günlük çarkını çevir, token kazan!\n\n👇 Uygulamayı açmak için aşağıdaki butona tıkla:`;
             buttonText = 'Uygulamayı Aç 🚀';
             break;
           case 'ru':
-            replyText = 'Готовы насладиться? Добро пожаловать в TASTE Mini App! 👇';
+            replyText = `Привет${from.first_name ? ', ' + from.first_name : ''}! 👋\n\nДобро пожаловать в TASTE Mini App!\n🎡 Крути колесо каждый день и выигрывай токены!\n\n👇 Нажми кнопку чтобы открыть:`;
             buttonText = 'Открыть приложение 🚀';
             break;
-          case 'hi':
-            replyText = 'क्या आप स्वाद लेने के लिए तैयार हैं? TASTE Mini App में आपका स्वागत है! 👇';
-            buttonText = 'ऐप खोलें 🚀';
-            break;
           default:
-            replyText = 'Are you ready to enjoy? Welcome to TASTE Mini App! 👇';
+            replyText = `Hello${from.first_name ? ', ' + from.first_name : ''}! 👋\n\nWelcome to TASTE Mini App!\n🎡 Spin the wheel daily and earn tokens!\n\n👇 Tap the button below to open the app:`;
             buttonText = 'Open App 🚀';
-            break;
         }
 
-        const payload = {
-          chat_id: chatId,
-          text: replyText,
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: buttonText,
-                  web_app: { url: WEB_APP_URL },
-                },
-              ],
-            ],
-          },
-        };
-
-        // Send the reply back to Telegram
         await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: replyText,
+            parse_mode: 'HTML',
+            reply_markup: {
+              inline_keyboard: [[
+                { text: buttonText, web_app: { url: WEB_APP_URL } }
+              ]]
+            }
+          })
         });
       }
     }

@@ -1,0 +1,137 @@
+name: 🎡 Günlük TASTE Çark Bildirimi
+
+on:
+  schedule:
+    # Her gün saat 09:00 UTC = 12:00 Türkiye saati
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Manuel çalıştırma için
+
+jobs:
+  send-notifications:
+    runs-on: ubuntu-latest
+    name: Günlük Çark Bildirimi Gönder
+
+    steps:
+      - name: Bildirimleri Gönder
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          WEBAPP_URL: https://incandescent-gelato-cc11a4.netlify.app/
+        run: |
+          node << 'EOF'
+          const BOT_TOKEN = process.env.BOT_TOKEN;
+          const SUPABASE_URL = process.env.SUPABASE_URL;
+          const SUPABASE_KEY = process.env.SUPABASE_KEY;
+          const WEBAPP_URL = process.env.WEBAPP_URL;
+
+          async function getActiveUsers() {
+            const res = await fetch(
+              `${SUPABASE_URL}/rest/v1/telegram_users?notifications_enabled=eq.true&select=chat_id,language_code,first_name`,
+              {
+                headers: {
+                  'apikey': SUPABASE_KEY,
+                  'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+              }
+            );
+            return await res.json();
+          }
+
+          async function getUsersWhoSpunToday() {
+            const today = new Date().toISOString().slice(0, 10);
+            const res = await fetch(
+              `${SUPABASE_URL}/rest/v1/spin_logs?created_at=gte.${today}T00:00:00Z&select=player_id`,
+              {
+                headers: {
+                  'apikey': SUPABASE_KEY,
+                  'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+              }
+            );
+            return await res.json();
+          }
+
+          async function sendMessage(chatId, text, buttonText) {
+            try {
+              const res = await fetch(
+                `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+                {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    chat_id: chatId,
+                    text: text,
+                    parse_mode: 'HTML',
+                    reply_markup: {
+                      inline_keyboard: [[
+                        { text: buttonText, web_app: { url: WEBAPP_URL } }
+                      ]]
+                    }
+                  })
+                }
+              );
+              const data = await res.json();
+              if (!data.ok) {
+                console.log(`❌ ${chatId}: ${data.description}`);
+              } else {
+                console.log(`✅ Gönderildi: ${chatId}`);
+              }
+              return data.ok;
+            } catch (e) {
+              console.error(`❌ Hata ${chatId}:`, e.message);
+              return false;
+            }
+          }
+
+          async function getMessage(lang, firstName) {
+            const name = firstName ? ` ${firstName}` : '';
+            
+            if (lang === 'tr') {
+              return {
+                text: `👋 Merhaba${name}!\n\n<b>Bugün TASTE Mini App'e uğramadınız.</b>\n\nSizi özledik! Bir bakın deriz 🙂`,
+                button: '✨ TASTE Mini App\'i Aç'
+              };
+            } else {
+              return {
+                text: `👋 Hello${name}!\n\n<b>You haven't visited TASTE Mini App today.</b>\n\nWe missed you! Come check it out 🙂`,
+                button: '✨ Open TASTE Mini App'
+              };
+            }
+          }
+
+          async function main() {
+            console.log('🚀 Günlük bildirim sistemi başlatıldı...');
+            console.log(`📅 Tarih: ${new Date().toISOString().slice(0, 10)}`);
+
+            const users = await getActiveUsers();
+            console.log(`👥 Toplam kullanıcı: ${users.length}`);
+
+            if (!users || users.length === 0) {
+              console.log('⚠️ Aktif kullanıcı yok, çıkılıyor.');
+              return;
+            }
+
+            let sent = 0, skipped = 0, failed = 0;
+
+            for (const user of users) {
+              const { chat_id, language_code, first_name } = user;
+              const lang = (language_code || 'en').slice(0, 2);
+              const msg = await getMessage(lang, first_name);
+              
+              const success = await sendMessage(chat_id, msg.text, msg.button);
+              if (success) sent++;
+              else failed++;
+
+              // Rate limit: Telegram max 30 mesaj/saniye
+              await new Promise(r => setTimeout(r, 100));
+            }
+
+            console.log(`\n📊 Sonuç:`);
+            console.log(`✅ Gönderildi: ${sent}`);
+            console.log(`❌ Başarısız: ${failed}`);
+            console.log(`⏭️ Atlandı: ${skipped}`);
+          }
+
+          main().catch(console.error);
+          EOF
