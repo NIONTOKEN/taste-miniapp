@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { ExternalLink, MapPin, Building, Megaphone, Stethoscope, ShoppingBag, GraduationCap, Rocket, Brain, Cpu, Layers, Link2 } from 'lucide-react'
+import { ExternalLink, MapPin, Building, Megaphone, Stethoscope, ShoppingBag, GraduationCap, Rocket, Brain, Cpu, Layers, Link2, Wallet, Shield, Zap, Globe } from 'lucide-react'
 
 export function Partners() {
     const { t, i18n } = useTranslation()
@@ -210,6 +210,131 @@ export function Partners() {
                         {isTr ? 'Görüntele' : 'View Chart'} <ExternalLink size={12} />
                     </motion.button>
                 </div>
+            </motion.div>
+
+            {/* QAI Wallet Partner Card */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                style={{
+                    background: 'linear-gradient(145deg, rgba(8, 16, 50, 0.9), rgba(5, 10, 35, 0.95))',
+                    border: '1px solid rgba(56, 139, 253, 0.4)',
+                    borderRadius: '24px',
+                    padding: '24px',
+                    boxShadow: '0 10px 40px rgba(56, 139, 253, 0.15)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}
+            >
+                {/* Glow effects */}
+                <div style={{ position: 'absolute', top: '-60px', right: '-60px', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(56,139,253,0.2) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(30px)', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', bottom: '-40px', left: '-40px', width: '150px', height: '150px', background: 'radial-gradient(circle, rgba(120,80,255,0.15) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(25px)', pointerEvents: 'none' }} />
+
+                {/* NEW PARTNER badge */}
+                <div style={{
+                    position: 'absolute', top: '16px', right: '16px',
+                    background: 'linear-gradient(90deg, #2563eb, #7c3aed)',
+                    color: '#fff', fontSize: '9px', fontWeight: 900,
+                    padding: '4px 10px', borderRadius: '20px',
+                    letterSpacing: '1px', zIndex: 2,
+                    boxShadow: '0 2px 10px rgba(59,130,246,0.5)'
+                }}>
+                    🆕 {isTr ? 'YENİ ORTAK' : 'NEW PARTNER'}
+                </div>
+
+                {/* Header - Logo yazı olarak */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px', position: 'relative', zIndex: 1 }}>
+                    <div style={{
+                        width: '64px', height: '64px', borderRadius: '18px',
+                        border: '2px solid rgba(56,139,253,0.5)',
+                        background: 'linear-gradient(135deg, #0a1440, #0d1a5e)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                        flexShrink: 0,
+                        boxShadow: '0 4px 20px rgba(56,139,253,0.3)'
+                    }}>
+                        <span style={{ fontSize: '18px', fontWeight: 900, background: 'linear-gradient(90deg, #3b82f6, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1 }}>QAI</span>
+                        <span style={{ fontSize: '9px', fontWeight: 800, color: '#60a5fa', letterSpacing: '1px', marginTop: '2px' }}>WALLET</span>
+                    </div>
+                    <div>
+                        <h3 style={{ margin: 0, fontSize: '22px', fontWeight: 900, color: '#fff', letterSpacing: '-0.5px' }}>
+                            <span style={{ background: 'linear-gradient(90deg, #60a5fa, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>QAI</span>
+                            {' '}
+                            <span style={{ color: '#fff' }}>WALLET</span>
+                        </h3>
+                        <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.8px', marginTop: '4px', color: '#60a5fa' }}>
+                            {isTr ? 'STRATEJİK WEB4 FİNANS PARTNERİ' : 'STRATEGIC WEB4 FINANCE PARTNER'}
+                        </div>
+                        <div style={{ fontSize: '10px', color: '#475569', marginTop: '3px', fontStyle: 'italic' }}>
+                            "The Future of Web4 Finance"
+                        </div>
+                    </div>
+                </div>
+
+                {/* Description */}
+                <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px', position: 'relative', zIndex: 1 }}>
+                    {isTr
+                        ? "QAI Wallet, yapay zeka destekli Web4 finans altyapısıyla kripto dünyasını yeniden tanımlıyor. TASTE Token ile kurduğumuz stratejik ortaklık; ödeme sistemleri, AI tabanlı portföy yönetimi ve çok zincirli varlık transferleri alanında güçlü bir sinerji yaratıyor."
+                        : "QAI Wallet redefines the crypto world with its AI-powered Web4 financial infrastructure. Our strategic partnership with TASTE Token creates powerful synergy in payment systems, AI-based portfolio management, and multi-chain asset transfers."}
+                </p>
+
+                {/* Feature pills */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '20px', position: 'relative', zIndex: 1 }}>
+                    {[
+                        { icon: '💼', label: isTr ? 'Cüzdan' : 'Wallet', color: '#3b82f6' },
+                        { icon: '🤖', label: 'AI Powered', color: '#a78bfa' },
+                        { icon: '🔒', label: isTr ? 'Güvenli' : 'Secure', color: '#10b981' },
+                        { icon: '🌐', label: 'Web4', color: '#f59e0b' },
+                    ].map((f, i) => (
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.03)', padding: '10px 4px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <span style={{ fontSize: '18px' }}>{f.icon}</span>
+                            <span style={{ fontSize: '9px', fontWeight: 700, color: '#94a3b8', textAlign: 'center' }}>{f.label}</span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Partnership highlight */}
+                <div style={{
+                    background: 'linear-gradient(135deg, rgba(59,130,246,0.08), rgba(124,58,237,0.08))',
+                    border: '1px solid rgba(59,130,246,0.2)',
+                    borderRadius: '16px', padding: '14px 16px',
+                    marginBottom: '16px', position: 'relative', zIndex: 1
+                }}>
+                    <div style={{ fontSize: '11px', fontWeight: 800, color: '#f59e0b', letterSpacing: '0.5px', marginBottom: '6px' }}>
+                        ⚡ {isTr ? 'ORTAKLIK AVANTAJLARI' : 'PARTNERSHIP BENEFITS'}
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: '1.7' }}>
+                        {isTr
+                            ? '✦ TASTE Token entegrasyonu  ✦ AI portföy yönetimi  ✦ Çapraz zincir transferler'
+                            : '✦ TASTE Token integration  ✦ AI portfolio management  ✦ Cross-chain transfers'}
+                    </div>
+                </div>
+
+                {/* CTA */}
+                <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => openLink('mailto:qaiwallet4@gmail.com')}
+                    style={{
+                        width: '100%',
+                        background: 'linear-gradient(90deg, #2563eb, #7c3aed)',
+                        color: '#fff',
+                        border: 'none',
+                        padding: '14px 20px',
+                        borderRadius: '14px',
+                        fontSize: '13px',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        boxShadow: '0 4px 20px rgba(59,130,246,0.4)',
+                        position: 'relative', zIndex: 1
+                    }}
+                >
+                    ✉️ qaiwallet4@gmail.com
+                </motion.button>
             </motion.div>
         </div>
     )

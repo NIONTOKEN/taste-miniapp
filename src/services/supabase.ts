@@ -270,3 +270,51 @@ export async function upsertProfile(profile: Partial<SupaProfile> & { user_name:
         return null
     } catch { return null }
 }
+
+// ─── OTC ORDERS ────────────────────────────────────────────────────────────
+export interface SupaOTCOrder {
+    id: string
+    user_id: string
+    wallet_address: string
+    amount_try: number
+    amount_taste: number
+    exchange_rate: number
+    reference_code: string
+    status: 'pending' | 'paid' | 'completed' | 'rejected' | 'cancelled'
+    receipt_url?: string
+    admin_notes?: string
+    confirmed_at?: string
+    created_at: string
+    updated_at?: string
+}
+
+export async function getOTCOrders(userId?: string): Promise<SupaOTCOrder[]> {
+    try {
+        const filter = userId ? `&user_id=eq.${userId}` : ''
+        const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/otc_orders?order=created_at.desc&limit=50${filter}`,
+            { headers: H }
+        )
+        if (!res.ok) return []
+        return res.json()
+    } catch { return [] }
+}
+
+export async function insertOTCOrder(order: any): Promise<SupaOTCOrder | null> {
+    return safePost('otc_orders', order)
+}
+
+export async function updateOTCOrderStatus(id: string, status: string, receipt_url?: string, notes?: string): Promise<boolean> {
+    try {
+        const body: any = { status }
+        if (notes) body.admin_notes = notes
+        if (receipt_url) body.receipt_url = receipt_url
+        if (status === 'completed') body.confirmed_at = new Date().toISOString()
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/otc_orders?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: H,
+            body: JSON.stringify(body)
+        })
+        return res.ok
+    } catch { return false }
+}

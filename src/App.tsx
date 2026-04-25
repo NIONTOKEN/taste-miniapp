@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import { TonConnectButton, useTonConnectUI } from '@tonconnect/ui-react'
+import { useTonConnectUI } from '@tonconnect/ui-react'
+import { useWallet } from './context/WalletContext'
+import { WalletSelector } from './components/WalletSelector'
 
 import { VoteDiscovery } from './components/VoteDiscovery'
 import { Roadmap } from './components/Roadmap'
@@ -23,6 +25,10 @@ import { PriceTicker } from './components/PriceTicker'
 import { CountdownTimer } from './components/CountdownTimer'
 import { RewardCountdown } from './components/RewardCountdown'
 import { Partners } from './components/Partners'
+import { QuickBuy } from './components/QuickBuy'
+import { QuickBuyAdmin } from './components/QuickBuyAdmin'
+import { Leaderboard } from './components/Leaderboard'
+import { DailyRewards } from './components/DailyRewards'
 import {
   Home,
   Map,
@@ -55,9 +61,11 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'quickbuy' | 'admin_otc'>('home');
+  const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
   const [tonConnectUI] = useTonConnectUI();
+  const { activeAddress } = useWallet();
   const [showPing, setShowPing] = useState(false);
   const [pingAmount, setPingAmount] = useState(0);
   const [tastePerTon, setTastePerTon] = useState(741); // default fallback
@@ -119,7 +127,7 @@ function App() {
       } catch (e) { /* keep defaults */ }
     };
     fetchData();
-  }, [tonConnectUI.account?.address]);
+  }, [activeAddress]);
 
   const languages = [
     { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
@@ -251,7 +259,7 @@ function App() {
                 border: '1px solid rgba(59, 130, 246, 0.3)',
                 borderRadius: '16px',
                 padding: '16px',
-                marginBottom: '20px',
+                marginBottom: '15px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -276,6 +284,47 @@ function App() {
               </div>
               <div style={{ background: 'rgba(59, 130, 246, 0.2)', padding: '8px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 700, color: '#60a5fa' }}>
                 {i18n.language?.startsWith('tr') ? 'İncele' : 'View'} →
+              </div>
+            </motion.div>
+
+            {/* OTC/Quick Buy Banner */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              style={{
+                background: 'linear-gradient(90deg, rgba(245, 159, 11, 0.15), rgba(239, 68, 68, 0.15))',
+                border: '1px solid rgba(245, 159, 11, 0.3)',
+                borderRadius: '16px',
+                padding: '16px',
+                marginBottom: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+              }}
+              onClick={() => {
+                setActiveTab('quickbuy');
+                if (window.scrollTo) window.scrollTo(0, 0);
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <img src="/logo.jpg" alt="TASTE" style={{ width: '40px', height: '40px', borderRadius: '50%', border: '2px solid #f59e0b', boxShadow: '0 0 10px rgba(245,159,11,0.3)' }} />
+                <div>
+                  <div style={{ fontSize: '10px', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    ⚡ {i18n.language?.startsWith('tr') ? 'Doğrudan Alım' : 'Direct Buy'}
+                  </div>
+                  <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff' }}>
+                    {i18n.language?.startsWith('tr') ? 'Hızlı TASTE Al (OTC)' : 'Quick Buy TASTE'}
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                    {i18n.language?.startsWith('tr') ? 'Banka Havale/EFT ile saniyeler içinde TASTE al.' : 'Buy TASTE with localized bank transfer instantly.'}
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: 'rgba(245, 159, 11, 0.2)', padding: '8px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 900, color: '#fbbf24' }}>
+                {i18n.language?.startsWith('tr') ? 'Al' : 'Buy'} →
               </div>
             </motion.div>
 
@@ -541,7 +590,7 @@ function App() {
                   {[
                     { label: 'Token Locks', url: 'https://tonscan.org/jetton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-', color: '#22c55e' },
                     { label: 'LP Lock (81.6%)', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
-                    { label: 'Audit & Safety', url: 'https://incandescent-gelato-cc11a4.netlify.app/audit.html', color: '#f59e0b' },
+                    { label: 'Audit & Safety', url: 'https://tasteminiapp.netlify.app/audit.html', color: '#f59e0b' },
                     { label: 'TASTE Website', url: 'https://tastetoken.net', color: '#3b82f6' },
                   ].map((item, i) => (
                     <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${item.color}30`, borderRadius: '14px', padding: '12px 16px', fontSize: '12px', color: item.color, textDecoration: 'none', fontWeight: 600, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -580,6 +629,8 @@ function App() {
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
             <SpinWheel />
           </div>
+          <DailyRewards />
+          <Leaderboard />
         </motion.div>
       );
       case 'charity': return (
@@ -640,6 +691,23 @@ function App() {
           </div>
         </motion.div>
       );
+      case 'quickbuy': return (
+        <motion.div key="quickbuy" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+          <QuickBuy userId={userId} />
+        </motion.div>
+      );
+      case 'admin_otc': return (
+        <motion.div key="admin_otc" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+          {userId === '1505452121' ? (
+            <QuickBuyAdmin />
+          ) : (
+            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔒</div>
+              <p style={{ fontSize: '14px' }}>Bu sayfa yalnızca admin erişimine açıktır.</p>
+            </div>
+          )}
+        </motion.div>
+      );
       default: return null;
     }
   };
@@ -686,7 +754,7 @@ function App() {
         </AnimatePresence>
 
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', position: 'relative' }}>
-          <TonConnectButton />
+          <WalletSelector />
           <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowLangMenu(!showLangMenu)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--bg-card-border)', color: 'var(--text-main)', padding: '5px 12px', borderRadius: '15px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
             {currentLang.flag} {currentLang.code.toUpperCase()}
           </motion.button>
@@ -766,19 +834,21 @@ function App() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
-                    { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', icon: Handshake, color: '#3b82f6', isNew: true },
-                    { id: 'community', label: 'Taste Jobs', icon: Briefcase, color: '#f97316' },
-                    { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', icon: Trophy, color: '#eab308' },
-                    { id: 'manifesto', label: 'Manifesto', icon: Flame, color: '#f97316' },
-                    { id: 'roadmap', label: t('nav.roadmap'), icon: Map, color: '#8b5cf6' },
-                    { id: 'whitepaper', label: t('nav.whitepaper'), icon: FileText, color: '#3b82f6' },
-                    { id: 'spin', label: t('nav.spin'), icon: Gift, color: '#ec4899' },
-                    { id: 'charity', label: t('nav.charity'), icon: Heart, color: '#f43f5e' },
-                    { id: 'chef', label: t('nav.chef'), icon: ChefHat, color: '#10b981', isDemo: true },
-                    { id: 'wallet', label: t('nav.wallet'), icon: QrCode, color: '#f59e0b' },
-                    { id: 'faq', label: i18n.language?.startsWith('tr') ? 'S.S.S.' : 'F.A.Q.', icon: HelpCircle, color: '#22c55e' },
-                    { id: 'tech', label: i18n.language?.startsWith('tr') ? 'Teknoloji' : 'Tech', icon: Cpu, color: '#10b981' },
-                    { id: 'legal', label: t('nav.legal'), icon: Scale, color: '#64748b' }
+                    { id: 'quickbuy', label: i18n.language?.startsWith('tr') ? 'Hızlı TASTE' : 'Quick Buy', color: '#f59e0b', image: '/logo.jpg', isNew: true },
+                    ...(userId === '1505452121' ? [{ id: 'admin_otc', label: '👑 OTC Admin', color: '#f59e0b', emojiImage: '👑' }] : []),
+                    { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
+                    { id: 'community', label: 'Taste Jobs', color: '#f97316', emojiImage: '💼' },
+                    { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', color: '#eab308', emojiImage: '🏆' },
+                    { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
+                    { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
+                    { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📄' },
+                    { id: 'spin', label: t('nav.spin'), color: '#ec4899', emojiImage: '🎡' },
+                    { id: 'charity', label: t('nav.charity'), color: '#f43f5e', emojiImage: '💖' },
+                    { id: 'chef', label: t('nav.chef'), color: '#10b981', emojiImage: '👨‍🍳', isDemo: true },
+                    { id: 'wallet', label: t('nav.wallet'), color: '#f59e0b', emojiImage: '💳' },
+                    { id: 'faq', label: i18n.language?.startsWith('tr') ? 'S.S.S.' : 'F.A.Q.', color: '#22c55e', emojiImage: '🙋' },
+                    { id: 'tech', label: i18n.language?.startsWith('tr') ? 'Teknoloji' : 'Tech', color: '#10b981', emojiImage: '💻' },
+                    { id: 'legal', label: t('nav.legal'), color: '#64748b', emojiImage: '⚖️' }
                   ].map((item: any) => (
                     <button
                       key={item.id}
@@ -811,8 +881,16 @@ function App() {
                       {item.isNew && (
                          <div style={{ position: 'absolute', top: '2px', right: '2px', background: 'linear-gradient(135deg, #f97316, #ea580c)', color: '#fff', fontSize: '6px', fontWeight: 900, padding: '1px 3px', borderRadius: '4px', zIndex: 2 }}>YENİ</div>
                       )}
-                      <item.icon size={20} color={activeTab === item.id ? item.color : '#64748b'} />
-                      <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.2px', textAlign: 'center', textTransform: 'uppercase' }}>{item.label}</span>
+                      
+                      {item.image ? (
+                        <img src={item.image} alt={item.label} style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${item.color}`, boxShadow: `0 0 10px ${item.color}66` }} />
+                      ) : item.emojiImage ? (
+                        <span style={{ fontSize: '26px', filter: `drop-shadow(0 0 8px ${item.color}88)`, display: 'block', height: '28px', lineHeight: '28px' }}>{item.emojiImage}</span>
+                      ) : (
+                        item.icon && <item.icon size={22} color={activeTab === item.id ? item.color : '#64748b'} />
+                      )}
+
+                      <span style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.2px', textAlign: 'center', textTransform: 'uppercase' }}>{item.label}</span>
                     </button>
                   ))}
                 </div>
@@ -844,7 +922,7 @@ function App() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {
-              const url = 'https://incandescent-gelato-cc11a4.netlify.app/audit.html';
+              const url = 'https://tasteminiapp.netlify.app/audit.html';
               if (window.Telegram?.WebApp) {
                 window.Telegram.WebApp.openLink(url);
               } else {
@@ -872,7 +950,7 @@ function App() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {
-              const url = 'https://incandescent-gelato-cc11a4.netlify.app/litepaper.html';
+              const url = 'https://tasteminiapp.netlify.app/litepaper.html';
               if (window.Telegram?.WebApp) {
                 window.Telegram.WebApp.openLink(url);
               } else {

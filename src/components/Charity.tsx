@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation, Trans } from 'react-i18next'
 import { useTonConnectUI } from '@tonconnect/ui-react'
+import { useWallet } from '../context/WalletContext'
 
 // ─── Config ─────────────────────────────────────────────────────────
 const CHARITY_WALLET = 'UQD1spM8Qis9Lu2lyOBKDZJU8PDGBCf5Lf3thWm3lNqY8kkb'
@@ -26,7 +27,8 @@ const QUICK_AMOUNTS = [0.1, 0.5, 1, 5]
 export function Charity() {
     const { t } = useTranslation()
     const [tonConnectUI] = useTonConnectUI()
-    const isConnected = !!tonConnectUI.account?.address
+    const { activeAddress } = useWallet()
+    const isConnected = !!activeAddress
 
     const [donateAmt, setDonateAmt] = useState('1')
     const [sending, setSending] = useState(false)

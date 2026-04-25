@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTonConnectUI } from '@tonconnect/ui-react'
+import { useWallet } from '../context/WalletContext'
 import { useTranslation } from 'react-i18next'
 import {
     getPlayerId,
@@ -122,8 +123,8 @@ function WheelSVG() {
 // ─── Main Component ─────────────────────────────────────────────────────────
 export function SpinWheel() {
     const { i18n } = useTranslation()
-    const [tonConnectUI] = useTonConnectUI()
-    const walletAddress = tonConnectUI.account?.address ?? ''
+    const { activeAddress } = useWallet()
+    const walletAddress = activeAddress ?? ''
 
     const [spinning, setSpinning] = useState(false)
     const [rotation, setRotation] = useState(0)

@@ -50,6 +50,8 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 - Via Tonkeeper wallet
 - Via @wallet on Telegram
 - Steps: Load TON → Select amount → Click "Buy with TON" → Swap via STON.fi
+- NEW: Direct OTC (Over-The-Counter) system (TR ONLY)
+  TR Users can transfer TRY directly to the Admin's bank account via the QuickBuy feature in the mini-app to receive TASTE seamlessly. They MUST use their reference code in the transfer description. No crypto words allowed.
 
 ## TASTE Platform Features
 1. **Telegram Mini App** — Full-featured app inside Telegram
@@ -91,7 +93,7 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 ## Security
 - Smart contract passed security audit
 - All locks publicly verifiable on TON blockchain via Tonscan
-- Audit available at: incandescent-gelato-cc11a4.netlify.app/audit.html
+- Audit available at: tasteminiapp.netlify.app/audit.html
 
 ## Blockchain Details
 - Blockchain: TON (The Open Network)
@@ -115,6 +117,7 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 ✅ Mini App v2.3 Wallet & QR Update — March 2026 — Quick Wallet & Transfer system, balances, QR scanning and secure TASTE/TON sending.
 ✅ Mini App v2.4 Taste Chef Digital Discount — March 2026 — Next-gen loyalty system. Apprenticeship to Master Chef journey.
 ✅ Mini App v2.5 Community 3.0 — March 2026 — Global Real-time Food Feed & Job Board with direct Telegram contact and live global chat. CV photo uploads active. Tech stack (PoweredBy) updated with JVault, LP Locks, Railway, Netlify, Google, and Socials.
+✅ Mini App v2.6 OTC & Transfer System — March 2026 — TR only direct bank transfer (TRY) to get TASTE seamlessly. 4-tab wallet component (Send, Receive, Buy, Sell via STON.fi).
 
 ## Taste Şef (Dijital İndirim Sistemi)
 - **Ustalık Seviyeleri**: 🥉 Çırak (2k+), 🥈 Kalfa (4k+), 🥇 Usta (7.5k+), 👨‍🍳 Şef (15k+).

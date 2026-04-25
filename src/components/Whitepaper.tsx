@@ -435,6 +435,16 @@ export function Whitepaper() {
                     ))}
                 </div>
 
+                {/* OTC System TR */}
+                <div style={{ background: 'linear-gradient(135deg, rgba(28,154,236,0.08), rgba(28,154,236,0.02))', border: '1px solid rgba(28,154,236,0.2)', borderRadius: '14px', padding: '16px', marginBottom: '12px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 800, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>
+                        🇹🇷 {t('whitepaper.otc_system.title')}
+                    </div>
+                    <p style={{ fontSize: '12px', color: '#bae6fd', lineHeight: 1.8, margin: 0 }}>
+                        {t('whitepaper.otc_system.content')}
+                    </p>
+                </div>
+
                 {/* Son mesaj */}
                 <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '14px', textAlign: 'center' }}>
                     <div style={{ fontSize: '13px', fontWeight: 800, color: '#f59e0b', marginBottom: '6px' }}>

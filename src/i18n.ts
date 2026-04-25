@@ -105,8 +105,11 @@ const resources = {
                     "v2_3": { "title": "Mini App v2.3 Wallet & QR Update — March 2026", "desc": "Quick Wallet & Transfer system launched. Users can now view TON & TASTE balances, scan QR codes for instant payments, and send both TON and TASTE tokens securely with optimized gas fees." },
                     "v2_4": { "title": "Mini App v2.4 Taste Chef", "desc": "Digital Loyalty & Discount system. Apprenticeship tiers to Master Chef status. Symbolic fee for discount validation at cashiers." },
                     "v2_5": { "title": "Mini App v2.5 Community 3.0 — March 2026", "desc": "Global Real-time Food Feed & Job Board launched with Supabase. Direct Telegram integration for instant contact with job posters. 'Share & Win' campaigns active with reward wallet visibility. Global live chat active." },
+                    "v2_6": { "title": "Mini App v2.6 OTC & Transfer System — March 2026", "desc": "Direct Bank Transfer (TRY) OTC module launched for Turkish users. Fully integrated Wallet component with Send, Receive, Buy, and Sell tabs powered by STON.fi deep links." },
                     "growth": { "title": "Community Growth", "desc": "Every day new users, every day new shares. Focused on organic growth." },
                     "visibility": { "title": "Greater DEX Visibility", "desc": "Presence in other TON ecosystem platforms alongside STON.fi." },
+                    "partners": { "title": "Strategic Partnerships", "desc": "Building alliances with local businesses, platforms, and gastronomy brands." },
+                    "listings": { "title": "CEX / DEX Listings", "desc": "Increasing trading volume across various decentralized and centralized exchanges." },
                     "reporting": { "title": "Transparent Reporting", "desc": "Holder count, transaction volume, and community growth will be shared regularly." },
                     "dev": { "title": "Mini App Development", "desc": "New features are being added based on user feedback." }
                 },
@@ -268,6 +271,10 @@ const resources = {
                 "supply_policy": {
                     "title": "Supply Policy",
                     "content": "88.4% of the total supply is professionally locked in JVault. The team maintains 0% control over locked assets until release dates."
+                },
+                "otc_system": {
+                    "title": "OTC System (TR Only)",
+                    "content": "To facilitate on-boarding for users in Turkey, TASTE has an integrated Over-The-Counter (OTC) module. Users can buy TASTE securely via bank transfer (TRY) directly from the application without needing to navigate complex exchanges. Once the payment is verified, tokens are sent direct to their TON Wallet. It's rapid, seamless, and entirely user-oriented."
                 }
             },
             "charity": {
@@ -676,8 +683,11 @@ const resources = {
                     "v2_3": { "title": "Mini App v2.3 Cüzdan & Adres Güncellemesi — Mart 2026", "desc": "Hızlı Cüzdan & Transfer sistemi yayına alındı. Kullanıcılar artık TON ve TASTE bakiyelerini görebilir, QR kod ile anında işlem yapabilir ve her iki varlığı optimize edilmiş komisyonlarla güvenle gönderebilir." },
                     "v2_4": { "title": "Mini App v2.4 Taste Şef — Mart 2026", "desc": "Dijital Sadakat ve İndirim sistemi yayına alındı. Çıraklıktan ustalığa giden yolda özel indirim hakları ve dijital onay sistemi tanımlandı." },
                     "v2_5": { "title": "Mini App v2.5 Topluluk 3.0 — Mart 2026", "desc": "Supabase ile küresel gerçek zamanlı Yemek Akışı ve İş İlanı panosu yayına girdi. İlan verenlerle Telegram üzerinden anlık iletişim özelliği eklendi. 'Paylaş Kazan' kampanyaları ve ödül cüzdanı görünürlüğü aktifleşti. Küresel canlı sohbet devreye alındı." },
+                    "v2_6": { "title": "Mini App v2.6 OTC & Cüzdan — Mart 2026", "desc": "Türk kullanıcılar için doğrudan havale/EFT (TRY) ile TASTE alım imkanı sunan OTC sistemi kuruldu. Ayrıca 4 sekmeli (Gönder, Al, Satın Al, Sat) gelişmiş cüzdan modülü STON.fi entegrasyonuyla yayına girdi." },
                     "growth": { "title": "Topluluk Büyütme", "desc": "Her gün yeni kullanıcılar, her gün yeni paylaşımlar. Organik büyüme odaklı." },
                     "visibility": { "title": "Daha Fazla DEX Görünürlüğü", "desc": "STON.fi'nin yanı sıra diğer TON ekosistem platformlarında varlık." },
+                    "partners": { "title": "Stratejik Ortaklıklar", "desc": "Yerel işletmeler, platformlar (örn. Panoda Şehir) ve gastronomi markalarıyla güç birliği yapılması." },
+                    "listings": { "title": "Borsa Listelemeleri", "desc": "DEX ve CEX borsalarında işlem görme ve hacim artışı için listeleme çalışmaları." },
                     "reporting": { "title": "Şeffaf Raporlama", "desc": "Holder sayısı, işlem hacmi ve topluluk büyümesi düzenli paylaşılacak." },
                     "dev": { "title": "Mini App Geliştirme", "desc": "Kullanıcı geri bildirimlerine göre yeni özellikler ekleniyor." }
                 },
@@ -839,6 +849,10 @@ const resources = {
                 "supply_policy": {
                     "title": "Arz Politikası",
                     "content": "Toplam arzın %88.4'ü profesyonel olarak JVault'ta kilitlenmiştir. Ekip, kilit açılış tarihine kadar kilitli varlıklar üzerinde %0 kontrole sahiptir."
+                },
+                "otc_system": {
+                    "title": "OTC Sistemi (Sadece TR)",
+                    "content": "Türkiye'deki kullanıcıların Web3 dünyasına adım atmasını kolaylaştırmak için TASTE, doğrudan uygulama içi OTC (Tezgah Üstü) alım modülüne sahiptir. Kullanıcılar karmaşık borsalarla uğraşmadan, doğrudan havale/EFT yoluyla TASTE satın alabilirler. Admin onayının ardından varlıklar anında cüzdana aktarılır. Bu sistem tamamen güvenli, hızlı ve kullanıcı dostudur."
                 }
             },
             "charity": {

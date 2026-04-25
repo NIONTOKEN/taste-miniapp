@@ -5,6 +5,7 @@ import './index.css'
 import App from './App';
 import './i18n'
 import { UserProvider } from './context/UserContext'
+import { WalletProvider } from './context/WalletContext'
 
 // Dynamic manifest URL for both dev and production
 const MANIFEST_URL = `${window.location.origin}/tonconnect-manifest.json`
@@ -18,7 +19,9 @@ createRoot(document.getElementById('root')!).render(
       }}
     >
       <UserProvider>
-        <App />
+        <WalletProvider>
+          <App />
+        </WalletProvider>
       </UserProvider>
     </TonConnectUIProvider>
   </StrictMode>,

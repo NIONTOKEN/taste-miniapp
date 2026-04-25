@@ -503,7 +503,7 @@ export function Community() {
             (post.tags.length ? post.tags.map(tKey => `#${t(`community.tags.${tKey}`) === `community.tags.${tKey}` ? tKey : t(`community.tags.${tKey}`)}`).join(' ') + '\n\n' : '') +
             t('community.shared_from')
         )
-        const url = `https://t.me/share/url?url=https://incandescent-gelato-cc11a4.netlify.app&text=${text}`
+        const url = `https://t.me/share/url?url=https://tasteminiapp.netlify.app&text=${text}`
         if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(url)
         else window.open(url, '_blank')
     }

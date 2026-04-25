@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { useTonConnectUI, useTonAddress } from '@tonconnect/ui-react'
+import { useTonConnectUI } from '@tonconnect/ui-react'
+import { useWallet } from '../context/WalletContext'
 import { Address, toNano, beginCell } from '@ton/core'
 import { apiService } from '../services/api'
 import { 
@@ -35,7 +36,7 @@ interface Tier {
 export function TasteChef() {
     const { t, i18n } = useTranslation()
     const [tonConnectUI] = useTonConnectUI()
-    const userAddress = useTonAddress()
+    const { activeAddress: userAddress } = useWallet()
     const [balance, setBalance] = useState<number>(0)
     const [kasaBalance, setKasaBalance] = useState<number>(0)
     const [loading, setLoading] = useState(false)

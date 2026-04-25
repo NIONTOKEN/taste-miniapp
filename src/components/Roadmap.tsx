@@ -24,12 +24,15 @@ export function Roadmap() {
         { emoji: '💳', key: 'v2_3' },
         { emoji: '👨‍🍳', key: 'v2_4' },
         { emoji: '🌎', key: 'v2_5' },
+        { emoji: '🏦', key: 'v2_6' },
     ]
 
     // ─── Devam eden & yakın plan (gerçekçi) ──────────────────────────────────
     const ONGOING = [
         { emoji: '🌱', key: 'growth' },
         { emoji: '🔗', key: 'visibility' },
+        { emoji: '🤝', key: 'partners' },
+        { emoji: '📈', key: 'listings' },
         { emoji: '📊', key: 'reporting' },
         { emoji: '🛠️', key: 'dev' },
     ]

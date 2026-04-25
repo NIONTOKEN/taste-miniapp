@@ -1,6 +1,25 @@
+// ─── Basit in-memory rate limiter ───────────────────────────────
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+function isRateLimited(ip: string, maxReq = 30, windowMs = 60_000): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + windowMs });
+    return false;
+  }
+  entry.count++;
+  return entry.count > maxReq;
+}
+
 export default async (req: Request) => {
   if (req.method !== 'POST') {
     return new Response('Method Not Allowed', { status: 405 });
+  }
+
+  // Rate limiting
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  if (isRateLimited(ip)) {
+    return new Response(JSON.stringify({ error: { message: 'Too many requests. Please wait.' } }), { status: 429, headers: { 'Content-Type': 'application/json' } });
   }
 
   try {
