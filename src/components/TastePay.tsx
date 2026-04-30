@@ -100,11 +100,61 @@ export function TastePay({ onClose }: { onClose: () => void }) {
   }, []);
 
   // ────────────────────────────────────────────────────────────────────────
-  // QR Scanner setup
+  // QR Scanner — Telegram native öncelikli (Mini App'te %100 çalışır),
+  // fallback olarak html5-qrcode (web/tarayıcı testleri için)
   // ────────────────────────────────────────────────────────────────────────
+  const parseQrData = (decodedText: string): boolean => {
+    try {
+      if (!decodedText.startsWith('tastepay://')) return false;
+      const url = new URL(decodedText);
+      const data = {
+        amount: url.searchParams.get('amount') || '0',
+        currency: url.searchParams.get('currency') || 'USD',
+        tasteAmount: url.searchParams.get('tasteAmount') || '0',
+        memo: url.searchParams.get('memo') || '',
+        address: url.searchParams.get('address') || OTC_ADMIN_WALLET,
+      };
+      setScannedPayload(data);
+      setMode('confirm');
+      return true;
+    } catch (e) {
+      console.error('[TastePay] Invalid QR format', e);
+      return false;
+    }
+  };
+
+  const openTelegramScanner = (): boolean => {
+    const tg = (window as any).Telegram?.WebApp;
+    if (!tg?.showScanQrPopup) return false;
+    try {
+      tg.showScanQrPopup(
+        { text: 'TASTE Pay kodunu okutun' },
+        (data: string) => {
+          if (parseQrData(data)) {
+            tg.closeScanQrPopup();
+            return true;
+          }
+          return false;
+        }
+      );
+      return true;
+    } catch (e) {
+      console.error('[TastePay] Telegram scanner failed', e);
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (mode !== 'scan') return;
 
+    // 1) Önce Telegram native scanner dene
+    if (openTelegramScanner()) {
+      // Telegram popup açıldı, bizim scan ekranımızı menüye döndür
+      setMode('menu');
+      return;
+    }
+
+    // 2) Fallback: html5-qrcode (sadece tarayıcıda)
     const scanner = new Html5QrcodeScanner(
       'qr-reader',
       { fps: 10, qrbox: { width: 250, height: 250 }, supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA] },
@@ -114,21 +164,8 @@ export function TastePay({ onClose }: { onClose: () => void }) {
 
     scanner.render(
       (decodedText) => {
-        try {
-          if (!decodedText.startsWith('tastepay://')) return;
-          const url = new URL(decodedText);
-          const data = {
-            amount: url.searchParams.get('amount') || '0',
-            currency: url.searchParams.get('currency') || 'USD',
-            tasteAmount: url.searchParams.get('tasteAmount') || '0',
-            memo: url.searchParams.get('memo') || '',
-            address: url.searchParams.get('address') || OTC_ADMIN_WALLET,
-          };
-          setScannedPayload(data);
-          setMode('confirm');
+        if (parseQrData(decodedText)) {
           scanner.clear().catch(() => {});
-        } catch (e) {
-          console.error('[TastePay] Invalid QR format', e);
         }
       },
       () => { /* silent scan errors */ }
@@ -139,6 +176,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
         scannerRef.current.clear().catch(() => {});
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   // ────────────────────────────────────────────────────────────────────────
@@ -623,6 +661,24 @@ export function TastePay({ onClose }: { onClose: () => void }) {
               <p style={{ marginTop: '22px', textAlign: 'center', color: '#9ca3af', fontSize: '13px' }}>
                 Ödeme yapmak için kasadaki karekodu okutun
               </p>
+              <button
+                data-testid="tastepay-manual-scan-btn"
+                onClick={() => {
+                  if (!openTelegramScanner()) {
+                    alert('Kamera erişimi bulunamadı. Lütfen Telegram içinden açın veya tarayıcıda kamera izni verin.');
+                  }
+                }}
+                style={{
+                  marginTop: '16px', padding: '12px 24px',
+                  background: 'linear-gradient(to right, #06b6d4, #2563eb)',
+                  color: 'white', border: 'none', borderRadius: '12px',
+                  fontSize: '14px', fontWeight: 'bold', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                }}
+              >
+                <Camera size={16} />
+                Kamerayı Aç
+              </button>
             </motion.div>
           )}
 
