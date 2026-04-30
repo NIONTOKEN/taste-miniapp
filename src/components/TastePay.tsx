@@ -82,18 +82,35 @@ export function TastePay({ onClose }: { onClose: () => void }) {
   const qrData = `tastepay://pay?address=${OTC_ADMIN_WALLET}&amount=${receiveAmount}&currency=${currency}&tasteAmount=${calculatedTaste}&memo=INV-${Math.floor(Math.random() * 10000)}`;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0a0f1c] text-white flex flex-col">
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+      zIndex: 9999,
+      backgroundColor: '#0a0f1c',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    }}>
       {/* Header */}
-      <div className="flex items-center p-4 border-b border-white/10 bg-[#121a2f]">
-        <button onClick={() => mode === 'menu' ? onClose() : setMode('menu')} className="p-2 mr-2">
-          <ArrowLeft className="w-6 h-6 text-cyan-400" />
+      <div style={{
+        display: 'flex', alignItems: 'center', padding: '16px',
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        backgroundColor: '#121a2f'
+      }}>
+        <button onClick={() => mode === 'menu' ? onClose() : setMode('menu')} style={{ background: 'none', border: 'none', padding: '8px', marginRight: '8px', cursor: 'pointer' }}>
+          <ArrowLeft size={24} color="#22d3ee" />
         </button>
-        <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+        <h1 style={{
+          fontSize: '20px', fontWeight: 'bold', margin: 0,
+          background: 'linear-gradient(to right, #22d3ee, #c084fc)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}>
           TASTE Pay
         </h1>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
         <AnimatePresence mode="wait">
           
           {/* MENU MODE */}
@@ -103,39 +120,58 @@ export function TastePay({ onClose }: { onClose: () => void }) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              className="flex flex-col gap-6 h-full justify-center pb-20"
+              style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: '100%', justifyContent: 'center', paddingBottom: '80px' }}
             >
-              <div className="text-center mb-8">
-                <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(34,211,238,0.3)]">
-                  <Wallet className="w-10 h-10 text-white" />
+              <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                <div style={{
+                  width: '80px', height: '80px',
+                  background: 'linear-gradient(135deg, #06b6d4, #9333ea)',
+                  borderRadius: '24px',
+                  margin: '0 auto 16px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 0 30px rgba(34,211,238,0.3)'
+                }}>
+                  <Wallet size={40} color="white" />
                 </div>
-                <h2 className="text-2xl font-bold">Kolay ve Hızlı Ödeme</h2>
-                <p className="text-gray-400 mt-2 text-sm">TASTE ile saniyeler içinde öde veya ödeme al.</p>
+                <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>Kolay ve Hızlı Ödeme</h2>
+                <p style={{ color: '#9ca3af', margin: 0, fontSize: '14px' }}>TASTE ile saniyeler içinde öde veya ödeme al.</p>
               </div>
 
               <button
                 onClick={() => setMode('scan')}
-                className="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl p-6 flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-lg shadow-cyan-500/20"
+                style={{
+                  background: 'linear-gradient(to right, #06b6d4, #2563eb)',
+                  borderRadius: '20px', padding: '24px',
+                  display: 'flex', alignItems: 'center', gap: '16px',
+                  border: 'none', cursor: 'pointer', textAlign: 'left',
+                  boxShadow: '0 10px 15px -3px rgba(6,182,212,0.2)'
+                }}
               >
-                <div className="bg-white/20 p-4 rounded-full">
-                  <Camera className="w-8 h-8 text-white" />
+                <div style={{ background: 'rgba(255,255,255,0.2)', padding: '16px', borderRadius: '50%' }}>
+                  <Camera size={32} color="white" />
                 </div>
-                <div className="text-left">
-                  <div className="text-xl font-bold text-white">QR ile Öde</div>
-                  <div className="text-cyan-100 text-sm">Müşteri Modu: Kodu okut ve öde</div>
+                <div>
+                  <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'white', marginBottom: '4px' }}>QR ile Öde</div>
+                  <div style={{ color: '#cffafe', fontSize: '14px' }}>Müşteri Modu: Kodu okut ve öde</div>
                 </div>
               </button>
 
               <button
                 onClick={() => setMode('receive')}
-                className="bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl p-6 flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-lg shadow-purple-500/20"
+                style={{
+                  background: 'linear-gradient(to right, #a855f7, #db2777)',
+                  borderRadius: '20px', padding: '24px',
+                  display: 'flex', alignItems: 'center', gap: '16px',
+                  border: 'none', cursor: 'pointer', textAlign: 'left',
+                  boxShadow: '0 10px 15px -3px rgba(168,85,247,0.2)'
+                }}
               >
-                <div className="bg-white/20 p-4 rounded-full">
-                  <QrCode className="w-8 h-8 text-white" />
+                <div style={{ background: 'rgba(255,255,255,0.2)', padding: '16px', borderRadius: '50%' }}>
+                  <QrCode size={32} color="white" />
                 </div>
-                <div className="text-left">
-                  <div className="text-xl font-bold text-white">Ödeme Al</div>
-                  <div className="text-purple-100 text-sm">İşletme Modu: QR kod oluştur</div>
+                <div>
+                  <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'white', marginBottom: '4px' }}>Ödeme Al</div>
+                  <div style={{ color: '#f3e8ff', fontSize: '14px' }}>İşletme Modu: QR kod oluştur</div>
                 </div>
               </button>
             </motion.div>
@@ -147,26 +183,31 @@ export function TastePay({ onClose }: { onClose: () => void }) {
               key="receive"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center pt-8"
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '32px' }}
             >
-              <h2 className="text-2xl font-bold mb-6">Ödeme Alınacak Tutar</h2>
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 24px 0' }}>Ödeme Alınacak Tutar</h2>
               
-              <div className="flex gap-2 mb-6 w-full max-w-xs">
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', width: '100%', maxWidth: '320px' }}>
                 {(['TRY', 'USD', 'EUR'] as const).map(c => (
                   <button
                     key={c}
                     onClick={() => setCurrency(c)}
-                    className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors ${
-                      currency === c ? 'bg-cyan-500 text-white' : 'bg-[#1a2235] text-gray-400'
-                    }`}
+                    style={{
+                      flex: 1, padding: '12px', borderRadius: '12px',
+                      fontSize: '14px', fontWeight: 'bold', cursor: 'pointer',
+                      border: 'none',
+                      backgroundColor: currency === c ? '#06b6d4' : '#1a2235',
+                      color: currency === c ? 'white' : '#9ca3af',
+                      transition: 'all 0.2s'
+                    }}
                   >
                     {c}
                   </button>
                 ))}
               </div>
 
-              <div className="relative mb-8 w-full max-w-xs">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400">
+              <div style={{ position: 'relative', marginBottom: '32px', width: '100%', maxWidth: '320px' }}>
+                <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '24px', color: '#9ca3af' }}>
                   {RATES[currency].symbol}
                 </span>
                 <input
@@ -174,25 +215,33 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                   value={receiveAmount}
                   onChange={(e) => setReceiveAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full bg-[#1a2235] border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-3xl font-bold text-white focus:outline-none focus:border-cyan-500 text-center"
+                  style={{
+                    width: '100%', backgroundColor: '#1a2235', border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '16px', padding: '16px 16px 16px 48px', fontSize: '30px', fontWeight: 'bold',
+                    color: 'white', textAlign: 'center', boxSizing: 'border-box'
+                  }}
                 />
               </div>
 
               {parseFloat(receiveAmount) > 0 ? (
-                <div className="bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(34,211,238,0.2)]">
+                <div style={{ backgroundColor: 'white', padding: '16px', borderRadius: '24px', boxShadow: '0 0 40px rgba(34,211,238,0.2)' }}>
                   <QRCodeSVG 
                     value={qrData} 
                     size={220}
                     level="H"
                     includeMargin={true}
                   />
-                  <div className="text-center mt-4 text-black">
-                    <div className="text-sm font-bold text-gray-500">Müşteriden Alınacak</div>
-                    <div className="text-2xl font-black text-cyan-600">{calculatedTaste} TASTE</div>
+                  <div style={{ textAlign: 'center', marginTop: '16px', color: 'black' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#6b7280' }}>Müşteriden Alınacak</div>
+                    <div style={{ fontSize: '24px', fontWeight: 900, color: '#0891b2' }}>{calculatedTaste} TASTE</div>
                   </div>
                 </div>
               ) : (
-                <div className="w-[252px] h-[252px] border-2 border-dashed border-white/20 rounded-3xl flex items-center justify-center text-gray-500">
+                <div style={{
+                  width: '252px', height: '252px', border: '2px dashed rgba(255,255,255,0.2)',
+                  borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#6b7280', fontSize: '16px'
+                }}>
                   Tutar Girin
                 </div>
               )}
@@ -205,20 +254,16 @@ export function TastePay({ onClose }: { onClose: () => void }) {
               key="scan"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex flex-col h-full items-center justify-center"
+              style={{ display: 'flex', flexDirection: 'column', height: '100%', alignItems: 'center', justifyContent: 'center' }}
             >
-              <div className="w-full max-w-sm aspect-square bg-black rounded-3xl overflow-hidden relative border-4 border-cyan-500/50 shadow-[0_0_40px_rgba(34,211,238,0.2)]">
-                <div id="qr-reader" className="w-full h-full"></div>
-                <div className="absolute inset-0 border-[40px] border-black/50 pointer-events-none"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-2 border-cyan-400 rounded-xl pointer-events-none">
-                  {/* Scan frame corners */}
-                  <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-cyan-400"></div>
-                  <div className="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-cyan-400"></div>
-                  <div className="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-cyan-400"></div>
-                  <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-cyan-400"></div>
-                </div>
+              <div style={{
+                width: '100%', maxWidth: '320px', aspectRatio: '1/1', backgroundColor: 'black',
+                borderRadius: '24px', overflow: 'hidden', position: 'relative',
+                border: '4px solid rgba(34,211,238,0.5)', boxShadow: '0 0 40px rgba(34,211,238,0.2)'
+              }}>
+                <div id="qr-reader" style={{ width: '100%', height: '100%' }}></div>
               </div>
-              <p className="mt-8 text-center text-gray-400">
+              <p style={{ marginTop: '32px', textAlign: 'center', color: '#9ca3af' }}>
                 Ödeme yapmak için kasadaki karekodu okutun
               </p>
             </motion.div>
@@ -230,34 +275,40 @@ export function TastePay({ onClose }: { onClose: () => void }) {
               key="confirm"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center pt-10"
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '40px' }}
             >
               {paymentStatus === 'idle' && (
                 <>
-                  <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mb-6">
-                    <Banknote className="w-10 h-10 text-blue-400" />
+                  <div style={{ width: '80px', height: '80px', backgroundColor: 'rgba(59,130,246,0.2)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                    <Banknote size={40} color="#60a5fa" />
                   </div>
-                  <h2 className="text-2xl font-bold mb-2">Ödeme Onayı</h2>
-                  <p className="text-gray-400 mb-8">İşletmeye yapılacak ödeme tutarı</p>
+                  <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>Ödeme Onayı</h2>
+                  <p style={{ color: '#9ca3af', marginBottom: '32px' }}>İşletmeye yapılacak ödeme tutarı</p>
 
-                  <div className="bg-[#1a2235] w-full max-w-xs rounded-2xl p-6 mb-8 border border-white/10">
-                    <div className="text-center mb-4">
-                      <div className="text-4xl font-black text-white">
+                  <div style={{ backgroundColor: '#1a2235', width: '100%', maxWidth: '320px', borderRadius: '16px', padding: '24px', marginBottom: '32px', border: '1px solid rgba(255,255,255,0.1)', boxSizing: 'border-box' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+                      <div style={{ fontSize: '36px', fontWeight: 900, color: 'white' }}>
                         {scannedPayload.amount} {scannedPayload.currency}
                       </div>
-                      <div className="text-cyan-400 mt-2 font-bold">
+                      <div style={{ color: '#22d3ee', marginTop: '8px', fontWeight: 'bold' }}>
                         ≈ {scannedPayload.tasteAmount} TASTE
                       </div>
                     </div>
-                    <div className="border-t border-white/10 pt-4 mt-4 text-sm text-gray-400 flex justify-between">
+                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px', marginTop: '16px', fontSize: '14px', color: '#9ca3af', display: 'flex', justifyContent: 'space-between' }}>
                       <span>Sipariş No:</span>
-                      <span className="text-white">{scannedPayload.memo}</span>
+                      <span style={{ color: 'white' }}>{scannedPayload.memo}</span>
                     </div>
                   </div>
 
                   <button
                     onClick={handleSimulatePayment}
-                    className="w-full max-w-xs py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-bold text-lg hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-all"
+                    style={{
+                      width: '100%', maxWidth: '320px', padding: '16px',
+                      background: 'linear-gradient(to right, #06b6d4, #2563eb)',
+                      borderRadius: '12px', fontWeight: 'bold', fontSize: '18px',
+                      color: 'white', border: 'none', cursor: 'pointer',
+                      boxShadow: '0 0 20px rgba(34,211,238,0.4)'
+                    }}
                   >
                     Onayla ve Öde
                   </button>
@@ -265,10 +316,12 @@ export function TastePay({ onClose }: { onClose: () => void }) {
               )}
 
               {paymentStatus === 'processing' && (
-                <div className="flex flex-col items-center justify-center h-64">
-                  <RefreshCw className="w-16 h-16 text-cyan-400 animate-spin mb-6" />
-                  <h3 className="text-xl font-bold">Ödeme İşleniyor...</h3>
-                  <p className="text-gray-400 mt-2">Blockchain onaylanıyor</p>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '256px' }}>
+                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
+                    <RefreshCw size={64} color="#22d3ee" style={{ marginBottom: '24px' }} />
+                  </motion.div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0 }}>Ödeme İşleniyor...</h3>
+                  <p style={{ color: '#9ca3af', marginTop: '8px' }}>Blockchain onaylanıyor</p>
                 </div>
               )}
 
@@ -276,20 +329,23 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                 <motion.div 
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="flex flex-col items-center justify-center h-64 text-center"
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '256px', textAlign: 'center' }}
                 >
-                  <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
-                    <CheckCircle2 className="w-16 h-16 text-green-400" />
+                  <div style={{ width: '96px', height: '96px', backgroundColor: 'rgba(34,197,94,0.2)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                    <CheckCircle2 size={64} color="#4ade80" />
                   </div>
-                  <h3 className="text-3xl font-black text-white mb-2">Ödendi!</h3>
-                  <p className="text-gray-400">İşlem başarıyla tamamlandı.</p>
+                  <h3 style={{ fontSize: '30px', fontWeight: 900, color: 'white', margin: '0 0 8px 0' }}>Ödendi!</h3>
+                  <p style={{ color: '#9ca3af', margin: 0 }}>İşlem başarıyla tamamlandı.</p>
                   
                   <button
                     onClick={() => {
                       setMode('menu');
                       setPaymentStatus('idle');
                     }}
-                    className="mt-8 px-8 py-3 bg-white/10 rounded-xl font-bold hover:bg-white/20 transition-colors"
+                    style={{
+                      marginTop: '32px', padding: '12px 32px', backgroundColor: 'rgba(255,255,255,0.1)',
+                      borderRadius: '12px', fontWeight: 'bold', color: 'white', border: 'none', cursor: 'pointer'
+                    }}
                   >
                     Ana Menüye Dön
                   </button>
