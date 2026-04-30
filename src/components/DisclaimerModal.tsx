@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 
-const STORAGE_KEY = 'taste_disclaimer_accepted_v1'
+const STORAGE_KEY = 'taste_disclaimer_accepted_v2'
 
 interface DisclaimerModalProps {
     onAccept: () => void
@@ -93,11 +93,11 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                     />
 
                     <DisclaimerItem
-                        emoji="🚫"
-                        color="#fca5a5"
-                        title={isEn ? "No Crypto Payment" : "Kripto Ödeme Yasağı"}
-                        subtitle="Legal"
-                        text={isEn ? "TASTE is NOT a payment method. It is a loyalty asset used strictly for discounts and community benefits. All legal payments must be made in local fiat currency." : "TASTE bir ödeme aracı DEĞİLDİR. Sadece sadakat programı ve indirimler için kullanılan bir dijital varlıktır. Tüm yasal ödemeler yerel para birimi (TL) ile yapılmalıdır."}
+                        emoji="🎁"
+                        color="#22d3ee"
+                        title={isEn ? "Digital Loyalty Points" : "Dijital Sadakat Puanı"}
+                        subtitle="Utility Token"
+                        text={isEn ? "TASTE is a blockchain-based digital LOYALTY POINT, not a fiat currency and not a licensed payment service. It can be used at partner merchants for discounts and as a loyalty-based settlement medium. Converting TASTE to fiat is the user's own responsibility." : "TASTE, blokzincir tabanlı bir dijital SADAKAT PUANIDIR — fiat para değildir ve lisanslı bir ödeme hizmeti değildir. Anlaşmalı işletmelerde indirim ve sadakat tabanlı ödemede kullanılabilir. TASTE'i yerel paraya çevirme sorumluluğu tamamen kullanıcıya aittir."}
                     />
 
                     <DisclaimerItem
@@ -165,7 +165,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         {checked && '✓'}
                     </div>
                     <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
-                        {isEn ? 'I am over 18 years old and I have read and understood the risk warnings. I accept that TASTE is not a payment method.' : '18 yaşından büyüğüm, risk uyarılarını okudum ve anladım. TASTE\'in bir ödeme aracı olmadığını kabul ediyorum.'}
+                        {isEn ? 'I am over 18 years old and I have read and understood the risk warnings. I understand that TASTE is a digital loyalty point, not fiat currency.' : '18 yaşından büyüğüm, risk uyarılarını okudum ve anladım. TASTE\'in dijital bir sadakat puanı olduğunu, fiat para olmadığını kabul ediyorum.'}
                     </span>
                 </motion.label>
 

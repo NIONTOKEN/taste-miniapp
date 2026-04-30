@@ -249,8 +249,8 @@ export const QuickBuy: React.FC<QuickBuyProps> = ({ userId }) => {
                             </p>
                             <p style={{ fontSize: '10px', color: 'var(--text-muted)', margin: '0 0 6px', lineHeight: 1.5 }}>
                                 {isTR 
-                                    ? 'TASTE bir ödeme aracı veya finansal enstrüman değildir; sadece bir dijital sadakat varlığıdır.' 
-                                    : 'TASTE is not a financial instrument or payment tool; it is a digital loyalty asset.'}
+                                    ? 'TASTE, anlaşmalı işletmelerde indirim ve sadakat tabanlı ödemede kullanılan dijital bir sadakat puanıdır. Fiat para veya lisanslı bir ödeme hizmeti değildir.' 
+                                    : 'TASTE is a digital loyalty point usable at partner merchants for discounts and loyalty-based settlement. It is not fiat currency or a licensed payment service.'}
                             </p>
                             <p style={{ fontSize: '10px', color: 'var(--text-muted)', margin: '0', lineHeight: 1.5 }}>
                                 {isTR 

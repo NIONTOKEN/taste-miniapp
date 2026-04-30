@@ -11,6 +11,7 @@ import { toNano, Address, beginCell } from '@ton/core';
 import { useWallet } from '../context/WalletContext';
 import { internalWalletService } from '../services/internalWallet';
 import { apiService } from '../services/api';
+import { createTastePayInvoice, markTastePayInvoicePaid } from '../services/supabase';
 
 // ──────────────────────────────────────────────────────────────────────────
 // Config
@@ -155,6 +156,37 @@ export function TastePay({ onClose }: { onClose: () => void }) {
     `&tasteAmount=${calculatedTaste}` +
     `&memo=${invoiceId}`;
 
+  // Merchant QR'ı ilk gösterdiğinde Supabase'e invoice kaydı (fire-and-forget)
+  const invoiceSavedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (mode !== 'receive') return;
+    const amt = parseFloat(receiveAmount);
+    const tasteAmt = parseFloat(calculatedTaste);
+    if (!amt || !tasteAmt || tastePriceInFiat <= 0) return;
+
+    // Aynı invoice için tekrar tekrar yazma
+    const key = `${invoiceId}:${amt}:${currency}`;
+    if (invoiceSavedRef.current === key) return;
+    invoiceSavedRef.current = key;
+
+    // Telegram kullanıcı adını Telegram WebApp API'den al (varsa)
+    const tg = (window as any).Telegram?.WebApp;
+    const merchantName = tg?.initDataUnsafe?.user?.username
+      || tg?.initDataUnsafe?.user?.first_name
+      || undefined;
+
+    createTastePayInvoice({
+      invoice_code: invoiceId,
+      merchant_wallet: OTC_ADMIN_WALLET,
+      merchant_name: merchantName,
+      fiat_amount: amt,
+      fiat_currency: currency,
+      taste_amount: tasteAmt,
+      exchange_rate: tastePriceInFiat,
+      memo: `TastePay ${invoiceId}`,
+    }).catch(() => { /* silent */ });
+  }, [mode, receiveAmount, currency, calculatedTaste, tastePriceInFiat, invoiceId]);
+
   // ────────────────────────────────────────────────────────────────────────
   // REAL Payment — TON Connect jetton transfer to OTC wallet
   // ────────────────────────────────────────────────────────────────────────
@@ -246,6 +278,17 @@ export function TastePay({ onClose }: { onClose: () => void }) {
 
         await tonConnectUI.sendTransaction(transaction);
       }
+
+      // Supabase'e "paid" işareti (fire-and-forget)
+      try {
+        const tg = (window as any).Telegram?.WebApp;
+        const payerTg = tg?.initDataUnsafe?.user?.username || undefined;
+        await markTastePayInvoicePaid(
+          scannedPayload.memo || invoiceId,
+          activeAddress,
+          payerTg
+        );
+      } catch { /* silent */ }
 
       setPaymentStatus('success');
       setTimeout(() => refreshBalances(), 5000);

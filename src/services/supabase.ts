@@ -318,3 +318,85 @@ export async function updateOTCOrderStatus(id: string, status: string, receipt_u
         return res.ok
     } catch { return false }
 }
+
+// ─── TASTEPAY INVOICES ────────────────────────────────────────────────────
+export interface SupaTastePayInvoice {
+    id: string
+    invoice_code: string
+    merchant_wallet: string
+    merchant_name?: string
+    fiat_amount: number
+    fiat_currency: string
+    taste_amount: number
+    exchange_rate: number
+    status: 'pending' | 'paid' | 'expired' | 'cancelled'
+    payer_wallet?: string
+    payer_telegram?: string
+    tx_hash?: string
+    memo?: string
+    created_at: string
+    paid_at?: string
+    expires_at: string
+}
+
+export async function createTastePayInvoice(invoice: {
+    invoice_code: string
+    merchant_wallet: string
+    merchant_name?: string
+    fiat_amount: number
+    fiat_currency: string
+    taste_amount: number
+    exchange_rate: number
+    memo?: string
+}): Promise<SupaTastePayInvoice | null> {
+    return safePost('tastepay_invoices', invoice)
+}
+
+export async function markTastePayInvoicePaid(
+    invoice_code: string,
+    payer_wallet: string,
+    payer_telegram?: string
+): Promise<boolean> {
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/tastepay_invoices?invoice_code=eq.${invoice_code}`, {
+            method: 'PATCH',
+            headers: H,
+            body: JSON.stringify({
+                status: 'paid',
+                payer_wallet,
+                payer_telegram: payer_telegram || null,
+                paid_at: new Date().toISOString()
+            })
+        })
+        return res.ok
+    } catch { return false }
+}
+
+export async function getTastePayInvoices(
+    merchant_wallet?: string,
+    limit: number = 50
+): Promise<SupaTastePayInvoice[]> {
+    try {
+        const filter = merchant_wallet ? `&merchant_wallet=eq.${merchant_wallet}` : ''
+        const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/tastepay_invoices?order=created_at.desc&limit=${limit}${filter}`,
+            { headers: H }
+        )
+        if (!res.ok) return []
+        return res.json()
+    } catch { return [] }
+}
+
+export async function getTastePayInvoiceByCode(
+    invoice_code: string
+): Promise<SupaTastePayInvoice | null> {
+    try {
+        const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/tastepay_invoices?invoice_code=eq.${invoice_code}&limit=1`,
+            { headers: H }
+        )
+        if (!res.ok) return null
+        const data = await res.json()
+        return Array.isArray(data) && data.length > 0 ? data[0] : null
+    } catch { return null }
+}
