@@ -2,6 +2,11 @@
   command = "npm run build"
   publish = "dist"
 
+[build.environment]
+  VITE_OTC_WALLET = "UQB-Q4l7vp-RiXhSfziofwYpZ-Gv5Gs4xI9ZL3_tghEtjFpr"
+  VITE_JETTON_ADDRESS = "EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
+  VITE_POOL_ADDRESS = "EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
