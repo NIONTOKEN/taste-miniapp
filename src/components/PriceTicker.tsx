@@ -38,9 +38,6 @@ export function PriceTicker() {
       <div className="ticker">
         <span className="ticker-item">💎 TASTE/USD: ${price} <span className={changeColor}>({changeSign}{change.toFixed(1)}%)</span></span>
         <span className="ticker-item">🇹🇷 TASTE/TRY: ₺{tryPrice}</span>
-        <span className="ticker-item" style={{ color: '#60a5fa', fontWeight: 800 }}>🤝 {i18n.language?.startsWith('tr') ? 'YENİ PARTNER: Panoda Şehir (Şehrin Dijital Panosu)' : 'NEW PARTNER: Panoda Sehir'}</span>
-        <span className="ticker-item" style={{ color: '#a78bfa', fontWeight: 800 }}>🦾 {i18n.language?.startsWith('tr') ? 'YENİ PARTNER: NION PROJECT (SOLANA AI LAB)' : 'NEW PARTNER: NION PROJECT (SOLANA AI LAB)'}</span>
-        <span className="ticker-item" style={{ color: '#38bdf8', fontWeight: 800 }}>🤝 {i18n.language?.startsWith('tr') ? '🆕 YENİ ORTAK: QAI WALLET — Web4 Finansın Geleceği!' : '🆕 NEW PARTNER: QAI WALLET — The Future of Web4 Finance!'}</span>
         <span className="ticker-item">🚀 {t('app.early_access_ending')} $0.01</span>
         <span className="ticker-item">🔥 {t('app.units.supply')}: 25,000,000</span>
         <span className="ticker-item">🌍 {i18n.language?.startsWith('tr') ? 'TOPLULUK ODAKLI' : 'COMMUNITY DRIVEN'}</span>

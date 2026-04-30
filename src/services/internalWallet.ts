@@ -52,6 +52,19 @@ class InternalWalletService {
         localStorage.removeItem(STORAGE_KEY);
     }
 
+    async importWallet(mnemonicPhrase: string): Promise<InternalWalletInfo> {
+        const words = mnemonicPhrase.trim().toLowerCase().split(/\s+/);
+        if (words.length !== 24) {
+            throw new Error('Mnemonic 24 kelimeden oluşmalıdır.');
+        }
+        // Validate by deriving key — throws if invalid
+        await mnemonicToWalletKey(words);
+        localStorage.setItem(STORAGE_KEY, words.join(' '));
+        const info = await this.getWalletInfo();
+        if (!info) throw new Error('Cüzdan import edilemedi');
+        return info;
+    }
+
     async getBalance(address: string): Promise<string> {
         const client = await this.getClient();
         const balance = await client.getBalance(Address.parse(address));

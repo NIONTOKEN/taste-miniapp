@@ -56,15 +56,13 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 ## TASTE Platform Features
 1. **Telegram Mini App** — Full-featured app inside Telegram
 2. **Food Feed (Yemek Akışı)** — Share recipes, food photos, restaurant reviews in real-time
-3. **Spin Wheel** — Daily digital reward wheel, earn TASTE assets
-4. **Charity Platform** — Support stray animal shelters
-5. **Food Allergen System** — 14 mandatory EU & Turkey allergens integrated
-6. **Live Activity** — Real-time blockchain activity tracker
-7. **Global Live Chat** — Real-time community chat accessible to everyone worldwide.
-8. **Job Board / Career** — Post job openings (chef, waiter, etc.) and contact posters directly via Telegram.
-9. **CV / Profile** — Culinary CV system with photo uploads and direct linking.
-10. **Leaderboard** — Community rankings
-11. **Documentation** — Full technical details at tastetoken.net
+3. **Charity Platform** — Support stray animal shelters
+4. **Food Allergen System** — 14 mandatory EU & Turkey allergens integrated
+5. **Live Activity** — Real-time blockchain activity tracker
+6. **Global Live Chat** — Real-time community chat accessible to everyone worldwide.
+7. **Leaderboard** — Community rankings
+8. **Taste Wallet** — Includes internal asset tracking and the ability to import an existing TON wallet via a 24-word seed phrase.
+9. **Documentation** — Full technical details at tastetoken.net
 
 ## Target Use Cases
 🍽️ Restaurant payments & loyalty rewards
@@ -133,15 +131,14 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 📌 Every step transparent, every commitment fulfilled.
 "TASTE builds trust, doesn't sell dreams."
 
-## Reward Distribution
-- Reward distribution ends: May 20, 2026
-- Spin Wheel is active for daily rewards
-
 ## Charity
 Platform for donating TON or TASTE to support stray animals:
 - Food, veterinary care, and shelter support
 - Donation channel open 24/7
 - All aid with proof/documentation published transparently
+
+## Official Partners
+- **Panoda Şehir**: Official Web3 Partner. The digital city board joined TASTE! Listed in the Discover > Partners section.
 
 ## Legal & Risk
 ⚠️ TASTE is NOT financial advice

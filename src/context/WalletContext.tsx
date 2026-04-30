@@ -24,6 +24,7 @@ interface WalletContextType {
     isLoading: boolean;
     // Eksik fonksiyonlar eklendi
     createInternalWallet: () => Promise<InternalWalletInfo>;
+    importWallet: (mnemonic: string) => Promise<InternalWalletInfo>;
     logoutInternal: () => void;
     internalWallet: InternalWalletInfo | null;
 }
@@ -73,6 +74,13 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setWalletType('external');
     };
 
+    const importWallet = async (mnemonicPhrase: string) => {
+        const info = await internalWalletService.importWallet(mnemonicPhrase);
+        setInternalWallet(info);
+        setWalletType('internal');
+        return info;
+    };
+
     const refreshBalances = useCallback(async () => {
         if (!activeAddress) return;
         setIsLoading(true);
@@ -119,6 +127,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             refreshBalances,
             isLoading,
             createInternalWallet,
+            importWallet,
             logoutInternal,
             internalWallet
         }}>

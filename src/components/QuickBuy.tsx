@@ -139,7 +139,7 @@ export const QuickBuy: React.FC<QuickBuyProps> = ({ userId }) => {
                     ⚡ {isTR ? 'Hızlı TASTE Al' : 'Quick Buy TASTE'}
                 </h2>
                 <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted)' }}>
-                    {isTR ? 'Havale/EFT ile TASTE satın al' : 'Buy TASTE via bank transfer'}
+                    {isTR ? 'Hızlı ve güvenli TASTE satın al' : 'Buy TASTE fast and securely'}
                 </p>
             </div>
 
@@ -229,12 +229,12 @@ export const QuickBuy: React.FC<QuickBuyProps> = ({ userId }) => {
                             </p>
                             {(isTR ? [
                                 '1️⃣ Tutarı gir ve siparişi oluştur',
-                                '2️⃣ Kodu açıklamaya yazarak havale/EFT yap',
+                                '2️⃣ Ödemeyi referans kodunu açıklamaya yazarak yap',
                                 '3️⃣ WhatsApp grubuna dekont ekran görüntüsünü at',
                                 '4️⃣ Onaydan sonra TASTE cüzdanına yatar (1-12 saat)',
                             ] : [
                                 '1️⃣ Enter amount and create order',
-                                '2️⃣ Transfer money with the code in description',
+                                '2️⃣ Send payment with the reference code in description',
                                 '3️⃣ Send receipt screenshot to our WhatsApp group',
                                 '4️⃣ After approval, TASTE lands in your wallet (1-12h)',
                             ]).map((txt, i) => (
@@ -290,7 +290,7 @@ export const QuickBuy: React.FC<QuickBuyProps> = ({ userId }) => {
                                 {isTR ? 'Sipariş oluşturuldu!' : 'Order created!'}
                             </p>
                             <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>
-                                {isTR ? 'Şimdi aşağıdaki bilgilere havale yap' : 'Now make the bank transfer below'}
+                                {isTR ? 'Şimdi aşağıdaki bilgilere ödeme yap' : 'Now send your payment using the details below'}
                             </p>
                         </div>
 
@@ -307,7 +307,7 @@ export const QuickBuy: React.FC<QuickBuyProps> = ({ userId }) => {
                         {/* Bank Details */}
                         <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', overflow: 'hidden' }}>
                             <div style={{ padding: '10px 16px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.06)', fontSize: '11px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                                🏦 {isTR ? 'Havale Bilgileri' : 'Transfer Details'}
+                                💳 {isTR ? 'Ödeme Bilgileri' : 'Payment Details'}
                             </div>
 
                             {/* IBAN — copyable */}
@@ -364,8 +364,8 @@ export const QuickBuy: React.FC<QuickBuyProps> = ({ userId }) => {
                             </p>
                             <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '0 0 12px', lineHeight: 1.6 }}>
                                 {isTR
-                                    ? `Havaleni yaptıktan sonra banka uygulamasından dekont ekranının görüntüsünü al ve referans kodun (${refCode}) ile birlikte WhatsApp grubuna gönder.`
-                                    : `After your transfer, take a screenshot of the receipt from your banking app and send it with your code (${refCode}) to our WhatsApp group.`}
+                                    ? `Ödemenizi yaptıktan sonra dekont ekran görüntüsünü al ve referans kodunla (${refCode}) birlikte WhatsApp grubuna gönder.`
+                                    : `After payment, take a screenshot of the receipt and send it with your code (${refCode}) to our WhatsApp group.`}
                             </p>
                             <motion.button
                                 whileTap={{ scale: 0.97 }}
@@ -394,7 +394,7 @@ export const QuickBuy: React.FC<QuickBuyProps> = ({ userId }) => {
                                 borderRadius: '14px', cursor: 'pointer'
                             }}
                         >
-                            {isTR ? '✅ Havalemi ve Dekontu Gönderdim →' : '✅ I Transferred & Sent Receipt →'}
+                            {isTR ? '✅ Ödedim ve Dekontu Gönderdim →' : '✅ I Paid & Sent Receipt →'}
                         </motion.button>
                     </motion.div>
                 )}

@@ -29,6 +29,7 @@ import { QuickBuy } from './components/QuickBuy'
 import { QuickBuyAdmin } from './components/QuickBuyAdmin'
 import { Leaderboard } from './components/Leaderboard'
 import { DailyRewards } from './components/DailyRewards'
+import { TastePay } from './components/TastePay'
 import {
   Home,
   Map,
@@ -49,7 +50,12 @@ import {
   Trophy,
   Users,
   ArrowDown,
-  Handshake
+  Handshake,
+  Globe,
+  ShieldCheck,
+  ScrollText,
+  BookOpen,
+  Wallet
 } from 'lucide-react'
 import { apiService } from './services/api'
 
@@ -63,6 +69,7 @@ function App() {
   const [holdersCount, setHoldersCount] = useState<string>('...');
   const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'quickbuy' | 'admin_otc'>('home');
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
+  const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
   const [tonConnectUI] = useTonConnectUI();
   const { activeAddress } = useWallet();
@@ -249,43 +256,6 @@ function App() {
                 </div>
             </motion.div>
 
-            {/* Quick Partner Banner */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              style={{
-                background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15))',
-                border: '1px solid rgba(59, 130, 246, 0.3)',
-                borderRadius: '16px',
-                padding: '16px',
-                marginBottom: '15px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
-              }}
-              onClick={() => {
-                setActiveTab('partners');
-                if (window.scrollTo) window.scrollTo(0, 0);
-              }}
-            >
-              <div>
-                <div style={{ fontSize: '10px', fontWeight: 800, color: '#3b82f6', textTransform: 'uppercase', marginBottom: '2px' }}>
-                  {i18n.language?.startsWith('tr') ? 'Resmi Web3 Partneri' : 'Official Web3 Partner'}
-                </div>
-                <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff' }}>
-                  🤝 Panoda Şehir
-                </div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                  {i18n.language?.startsWith('tr') ? "Şehrin dijital panosu TASTE'e katıldı!" : 'The digital city board joined TASTE!'}
-                </div>
-              </div>
-              <div style={{ background: 'rgba(59, 130, 246, 0.2)', padding: '8px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 700, color: '#60a5fa' }}>
-                {i18n.language?.startsWith('tr') ? 'İncele' : 'View'} →
-              </div>
-            </motion.div>
 
             {/* OTC/Quick Buy Banner */}
             <motion.div
@@ -319,12 +289,43 @@ function App() {
                     {i18n.language?.startsWith('tr') ? 'Hızlı TASTE Al (OTC)' : 'Quick Buy TASTE'}
                   </div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                    {i18n.language?.startsWith('tr') ? 'Banka Havale/EFT ile saniyeler içinde TASTE al.' : 'Buy TASTE with localized bank transfer instantly.'}
+                    {i18n.language?.startsWith('tr') ? 'Hızlı ve güvenli şekilde TASTE satın al.' : 'Buy TASTE quickly and securely.'}
                   </div>
                 </div>
               </div>
               <div style={{ background: 'rgba(245, 159, 11, 0.2)', padding: '8px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 900, color: '#fbbf24' }}>
                 {i18n.language?.startsWith('tr') ? 'Al' : 'Buy'} →
+              </div>
+            </motion.div>
+
+            {/* TASTE PAY BUTTON (BANK LIKE) */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              onClick={() => setIsTastePayOpen(true)}
+              style={{
+                background: 'linear-gradient(135deg, #0ea5e9, #2563eb)',
+                border: '1px solid rgba(14, 165, 233, 0.5)',
+                borderRadius: '20px',
+                padding: '20px',
+                marginBottom: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                boxShadow: '0 8px 32px rgba(14, 165, 233, 0.3)',
+                cursor: 'pointer'
+              }}
+            >
+              <div style={{ background: 'rgba(255,255,255,0.2)', padding: '16px', borderRadius: '50%', boxShadow: 'inset 0 0 10px rgba(255,255,255,0.2)' }}>
+                <QrCode size={32} color="#fff" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '20px', fontWeight: 900, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>QR ile Öde</div>
+                <div style={{ fontSize: '13px', color: '#e0f2fe', fontWeight: 600 }}>TASTE Pay • Hızlı ve Masrafsız</div>
+              </div>
+              <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '8px 16px', borderRadius: '12px', fontSize: '12px', fontWeight: 900, color: '#fff', backdropFilter: 'blur(10px)' }}>
+                Aç →
               </div>
             </motion.div>
 
@@ -720,6 +721,12 @@ function App() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {isTastePayOpen && (
+          <TastePay onClose={() => setIsTastePayOpen(false)} />
+        )}
+      </AnimatePresence>
+
       <div className={`container ${isRTL ? 'rtl' : ''}`} style={{ paddingBottom: '90px', paddingTop: '40px' }}>
         <PriceTicker />
 
@@ -756,7 +763,9 @@ function App() {
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', position: 'relative' }}>
           <WalletSelector />
           <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowLangMenu(!showLangMenu)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--bg-card-border)', color: 'var(--text-main)', padding: '5px 12px', borderRadius: '15px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            {currentLang.flag} {currentLang.code.toUpperCase()}
+            <Globe size={14} />
+            <span style={{ fontWeight: 800 }}>{i18n.language?.startsWith('tr') ? 'Dil' : 'Lang'}</span>
+            {currentLang.flag}
           </motion.button>
 
           <AnimatePresence>
@@ -835,20 +844,18 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
                     { id: 'quickbuy', label: i18n.language?.startsWith('tr') ? 'Hızlı TASTE' : 'Quick Buy', color: '#f59e0b', image: '/logo.jpg', isNew: true },
-                    ...(userId === '1505452121' ? [{ id: 'admin_otc', label: '👑 OTC Admin', color: '#f59e0b', emojiImage: '👑' }] : []),
-                    { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
-                    { id: 'community', label: 'Taste Jobs', color: '#f97316', emojiImage: '💼' },
-                    { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', color: '#eab308', emojiImage: '🏆' },
-                    { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
-                    { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
-                    { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📄' },
-                    { id: 'spin', label: t('nav.spin'), color: '#ec4899', emojiImage: '🎡' },
-                    { id: 'charity', label: t('nav.charity'), color: '#f43f5e', emojiImage: '💖' },
-                    { id: 'chef', label: t('nav.chef'), color: '#10b981', emojiImage: '👨‍🍳', isDemo: true },
-                    { id: 'wallet', label: t('nav.wallet'), color: '#f59e0b', emojiImage: '💳' },
-                    { id: 'faq', label: i18n.language?.startsWith('tr') ? 'S.S.S.' : 'F.A.Q.', color: '#22c55e', emojiImage: '🙋' },
-                    { id: 'tech', label: i18n.language?.startsWith('tr') ? 'Teknoloji' : 'Tech', color: '#10b981', emojiImage: '💻' },
-                    { id: 'legal', label: t('nav.legal'), color: '#64748b', emojiImage: '⚖️' }
+                    ...(userId === '1505452121' ? [{ id: 'admin_otc', label: 'OTC Admin', color: '#f59e0b', icon: ShieldCheck }] : []),
+                    { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', icon: Handshake, isNew: true },
+                    { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', color: '#eab308', icon: Trophy },
+                    { id: 'manifesto', label: 'Manifesto', color: '#f97316', icon: ScrollText },
+                    { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', icon: Map },
+                    { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', icon: BookOpen },
+                    { id: 'charity', label: t('nav.charity'), color: '#f43f5e', icon: Heart },
+                    { id: 'chef', label: t('nav.chef'), color: '#10b981', icon: ChefHat, isDemo: true },
+                    { id: 'wallet', label: 'Taste Wallet', color: '#f59e0b', icon: Wallet },
+                    { id: 'faq', label: i18n.language?.startsWith('tr') ? 'S.S.S.' : 'F.A.Q.', color: '#22c55e', icon: HelpCircle },
+                    { id: 'tech', label: i18n.language?.startsWith('tr') ? 'Teknoloji' : 'Tech', color: '#10b981', icon: Cpu },
+                    { id: 'legal', label: t('nav.legal'), color: '#64748b', icon: Scale }
                   ].map((item: any) => (
                     <button
                       key={item.id}
