@@ -298,37 +298,6 @@ function App() {
               </div>
             </motion.div>
 
-            {/* TASTE PAY BUTTON (BANK LIKE) */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              onClick={() => setIsTastePayOpen(true)}
-              style={{
-                background: 'linear-gradient(135deg, #0ea5e9, #2563eb)',
-                border: '1px solid rgba(14, 165, 233, 0.5)',
-                borderRadius: '20px',
-                padding: '20px',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-                boxShadow: '0 8px 32px rgba(14, 165, 233, 0.3)',
-                cursor: 'pointer'
-              }}
-            >
-              <div style={{ background: 'rgba(255,255,255,0.2)', padding: '16px', borderRadius: '50%', boxShadow: 'inset 0 0 10px rgba(255,255,255,0.2)' }}>
-                <QrCode size={32} color="#fff" />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '20px', fontWeight: 900, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>QR ile Öde</div>
-                <div style={{ fontSize: '13px', color: '#e0f2fe', fontWeight: 600 }}>TASTE Pay • Hızlı ve Masrafsız</div>
-              </div>
-              <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '8px 16px', borderRadius: '12px', fontSize: '12px', fontWeight: 900, color: '#fff', backdropFilter: 'blur(10px)' }}>
-                Aç →
-              </div>
-            </motion.div>
-
             {/* Airdrop Countdown */}
             <RewardCountdown />
 
@@ -843,6 +812,7 @@ function App() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
+                    { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', icon: QrCode, isNew: true },
                     { id: 'quickbuy', label: i18n.language?.startsWith('tr') ? 'Hızlı TASTE' : 'Quick Buy', color: '#f59e0b', image: '/logo.jpg', isNew: true },
                     ...(userId === '1505452121' ? [{ id: 'admin_otc', label: 'OTC Admin', color: '#f59e0b', icon: ShieldCheck }] : []),
                     { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', icon: Handshake, isNew: true },
@@ -860,7 +830,11 @@ function App() {
                     <button
                       key={item.id}
                       onClick={() => {
-                        setActiveTab(item.id as any);
+                        if (item.id === 'pay') {
+                           setIsTastePayOpen(true);
+                        } else {
+                           setActiveTab(item.id as any);
+                        }
                         setIsMenuOpen(false);
                       }}
                       style={{
