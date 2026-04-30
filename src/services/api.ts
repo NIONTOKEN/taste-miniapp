@@ -72,6 +72,31 @@ class ApiService {
     }
 
     /**
+     * Get USD -> all fiat exchange rates (for TastePay multi-currency support)
+     * Returns an object like { TRY: 32.5, EUR: 0.92, RUB: 95, ... }
+     */
+    async getMultiFiatRates(): Promise<Record<string, number>> {
+        const FALLBACK_RATES: Record<string, number> = {
+            USD: 1,      TRY: 43.87, EUR: 0.92, GBP: 0.79, RUB: 95,
+            AED: 3.67,   SAR: 3.75,  IQD: 1310, JPY: 155,  CNY: 7.25,
+            INR: 83,     UAH: 41.5,  AZN: 1.7,  KZT: 475,  BRL: 5.1,
+        };
+        try {
+            const data = await this.fetchWithRetry(
+                'https://api.exchangerate-api.com/v4/latest/USD',
+                { timeout: 8000, retries: 2, fallbackValue: null }
+            );
+            if (data?.rates && typeof data.rates === 'object') {
+                return { ...FALLBACK_RATES, ...data.rates };
+            }
+            return FALLBACK_RATES;
+        } catch (error) {
+            console.warn('[Multi-Fiat] Failed, using fallback:', error);
+            return FALLBACK_RATES;
+        }
+    }
+
+    /**
      * Get USD to TRY exchange rate
      */
     async getExchangeRate(): Promise<{ rate: number; usdToTry: number }> {
