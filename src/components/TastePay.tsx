@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Camera, QrCode, ArrowLeft, CheckCircle2, Wallet, Banknote,
   RefreshCw, AlertCircle, ExternalLink, ChevronDown
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Html5QrcodeScanner, Html5QrcodeScanType } from 'html5-qrcode';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { toNano, Address, beginCell } from '@ton/core';
 import { useWallet } from '../context/WalletContext';
@@ -71,7 +70,68 @@ export function TastePay({ onClose }: { onClose: () => void }) {
   const [scannedPayload, setScannedPayload] = useState<any>(null);
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [paymentError, setPaymentError] = useState<string>('');
-  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [scanning, setScanning] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+  const jsQRRef = useRef<any>(null);
+
+  // Load jsQR dynamically
+  useEffect(() => {
+    import('jsqr').then((mod) => {
+      jsQRRef.current = mod.default;
+    }).catch(() => {
+      console.error('jsQR could not be loaded');
+    });
+  }, []);
+
+  const stopCamera = useCallback(() => {
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+    }
+    setScanning(false);
+  }, []);
+
+  const startCamera = useCallback(async () => {
+    setCameraError(null);
+    setScanning(false);
+
+    try {
+      const constraints: MediaStreamConstraints = {
+        video: {
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+        }
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      streamRef.current = stream;
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.setAttribute('playsinline', 'true');
+        await videoRef.current.play();
+        setScanning(true);
+      }
+    } catch (err: any) {
+      console.error('Camera error:', err);
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        setCameraError('Kamera izni reddedildi. Lütfen cihaz ayarlarından izin verin.');
+      } else if (err.name === 'NotFoundError') {
+        setCameraError('Kamera bulunamadı.');
+      } else {
+        setCameraError('Kamera açılamadı: ' + err.message);
+      }
+    }
+  }, []);
 
   // ────────────────────────────────────────────────────────────────────────
   // Fetch live rates on mount + periodic refresh
@@ -144,40 +204,57 @@ export function TastePay({ onClose }: { onClose: () => void }) {
     }
   };
 
+  // Scan loop using jsQR
   useEffect(() => {
-    if (mode !== 'scan') return;
+    if (!scanning || mode !== 'scan') return;
 
-    // 1) Önce Telegram native scanner dene
-    if (openTelegramScanner()) {
-      // Telegram popup açıldı, bizim scan ekranımızı menüye döndür
-      setMode('menu');
-      return;
-    }
+    const tick = () => {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      const jsQR = jsQRRef.current;
 
-    // 2) Fallback: html5-qrcode (sadece tarayıcıda)
-    const scanner = new Html5QrcodeScanner(
-      'qr-reader',
-      { fps: 10, qrbox: { width: 250, height: 250 }, supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA] },
-      false
-    );
-    scannerRef.current = scanner;
+      if (video && canvas && jsQR && video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.height = video.videoHeight;
+        canvas.width = video.videoWidth;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: 'dontInvert',
+          });
 
-    scanner.render(
-      (decodedText) => {
-        if (parseQrData(decodedText)) {
-          scanner.clear().catch(() => {});
+          if (code) {
+            const decodedText = code.data;
+            if (parseQrData(decodedText)) {
+              stopCamera();
+              return; // stop loop
+            }
+          }
         }
-      },
-      () => { /* silent scan errors */ }
-    );
+      }
+      animFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    animFrameRef.current = requestAnimationFrame(tick);
 
     return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(() => {});
-      }
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, [scanning, mode, stopCamera]);
+
+  useEffect(() => {
+    if (mode === 'scan') {
+      if (openTelegramScanner()) {
+        setMode('menu');
+      } else {
+        startCamera();
+      }
+    } else {
+      stopCamera();
+    }
+    return () => stopCamera();
+  }, [mode, startCamera, stopCamera]);
 
   // ────────────────────────────────────────────────────────────────────────
   // Receive-mode calculations
@@ -651,34 +728,75 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                 minHeight: '100%', alignItems: 'center', justifyContent: 'center',
               }}
             >
-              <div style={{
-                width: '100%', maxWidth: '320px', aspectRatio: '1/1',
-                backgroundColor: 'black', borderRadius: '24px', overflow: 'hidden', position: 'relative',
-                border: '4px solid rgba(34,211,238,0.5)', boxShadow: '0 0 40px rgba(34,211,238,0.2)',
-              }}>
-                <div id="qr-reader" data-testid="tastepay-qr-reader" style={{ width: '100%', height: '100%' }} />
-              </div>
-              <p style={{ marginTop: '22px', textAlign: 'center', color: '#9ca3af', fontSize: '13px' }}>
-                Ödeme yapmak için kasadaki karekodu okutun
-              </p>
-              <button
-                data-testid="tastepay-manual-scan-btn"
-                onClick={() => {
-                  if (!openTelegramScanner()) {
-                    alert('Kamera erişimi bulunamadı. Lütfen Telegram içinden açın veya tarayıcıda kamera izni verin.');
-                  }
-                }}
-                style={{
-                  marginTop: '16px', padding: '12px 24px',
-                  background: 'linear-gradient(to right, #06b6d4, #2563eb)',
-                  color: 'white', border: 'none', borderRadius: '12px',
-                  fontSize: '14px', fontWeight: 'bold', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                }}
-              >
-                <Camera size={16} />
-                Kamerayı Aç
-              </button>
+              <canvas ref={canvasRef} style={{ display: 'none' }} />
+              {cameraError ? (
+                <div style={{
+                  width: '100%', maxWidth: '320px', padding: '24px',
+                  background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
+                  borderRadius: '20px', textAlign: 'center'
+                }}>
+                  <AlertCircle size={48} color="#f87171" style={{ marginBottom: '16px', margin: '0 auto' }} />
+                  <p style={{ color: '#f87171', marginBottom: '20px', fontSize: '14px' }}>{cameraError}</p>
+                  <button
+                    onClick={startCamera}
+                    style={{
+                      background: 'linear-gradient(to right, #06b6d4, #2563eb)',
+                      border: 'none', borderRadius: '12px', padding: '12px 24px',
+                      color: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px'
+                    }}
+                  >
+                    Kamerayı Tekrar Dene
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div style={{
+                    width: '100%', maxWidth: '320px', aspectRatio: '1/1',
+                    backgroundColor: 'black', borderRadius: '24px', overflow: 'hidden', position: 'relative',
+                    border: '4px solid rgba(34,211,238,0.5)', boxShadow: '0 0 40px rgba(34,211,238,0.2)',
+                  }}>
+                    {!scanning && (
+                      <div style={{
+                        position: 'absolute', inset: 0,
+                        display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center',
+                        background: '#0a0f1c', gap: '12px'
+                      }}>
+                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}>
+                          <RefreshCw size={40} color="#22d3ee" />
+                        </motion.div>
+                        <span style={{ color: '#9ca3af', fontSize: '14px' }}>Kamera açılıyor...</span>
+                      </div>
+                    )}
+                    <video
+                      ref={videoRef}
+                      playsInline
+                      muted
+                      style={{
+                        width: '100%', height: '100%',
+                        objectFit: 'cover',
+                        display: scanning ? 'block' : 'none'
+                      }}
+                    />
+                    {scanning && (
+                      <>
+                        <div style={{ position: 'absolute', top: '15%', left: '15%', width: '30px', height: '30px', borderTop: '4px solid #22d3ee', borderLeft: '4px solid #22d3ee', borderRadius: '4px 0 0 0' }} />
+                        <div style={{ position: 'absolute', top: '15%', right: '15%', width: '30px', height: '30px', borderTop: '4px solid #22d3ee', borderRight: '4px solid #22d3ee', borderRadius: '0 4px 0 0' }} />
+                        <div style={{ position: 'absolute', bottom: '15%', left: '15%', width: '30px', height: '30px', borderBottom: '4px solid #22d3ee', borderLeft: '4px solid #22d3ee', borderRadius: '0 0 0 4px' }} />
+                        <div style={{ position: 'absolute', bottom: '15%', right: '15%', width: '30px', height: '30px', borderBottom: '4px solid #22d3ee', borderRight: '4px solid #22d3ee', borderRadius: '0 0 4px 0' }} />
+                        <motion.div
+                          animate={{ top: ['20%', '80%', '20%'] }}
+                          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                          style={{ position: 'absolute', left: '10%', right: '10%', height: '2px', background: 'linear-gradient(to right, transparent, #22d3ee, transparent)' }}
+                        />
+                      </>
+                    )}
+                  </div>
+                  <p style={{ marginTop: '22px', textAlign: 'center', color: '#9ca3af', fontSize: '13px' }}>
+                    Ödeme yapmak için kasadaki karekodu okutun
+                  </p>
+                </>
+              )}
             </motion.div>
           )}
 

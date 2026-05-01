@@ -1161,18 +1161,17 @@ const resources = {
     }
 };
 
+const savedLang = localStorage.getItem('i18nextLng');
+const initialLang = savedLang?.toLowerCase().startsWith('tr') ? 'tr' : 'en';
+
 i18n
-    .use(LanguageDetector)
     .use(initReactI18next)
     .init({
         resources,
+        lng: initialLang,
         fallbackLng: 'en',
         interpolation: {
             escapeValue: false
-        },
-        detection: {
-            order: ['localStorage', 'navigator'],
-            caches: ['localStorage']
         }
     });
 
