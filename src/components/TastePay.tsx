@@ -185,7 +185,9 @@ export function TastePay({ onClose }: { onClose: () => void }) {
 
   const openTelegramScanner = (): boolean => {
     const tg = (window as any).Telegram?.WebApp;
-    if (!tg?.showScanQrPopup) return false;
+    // showScanQrPopup only works reliably on mobile platforms
+    const isMobile = tg?.platform === 'android' || tg?.platform === 'ios';
+    if (!tg?.showScanQrPopup || !isMobile) return false;
     try {
       tg.showScanQrPopup(
         { text: 'TASTE Pay kodunu okutun' },
@@ -245,9 +247,8 @@ export function TastePay({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     if (mode === 'scan') {
-      if (openTelegramScanner()) {
-        setMode('menu');
-      } else {
+      const openedNative = openTelegramScanner();
+      if (!openedNative) {
         startCamera();
       }
     } else {
@@ -737,16 +738,30 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                 }}>
                   <AlertCircle size={48} color="#f87171" style={{ marginBottom: '16px', margin: '0 auto' }} />
                   <p style={{ color: '#f87171', marginBottom: '20px', fontSize: '14px' }}>{cameraError}</p>
-                  <button
-                    onClick={startCamera}
-                    style={{
-                      background: 'linear-gradient(to right, #06b6d4, #2563eb)',
-                      border: 'none', borderRadius: '12px', padding: '12px 24px',
-                      color: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px'
-                    }}
-                  >
-                    Kamerayı Tekrar Dene
-                  </button>
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                    <button
+                      onClick={startCamera}
+                      style={{
+                        background: 'linear-gradient(to right, #06b6d4, #2563eb)',
+                        border: 'none', borderRadius: '12px', padding: '12px 24px',
+                        color: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px'
+                      }}
+                    >
+                      Tekrar Dene
+                    </button>
+                    {(window as any).Telegram?.WebApp?.showScanQrPopup && (
+                      <button
+                        onClick={() => openTelegramScanner()}
+                        style={{
+                          background: 'rgba(255,255,255,0.1)',
+                          border: 'none', borderRadius: '12px', padding: '12px 24px',
+                          color: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px'
+                        }}
+                      >
+                        Native Kamera
+                      </button>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <>

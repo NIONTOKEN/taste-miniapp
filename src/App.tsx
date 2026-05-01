@@ -147,6 +147,7 @@ function App() {
 
   const changeLanguage = (code: string) => {
     i18n.changeLanguage(code);
+    localStorage.setItem('i18nextLng', code);
     setShowLangMenu(false);
   };
 
