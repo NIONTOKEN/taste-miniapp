@@ -523,7 +523,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   }}
                 >
-                  <span>✓ Cüzdan bağlı</span>
+                  <span>{t('tastepay.wallet_connected')}</span>
                   <span style={{ color: '#22d3ee', fontWeight: 'bold' }}>
                     {balances.taste} TASTE
                   </span>
@@ -537,7 +537,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                   display: 'flex', alignItems: 'center', gap: '8px',
                 }}>
                   <AlertCircle size={14} />
-                  <span>Ödeme yapmak için cüzdan bağlamanız gerekir</span>
+                  <span>{t('tastepay.wallet_required')}</span>
                 </div>
               )}
 
@@ -560,7 +560,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     {t('tastepay.scan')}
                   </div>
                   <div style={{ color: '#cffafe', fontSize: '13px' }}>
-                    Müşteri Modu · Kasadaki kodu okut ve öde
+                    {t('tastepay.scan_desc')}
                   </div>
                 </div>
               </button>
@@ -584,7 +584,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     Ödeme Al
                   </div>
                   <div style={{ color: '#f3e8ff', fontSize: '13px' }}>
-                    İşletme Modu · QR kod oluştur, müşteri ödesin
+                    {t('tastepay.receive_desc')}
                   </div>
                 </div>
               </button>
@@ -600,7 +600,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '12px' }}
             >
               <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: '0 0 20px 0' }}>
-                Ödeme Alınacak {t('tastepay.amount')}
+                {t('tastepay.receive_amount_title')}
               </h2>
 
               {/* Currency selector */}
