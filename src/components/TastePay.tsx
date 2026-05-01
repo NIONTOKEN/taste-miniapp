@@ -5,6 +5,7 @@ import {
   RefreshCw, AlertCircle, ExternalLink, ChevronDown
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
+import { useTranslation } from 'react-i18next';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { toNano, Address, beginCell } from '@ton/core';
 import { useWallet } from '../context/WalletContext';
@@ -48,6 +49,7 @@ type CurrencyCode = keyof typeof CURRENCIES;
 // Main Component
 // ──────────────────────────────────────────────────────────────────────────
 export function TastePay({ onClose }: { onClose: () => void }) {
+  const { t, i18n } = useTranslation();
   const [mode, setMode] = useState<'menu' | 'scan' | 'receive' | 'confirm'>('menu');
 
   // Wallet integration
@@ -124,11 +126,11 @@ export function TastePay({ onClose }: { onClose: () => void }) {
     } catch (err: any) {
       console.error('Camera error:', err);
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        setCameraError('Kamera izni reddedildi. Lütfen cihaz ayarlarından izin verin.');
+        setCameraError(t('tastepay.cam_denied'));
       } else if (err.name === 'NotFoundError') {
-        setCameraError('Kamera bulunamadı.');
+        setCameraError(t('tastepay.cam_not_found'));
       } else {
-        setCameraError('Kamera açılamadı: ' + err.message);
+        setCameraError(t('tastepay.cam_failed') +  + err.message);
       }
     }
   }, []);
@@ -311,28 +313,28 @@ export function TastePay({ onClose }: { onClose: () => void }) {
 
     // Pre-flight checks
     if (!activeAddress) {
-      setPaymentError('Lütfen önce cüzdanınızı bağlayın (Connect Wallet)');
+      setPaymentError(t('tastepay.err_wallet'));
       setPaymentStatus('error');
       return;
     }
 
     const tasteAmount = parseFloat(scannedPayload.tasteAmount);
     if (!tasteAmount || tasteAmount <= 0) {
-      setPaymentError('Geçersiz ödeme tutarı');
+      setPaymentError(t('tastepay.err_amount'));
       setPaymentStatus('error');
       return;
     }
 
     const userTasteBal = parseFloat((balances.taste || '0').replace(/,/g, ''));
     if (userTasteBal < tasteAmount) {
-      setPaymentError(`Yetersiz TASTE bakiyesi! Gerekli: ${tasteAmount}, Mevcut: ${userTasteBal}`);
+      setPaymentError(t('tastepay.err_balance').replace('{{req}}', tasteAmount.toString()).replace('{{avail}}', userTasteBal.toString()));
       setPaymentStatus('error');
       return;
     }
 
     const userTonBal = parseFloat(balances.ton || '0');
     if (userTonBal < 0.2) {
-      setPaymentError('İşlem komisyonu için en az 0.2 TON gerekiyor');
+      setPaymentError(t('tastepay.err_fee'));
       setPaymentStatus('error');
       return;
     }
@@ -502,10 +504,10 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                   <Wallet size={40} color="white" />
                 </div>
                 <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: '0 0 8px 0' }}>
-                  Kolay ve Hızlı Ödeme
+                  {t('tastepay.title')}
                 </h2>
                 <p style={{ color: '#9ca3af', margin: 0, fontSize: '13px' }}>
-                  TASTE ile saniyeler içinde öde veya ödeme al — dünyanın her yerinde.
+                  {t('tastepay.desc')}
                 </p>
               </div>
 
@@ -555,7 +557,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                 </div>
                 <div>
                   <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'white', marginBottom: '4px' }}>
-                    QR ile Öde
+                    {t('tastepay.scan')}
                   </div>
                   <div style={{ color: '#cffafe', fontSize: '13px' }}>
                     Müşteri Modu · Kasadaki kodu okut ve öde
@@ -598,7 +600,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '12px' }}
             >
               <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: '0 0 20px 0' }}>
-                Ödeme Alınacak Tutar
+                Ödeme Alınacak {t('tastepay.amount')}
               </h2>
 
               {/* Currency selector */}
@@ -691,7 +693,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     <QRCodeSVG value={qrData} size={220} level="H" includeMargin />
                     <div style={{ textAlign: 'center', marginTop: '14px', color: 'black' }}>
                       <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#6b7280' }}>
-                        Müşteriden Alınacak
+                        {t('tastepay.to_receive')}
                       </div>
                       <div style={{ fontSize: '22px', fontWeight: 900, color: '#0891b2' }}>
                         {calculatedTaste} TASTE
@@ -699,9 +701,9 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     </div>
                   </div>
                   <div style={{ marginTop: '14px', fontSize: '11px', color: '#6b7280', textAlign: 'center' }}>
-                    Fatura No: <span style={{ color: '#22d3ee' }}>{invoiceId}</span>
+                    {t('tastepay.invoice_no')} <span style={{ color: '#22d3ee' }}>{invoiceId}</span>
                     <br />
-                    Canlı kur: 1 TASTE ≈ {tastePriceInFiat.toFixed(4)} {currency}
+                    {t('tastepay.live_rate')} {tastePriceInFiat.toFixed(4)} {currency}
                   </div>
                 </>
               ) : (
@@ -712,7 +714,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: '#6b7280', fontSize: '15px',
                 }}>
-                  Tutar Girin
+                  {t('tastepay.enter_amount')}
                 </div>
               )}
             </motion.div>
@@ -747,7 +749,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                         color: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px'
                       }}
                     >
-                      Tekrar Dene
+                      {t('tastepay.retry_cam')}
                     </button>
                     {(window as any).Telegram?.WebApp?.showScanQrPopup && (
                       <button
@@ -758,7 +760,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                           color: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px'
                         }}
                       >
-                        Native Kamera
+                        {t('tastepay.native_cam')}
                       </button>
                     )}
                   </div>
@@ -808,7 +810,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     )}
                   </div>
                   <p style={{ marginTop: '22px', textAlign: 'center', color: '#9ca3af', fontSize: '13px' }}>
-                    Ödeme yapmak için kasadaki karekodu okutun
+                    {t('tastepay.scan_qr_text')}
                   </p>
                 </>
               )}
@@ -859,7 +861,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                       display: 'flex', flexDirection: 'column', gap: '6px',
                     }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <span>Fatura No:</span>
+                        <span>{t('tastepay.invoice_no')}</span>
                         <span style={{ color: 'white' }}>{scannedPayload.memo}</span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -907,7 +909,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     <RefreshCw size={60} color="#22d3ee" style={{ marginBottom: '20px' }} />
                   </motion.div>
                   <h3 style={{ fontSize: '19px', fontWeight: 'bold', margin: 0 }}>
-                    Ödeme İşleniyor...
+                    Ödeme {t('tastepay.btn_processing')}
                   </h3>
                   <p style={{ color: '#9ca3af', marginTop: '8px', fontSize: '13px' }}>
                     Lütfen cüzdan uygulamanızdan onaylayın
@@ -933,10 +935,10 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     <CheckCircle2 size={56} color="#4ade80" />
                   </div>
                   <h3 style={{ fontSize: '28px', fontWeight: 900, color: 'white', margin: '0 0 6px 0' }}>
-                    Ödeme Gönderildi!
+                    {t('tastepay.success_title')}
                   </h3>
                   <p style={{ color: '#9ca3af', margin: 0, fontSize: '13px' }}>
-                    İşlem blokzincire gönderildi. Birkaç saniye içinde onaylanacak.
+                    {t('tastepay.success_desc')}
                   </p>
 
                   <a
@@ -950,7 +952,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                       textDecoration: 'none',
                     }}
                   >
-                    Tonviewer'da görüntüle <ExternalLink size={14} />
+                    {t('tastepay.view_explorer')} <ExternalLink size={14} />
                   </a>
 
                   <button
@@ -967,7 +969,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                       border: 'none', cursor: 'pointer',
                     }}
                   >
-                    Ana Menüye Dön
+                    {t('tastepay.back_menu')}
                   </button>
                 </motion.div>
               )}
@@ -990,7 +992,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                     <AlertCircle size={50} color="#f87171" />
                   </div>
                   <h3 style={{ fontSize: '22px', fontWeight: 900, color: 'white', margin: '0 0 6px 0' }}>
-                    Ödeme Başarısız
+                    {t('tastepay.fail_title')}
                   </h3>
                   <p style={{ color: '#f87171', margin: 0, fontSize: '13px', maxWidth: '300px' }}>
                     {paymentError}
@@ -1007,7 +1009,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                         border: 'none', cursor: 'pointer',
                       }}
                     >
-                      Tekrar Dene
+                      {t('tastepay.retry_cam')}
                     </button>
                     <button
                       onClick={() => {
@@ -1021,7 +1023,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
                         border: 'none', cursor: 'pointer',
                       }}
                     >
-                      Vazgeç
+                      {t('tastepay.cancel')}
                     </button>
                   </div>
                 </motion.div>
