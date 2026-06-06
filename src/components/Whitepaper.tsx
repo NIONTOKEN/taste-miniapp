@@ -67,7 +67,7 @@ export function Whitepaper() {
                 {/* 4 ana özellik */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
                     {[
-                        { icon: '🔒', label: t('whitepaper.summary.fixed_supply'), value: '25,000,000', sub: t('whitepaper.summary.no_mint'), color: '#22c55e' },
+                        { icon: '🔒', label: t('whitepaper.summary.fixed_supply'), value: '25,000,000', sub: '🚫 No New Mint — Ever', color: '#22c55e' },
                         { icon: '⛓️', label: 'Blockchain', value: 'TON', sub: 'The Open Network', color: '#0098EA' },
                         { icon: '🔐', label: t('whitepaper.summary.lock_prefix'), value: '%88.4', sub: `JVault ${t('whitepaper.summary.secured')}`, color: '#f59e0b' },
                         { icon: '🏛️', label: t('whitepaper.summary.governance'), value: 'DAO', sub: t('whitepaper.summary.community_decision'), color: '#818cf8' },
@@ -406,18 +406,18 @@ export function Whitepaper() {
                     </p>
                 </div>
 
-                {/* DAO Süreci */}
-                <div style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.06), rgba(34,197,94,0.02))', border: '1px solid rgba(34,197,94,0.15)', borderRadius: '14px', padding: '16px', marginBottom: '12px' }}>
+                {/* Hard Cap Taahhüdü */}
+                <div style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.02))', border: '1px solid rgba(34,197,94,0.25)', borderRadius: '14px', padding: '16px', marginBottom: '12px' }}>
                     <div style={{ fontSize: '11px', fontWeight: 800, color: '#22c55e', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>
-                        {t('whitepaper.summary.dao_title')}
+                        ✅ {t('whitepaper.summary.hard_cap_title')}
                     </div>
                     <p style={{ fontSize: '12px', color: '#86efac', lineHeight: 1.8, margin: '0 0 10px' }}>
-                        {t('whitepaper.summary.dao_desc')}
+                        {t('whitepaper.summary.hard_cap_desc')}
                     </p>
-                    {(t('whitepaper.summary.dao_steps', { returnObjects: true }) as string[]).map((step, i) => (
-                        <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-                            <span style={{ fontSize: '12px', color: '#22c55e', flexShrink: 0 }}>{`${i + 1}.`}</span>
-                            <p style={{ fontSize: '12px', color: '#86efac', lineHeight: 1.6, margin: 0 }}>{step}</p>
+                    {(t('whitepaper.summary.hard_cap_points', { returnObjects: true }) as string[]).map((point, i) => (
+                        <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'flex-start' }}>
+                            <span style={{ fontSize: '14px', flexShrink: 0 }}>{'✅'}</span>
+                            <p style={{ fontSize: '12px', color: '#86efac', lineHeight: 1.6, margin: 0 }}>{point}</p>
                         </div>
                     ))}
                 </div>
@@ -435,15 +435,7 @@ export function Whitepaper() {
                     ))}
                 </div>
 
-                {/* OTC System TR */}
-                <div style={{ background: 'linear-gradient(135deg, rgba(28,154,236,0.08), rgba(28,154,236,0.02))', border: '1px solid rgba(28,154,236,0.2)', borderRadius: '14px', padding: '16px', marginBottom: '12px' }}>
-                    <div style={{ fontSize: '11px', fontWeight: 800, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>
-                        🇹🇷 {t('whitepaper.otc_system.title')}
-                    </div>
-                    <p style={{ fontSize: '12px', color: '#bae6fd', lineHeight: 1.8, margin: 0 }}>
-                        {t('whitepaper.otc_system.content')}
-                    </p>
-                </div>
+
 
                 {/* Son mesaj */}
                 <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '14px', textAlign: 'center' }}>

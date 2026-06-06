@@ -17,7 +17,7 @@ jobs:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          WEBAPP_URL: https://incandescent-gelato-cc11a4.netlify.app/
+          WEBAPP_URL: https://tasteminiapp.netlify.app/
         run: |
           node << 'EOF'
           const BOT_TOKEN = process.env.BOT_TOKEN;

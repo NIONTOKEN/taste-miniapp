@@ -245,19 +245,26 @@ export function TasteChef() {
                             </div>
                         </div>
                         <div style={{ 
-                            background: '#ef4444', color: '#fff', fontSize: '10px', fontWeight: 900, 
-                            padding: '4px 8px', borderRadius: '8px', boxShadow: '0 0 10px rgba(239,68,68,0.3)' 
+                            background: 'linear-gradient(135deg, #10b981, #059669)', color: '#fff', fontSize: '10px', fontWeight: 900, 
+                            padding: '4px 8px', borderRadius: '8px', boxShadow: '0 0 10px rgba(16,185,129,0.4)' 
                         }}>
-                            DEMO / COMING SOON
+                            🔒 25M HARD CAP
                         </div>
                     </div>
 
                     {currentTier ? (
                         <div style={{ marginBottom: '20px' }}>
                             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                                <span style={{ fontSize: '32px', fontWeight: 900, color: currentTier.color }}>%{currentTier.discount}</span>
-                            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-muted)' }}>{t('chef.discount_right')}</span>
+                                <span style={{ fontSize: '32px', fontWeight: 900, color: currentTier.color }}>
+                                    {currentTier.id.toUpperCase()}
+                                </span>
+                                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-muted)' }}>
+                                    {i18n.language === 'tr' ? 'AKTİF STATÜ SEVİYESİ' : 'ACTIVE ECOSYSTEM STATUS'}
+                                </span>
                             </div>
+                            <p style={{ margin: '4px 0 0', fontSize: '11px', color: 'rgba(16,185,129,0.8)', fontWeight: 600 }}>
+                                🏗️ {i18n.language === 'tr' ? 'Gerçek dünya entegrasyonu geliştirme aşamasında' : 'Real-world integration in development'}
+                            </p>
                         </div>
                     ) : (
                         <div style={{ marginBottom: '20px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px' }}>
@@ -296,39 +303,32 @@ export function TasteChef() {
                     )}
 
                     {userAddress && currentTier && (
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            disabled={loading}
-                            onClick={handleGetDiscount}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
                             style={{
                                 width: '100%',
                                 padding: '16px',
                                 borderRadius: '16px',
-                                border: 'none',
-                                background: loading ? 'rgba(255,255,255,0.05)' : `linear-gradient(135deg, ${currentTier.color}, #000)`,
-                                color: currentTier.color,
-                                fontWeight: 800,
-                                fontSize: '15px',
-                                cursor: 'pointer',
+                                border: `1px dashed ${currentTier.color}60`,
+                                background: `linear-gradient(135deg, ${currentTier.bgColor}, rgba(15,23,42,0.8))`,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '10px',
-                                boxShadow: `0 8px 20px ${currentTier.color}30`,
-                                position: 'relative',
-                                overflow: 'hidden'
+                                flexDirection: 'column'
                             }}
                         >
-                            {loading ? (
-                                <div className="spinner-small" />
-                            ) : (
-                                <>
-                                    <UserCheck size={20} />
-                                    {t('chef.get_discount')}
-                                </>
-                            )}
-                        </motion.button>
+                            <div style={{ fontSize: '24px' }}>🔧</div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 900, color: currentTier.color, marginBottom: '4px' }}>
+                                    {t('chef.coming_soon_title')}
+                                </div>
+                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                                    {t('chef.coming_soon_desc')}
+                                </div>
+                            </div>
+                        </motion.div>
                     )}
                 </div>
             </div>
@@ -421,41 +421,42 @@ export function TasteChef() {
                             </div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: '15px', fontWeight: 900, color: '#fff' }}>%{tier.discount} OFF</div>
+                            <div style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
+                                {i18n.language === 'tr' ? '[YENİLENİYOR]' : '[REBRANDING]'}
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
 
-            {/* Venue Navigation */}
+            {/* Partner Network - Coming Soon */}
             <div style={{ marginTop: '20px' }}>
                 <h5 style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: 800, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <MapPin size={14} /> {t('chef.nearby_venues')}
                 </h5>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <motion.div 
-                        whileHover={{ scale: 1.01 }}
-                        onClick={() => window.open('https://maps.google.com/?q=Restaurants+Istanbul', '_blank')}
-                        style={{ 
-                            padding: '16px', 
-                            background: 'rgba(255,255,255,0.02)', 
-                            borderRadius: '16px', 
-                            border: '1px solid rgba(255,255,255,0.08)',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div>
-                                <div style={{ fontSize: '14px', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>Taste Gourmet & Lounge</div>
-                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{t('chef.nearby_branch')} • 1.2 km</div>
-                            </div>
-                            <div style={{ color: 'var(--primary)' }}><ExternalLink size={18} /></div>
-                        </div>
-                    </motion.div>
-                    <p style={{ margin: '8px 4px 0', fontSize: '10px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    style={{
+                        padding: '24px 16px',
+                        background: 'rgba(255,255,255,0.02)',
+                        borderRadius: '16px',
+                        border: '1px dashed rgba(255,255,255,0.1)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '10px',
+                        textAlign: 'center'
+                    }}
+                >
+                    <div style={{ fontSize: '32px' }}>🏗️</div>
+                    <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-muted)' }}>
+                        {t('chef.nearby_branch')}
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', lineHeight: 1.6 }}>
                         {t('chef.nav_tip')}
-                    </p>
-                </div>
+                    </div>
+                </motion.div>
             </div>
 
             {/* FAQ / Legal Note */}

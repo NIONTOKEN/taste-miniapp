@@ -13,8 +13,8 @@ Always respond in the same language the user writes in (Turkish or English).
 === TASTE — COMPLETE KNOWLEDGE BASE ===
 
 ## What is TASTE?
-TASTE is a gastronomy and education-focused digital loyalty asset built on the TON (The Open Network) blockchain.
-It targets real-world use in restaurants, hotels, cafes, and the food & beverage industry.
+TASTE is a gastronomy and education-focused digital ecosystem asset built on the TON (The Open Network) blockchain.
+It targets real-world use and integration in the food & beverage, hospitality, and culinary education industry.
 Contract address: EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-
 
 ## Asset Economics
@@ -31,7 +31,7 @@ Contract address: EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-
 - LP Lock: 81.6% of STON.fi pTON-TASTE LP units are locked via tinu-locker.ton
 
 ## Why is Asset Generation Open?
-The generation authority is technically left open because if TASTE later integrates with restaurants, hotels, and chain businesses to establish a discount system, the community might need a supply adjustment.
+The generation authority is technically left open because if TASTE later integrates with restaurants, hotels, and chain businesses to establish new utility features, the community might need a supply adjustment.
 HOWEVER: The team CANNOT act alone. Any supply increase requires:
 1. Community DAO voting
 2. Transparent disclosure
@@ -50,8 +50,7 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 - Via Tonkeeper wallet
 - Via @wallet on Telegram
 - Steps: Load TON → Select amount → Click "Buy with TON" → Swap via STON.fi
-- NEW: Direct OTC (Over-The-Counter) system (TR ONLY)
-  TR Users can transfer TRY directly to the Admin's bank account via the QuickBuy feature in the mini-app to receive TASTE seamlessly. They MUST use their reference code in the transfer description. No crypto words allowed.
+
 
 ## TASTE Platform Features
 1. **Telegram Mini App** — Full-featured app inside Telegram
@@ -65,16 +64,16 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 9. **Documentation** — Full technical details at tastetoken.net
 
 ## Target Use Cases
-🍽️ Restaurant payments & loyalty rewards
+🍽️ Gastronomy & Ecosystem integrations
 🏨 Hotel & hospitality industry
-☕ Cafe reward programs
+☕ Cafe integration systems
 🎓 Culinary education & certification
-🎟️ Discount coupons for food businesses
-🤝 Customer loyalty rewards
+🎟️ Special access for food businesses
+🤝 Community awards & interactions
 
 ## Vision & Mission
 **Vision:** Build a global bridge where culinary mastery meets digital value, empowering creators and businesses through transparency.
-**Mission:** Provide the gastronomy world with tools for loyalty, traceability, and growth using blockchain technology.
+**Mission:** Provide the gastronomy world with tools for digital connection, traceability, and growth using blockchain technology.
 
 ## Team
 - **Fatih Emon** — Founder & Visionary
@@ -113,15 +112,15 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 ✅ Mini App v2 update (March 2026) — PoweredBy SVG logos, TASTE summary card, reward countdown, likes/search/trending in Food Feed
 ✅ Mini App v2.2 Content & Compliance — March 2026 — TASTE Manifesto, full i18n support, legal framework.
 ✅ Mini App v2.3 Wallet & QR Update — March 2026 — Quick Wallet & Transfer system, balances, QR scanning and secure TASTE/TON sending.
-✅ Mini App v2.4 Taste Chef Digital Discount — March 2026 — Next-gen loyalty system. Apprenticeship to Master Chef journey.
+✅ Mini App v2.4 Taste Chef Digital Ecosystem Tiers — March 2026 — Next-gen utility system. Apprenticeship to Master Chef journey.
 ✅ Mini App v2.5 Community 3.0 — March 2026 — Global Real-time Food Feed & Job Board with direct Telegram contact and live global chat. CV photo uploads active. Tech stack (PoweredBy) updated with JVault, LP Locks, Railway, Netlify, Google, and Socials.
-✅ Mini App v2.6 OTC & Transfer System — March 2026 — TR only direct bank transfer (TRY) to get TASTE seamlessly. 4-tab wallet component (Send, Receive, Buy, Sell via STON.fi).
+✅ Mini App v2.6 Wallet Update — March 2026 — 4-tab wallet component (Send, Receive, Buy, Sell via STON.fi).
 
-## Taste Şef (Dijital İndirim Sistemi)
+## Taste Şef (Dijital Ekosistem Seviyeleri)
 - **Ustalık Seviyeleri**: 🥉 Çırak (2k+), 🥈 Kalfa (4k+), 🥇 Usta (7.5k+), 👨‍🍳 Şef (15k+).
-- **Avantajlar**: Anlaşmalı restoranlarda %2.5 ile %10 arasında değişen indirim hakları.
-- **Sistem**: Cüzdan bakiyesine göre otomatik seviye belirleme. İndirim hakkı kazanmak için sembolik bir bedel (yaklaşık 1-2 TL değerinde TASTE) gönderilir.
-- **Yasal Durum**: TASTE bir ödeme aracı değildir. Ana hesap TL ile ödenir, TASTE sadece indirim hakkı sağlar.
+- **Avantajlar**: Şef seviyesine özel dijital rozetler ve topluluk ayrıcalıkları.
+- **Sistem**: Cüzdan bakiyesine göre otomatik seviye belirleme. Seviye onaylamak için sembolik bir bedel (yaklaşık 1-2 TL değerinde TASTE) gönderilir.
+- **Yasal Durum**: TASTE bir ödeme aracı değildir.
 - **Şartlar**: Bu sistemi kullanmak için 18 yaş ve üzeri olmak zorunludur.
 
 ## TASTE Philosophy

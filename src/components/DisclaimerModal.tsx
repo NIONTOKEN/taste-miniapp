@@ -95,9 +95,9 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                     <DisclaimerItem
                         emoji="🎁"
                         color="#22d3ee"
-                        title={isEn ? "Digital Loyalty Points" : "Dijital Sadakat Puanı"}
+                        title={isEn ? "Community Utility Asset" : "Topluluk ve Ekosistem Varlığı"}
                         subtitle="Utility Token"
-                        text={isEn ? "TASTE is a blockchain-based digital LOYALTY POINT, not a fiat currency and not a licensed payment service. It can be used at partner merchants for discounts and as a loyalty-based settlement medium. Converting TASTE to fiat is the user's own responsibility." : "TASTE, blokzincir tabanlı bir dijital SADAKAT PUANIDIR — fiat para değildir ve lisanslı bir ödeme hizmeti değildir. Anlaşmalı işletmelerde indirim ve sadakat tabanlı ödemede kullanılabilir. TASTE'i yerel paraya çevirme sorumluluğu tamamen kullanıcıya aittir."}
+                        text={isEn ? "TASTE is a blockchain-based digital utility asset on TON, not a fiat currency and not a licensed payment service. [REBRANDING IN PROGRESS — TASTE is transitioning to a brand-new ecosystem structure. New utility features will be announced soon.]" : "TASTE, TON blokzinciri üzerinde yer alan bir dijital topluluk varlığıdır — fiat para değildir ve lisanslı bir ödeme hizmeti değildir. [EVRİM SÜRECİ — TASTE yepyeni bir ekosistem yapısına geçiş yapmaktadır. Yeni kullanım alanları yakında açıklanacaktır.]"}
                     />
 
                     <DisclaimerItem
@@ -165,7 +165,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         {checked && '✓'}
                     </div>
                     <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
-                        {isEn ? 'I am over 18 years old and I have read and understood the risk warnings. I understand that TASTE is a digital loyalty point, not fiat currency.' : '18 yaşından büyüğüm, risk uyarılarını okudum ve anladım. TASTE\'in dijital bir sadakat puanı olduğunu, fiat para olmadığını kabul ediyorum.'}
+                        {isEn ? 'I am over 18 years old and I have read and understood the risk warnings. I understand that TASTE is a digital utility asset, not fiat currency.' : '18 yaşından büyüğüm, risk uyarılarını okudum ve anladım. TASTE\'in dijital bir topluluk varlığı olduğunu, fiat para olmadığını kabul ediyorum.'}
                     </span>
                 </motion.label>
 

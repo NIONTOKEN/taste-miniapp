@@ -20,9 +20,9 @@ const JETTON_MASTER_ADDRESS =
   (import.meta.env.VITE_JETTON_ADDRESS as string) ||
   'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
 
-// OTC admin wallet — all TastePay payments land here (centralized settlement)
-const OTC_ADMIN_WALLET =
-  (import.meta.env.VITE_OTC_WALLET as string) ||
+// TastePay admin wallet — all TastePay payments land here (centralized settlement)
+const TASTEPAY_ADMIN_WALLET =
+  (import.meta.env.VITE_TASTEPAY_ADMIN_WALLET as string) ||
   'UQB-Q4l7vp-RiXhSfziofwYpZ-Gv5Gs4xI9ZL3_tghEtjFpr';
 
 // Multi-currency catalogue (15 currencies)
@@ -174,7 +174,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
         currency: url.searchParams.get('currency') || 'USD',
         tasteAmount: url.searchParams.get('tasteAmount') || '0',
         memo: url.searchParams.get('memo') || '',
-        address: url.searchParams.get('address') || OTC_ADMIN_WALLET,
+        address: url.searchParams.get('address') || TASTEPAY_ADMIN_WALLET,
       };
       setScannedPayload(data);
       setMode('confirm');
@@ -268,7 +268,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
     ? (parseFloat(receiveAmount) / tastePriceInFiat).toFixed(2)
     : '0.00';
 
-  const qrData = `tastepay://pay?address=${OTC_ADMIN_WALLET}` +
+  const qrData = `tastepay://pay?address=${TASTEPAY_ADMIN_WALLET}` +
     `&amount=${receiveAmount || 0}` +
     `&currency=${currency}` +
     `&tasteAmount=${calculatedTaste}` +
@@ -295,7 +295,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
 
     createTastePayInvoice({
       invoice_code: invoiceId,
-      merchant_wallet: OTC_ADMIN_WALLET,
+      merchant_wallet: TASTEPAY_ADMIN_WALLET,
       merchant_name: merchantName,
       fiat_amount: amt,
       fiat_currency: currency,
@@ -306,7 +306,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
   }, [mode, receiveAmount, currency, calculatedTaste, tastePriceInFiat, invoiceId]);
 
   // ────────────────────────────────────────────────────────────────────────
-  // REAL Payment — TON Connect jetton transfer to OTC wallet
+  // REAL Payment — TON Connect jetton transfer to TastePay wallet
   // ────────────────────────────────────────────────────────────────────────
   const handlePayment = async () => {
     if (!scannedPayload) return;
@@ -344,7 +344,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
 
     try {
       const memo = scannedPayload.memo || invoiceId;
-      const destinationAddress = scannedPayload.address || OTC_ADMIN_WALLET;
+      const destinationAddress = scannedPayload.address || TASTEPAY_ADMIN_WALLET;
 
       if (walletType === 'internal') {
         // Internal wallet flow (if user is using imported seed phrase)

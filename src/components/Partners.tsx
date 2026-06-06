@@ -67,8 +67,8 @@ export function Partners() {
 
                 <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px', position: 'relative', zIndex: 1 }}>
                     {isTr
-                        ? "Şehrin nabzını tutan sanal not paylaşım platformu. Eğitim, kültür/sanat, sağlık, emlak ve kayıp ilanlarına kadar günlük hayata dair her şey burada. TASTE Token'ın gerçek dünyadaki alışveriş ve sadakat puanı entegrasyonları için güçlerimizi birleştirdik."
-                        : "The virtual note-sharing platform keeping the pulse of the city. From education and arts to health and real estate. We joined forces to integrate TASTE Token for real-world shopping and loyalty programs."}
+                        ? "Şehrin nabzını tutan sanal not paylaşım platformu. Eğitim, kültür/sanat, sağlık, emlak ve kayıp ilanlarına kadar günlük hayata dair her şey burada. TASTE Token'ın dijital ekosistem entegrasyonları için güçlerimizi birleştirdik."
+                        : "The virtual note-sharing platform keeping the pulse of the city. From education and arts to health and real estate. We joined forces to integrate TASTE Token for digital ecosystem integrations."}
                 </p>
 
                 {/* Categories/Features */}

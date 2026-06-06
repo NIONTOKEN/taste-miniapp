@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWallet } from '../context/WalletContext';
 import { Wallet, Copy, Plus, LogOut, Key, Download, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { TonConnectButton } from '@tonconnect/ui-react';
+import { useTonConnectUI } from '@tonconnect/ui-react';
 
 type Tab = 'external' | 'internal' | 'import';
 
 export const WalletSelector = () => {
     const { i18n } = useTranslation();
     const isTR = i18n.language?.startsWith('tr');
+    const [tonConnectUI] = useTonConnectUI();
     const {
         walletType,
         setWalletType,
@@ -28,6 +29,13 @@ export const WalletSelector = () => {
     const [importing, setImporting]     = useState(false);
     const [importError, setImportError] = useState('');
     const [importSuccess, setImportSuccess] = useState(false);
+
+    // Harici cüzdan bağlandığında modalı otomatik kapat
+    useEffect(() => {
+        if (activeAddress && walletType === 'external' && isOpen) {
+            setIsOpen(false);
+        }
+    }, [activeAddress, walletType]);
 
     const copyAddress = () => {
         if (activeAddress) navigator.clipboard.writeText(activeAddress);
@@ -157,14 +165,79 @@ export const WalletSelector = () => {
                                     {/* ── TAB 1: External / TON Connect ── */}
                                     {activeTab === 'external' && (
                                         <motion.div key="external" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                                            <p style={{ fontSize: '13px', color: '#94a3b8', textAlign: 'center', marginBottom: '20px', lineHeight: 1.5 }}>
-                                                {isTR
-                                                    ? 'Tonkeeper veya MyTonWallet gibi harici bir cüzdan kullanarak bağlanın.'
-                                                    : 'Connect using an external wallet like Tonkeeper or MyTonWallet.'}
-                                            </p>
-                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                <TonConnectButton />
-                                            </div>
+                                            {activeAddress && walletType === 'external' ? (
+                                                <div style={{ textAlign: 'center' }}>
+                                                    <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '20px', lineHeight: 1.5 }}>
+                                                        {isTR
+                                                            ? 'Harici TON cüzdanınız bağlı durumdadır.'
+                                                            : 'Your external TON wallet is currently connected.'}
+                                                    </p>
+                                                    <div style={{ background: 'rgba(0,0,0,0.3)', padding: '15px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '15px' }}>
+                                                        <div style={{ fontSize: '10px', color: '#3b82f6', fontWeight: 800, marginBottom: '5px' }}>
+                                                            {isTR ? 'BAĞLI CÜZDAN ADRESİ' : 'CONNECTED WALLET ADDRESS'}
+                                                        </div>
+                                                        <div style={{ fontSize: '12px', color: '#fff', wordBreak: 'break-all', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
+                                                            {shortAddress(activeAddress)}
+                                                            <Copy size={16} onClick={copyAddress} style={{ cursor: 'pointer', flexShrink: 0, color: '#94a3b8' }} />
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Balances */}
+                                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '15px' }}>
+                                                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '12px', borderRadius: '12px', textAlign: 'center' }}>
+                                                            <div style={{ fontSize: '9px', color: '#94a3b8', marginBottom: '4px' }}>TON BAKİYE</div>
+                                                            <div style={{ fontSize: '16px', fontWeight: 900, color: '#3b82f6' }}>{balances.ton}</div>
+                                                        </div>
+                                                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '12px', borderRadius: '12px', textAlign: 'center' }}>
+                                                            <div style={{ fontSize: '9px', color: '#94a3b8', marginBottom: '4px' }}>TASTE BAKİYE</div>
+                                                            <div style={{ fontSize: '16px', fontWeight: 900, color: '#22c55e' }}>{balances.taste}</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <button
+                                                        onClick={async () => {
+                                                            await tonConnectUI.disconnect();
+                                                        }}
+                                                        style={{
+                                                            width: '100%', padding: '12px', borderRadius: '12px', border: 'none',
+                                                            background: 'rgba(239,68,68,0.1)', color: '#ef4444', fontWeight: 700,
+                                                            fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+                                                        }}
+                                                    >
+                                                        <LogOut size={16} /> {isTR ? 'BAĞLANTIYI KES' : 'DISCONNECT WALLET'}
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div style={{ textAlign: 'center' }}>
+                                                    <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '20px', lineHeight: 1.5 }}>
+                                                        {isTR
+                                                            ? 'Tonkeeper veya MyTonWallet gibi harici bir cüzdan kullanarak bağlanın.'
+                                                            : 'Connect using an external wallet like Tonkeeper or MyTonWallet.'}
+                                                    </p>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            setIsOpen(false);
+                                                            // Give React time to unmount the modal and then open TonConnect
+                                                            setTimeout(() => {
+                                                                try {
+                                                                    tonConnectUI.openModal();
+                                                                } catch(err) {
+                                                                    console.error("TonConnect modal open error:", err);
+                                                                }
+                                                            }, 300);
+                                                        }}
+                                                        style={{
+                                                            width: '100%', padding: '16px', borderRadius: '15px', border: 'none',
+                                                            background: 'linear-gradient(135deg, #3b82f6, #2563eb)', color: '#fff', fontWeight: 900,
+                                                            fontSize: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+                                                        }}
+                                                    >
+                                                        <Wallet size={18} /> {isTR ? 'TON CÜZDANINI BAĞLA' : 'CONNECT TON WALLET'}
+                                                    </button>
+                                                </div>
+                                            )}
                                         </motion.div>
                                     )}
 

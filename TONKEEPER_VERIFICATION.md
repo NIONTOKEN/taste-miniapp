@@ -45,7 +45,7 @@ name: TASTE
 symbol: TASTE
 description: Community-driven gastronomy token on the TON blockchain
 address: 0:746de4f14ad99d855ae2e2cfdc625c182da1bf66247996929e7c0342d0ad95d73
-image: https://incandescent-gelato-cc11a4.netlify.app/logo.jpg
+image: https://tasteminiapp.netlify.app/logo.jpg
 social:
   - https://t.me/taste2025
   - https://t.me/taste_miniapp
@@ -73,7 +73,7 @@ Tonkeeper ekibi 1-7 gün içinde inceler ve onaylar.
 ## ⚠️ Notlar
 
 - Doğrulama **ücretsizdir**, para isterlerse SCAM'dir
-- Logo linki: <https://incandescent-gelato-cc11a4.netlify.app/logo.jpg>
+- Logo linki: <https://tasteminiapp.netlify.app/logo.jpg>
 - Token Kontrat: EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-
 - Raw Address: 0:746de4f14ad99d855ae2e2cfdc625c182da1bf66247996929e7c0342d0ad95d73
 - STON.fi Pool: EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS

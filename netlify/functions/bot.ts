@@ -63,30 +63,6 @@ export const handler: Handler = async (event) => {
       return { statusCode: 500, body: 'Server Error' };
     }
 
-    // ─── Custom API Endpoint: OTC Order Notification (Admin) ───
-    if (update.type === 'otc_order') {
-      const { admin_id, order } = update;
-      if (!admin_id || !order) return { statusCode: 400, body: 'Invalid payload' };
-
-      const msg = `🚨 *YENİ TASTE SİPARİŞİ GELDİ!* 🚨\n\n` +
-                  `👤 *Müşteri (TG ID):* \`${order.userId}\`\n` +
-                  `💸 *Gönderilen Tutar:* *${order.amount} TL*\n` +
-                  `💎 *Verilecek TASTE:* *${order.taste}*\n\n` +
-                  `💳 *Alıcı Cüzdan (Buraya Gönder):*\n\`${order.wallet}\`\n\n` +
-                  `🧾 *Bankadaki Açıklama Kodu:* \`${order.code}\`\n\n` +
-                  `⚠️ *Ne Yapmalısın?*\n` +
-                  `1. Banka hesabına (${order.amount} TL) gelmiş mi kontrol et.\n` +
-                  `2. Açıklamada \`${order.code}\` yazıyor mu bak.\n` +
-                  `3. Geldiyse Tonkeeper'ı aç ve yukarıdaki cüzdana ${order.taste} TASTE yolla kanka! 🚀`;
-
-      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: admin_id, text: msg, parse_mode: 'Markdown' })
-      });
-
-      return { statusCode: 200, body: 'Admin notified' };
-    }
 
     // ─── Custom API Endpoint: User Notification (Approve/Reject) ───
     if (update.type === 'admin_notify') {

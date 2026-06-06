@@ -23,13 +23,13 @@ import { TasteJobs } from './components/TasteJobs'
 import { WalletTransfer } from './components/WalletTransfer'
 import { PriceTicker } from './components/PriceTicker'
 import { CountdownTimer } from './components/CountdownTimer'
-import { RewardCountdown } from './components/RewardCountdown'
 import { Partners } from './components/Partners'
-import { QuickBuy } from './components/QuickBuy'
-import { QuickBuyAdmin } from './components/QuickBuyAdmin'
 import { Leaderboard } from './components/Leaderboard'
 import { DailyRewards } from './components/DailyRewards'
 import { TastePay } from './components/TastePay'
+import { TasteGame } from './components/TasteGame'
+import { Settings } from './components/Settings'
+import { PinLock } from './components/PinLock'
 import {
   Home,
   Map,
@@ -67,7 +67,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'quickbuy' | 'admin_otc'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'game' | 'settings'>('home');
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
@@ -257,50 +257,6 @@ function App() {
                 </div>
             </motion.div>
 
-
-            {/* OTC/Quick Buy Banner */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              style={{
-                background: 'linear-gradient(90deg, rgba(245, 159, 11, 0.15), rgba(239, 68, 68, 0.15))',
-                border: '1px solid rgba(245, 159, 11, 0.3)',
-                borderRadius: '16px',
-                padding: '16px',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
-              }}
-              onClick={() => {
-                setActiveTab('quickbuy');
-                if (window.scrollTo) window.scrollTo(0, 0);
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <img src="/logo.jpg" alt="TASTE" style={{ width: '40px', height: '40px', borderRadius: '50%', border: '2px solid #f59e0b', boxShadow: '0 0 10px rgba(245,159,11,0.3)' }} />
-                <div>
-                  <div style={{ fontSize: '10px', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    ⚡ {i18n.language?.startsWith('tr') ? 'Doğrudan Alım' : 'Direct Buy'}
-                  </div>
-                  <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff' }}>
-                    {i18n.language?.startsWith('tr') ? 'Hızlı TASTE Al (OTC)' : 'Quick Buy TASTE'}
-                  </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                    {i18n.language?.startsWith('tr') ? 'Hızlı ve güvenli şekilde TASTE satın al.' : 'Buy TASTE quickly and securely.'}
-                  </div>
-                </div>
-              </div>
-              <div style={{ background: 'rgba(245, 159, 11, 0.2)', padding: '8px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 900, color: '#fbbf24' }}>
-                {i18n.language?.startsWith('tr') ? 'Al' : 'Buy'} →
-              </div>
-            </motion.div>
-
-            {/* Airdrop Countdown */}
-            <RewardCountdown />
 
             {/* Premium Swap Widget */}
             <motion.div 
@@ -635,7 +591,7 @@ function App() {
         <motion.div key="chef" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.chef')}</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👨‍🍳 {i18n.language?.startsWith('tr') ? 'Taste Şef Dijital İndirim' : 'Taste Chef Digital Discount'}</h3>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👨‍🍳 {i18n.language?.startsWith('tr') ? 'Taste Şef Dijital Statü' : 'Taste Chef Digital Status'}</h3>
             <TasteChef />
           </div>
         </motion.div>
@@ -662,21 +618,14 @@ function App() {
           </div>
         </motion.div>
       );
-      case 'quickbuy': return (
-        <motion.div key="quickbuy" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-          <QuickBuy userId={userId} />
+      case 'game': return (
+        <motion.div key="game" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+          <TasteGame />
         </motion.div>
       );
-      case 'admin_otc': return (
-        <motion.div key="admin_otc" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-          {userId === '1505452121' ? (
-            <QuickBuyAdmin />
-          ) : (
-            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔒</div>
-              <p style={{ fontSize: '14px' }}>Bu sayfa yalnızca admin erişimine açıktır.</p>
-            </div>
-          )}
+      case 'settings': return (
+        <motion.div key="settings" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+          <Settings />
         </motion.div>
       );
       default: return null;
@@ -684,7 +633,7 @@ function App() {
   };
 
   return (
-    <>
+    <PinLock>
       <AnimatePresence>
         {disclaimerVisible && (
           <DisclaimerModal onAccept={() => setDisclaimerVisible(false)} />
@@ -813,20 +762,19 @@ function App() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
-                    { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', icon: QrCode, isNew: true },
-                    { id: 'quickbuy', label: i18n.language?.startsWith('tr') ? 'Hızlı TASTE' : 'Quick Buy', color: '#f59e0b', image: '/logo.jpg', isNew: true },
-                    ...(userId === '1505452121' ? [{ id: 'admin_otc', label: 'OTC Admin', color: '#f59e0b', icon: ShieldCheck }] : []),
-                    { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', icon: Handshake, isNew: true },
-                    { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', color: '#eab308', icon: Trophy },
-                    { id: 'manifesto', label: 'Manifesto', color: '#f97316', icon: ScrollText },
-                    { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', icon: Map },
-                    { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', icon: BookOpen },
-                    { id: 'charity', label: t('nav.charity'), color: '#f43f5e', icon: Heart },
-                    { id: 'chef', label: t('nav.chef'), color: '#10b981', icon: ChefHat, isDemo: true },
-                    { id: 'wallet', label: 'Taste Wallet', color: '#f59e0b', icon: Wallet },
-                    { id: 'faq', label: i18n.language?.startsWith('tr') ? 'S.S.S.' : 'F.A.Q.', color: '#22c55e', icon: HelpCircle },
-                    { id: 'tech', label: i18n.language?.startsWith('tr') ? 'Teknoloji' : 'Tech', color: '#10b981', icon: Cpu },
-                    { id: 'legal', label: t('nav.legal'), color: '#64748b', icon: Scale }
+                    { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
+                    { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
+                    { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', color: '#eab308', emojiImage: '🏆' },
+                    { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
+                    { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
+                    { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📖' },
+                    { id: 'charity', label: t('nav.charity'), color: '#f43f5e', emojiImage: '❤️' },
+                    { id: 'chef', label: t('nav.chef'), color: '#10b981', emojiImage: '👨‍🍳', isDemo: true },
+                    { id: 'wallet', label: 'Taste Wallet', color: '#f59e0b', image: '/wallet-icon.png' },
+                    { id: 'faq', label: i18n.language?.startsWith('tr') ? 'S.S.S.' : 'F.A.Q.', color: '#22c55e', emojiImage: '❓' },
+                    { id: 'tech', label: i18n.language?.startsWith('tr') ? 'Teknoloji' : 'Tech', color: '#10b981', emojiImage: '💻' },
+                    { id: 'legal', label: t('nav.legal'), color: '#64748b', emojiImage: '⚖️' },
+                    { id: 'settings', label: i18n.language?.startsWith('tr') ? 'Ayarlar' : 'Settings', color: '#64748b', emojiImage: '⚙️' }
                   ].map((item: any) => (
                     <button
                       key={item.id}
@@ -887,7 +835,10 @@ function App() {
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
           
-
+          <button className={`nav-item ${activeTab === 'game' ? 'active' : ''}`} onClick={() => { setActiveTab('game'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
+            <span className="nav-icon" style={{ fontSize: '22px' }}>🎮</span><span className="nav-label">{i18n.language?.startsWith('tr') ? 'Oyna' : 'Play'}</span>
+            <span style={{ position: 'absolute', top: '4px', right: '14px', width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 8px #ef4444', animation: 'pulse 2s infinite' }} />
+          </button>
 
           <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
             <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>
@@ -985,7 +936,7 @@ function App() {
           </div>
         </div>
       </div>
-    </>
+    </PinLock>
   );
 }
 

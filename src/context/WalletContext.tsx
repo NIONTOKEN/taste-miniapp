@@ -53,8 +53,14 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, [walletType]);
 
     const loadInternal = async () => {
-        const info = await internalWalletService.getWalletInfo();
-        if (info) setInternalWallet(info);
+        try {
+            const info = await internalWalletService.getWalletInfo();
+            if (info) setInternalWallet(info);
+        } catch (err) {
+            console.error('[WalletContext] Internal wallet load error:', err);
+            // Corrupted mnemonic — clear it so app doesn't crash on every load
+            try { localStorage.removeItem('taste_internal_wallet_mnemonic'); } catch {}
+        }
     };
 
     useEffect(() => {
@@ -62,10 +68,15 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, []);
 
     const createInternalWallet = async () => {
-        const info = await internalWalletService.createWallet();
-        setInternalWallet(info);
-        setWalletType('internal');
-        return info;
+        try {
+            const info = await internalWalletService.createWallet();
+            setInternalWallet(info);
+            setWalletType('internal');
+            return info;
+        } catch (err) {
+            console.error('[WalletContext] Create wallet error:', err);
+            throw err;
+        }
     };
 
     const logoutInternal = () => {
@@ -75,10 +86,15 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     const importWallet = async (mnemonicPhrase: string) => {
-        const info = await internalWalletService.importWallet(mnemonicPhrase);
-        setInternalWallet(info);
-        setWalletType('internal');
-        return info;
+        try {
+            const info = await internalWalletService.importWallet(mnemonicPhrase);
+            setInternalWallet(info);
+            setWalletType('internal');
+            return info;
+        } catch (err) {
+            console.error('[WalletContext] Import wallet error:', err);
+            throw err;
+        }
     };
 
     const refreshBalances = useCallback(async () => {
