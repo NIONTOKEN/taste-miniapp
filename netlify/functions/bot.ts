@@ -1,6 +1,6 @@
 import { Handler } from '@netlify/functions';
 
-const WEB_APP_URL = 'https://tasteminiapp.netlify.app/';
+const WEB_APP_URL = 'https://tastetoken.netlify.app/';
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
 
