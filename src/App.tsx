@@ -32,6 +32,7 @@ import { PinLock } from './components/PinLock'
 import { PWAInstallBanner } from './components/PWAInstallBanner'
 import { InstallModal } from './components/InstallModal'
 import { TasteRace } from './components/TasteRace'
+import { OfficialSocials } from './components/OfficialSocials'
 import {
   Home,
   Map,
@@ -69,7 +70,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'game' | 'settings'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'game' | 'settings' | 'socials'>('home');
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
@@ -498,6 +499,11 @@ function App() {
             <VoteDiscovery />
         </motion.div>
       );
+      case 'socials': return (
+        <motion.div key="socials" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+            <OfficialSocials onClose={() => setActiveTab('home')} />
+        </motion.div>
+      );
       case 'manifesto': return <Manifesto />;
       case 'roadmap': return (
         <motion.div key="roadmap" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
@@ -727,6 +733,7 @@ function App() {
                     { id: 'install', label: i18n.language?.startsWith('tr') ? 'Yükle' : 'Install', color: '#10b981', emojiImage: '📲', isNew: true },
                     { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
                     { id: 'vote', label: i18n.language?.startsWith('tr') ? "Web3'teki Yerimiz" : 'Our Place in Web3', color: '#eab308', emojiImage: '🌐' },
+                    { id: 'socials', label: i18n.language?.startsWith('tr') ? 'Sosyal Ağlar' : 'Social Media', color: '#25D366', emojiImage: '📱', isNew: true },
                     { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
                     { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
                     { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📖' },
