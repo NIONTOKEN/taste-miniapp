@@ -36,7 +36,8 @@ const FARM_ITEMS: FarmItem[] = [
     { id: 'tomato', nameTr: 'Domates', nameEn: 'Tomato', emoji: '🍅', points: 10, color: '#ef4444' },
     { id: 'strawberry', nameTr: 'Çilek', nameEn: 'Strawberry', emoji: '🍓', points: 15, color: '#f43f5e' },
     { id: 'lemon', nameTr: 'Limon', nameEn: 'Lemon', emoji: '🍋', points: 20, color: '#eab308' },
-    { id: 'wheat', nameTr: 'Buğday', nameEn: 'Wheat', emoji: '🌾', points: 5, color: '#f59e0b' }
+    { id: 'wheat', nameTr: 'Buğday', nameEn: 'Wheat', emoji: '🌾', points: 5, color: '#f59e0b' },
+    { id: 'olive', nameTr: 'Zeytin', nameEn: 'Olive', emoji: '🫒', points: 25, color: '#84cc16' }
 ];
 
 const RECIPES: RecipeItem[] = [
@@ -51,6 +52,10 @@ const RECIPES: RecipeItem[] = [
     { 
         id: 'bread', nameTr: 'Taze Ekmek', nameEn: 'Fresh Bread', emoji: '🍞', points: 50, color: '#f59e0b', 
         requirements: { 'wheat': 3 } 
+    },
+    { 
+        id: 'pizza', nameTr: 'Akdeniz Pizzası', nameEn: 'Mediterranean Pizza', emoji: '🍕', points: 350, color: '#f97316', 
+        requirements: { 'tomato': 2, 'wheat': 2, 'olive': 2 } 
     }
 ];
 
@@ -58,7 +63,8 @@ const UPGRADES: UpgradeItem[] = [
     { id: 'stand', nameTr: 'Küçük Tezgah', nameEn: 'Small Stand', emoji: '🏪', baseCost: 500, profitPerHr: 100, color: '#94a3b8' },
     { id: 'truck', nameTr: 'Yemek Kamyonu', nameEn: 'Food Truck', emoji: '🚚', baseCost: 2500, profitPerHr: 600, color: '#3b82f6' },
     { id: 'cafe', nameTr: 'Taste Kafe', nameEn: 'Taste Cafe', emoji: '☕️', baseCost: 10000, profitPerHr: 2500, color: '#f59e0b' },
-    { id: 'restaurant', nameTr: 'Lüks Restoran', nameEn: 'Luxury Restaurant', emoji: '🏛️', baseCost: 50000, profitPerHr: 15000, color: '#ef4444' }
+    { id: 'restaurant', nameTr: 'Lüks Restoran', nameEn: 'Luxury Restaurant', emoji: '🏛️', baseCost: 50000, profitPerHr: 15000, color: '#ef4444' },
+    { id: 'academy', nameTr: 'Gastronomi Akademisi', nameEn: 'Gastronomy Academy', emoji: '🎓', baseCost: 250000, profitPerHr: 85000, color: '#a855f7' }
 ];
 
 export function TasteGame() {
