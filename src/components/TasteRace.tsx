@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Play, RotateCcw, Volume2, VolumeX, Shield, Coins, AlertTriangle, ArrowRight, Smartphone } from 'lucide-react'
 
 interface TasteRaceProps {
-  onClose: () => void
+  onClose?: () => void
 }
 
 // Sound Synthesizer using Web Audio API
-const playSound = (type: 'coin' | 'crash' | 'gameover') => {
+const playSound = (type: 'coin' | 'crash' | 'gameover' | 'click' | 'countdown' | 'engine' | 'low_lives' | 'clock_tick') => {
   try {
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext
     if (!AudioContext) return
@@ -57,6 +57,72 @@ const playSound = (type: 'coin' | 'crash' | 'gameover') => {
       
       osc.start()
       osc.stop(ctx.currentTime + 0.6)
+    } else if (type === 'click') {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sine'
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      
+      osc.frequency.setValueAtTime(600, ctx.currentTime)
+      gain.gain.setValueAtTime(0.06, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1)
+      
+      osc.start()
+      osc.stop(ctx.currentTime + 0.1)
+    } else if (type === 'countdown') {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sine'
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      
+      osc.frequency.setValueAtTime(440, ctx.currentTime) // A4
+      gain.gain.setValueAtTime(0.1, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15)
+      
+      osc.start()
+      osc.stop(ctx.currentTime + 0.15)
+    } else if (type === 'engine') {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sawtooth'
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      
+      osc.frequency.setValueAtTime(80, ctx.currentTime)
+      osc.frequency.linearRampToValueAtTime(320, ctx.currentTime + 0.6)
+      gain.gain.setValueAtTime(0.1, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6)
+      
+      osc.start()
+      osc.stop(ctx.currentTime + 0.6)
+    } else if (type === 'low_lives') {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sine'
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      
+      osc.frequency.setValueAtTime(880, ctx.currentTime)
+      gain.gain.setValueAtTime(0.15, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3)
+      
+      osc.start()
+      osc.stop(ctx.currentTime + 0.3)
+    } else if (type === 'clock_tick') {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sine'
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      
+      osc.frequency.setValueAtTime(1000, ctx.currentTime)
+      gain.gain.setValueAtTime(0.05, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05)
+      
+      osc.start()
+      osc.stop(ctx.currentTime + 0.05)
     }
   } catch (e) {
     console.warn('AudioContext not allowed or supported yet.', e)
@@ -136,6 +202,12 @@ export function TasteRace({ onClose }: TasteRaceProps) {
 
   // Start game
   const startGame = () => {
+    if (soundEnabled) {
+      playSound('engine')
+      setTimeout(() => {
+        playSound('countdown')
+      }, 350)
+    }
     setLives(3)
     setTimeRemaining(120)
     setScore(0)
@@ -165,13 +237,13 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     if (soundEnabled) playSound('gameover')
     
     // Calculate rewards
-    // minimum 0.2 TASTE, max 5.0 (per instructions) but session cap is 3.0 TASTE
+    // minimum 0.2 TASTE, max 1.0 (session limit is 1.0 TASTE)
     let finalReward = gameVars.current.totalGiftsCollected * 0.2
     if (finalReward < 0.2 && (120 - timeRemaining) > 5) {
       finalReward = 0.2 // played at least 5s
     }
-    if (finalReward > 3.0) {
-      finalReward = 3.0 // session limit is 3 TASTE
+    if (finalReward > 1.0) {
+      finalReward = 1.0 // session limit is 1 TASTE
     }
     
     const finalScore = parseFloat(finalReward.toFixed(2))
@@ -194,16 +266,21 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     if (gameState !== 'PLAYING') return
     const timer = setInterval(() => {
       setTimeRemaining((prev) => {
-        if (prev <= 1) {
+        const nextTime = prev - 1
+        if (nextTime <= 0) {
           clearInterval(timer)
           endGame(true)
           return 0
         }
-        return prev - 1
+        // Play tick sound in final 10 seconds of the countdown
+        if (nextTime <= 10 && soundEnabled) {
+          playSound('clock_tick')
+        }
+        return nextTime
       })
     }, 1000)
     return () => clearInterval(timer)
-  }, [gameState])
+  }, [gameState, soundEnabled])
 
   // Core Game Loop
   useEffect(() => {
@@ -330,7 +407,11 @@ export function TasteRace({ onClose }: TasteRaceProps) {
             endGame(false)
             return 0
           }
-          return prev - 1
+          const nextLives = prev - 1
+          if (nextLives === 1 && soundEnabled) {
+            playSound('low_lives')
+          }
+          return nextLives
         })
         v.invulnerableFrames = 90 // 1.5 seconds invulnerability
         v.speed = Math.max(5, v.speed - 3) // slow down
@@ -359,7 +440,6 @@ export function TasteRace({ onClose }: TasteRaceProps) {
         // Collect!
         if (soundEnabled) playSound('coin')
         v.totalGiftsCollected++
-        // Trigger simple canvas floating text in draw logic
         return false
       }
       
@@ -523,9 +603,10 @@ export function TasteRace({ onClose }: TasteRaceProps) {
 
   // Handle WhatsApp claim click
   const handleWhatsAppClaim = () => {
+    if (soundEnabled) playSound('click')
     const text = isTR 
-      ? `Merhaba! TASTE Race oyununda 50 TASTE sınırını ulaştım. Çekim talebi oluşturmak istiyorum.\n\nToplam Bakiyem: ${totalBalance} TASTE\nCüzdan Adresim: ${localStorage.getItem('taste_wallet_address') || 'Cüzdan adresi eklenmedi'}` 
-      : `Hello! I have reached the 50 TASTE threshold in TASTE Race. I would like to make a withdrawal.\n\nTotal Balance: ${totalBalance} TASTE\nWallet Address: ${localStorage.getItem('taste_wallet_address') || 'Not Set'}`
+      ? `Merhaba! TASTE Race oyununda 250 TASTE sınırına ulaştım. Çekim talebi oluşturmak istiyorum.\n\nToplam Bakiyem: ${totalBalance} TASTE\nCüzdan Adresim: ${localStorage.getItem('taste_wallet_address') || 'Cüzdan adresi eklenmedi'}` 
+      : `Hello! I have reached the 250 TASTE threshold in TASTE Race. I would like to make a withdrawal.\n\nTotal Balance: ${totalBalance} TASTE\nWallet Address: ${localStorage.getItem('taste_wallet_address') || 'Not Set'}`
     const link = `https://chat.whatsapp.com/G2Q6xjoYt94GzseLmFnUtO` // Directly opens their WhatsApp community
     
     // Copy info to clipboard first to help them post in the group
@@ -546,6 +627,11 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     const m = Math.floor(seconds / 60)
     const s = seconds % 60
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+  }
+
+  const handleToggleSound = () => {
+    playSound('click')
+    setSoundEnabled(!soundEnabled)
   }
 
   return (
@@ -571,29 +657,33 @@ export function TasteRace({ onClose }: TasteRaceProps) {
         backdropFilter: 'blur(10px)',
         zIndex: 10
       }}>
-        <button
-          onClick={onClose}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#94a3b8',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontSize: '14px',
-            fontWeight: 700
-          }}
-        >
-          <ArrowLeft size={18} /> {isTR ? 'Geri' : 'Back'}
-        </button>
+        {onClose ? (
+          <button
+            onClick={() => { playSound('click'); onClose(); }}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#94a3b8',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '14px',
+              fontWeight: 700
+            }}
+          >
+            <ArrowLeft size={18} /> {isTR ? 'Geri' : 'Back'}
+          </button>
+        ) : (
+          <div style={{ width: '40px' }} />
+        )}
         
         <div style={{ fontWeight: 900, fontSize: '16px', color: '#fbbf24', letterSpacing: '1px' }}>
           TASTE RACE 🏎️
         </div>
 
         <button
-          onClick={() => setSoundEnabled(!soundEnabled)}
+          onClick={handleToggleSound}
           style={{
             background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.08)',
@@ -690,7 +780,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
                     {isTR ? 'KAZANILAN TASTE' : 'EARNED TASTE'}
                   </div>
                   <div style={{ fontSize: '18px', fontWeight: 900, color: '#fbbf24', marginTop: '2px' }}>
-                    {(gameVars.current.totalGiftsCollected * 0.2).toFixed(1)} / 3.0
+                    {Math.min(1.0, gameVars.current.totalGiftsCollected * 0.2).toFixed(1)} / 1.0
                   </div>
                 </div>
               </div>
@@ -789,7 +879,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
               }}>
                 <div>⏱️ <b>{isTR ? 'Süre:' : 'Duration:'}</b> {isTR ? '2 Dakika (120 saniye)' : '2 Minutes (120 seconds)'}</div>
                 <div>❤️ <b>{isTR ? 'Can:' : 'Lives:'}</b> {isTR ? '3 Çarpma hakkı' : '3 Crashes allowed'}</div>
-                <div>🎁 <b>{isTR ? 'Kazanç:' : 'Earnings:'}</b> {isTR ? 'Her kutu +0.2 TASTE (Maks: 3.0 TASTE / yarış)' : 'Each box +0.2 TASTE (Max: 3.0 TASTE / race)'}</div>
+                <div>🎁 <b>{isTR ? 'Kazanç:' : 'Earnings:'}</b> {isTR ? 'Her kutu +0.2 TASTE (Maks: 1.0 TASTE / yarış)' : 'Each box +0.2 TASTE (Max: 1.0 TASTE / race)'}</div>
                 <div>🎮 <b>{isTR ? 'Kontroller:' : 'Controls:'}</b> {isTR ? 'Klavyede A/D veya Yön Tuşları, Mobilde Ekran Butonları' : 'A/D or Arrows on Keyboard, Screen Buttons on Mobile'}</div>
               </div>
 
@@ -805,15 +895,15 @@ export function TasteRace({ onClose }: TasteRaceProps) {
                   {isTR ? 'TOPLAM YARIŞ BAKİYESİ' : 'TOTAL RACE BALANCE'}
                 </div>
                 <div style={{ fontSize: '28px', fontWeight: 900, color: '#10b981', marginTop: '4px' }}>
-                  {totalBalance.toFixed(2)} / 50.0 TASTE
+                  {totalBalance.toFixed(2)} / 250.0 TASTE
                 </div>
                 
-                {/* Progress bar to 50 */}
+                {/* Progress bar to 250 */}
                 <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', marginTop: '10px', overflow: 'hidden' }}>
-                  <div style={{ width: `${Math.min(100, (totalBalance / 50) * 100)}%`, height: '100%', background: '#10b981' }} />
+                  <div style={{ width: `${Math.min(100, (totalBalance / 250) * 100)}%`, height: '100%', background: '#10b981' }} />
                 </div>
 
-                {totalBalance >= 50 ? (
+                {totalBalance >= 250 ? (
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
@@ -832,11 +922,11 @@ export function TasteRace({ onClose }: TasteRaceProps) {
                       boxShadow: '0 4px 12px rgba(37,211,102,0.3)'
                     }}
                   >
-                    💬 {isTR ? 'WhatsApp ile Çek (50 TASTE)' : 'Withdraw via WhatsApp (50 TASTE)'}
+                    💬 {isTR ? 'WhatsApp ile Çek (250 TASTE)' : 'Withdraw via WhatsApp (250 TASTE)'}
                   </motion.button>
                 ) : (
                   <div style={{ fontSize: '10px', color: '#64748b', marginTop: '8px' }}>
-                    {isTR ? '* Çekim yapmak için en az 50 TASTE biriktirmelisiniz.' : '* You must reach at least 50 TASTE to withdraw.'}
+                    {isTR ? '* Çekim yapmak için en az 250 TASTE biriktirmelisiniz.' : '* You must reach at least 250 TASTE to withdraw.'}
                   </div>
                 )}
               </div>
@@ -943,7 +1033,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => setGameState('START')}
+                  onClick={() => { playSound('click'); setGameState('START'); }}
                   style={{
                     background: 'rgba(255,255,255,0.05)',
                     border: '1px solid rgba(255,255,255,0.1)',

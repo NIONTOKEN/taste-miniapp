@@ -27,7 +27,6 @@ import { Partners } from './components/Partners'
 import { Leaderboard } from './components/Leaderboard'
 import { DailyRewards } from './components/DailyRewards'
 import { TastePay } from './components/TastePay'
-import { TasteGame } from './components/TasteGame'
 import { Settings } from './components/Settings'
 import { PinLock } from './components/PinLock'
 import { PWAInstallBanner } from './components/PWAInstallBanner'
@@ -74,7 +73,6 @@ function App() {
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
-  const [isTasteRaceOpen, setIsTasteRaceOpen] = useState(false);
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
   const [tonConnectUI] = useTonConnectUI();
   const { activeAddress } = useWallet();
@@ -625,7 +623,7 @@ function App() {
       );
       case 'game': return (
         <motion.div key="game" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-          <TasteGame />
+          <TasteRace onClose={() => setActiveTab('home')} />
         </motion.div>
       );
       case 'settings': return (
@@ -653,11 +651,6 @@ function App() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {isTasteRaceOpen && (
-          <TasteRace onClose={() => setIsTasteRaceOpen(false)} />
-        )}
-      </AnimatePresence>
 
       <div className={`container ${isRTL ? 'rtl' : ''}`} style={{ paddingBottom: '90px', paddingTop: '40px' }}>
         <PriceTicker />
@@ -776,7 +769,6 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
                     { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
-                    { id: 'race', label: 'Taste Race', color: '#ef4444', emojiImage: '🏎️', isNew: true },
                     { id: 'install', label: i18n.language?.startsWith('tr') ? 'Yükle' : 'Install', color: '#10b981', emojiImage: '📲', isNew: true },
                     { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
                     { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', color: '#eab308', emojiImage: '🏆' },
@@ -798,8 +790,6 @@ function App() {
                            setIsTastePayOpen(true);
                         } else if (item.id === 'install') {
                            setIsInstallModalOpen(true);
-                        } else if (item.id === 'race') {
-                           setIsTasteRaceOpen(true);
                         } else {
                            setActiveTab(item.id as any);
                         }
