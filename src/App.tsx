@@ -30,6 +30,7 @@ import { TastePay } from './components/TastePay'
 import { TasteGame } from './components/TasteGame'
 import { Settings } from './components/Settings'
 import { PinLock } from './components/PinLock'
+import { PWAInstallBanner } from './components/PWAInstallBanner'
 import {
   Home,
   Map,
@@ -634,6 +635,7 @@ function App() {
 
   return (
     <PinLock>
+      <PWAInstallBanner />
       <AnimatePresence>
         {disclaimerVisible && (
           <DisclaimerModal onAccept={() => setDisclaimerVisible(false)} />
