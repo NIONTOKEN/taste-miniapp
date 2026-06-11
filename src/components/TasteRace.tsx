@@ -137,6 +137,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
   const [gameState, setGameState] = useState<'START' | 'PLAYING' | 'GAMEOVER'>('START')
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [score, setScore] = useState(0) // session collected TASTE
+  const [scoreTon, setScoreTon] = useState(0) // session collected TON
   const [timeRemaining, setTimeRemaining] = useState(120) // 2 minutes
   const [lives, setLives] = useState(3)
   const [highScore, setHighScore] = useState<number>(() => {
@@ -145,10 +146,21 @@ export function TasteRace({ onClose }: TasteRaceProps) {
   const [totalBalance, setTotalBalance] = useState<number>(() => {
     return parseFloat(localStorage.getItem('taste_race_total_balance') || '0')
   })
+  const [totalTonBalance, setTotalTonBalance] = useState<number>(() => {
+    return parseFloat(localStorage.getItem('taste_race_ton_balance') || '0')
+  })
   
   // Game canvas references
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const requestRef = useRef<number | null>(null)
+
+  // Preloaded images
+  const tasteImgRef = useRef<HTMLImageElement | null>(null)
+  const tonImgRef = useRef<HTMLImageElement | null>(null)
+  useEffect(() => {
+    const tImg = new Image(); tImg.src = '/logo.jpg'; tasteImgRef.current = tImg
+    const tonImg = new Image(); tonImg.src = 'https://ton.org/download/ton_symbol.png'; tonImgRef.current = tonImg
+  }, [])
   
   // Controls state
   const keysPressed = useRef<{ [key: string]: boolean }>({})
@@ -166,11 +178,13 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     distanceTravelled: 0,
     roadOffset: 0,
     obstacles: [] as Array<{ id: number; x: number; y: number; width: number; height: number; speed: number; color: string }>,
-    collectibles: [] as Array<{ id: number; x: number; y: number; size: number; pulse: number }>,
+    collectibles: [] as Array<{ id: number; x: number; y: number; size: number; pulse: number; type: 'taste' | 'ton' }>,
     invulnerableFrames: 0,
     nextSpawnObstacle: 0,
     nextSpawnCollectible: 0,
+    nextSpawnTon: 0,
     totalGiftsCollected: 0,
+    totalTonCollected: 0,
   })
 
   // Detect mobile
@@ -211,6 +225,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     setLives(3)
     setTimeRemaining(120)
     setScore(0)
+    setScoreTon(0)
     setGameState('PLAYING')
     
     // Reset game variables
@@ -227,7 +242,9 @@ export function TasteRace({ onClose }: TasteRaceProps) {
       invulnerableFrames: 0,
       nextSpawnObstacle: 0,
       nextSpawnCollectible: 0,
+      nextSpawnTon: 40,
       totalGiftsCollected: 0,
+      totalTonCollected: 0,
     }
   }
 
@@ -236,29 +253,34 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     setGameState('GAMEOVER')
     if (soundEnabled) playSound('gameover')
     
-    // Calculate rewards
-    // minimum 0.2 TASTE, max 1.0 (session limit is 1.0 TASTE)
+    // TASTE reward: min 0.2, max 1.0 per session
     let finalReward = gameVars.current.totalGiftsCollected * 0.2
-    if (finalReward < 0.2 && (120 - timeRemaining) > 5) {
-      finalReward = 0.2 // played at least 5s
-    }
-    if (finalReward > 1.0) {
-      finalReward = 1.0 // session limit is 1 TASTE
-    }
-    
+    if (finalReward < 0.2 && (120 - timeRemaining) > 5) finalReward = 0.2
+    if (finalReward > 1.0) finalReward = 1.0
     const finalScore = parseFloat(finalReward.toFixed(2))
     setScore(finalScore)
     
-    // Update highscore
+    // TON reward: 0.002 per TON collected, max 0.001 per session
+    let finalTon = gameVars.current.totalTonCollected * 0.002
+    if (finalTon > 0.001) finalTon = 0.001
+    const finalTonScore = parseFloat(finalTon.toFixed(4))
+    setScoreTon(finalTonScore)
+    
+    // Update TASTE highscore
     if (finalScore > highScore) {
       setHighScore(finalScore)
       localStorage.setItem('taste_race_highscore', finalScore.toString())
     }
     
-    // Update balance
+    // Update TASTE balance
     const newBalance = parseFloat((totalBalance + finalScore).toFixed(2))
     setTotalBalance(newBalance)
     localStorage.setItem('taste_race_total_balance', newBalance.toString())
+
+    // Update TON balance
+    const newTonBalance = parseFloat((totalTonBalance + finalTonScore).toFixed(4))
+    setTotalTonBalance(newTonBalance)
+    localStorage.setItem('taste_race_ton_balance', newTonBalance.toString())
   }
 
   // Timer countdown
@@ -364,7 +386,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
       v.nextSpawnObstacle = v.distanceTravelled + (Math.random() * 15 + 10)
     }
 
-    // Spawn Collectibles (TASTE 🎁)
+    // Spawn TASTE Collectibles
     if (v.distanceTravelled >= v.nextSpawnCollectible) {
       const randomColX = (Math.random() * 1.6) - 0.8
       v.collectibles.push({
@@ -372,9 +394,24 @@ export function TasteRace({ onClose }: TasteRaceProps) {
         x: randomColX,
         y: -50,
         size: 20,
-        pulse: 0
+        pulse: 0,
+        type: 'taste'
       })
       v.nextSpawnCollectible = v.distanceTravelled + (Math.random() * 12 + 6)
+    }
+
+    // Spawn TON Collectibles (less frequent)
+    if (v.distanceTravelled >= v.nextSpawnTon) {
+      const randomColX = (Math.random() * 1.4) - 0.7
+      v.collectibles.push({
+        id: Date.now() + Math.random() + 9999,
+        x: randomColX,
+        y: -50,
+        size: 18,
+        pulse: 0,
+        type: 'ton'
+      })
+      v.nextSpawnTon = v.distanceTravelled + (Math.random() * 25 + 20)
     }
 
     // Map screen coord helpers
@@ -439,7 +476,11 @@ export function TasteRace({ onClose }: TasteRaceProps) {
       ) {
         // Collect!
         if (soundEnabled) playSound('coin')
-        v.totalGiftsCollected++
+        if (item.type === 'ton') {
+          v.totalTonCollected++
+        } else {
+          v.totalGiftsCollected++
+        }
         return false
       }
       
@@ -507,34 +548,70 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     ctx.stroke()
     ctx.setLineDash([]) // reset
 
-    // 3. Draw Collectibles (TASTE 🎁)
+    // 3. Draw Collectibles
     v.collectibles.forEach(item => {
       const itemX = width / 2 + (item.x * (roadWidth / 2))
       const pulseSize = item.size + Math.sin(item.pulse) * 3
       
-      // Draw a glowing coin / gift box
-      ctx.shadowBlur = 15
-      ctx.shadowColor = '#f59e0b'
-      
-      // Draw outer gold ring
-      ctx.fillStyle = '#fbbf24'
-      ctx.beginPath()
-      ctx.arc(itemX, item.y, pulseSize, 0, Math.PI * 2)
-      ctx.fill()
-      
-      // Draw inner core
-      ctx.fillStyle = '#f59e0b'
-      ctx.beginPath()
-      ctx.arc(itemX, item.y, pulseSize * 0.75, 0, Math.PI * 2)
-      ctx.fill()
-      
-      // Draw T text
-      ctx.shadowBlur = 0 // reset shadow
-      ctx.fillStyle = '#000000'
-      ctx.font = `bold ${pulseSize * 1.1}px Arial`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText('T', itemX, item.y + 1)
+      if (item.type === 'taste') {
+        // TASTE coin - gold glow
+        ctx.shadowBlur = 18
+        ctx.shadowColor = '#f59e0b'
+        ctx.fillStyle = '#fbbf24'
+        ctx.beginPath()
+        ctx.arc(itemX, item.y, pulseSize, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.fillStyle = '#f59e0b'
+        ctx.beginPath()
+        ctx.arc(itemX, item.y, pulseSize * 0.78, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.shadowBlur = 0
+        // Draw TASTE logo image
+        if (tasteImgRef.current?.complete) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.arc(itemX, item.y, pulseSize * 0.7, 0, Math.PI * 2)
+          ctx.clip()
+          const s = pulseSize * 1.4
+          ctx.drawImage(tasteImgRef.current, itemX - s/2, item.y - s/2, s, s)
+          ctx.restore()
+        } else {
+          ctx.fillStyle = '#000'
+          ctx.font = `bold ${pulseSize * 1.1}px Arial`
+          ctx.textAlign = 'center'
+          ctx.textBaseline = 'middle'
+          ctx.fillText('T', itemX, item.y + 1)
+        }
+      } else {
+        // TON coin - blue glow
+        ctx.shadowBlur = 18
+        ctx.shadowColor = '#3b82f6'
+        ctx.fillStyle = '#60a5fa'
+        ctx.beginPath()
+        ctx.arc(itemX, item.y, pulseSize, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.fillStyle = '#2563eb'
+        ctx.beginPath()
+        ctx.arc(itemX, item.y, pulseSize * 0.78, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.shadowBlur = 0
+        // Draw TON logo image
+        if (tonImgRef.current?.complete) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.arc(itemX, item.y, pulseSize * 0.7, 0, Math.PI * 2)
+          ctx.clip()
+          const s = pulseSize * 1.4
+          ctx.drawImage(tonImgRef.current, itemX - s/2, item.y - s/2, s, s)
+          ctx.restore()
+        } else {
+          ctx.fillStyle = '#fff'
+          ctx.font = `bold ${pulseSize * 0.9}px Arial`
+          ctx.textAlign = 'center'
+          ctx.textBaseline = 'middle'
+          ctx.fillText('TON', itemX, item.y + 1)
+        }
+      }
     })
 
     // 4. Draw Obstacles (Enemy cars)
@@ -602,24 +679,30 @@ export function TasteRace({ onClose }: TasteRaceProps) {
   }
 
   // Handle WhatsApp claim click
-  const handleWhatsAppClaim = () => {
+  const handleWhatsAppClaim = (type: 'taste' | 'ton') => {
     if (soundEnabled) playSound('click')
-    const text = isTR 
-      ? `Merhaba! TASTE Race oyununda 250 TASTE sınırına ulaştım. Çekim talebi oluşturmak istiyorum.\n\nToplam Bakiyem: ${totalBalance} TASTE\nCüzdan Adresim: ${localStorage.getItem('taste_wallet_address') || 'Cüzdan adresi eklenmedi'}` 
-      : `Hello! I have reached the 250 TASTE threshold in TASTE Race. I would like to make a withdrawal.\n\nTotal Balance: ${totalBalance} TASTE\nWallet Address: ${localStorage.getItem('taste_wallet_address') || 'Not Set'}`
-    const link = `https://chat.whatsapp.com/G2Q6xjoYt94GzseLmFnUtO` // Directly opens their WhatsApp community
+    const link = `https://chat.whatsapp.com/G2Q6xjoYt94GzseLmFnUtO`
+    const wallet = localStorage.getItem('taste_wallet_address') || (isTR ? 'Cüzdan adresi eklenmedi' : 'Not Set')
+    const text = type === 'taste'
+      ? (isTR
+          ? `Merhaba! TASTE Race oyununda çekim hakkı kazandım.\nToplam TASTE Bakiyem: ${totalBalance} TASTE\nCüzdan: ${wallet}`
+          : `Hello! I earned a TASTE withdrawal in TASTE Race.\nTotal TASTE Balance: ${totalBalance} TASTE\nWallet: ${wallet}`)
+      : (isTR
+          ? `Merhaba! TASTE Race oyununda TON ödülü çekmek istiyorum.\nToplam TON Bakiyem: ${totalTonBalance} TON\nCüzdan: ${wallet}`
+          : `Hello! I want to withdraw my TON reward from TASTE Race.\nTotal TON Balance: ${totalTonBalance} TON\nWallet: ${wallet}`)
     
-    // Copy info to clipboard first to help them post in the group
     navigator.clipboard.writeText(text).then(() => {
       alert(isTR 
-        ? "Çekim şablonu kopyalandı! Şimdi WhatsApp grubuna yönlendiriliyorsunuz. Mesajınızı oraya yapıştırın." 
-        : "Withdrawal info copied! Redirecting to WhatsApp group. Paste your message there.")
-      
+        ? 'Bilgiler kopyalandı! WhatsApp kanalına yönlendiriliyorsunuz.'
+        : 'Info copied! Redirecting to WhatsApp channel.')
       if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.openLink(link)
       } else {
         window.open(link, '_blank')
       }
+    }).catch(() => {
+      if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(link)
+      else window.open(link, '_blank')
     })
   }
 
@@ -768,19 +851,30 @@ export function TasteRace({ onClose }: TasteRaceProps) {
                 </div>
 
                 {/* Score */}
-                <div style={{
-                  background: 'rgba(15,23,42,0.85)',
-                  border: '1px solid rgba(245,159,11,0.4)',
-                  borderRadius: '16px',
-                  padding: '8px 14px',
-                  textAlign: 'right',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-                }}>
-                  <div style={{ fontSize: '9px', color: '#fbbf24', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    {isTR ? 'KAZANILAN TASTE' : 'EARNED TASTE'}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <div style={{
+                    background: 'rgba(15,23,42,0.85)',
+                    border: '1px solid rgba(245,159,11,0.4)',
+                    borderRadius: '12px',
+                    padding: '5px 12px',
+                    textAlign: 'right',
+                  }}>
+                    <div style={{ fontSize: '8px', color: '#fbbf24', fontWeight: 800, letterSpacing: '0.5px' }}>TASTE 🟡</div>
+                    <div style={{ fontSize: '15px', fontWeight: 900, color: '#fbbf24' }}>
+                      {gameVars.current.totalGiftsCollected}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '18px', fontWeight: 900, color: '#fbbf24', marginTop: '2px' }}>
-                    {Math.min(1.0, gameVars.current.totalGiftsCollected * 0.2).toFixed(1)} / 1.0
+                  <div style={{
+                    background: 'rgba(15,23,42,0.85)',
+                    border: '1px solid rgba(59,130,246,0.4)',
+                    borderRadius: '12px',
+                    padding: '5px 12px',
+                    textAlign: 'right',
+                  }}>
+                    <div style={{ fontSize: '8px', color: '#60a5fa', fontWeight: 800, letterSpacing: '0.5px' }}>TON 🔵</div>
+                    <div style={{ fontSize: '15px', fontWeight: 900, color: '#60a5fa' }}>
+                      {gameVars.current.totalTonCollected}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -877,58 +971,78 @@ export function TasteRace({ onClose }: TasteRaceProps) {
                 flexDirection: 'column',
                 gap: '8px'
               }}>
-                <div>⏱️ <b>{isTR ? 'Süre:' : 'Duration:'}</b> {isTR ? '2 Dakika (120 saniye)' : '2 Minutes (120 seconds)'}</div>
+                <div>⏱️ <b>{isTR ? 'Süre:' : 'Duration:'}</b> {isTR ? '2 Dakika' : '2 Minutes'}</div>
                 <div>❤️ <b>{isTR ? 'Can:' : 'Lives:'}</b> {isTR ? '3 Çarpma hakkı' : '3 Crashes allowed'}</div>
-                <div>🎁 <b>{isTR ? 'Kazanç:' : 'Earnings:'}</b> {isTR ? 'Her kutu +0.2 TASTE (Maks: 1.0 TASTE / yarış)' : 'Each box +0.2 TASTE (Max: 1.0 TASTE / race)'}</div>
-                <div>🎮 <b>{isTR ? 'Kontroller:' : 'Controls:'}</b> {isTR ? 'Klavyede A/D veya Yön Tuşları, Mobilde Ekran Butonları' : 'A/D or Arrows on Keyboard, Screen Buttons on Mobile'}</div>
+                <div>🟡 <b>{isTR ? 'TASTE:' : 'TASTE:'}</b> {isTR ? 'Altın coinleri topla, TASTE kazan!' : 'Collect gold coins, earn TASTE!'}</div>
+                <div>🔵 <b>TON:</b> {isTR ? 'Mavi coinleri topla, TON kazan!' : 'Collect blue coins, earn TON!'}</div>
+                <div>🎮 <b>{isTR ? 'Kontroller:' : 'Controls:'}</b> {isTR ? 'A/D veya Yön Tuşları / Ekran Butonları' : 'A/D or Arrows / Screen Buttons'}</div>
               </div>
 
               {/* Balance Box */}
-              <div style={{
-                background: 'linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.03))',
-                border: '1px solid rgba(16,185,129,0.25)',
-                borderRadius: '20px',
-                padding: '16px',
-                marginBottom: '30px'
-              }}>
-                <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  {isTR ? 'TOPLAM YARIŞ BAKİYESİ' : 'TOTAL RACE BALANCE'}
-                </div>
-                <div style={{ fontSize: '28px', fontWeight: 900, color: '#10b981', marginTop: '4px' }}>
-                  {totalBalance.toFixed(2)} / 250.0 TASTE
-                </div>
-                
-                {/* Progress bar to 250 */}
-                <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', marginTop: '10px', overflow: 'hidden' }}>
-                  <div style={{ width: `${Math.min(100, (totalBalance / 250) * 100)}%`, height: '100%', background: '#10b981' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                {/* TASTE Balance */}
+                <div style={{
+                  background: 'linear-gradient(135deg, rgba(245,159,11,0.1), rgba(245,159,11,0.03))',
+                  border: '1px solid rgba(245,159,11,0.25)',
+                  borderRadius: '16px',
+                  padding: '14px',
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 800, textTransform: 'uppercase' }}>
+                      🟡 TASTE {isTR ? 'BAKİYE' : 'BALANCE'}
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 900, color: '#fbbf24' }}>
+                      {totalBalance.toFixed(2)}
+                    </div>
+                  </div>
+                  <div style={{ width: '100%', height: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', marginTop: '8px', overflow: 'hidden' }}>
+                    <div style={{ width: `${Math.min(100, (totalBalance / 250) * 100)}%`, height: '100%', background: '#f59e0b' }} />
+                  </div>
+                  {totalBalance >= 250 ? (
+                    <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                      onClick={() => handleWhatsAppClaim('taste')}
+                      style={{ width: '100%', marginTop: '10px', background: 'linear-gradient(135deg, #25D366, #128C7E)', color: '#fff', border: 'none', borderRadius: '10px', padding: '9px', fontWeight: 800, fontSize: '12px', cursor: 'pointer' }}
+                    >
+                      💬 {isTR ? 'WhatsApp ile Çek' : 'Withdraw via WhatsApp'}
+                    </motion.button>
+                  ) : (
+                    <div style={{ fontSize: '10px', color: '#64748b', marginTop: '6px' }}>
+                      {isTR ? '* Çekim için 250 TASTE gerekli.' : '* 250 TASTE required to withdraw.'}
+                    </div>
+                  )}
                 </div>
 
-                {totalBalance >= 250 ? (
-                  <motion.button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handleWhatsAppClaim}
-                    style={{
-                      width: '100%',
-                      marginTop: '14px',
-                      background: 'linear-gradient(135deg, #25D366, #128C7E)',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '12px',
-                      padding: '10px',
-                      fontWeight: 800,
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                      boxShadow: '0 4px 12px rgba(37,211,102,0.3)'
-                    }}
-                  >
-                    💬 {isTR ? 'WhatsApp ile Çek (250 TASTE)' : 'Withdraw via WhatsApp (250 TASTE)'}
-                  </motion.button>
-                ) : (
-                  <div style={{ fontSize: '10px', color: '#64748b', marginTop: '8px' }}>
-                    {isTR ? '* Çekim yapmak için en az 250 TASTE biriktirmelisiniz.' : '* You must reach at least 250 TASTE to withdraw.'}
+                {/* TON Balance */}
+                <div style={{
+                  background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(59,130,246,0.03))',
+                  border: '1px solid rgba(59,130,246,0.25)',
+                  borderRadius: '16px',
+                  padding: '14px',
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ fontSize: '11px', color: '#60a5fa', fontWeight: 800, textTransform: 'uppercase' }}>
+                      🔵 TON {isTR ? 'BAKİYE' : 'BALANCE'}
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 900, color: '#60a5fa' }}>
+                      {totalTonBalance.toFixed(4)}
+                    </div>
                   </div>
-                )}
+                  <div style={{ width: '100%', height: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', marginTop: '8px', overflow: 'hidden' }}>
+                    <div style={{ width: `${Math.min(100, (totalTonBalance / 2) * 100)}%`, height: '100%', background: '#3b82f6' }} />
+                  </div>
+                  {totalTonBalance >= 2 ? (
+                    <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                      onClick={() => handleWhatsAppClaim('ton')}
+                      style={{ width: '100%', marginTop: '10px', background: 'linear-gradient(135deg, #25D366, #128C7E)', color: '#fff', border: 'none', borderRadius: '10px', padding: '9px', fontWeight: 800, fontSize: '12px', cursor: 'pointer' }}
+                    >
+                      💬 {isTR ? 'WhatsApp ile Çek' : 'Withdraw via WhatsApp'}
+                    </motion.button>
+                  ) : (
+                    <div style={{ fontSize: '10px', color: '#64748b', marginTop: '6px' }}>
+                      {isTR ? '* Çekim için 2 TON gerekli.' : '* 2 TON required to withdraw.'}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Start Button */}
@@ -986,21 +1100,21 @@ export function TasteRace({ onClose }: TasteRaceProps) {
                 border: '1px solid rgba(255,255,255,0.07)',
                 borderRadius: '20px',
                 padding: '20px',
-                marginBottom: '30px',
+                marginBottom: '24px',
                 textAlign: 'left'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '13px' }}>
                   <span style={{ color: '#94a3b8' }}>⏱️ {isTR ? 'Süre:' : 'Time:'}</span>
-                  <span style={{ fontWeight: 800 }}>{120 - timeRemaining} {isTR ? 'saniye' : 'seconds'}</span>
+                  <span style={{ fontWeight: 800 }}>{120 - timeRemaining} {isTR ? 'saniye' : 'sec'}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '13px' }}>
-                  <span style={{ color: '#94a3b8' }}>🎁 {isTR ? 'Toplanan Kutu:' : 'Boxes Collected:'}</span>
-                  <span style={{ fontWeight: 800 }}>{gameVars.current.totalGiftsCollected}</span>
-                </div>
-                <div style={{ height: '1px', background: 'rgba(255,255,255,0.07)', margin: '10px 0' }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
-                  <span style={{ color: '#fbbf24', fontWeight: 800 }}>🪙 {isTR ? 'Kazanılan TASTE:' : 'TASTE Reward:'}</span>
+                <div style={{ height: '1px', background: 'rgba(255,255,255,0.07)', margin: '8px 0' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px', marginBottom: '8px' }}>
+                  <span style={{ color: '#fbbf24', fontWeight: 800 }}>🟡 {isTR ? 'TASTE Ödülü:' : 'TASTE Reward:'}</span>
                   <span style={{ color: '#fbbf24', fontWeight: 900 }}>+{score.toFixed(2)} TASTE</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
+                  <span style={{ color: '#60a5fa', fontWeight: 800 }}>🔵 TON {isTR ? 'Ödülü:' : 'Reward:'}</span>
+                  <span style={{ color: '#60a5fa', fontWeight: 900 }}>+{scoreTon.toFixed(4)} TON</span>
                 </div>
               </div>
 
