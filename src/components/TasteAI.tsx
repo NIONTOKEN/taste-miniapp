@@ -90,7 +90,7 @@ Currently: 0 units have been added. Supply is fixed at 25M.
 ## Security
 - Smart contract passed security audit
 - All locks publicly verifiable on TON blockchain via Tonscan
-- Audit available at: tastetoken.netlify.app/audit.html
+- Audit available at: taste-miniapp-xy8k.vercel.app/audit.html
 
 ## Blockchain Details
 - Blockchain: TON (The Open Network)

@@ -518,7 +518,7 @@ function App() {
                   {[
                     { label: 'Token Locks', url: 'https://tonscan.org/jetton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-', color: '#22c55e' },
                     { label: 'LP Lock (81.6%)', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
-                    { label: 'Audit & Safety', url: 'https://tastetoken.netlify.app/audit.html', color: '#f59e0b' },
+                    { label: 'Audit & Safety', url: 'https://taste-miniapp-xy8k.vercel.app/audit.html', color: '#f59e0b' },
                     { label: 'TASTE Website', url: 'https://tastetoken.net', color: '#3b82f6' },
                   ].map((item, i) => (
                     <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${item.color}30`, borderRadius: '14px', padding: '12px 16px', fontSize: '12px', color: item.color, textDecoration: 'none', fontWeight: 600, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -857,7 +857,7 @@ function App() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {
-              const url = 'https://tastetoken.netlify.app/audit.html';
+              const url = 'https://taste-miniapp-xy8k.vercel.app/audit.html';
               if (window.Telegram?.WebApp) {
                 window.Telegram.WebApp.openLink(url);
               } else {
@@ -885,7 +885,7 @@ function App() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {
-              const url = 'https://tastetoken.netlify.app/litepaper.html';
+              const url = 'https://taste-miniapp-xy8k.vercel.app/litepaper.html';
               if (window.Telegram?.WebApp) {
                 window.Telegram.WebApp.openLink(url);
               } else {
