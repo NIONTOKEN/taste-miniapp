@@ -17,6 +17,7 @@ import { Legal } from './components/Legal'
 import { TasteAI } from './components/TasteAI'
 import { TasteChef } from './components/TasteChef'
 import { DisclaimerModal, shouldShowDisclaimer } from './components/DisclaimerModal'
+import { LangSelectionModal } from './components/LangSelectionModal'
 import { PoweredBy } from './components/PoweredBy'
 import { Community } from './components/Community'
 import { TasteJobs } from './components/TasteJobs'
@@ -75,6 +76,7 @@ function App() {
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
+  const [langSelectionVisible, setLangSelectionVisible] = useState<boolean>(!localStorage.getItem('taste_lang_selected'));
   const [tonConnectUI] = useTonConnectUI();
   const { activeAddress } = useWallet();
   const [showPing, setShowPing] = useState(false);
@@ -106,9 +108,13 @@ function App() {
         
         if (detectedLang?.startsWith('tr')) {
           i18n.changeLanguage('tr');
+        } else if (detectedLang?.startsWith('ru')) {
+          i18n.changeLanguage('ru');
+        } else if (detectedLang?.startsWith('ar')) {
+          i18n.changeLanguage('ar');
+        } else if (detectedLang?.startsWith('zh')) {
+          i18n.changeLanguage('zh');
         } else {
-          // For all other languages (Arabic, Russian, German, etc.) — use English
-          // as we don't have translations yet, but detect & store for future
           i18n.changeLanguage('en');
         }
       }
@@ -143,11 +149,14 @@ function App() {
   const languages = [
     { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
     { code: 'en', label: 'English (US)', flag: '🇺🇸' },
+    { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+    { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+    { code: 'zh', label: '简体中文', flag: '🇨🇳' },
   ];
 
   const currentLangCode = i18n.language?.split('-')[0] || 'en';
   const currentLang = languages.find(l => l.code === currentLangCode) || languages[1];
-  const isRTL = false; // Arabic removed
+  const isRTL = currentLangCode === 'ar';
 
   const changeLanguage = (code: string) => {
     i18n.changeLanguage(code);
@@ -601,7 +610,19 @@ function App() {
       <PWAInstallBanner />
       <InstallModal isOpen={isInstallModalOpen} onClose={() => setIsInstallModalOpen(false)} />
       <AnimatePresence>
-        {disclaimerVisible && (
+        {langSelectionVisible && (
+          <LangSelectionModal
+            onSelect={(code) => {
+              changeLanguage(code);
+              localStorage.setItem('taste_lang_selected', 'true');
+              setLangSelectionVisible(false);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {!langSelectionVisible && disclaimerVisible && (
           <DisclaimerModal onAccept={() => setDisclaimerVisible(false)} />
         )}
       </AnimatePresence>

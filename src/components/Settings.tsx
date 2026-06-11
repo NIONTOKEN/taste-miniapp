@@ -47,7 +47,10 @@ export function Settings() {
 
     const languages = [
         { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
-        { code: 'en', label: 'English', flag: '🇬🇧' }
+        { code: 'en', label: 'English', flag: '🇬🇧' },
+        { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+        { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+        { code: 'zh', label: '简体中文', flag: '🇨🇳' }
     ];
 
     const handleShare = () => {

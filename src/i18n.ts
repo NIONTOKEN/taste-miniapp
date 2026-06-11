@@ -1233,6 +1233,105 @@ const resources = {
                     "diamond": "Şef"
                 }
             }
+        },
+        ru: {
+            translation: {
+                "app": {
+                    "title": "TASTE",
+                    "description": "Утилитарные цифровые активы в сфере гастрономии и обучения",
+                    "my_balance": "Мой Баланс",
+                    "connect_wallet_first": "Подключите кошелек",
+                    "tap_to_earn": "Нажмите, чтобы заработать",
+                    "no_energy": "Нет энергии",
+                    "invite_friend": "Пригласить друга",
+                    "share_link": "Поделиться ссылкой",
+                    "invite_gain": "Давайте расширять сообщество вместе",
+                    "buy_title": "Erken Erişim — Купить TASTE",
+                    "buy_with": "Получить с помощью TON",
+                    "you_get": "Вы получите",
+                    "swap_opening": "Открытие обмена на STON.fi..."
+                },
+                "nav": {
+                    "home": "Главная",
+                    "roadmap": "Дорожная карта",
+                    "whitepaper": "Белая бумага",
+                    "litepaper": "Лайтпейпер",
+                    "community": "Кулинарная лента",
+                    "spin": "Колесо удачи",
+                    "charity": "Благотворительность",
+                    "legal": "Правовая информация",
+                    "leaderboard": "Лидеры",
+                    "play": "Играть",
+                    "wallet": "Кошелек",
+                    "chef": "Шеф Taste"
+                }
+            }
+        },
+        ar: {
+            translation: {
+                "app": {
+                    "title": "TASTE",
+                    "description": "الأصول الرقمية الخدمية الموجهة نحو فن الطهي والتعليم",
+                    "my_balance": "رصيدي",
+                    "connect_wallet_first": "يرجى ربط المحفظة",
+                    "tap_to_earn": "انقر لتكسب",
+                    "no_energy": "لا توجد طاقة",
+                    "invite_friend": "دعوة صديق",
+                    "share_link": "مشاركة الرابط",
+                    "invite_gain": "دعونا ننمي المجتمع معاً",
+                    "buy_title": "Erken Erişim — شراء TASTE",
+                    "buy_with": "احصل عليه باستخدام TON",
+                    "you_get": "سوف تحصل على",
+                    "swap_opening": "فتح التداول على STON.fi..."
+                },
+                "nav": {
+                    "home": "الرئيسية",
+                    "roadmap": "خارطة الطريق",
+                    "whitepaper": "الورقة البيضاء",
+                    "litepaper": "الورقة المبسطة",
+                    "community": "منشورات الطعام",
+                    "spin": "عجلة الحظ",
+                    "charity": "منصة التبرعات",
+                    "legal": "معلومات قانونية",
+                    "leaderboard": "الترتيب",
+                    "play": "العب",
+                    "wallet": "المحفظة",
+                    "chef": "شيف Taste"
+                }
+            }
+        },
+        zh: {
+            translation: {
+                "app": {
+                    "title": "TASTE",
+                    "description": "专注于美食与教育的实用数字资产",
+                    "my_balance": "我的余额",
+                    "connect_wallet_first": "请先连接钱包",
+                    "tap_to_earn": "点击赚取",
+                    "no_energy": "精力不足",
+                    "invite_friend": "邀请好友",
+                    "share_link": "分享链接",
+                    "invite_gain": "共同拓展社区",
+                    "buy_title": "Erken Erişim — 购买 TASTE",
+                    "buy_with": "使用 TON 获取",
+                    "you_get": "您将获得",
+                    "swap_opening": "在 STON.fi 上开放兑换..."
+                },
+                "nav": {
+                    "home": "首页",
+                    "roadmap": "路线图",
+                    "whitepaper": "白皮书",
+                    "litepaper": "精简白皮书",
+                    "community": "美食动态",
+                    "spin": "幸运轮盘",
+                    "charity": "慈善平台",
+                    "legal": "法律信息",
+                    "leaderboard": "排行榜",
+                    "play": "开始游戏",
+                    "wallet": "钱包",
+                    "chef": "Taste 厨师"
+                }
+            }
         }
     }
 };
