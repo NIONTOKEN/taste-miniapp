@@ -260,34 +260,44 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     setGameState('GAMEOVER')
     if (soundEnabled) playSound('gameover')
     
-    // TASTE reward: min 0.2, max 1.0 per session
-    let finalReward = gameVars.current.totalGiftsCollected * 0.2
-    if (finalReward < 0.2 && (120 - timeRemaining) > 5) finalReward = 0.2
-    if (finalReward > 1.0) finalReward = 1.0
-    const finalScore = parseFloat(finalReward.toFixed(2))
-    setScore(finalScore)
+    let finalScore = 0
+    let finalTonScore = 0
     
-    // TON reward: 0.002 per TON collected, max 0.001 per session
-    let finalTon = gameVars.current.totalTonCollected * 0.002
-    if (finalTon > 0.001) finalTon = 0.001
-    const finalTonScore = parseFloat(finalTon.toFixed(4))
-    setScoreTon(finalTonScore)
-    
-    // Update TASTE highscore
-    if (finalScore > highScore) {
-      setHighScore(finalScore)
-      localStorage.setItem('taste_race_highscore', finalScore.toString())
+    if (completed) {
+      // TASTE reward: min 0.2, max 1.0 per session
+      let finalReward = gameVars.current.totalGiftsCollected * 0.2
+      if (finalReward < 0.2 && (120 - timeRemaining) > 5) finalReward = 0.2
+      if (finalReward > 1.0) finalReward = 1.0
+      finalScore = parseFloat(finalReward.toFixed(2))
+      
+      // TON reward: 0.002 per TON collected, max 0.001 per session
+      let finalTon = gameVars.current.totalTonCollected * 0.002
+      if (finalTon > 0.001) finalTon = 0.001
+      finalTonScore = parseFloat(finalTon.toFixed(4))
+      
+      // Update TASTE highscore
+      if (finalScore > highScore) {
+        setHighScore(finalScore)
+        localStorage.setItem('taste_race_highscore', finalScore.toString())
+      }
+      
+      // Update TASTE balance
+      const newBalance = parseFloat((totalBalance + finalScore).toFixed(2))
+      setTotalBalance(newBalance)
+      localStorage.setItem('taste_race_total_balance', newBalance.toString())
+
+      // Update TON balance
+      const newTonBalance = parseFloat((totalTonBalance + finalTonScore).toFixed(4))
+      setTotalTonBalance(newTonBalance)
+      localStorage.setItem('taste_race_ton_balance', newTonBalance.toString())
+    } else {
+      // Crash or did not finish - score is 0
+      finalScore = 0
+      finalTonScore = 0
     }
     
-    // Update TASTE balance
-    const newBalance = parseFloat((totalBalance + finalScore).toFixed(2))
-    setTotalBalance(newBalance)
-    localStorage.setItem('taste_race_total_balance', newBalance.toString())
-
-    // Update TON balance
-    const newTonBalance = parseFloat((totalTonBalance + finalTonScore).toFixed(4))
-    setTotalTonBalance(newTonBalance)
-    localStorage.setItem('taste_race_ton_balance', newTonBalance.toString())
+    setScore(finalScore)
+    setScoreTon(finalTonScore)
   }
 
   // Timer countdown
@@ -1116,6 +1126,25 @@ export function TasteRace({ onClose }: TasteRaceProps) {
               <p style={{ fontSize: '13px', color: '#94a3b8', margin: '0 0 24px 0' }}>
                 {isTR ? 'Süre Doldu veya Canların Bitti' : 'Time ran out or you lost all lives'}
               </p>
+
+              {lives === 0 && (
+                <div style={{
+                  background: 'rgba(239, 68, 68, 0.15)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  borderRadius: '16px',
+                  padding: '12px',
+                  fontSize: '12px',
+                  color: '#f87171',
+                  marginBottom: '20px',
+                  textAlign: 'center',
+                  fontWeight: 700,
+                  lineHeight: '1.4'
+                }}>
+                  ⚠️ {isTR 
+                    ? 'Oyunu tamamlayamadığın için (Kaza yaptın) topladığın tüm ödüller sıfırlandı! Kazanmak için yarışı bitirmelisin.' 
+                    : 'Since you did not complete the race (Crashed), your collected rewards are reset to 0! You must finish the race to earn.'}
+                </div>
+              )}
 
               {/* Results */}
               <div style={{

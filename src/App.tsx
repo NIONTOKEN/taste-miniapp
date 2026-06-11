@@ -175,17 +175,28 @@ function App() {
       case 'home':
         return (
           <motion.div key="home" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            {/* Hero (Logo & Intro) */}
-            <div style={{ textAlign: 'center', marginBottom: '20px', marginTop: '10px' }}>
+            {/* Hero (Logo & Intro) in a premium White Paper styled card container */}
+            <div style={{
+              textAlign: 'center',
+              marginBottom: '20px',
+              marginTop: '10px',
+              background: '#ffffff',
+              color: '#0f172a',
+              padding: '24px 16px',
+              borderRadius: '24px',
+              boxShadow: '0 10px 30px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0, 0, 0, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.95)',
+              position: 'relative'
+            }}>
               <div style={{ position: 'relative', width: '140px', height: '140px', margin: '0 auto 10px' }}>
                 <svg viewBox="0 0 180 180" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', animation: 'spin-text 12s linear infinite' }}>
                   <defs>
                     <path id="circlePath" d="M 90,90 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
-                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#f59e0b" /><stop offset="50%" stopColor="#fbbf24" /><stop offset="100%" stopColor="#f59e0b" />
+                    <linearGradient id="darkGoldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#b45309" /><stop offset="50%" stopColor="#d97706" /><stop offset="100%" stopColor="#b45309" />
                     </linearGradient>
                   </defs>
-                  <text fill="url(#goldGradient)" fontSize="13" fontWeight="800" letterSpacing="5">
+                  <text fill="url(#darkGoldGradient)" fontSize="13" fontWeight="800" letterSpacing="5">
                     <textPath href="#circlePath" startOffset="0%">TASTE • TOKEN • TASTE • TOKEN •</textPath>
                   </text>
                 </svg>
@@ -194,14 +205,14 @@ function App() {
                   transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                   style={{
                     position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    width: '85px', height: '85px', borderRadius: '50%', boxShadow: '0 0 30px var(--primary-glow)',
-                    border: '4px solid rgba(245, 159, 11, 0.3)', overflow: 'hidden'
+                    width: '85px', height: '85px', borderRadius: '50%', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.12)',
+                    border: '4px solid #f59e0b', overflow: 'hidden'
                   }}
                 >
                   <video src="/logo-gif.mp4" autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                 </motion.div>
               </div>
-              <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '13px' }}>{t('app.description')}</p>
+              <p style={{ color: '#475569', margin: 0, fontSize: '13px', fontWeight: 700 }}>{t('app.description')}</p>
             </div>
 
             {/* Intro Video - Compact Card */}
