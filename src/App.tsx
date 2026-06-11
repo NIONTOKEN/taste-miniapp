@@ -31,6 +31,7 @@ import { TasteGame } from './components/TasteGame'
 import { Settings } from './components/Settings'
 import { PinLock } from './components/PinLock'
 import { PWAInstallBanner } from './components/PWAInstallBanner'
+import { InstallModal } from './components/InstallModal'
 import {
   Home,
   Map,
@@ -71,6 +72,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'game' | 'settings'>('home');
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [disclaimerVisible, setDisclaimerVisible] = useState<boolean>(shouldShowDisclaimer());
   const [tonConnectUI] = useTonConnectUI();
   const { activeAddress } = useWallet();
@@ -636,6 +638,7 @@ function App() {
   return (
     <PinLock>
       <PWAInstallBanner />
+      <InstallModal isOpen={isInstallModalOpen} onClose={() => setIsInstallModalOpen(false)} />
       <AnimatePresence>
         {disclaimerVisible && (
           <DisclaimerModal onAccept={() => setDisclaimerVisible(false)} />
@@ -765,6 +768,7 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
                     { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
+                    { id: 'install', label: i18n.language?.startsWith('tr') ? 'Yükle' : 'Install', color: '#10b981', emojiImage: '📲', isNew: true },
                     { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
                     { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', color: '#eab308', emojiImage: '🏆' },
                     { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
@@ -783,6 +787,8 @@ function App() {
                       onClick={() => {
                         if (item.id === 'pay') {
                            setIsTastePayOpen(true);
+                        } else if (item.id === 'install') {
+                           setIsInstallModalOpen(true);
                         } else {
                            setActiveTab(item.id as any);
                         }
