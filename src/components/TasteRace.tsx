@@ -154,12 +154,19 @@ export function TasteRace({ onClose }: TasteRaceProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const requestRef = useRef<number | null>(null)
 
-  // Preloaded images
+  // Preloaded images - wait for onload
   const tasteImgRef = useRef<HTMLImageElement | null>(null)
   const tonImgRef = useRef<HTMLImageElement | null>(null)
   useEffect(() => {
-    const tImg = new Image(); tImg.src = '/logo.jpg'; tasteImgRef.current = tImg
-    const tonImg = new Image(); tonImg.src = 'https://ton.org/download/ton_symbol.png'; tonImgRef.current = tonImg
+    const tImg = new Image()
+    tImg.crossOrigin = 'anonymous'
+    tImg.onload = () => { tasteImgRef.current = tImg }
+    tImg.src = '/logo.jpg'
+
+    const tonImg = new Image()
+    tonImg.crossOrigin = 'anonymous'
+    tonImg.onload = () => { tonImgRef.current = tonImg }
+    tonImg.src = 'https://ton.org/download/ton_symbol.png'
   }, [])
   
   // Controls state
@@ -397,10 +404,10 @@ export function TasteRace({ onClose }: TasteRaceProps) {
         pulse: 0,
         type: 'taste'
       })
-      v.nextSpawnCollectible = v.distanceTravelled + (Math.random() * 12 + 6)
+      v.nextSpawnCollectible = v.distanceTravelled + (Math.random() * 22 + 18) // TASTE: daha seyrek
     }
 
-    // Spawn TON Collectibles (less frequent)
+    // Spawn TON Collectibles
     if (v.distanceTravelled >= v.nextSpawnTon) {
       const randomColX = (Math.random() * 1.4) - 0.7
       v.collectibles.push({
@@ -411,7 +418,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
         pulse: 0,
         type: 'ton'
       })
-      v.nextSpawnTon = v.distanceTravelled + (Math.random() * 25 + 20)
+      v.nextSpawnTon = v.distanceTravelled + (Math.random() * 18 + 12) // TON: daha sık
     }
 
     // Map screen coord helpers
@@ -567,7 +574,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
         ctx.fill()
         ctx.shadowBlur = 0
         // Draw TASTE logo image
-        if (tasteImgRef.current?.complete) {
+        if (tasteImgRef.current) {
           ctx.save()
           ctx.beginPath()
           ctx.arc(itemX, item.y, pulseSize * 0.7, 0, Math.PI * 2)
@@ -596,7 +603,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
         ctx.fill()
         ctx.shadowBlur = 0
         // Draw TON logo image
-        if (tonImgRef.current?.complete) {
+        if (tonImgRef.current) {
           ctx.save()
           ctx.beginPath()
           ctx.arc(itemX, item.y, pulseSize * 0.7, 0, Math.PI * 2)
