@@ -843,7 +843,11 @@ function App() {
           <button className={`nav-item ${activeTab === 'home' ? 'active' : ''}`} onClick={() => { setActiveTab('home'); setIsMenuOpen(false); }}>
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
-          
+
+          <button className={`nav-item ${activeTab === 'game' ? 'active' : ''}`} onClick={() => { setActiveTab('game'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
+            <span className="nav-icon" style={{ fontSize: '22px' }}>🎮</span><span className="nav-label">{i18n.language?.startsWith('tr') ? 'Oyna' : 'Play'}</span>
+            <span style={{ position: 'absolute', top: '4px', right: '14px', width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 8px #ef4444', animation: 'pulse 2s infinite' }} />
+          </button>
 
           <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
             <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>
