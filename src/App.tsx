@@ -175,28 +175,17 @@ function App() {
       case 'home':
         return (
           <motion.div key="home" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            {/* Hero (Logo & Intro) in a premium White Paper styled card container */}
-            <div style={{
-              textAlign: 'center',
-              marginBottom: '20px',
-              marginTop: '10px',
-              background: '#ffffff',
-              color: '#0f172a',
-              padding: '24px 16px',
-              borderRadius: '24px',
-              boxShadow: '0 10px 30px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0, 0, 0, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.95)',
-              position: 'relative'
-            }}>
+            {/* Hero (Logo & Intro) */}
+            <div style={{ textAlign: 'center', marginBottom: '20px', marginTop: '10px' }}>
               <div style={{ position: 'relative', width: '140px', height: '140px', margin: '0 auto 10px' }}>
                 <svg viewBox="0 0 180 180" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', animation: 'spin-text 12s linear infinite' }}>
                   <defs>
                     <path id="circlePath" d="M 90,90 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
-                    <linearGradient id="darkGoldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#b45309" /><stop offset="50%" stopColor="#d97706" /><stop offset="100%" stopColor="#b45309" />
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#f59e0b" /><stop offset="50%" stopColor="#fbbf24" /><stop offset="100%" stopColor="#f59e0b" />
                     </linearGradient>
                   </defs>
-                  <text fill="url(#darkGoldGradient)" fontSize="13" fontWeight="800" letterSpacing="5">
+                  <text fill="url(#goldGradient)" fontSize="13" fontWeight="800" letterSpacing="5">
                     <textPath href="#circlePath" startOffset="0%">TASTE • TOKEN • TASTE • TOKEN •</textPath>
                   </text>
                 </svg>
@@ -205,14 +194,14 @@ function App() {
                   transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                   style={{
                     position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    width: '85px', height: '85px', borderRadius: '50%', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.12)',
-                    border: '4px solid #f59e0b', overflow: 'hidden'
+                    width: '85px', height: '85px', borderRadius: '50%', boxShadow: '0 0 30px var(--primary-glow)',
+                    border: '4px solid rgba(245, 159, 11, 0.3)', overflow: 'hidden'
                   }}
                 >
                   <video src="/logo-gif.mp4" autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                 </motion.div>
               </div>
-              <p style={{ color: '#475569', margin: 0, fontSize: '13px', fontWeight: 700 }}>{t('app.description')}</p>
+              <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '13px' }}>{t('app.description')}</p>
             </div>
 
             {/* Intro Video - Compact Card */}
@@ -223,53 +212,8 @@ function App() {
               />
             </motion.div>
 
-            {/* Asansör Konuşması (Pitch) - Ana Sayfa Versiyonu */}
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                style={{ 
-                    marginBottom: '25px',
-                    padding: '20px',
-                    background: 'linear-gradient(135deg, rgba(245,159,11,0.08), rgba(0,0,0,0.3))',
-                    border: '1px solid rgba(245,159,11,0.2)',
-                    borderRadius: '24px',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
-                }}
-            >
-                <div style={{ textAlign: 'center', marginBottom: '12px' }}>
-                    <h4 style={{ color: '#f59e0b', fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                        🤔 {t('whitepaper.pitch.title')}
-                    </h4>
-                </div>
-                
-                <p style={{ fontSize: '13px', color: 'var(--text-main)', lineHeight: '1.6', whiteSpace: 'pre-line', marginBottom: '12px', textAlign: 'center' }}>
-                    {t('whitepaper.pitch.text1')}
-                </p>
-                
-                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '12px', borderRadius: '12px', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <p style={{ fontSize: '13px', color: '#fcd34d', lineHeight: '1.6', margin: 0 }}>
-                        <Trans
-                            i18nKey="whitepaper.pitch.text2"
-                            components={{ highlight: <span style={{ color: '#f59e0b', fontWeight: 800 }} /> }}
-                        />
-                    </p>
-                </div>
 
-                <div style={{ textAlign: 'center', margin: '15px 0' }}>
-                    <Trans
-                        i18nKey="whitepaper.pitch.text4"
-                        components={{ highlight: <span style={{ color: '#22c55e', fontWeight: 900, fontSize: '14px', display: 'block' }} /> }}
-                    />
-                </div>
 
-                <div style={{ textAlign: 'center', background: 'var(--gradient-gold)', padding: '12px', borderRadius: '12px', color: '#000' }}>
-                    <Trans
-                        i18nKey="whitepaper.pitch.text6"
-                        components={{ highlight: <strong style={{ display: 'block', fontSize: '14px', marginTop: '4px', fontWeight: 900 }} /> }}
-                    />
-                </div>
-            </motion.div>
 
 
             {/* Premium Swap Widget */}
