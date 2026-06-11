@@ -334,8 +334,12 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     resizeCanvas()
 
     const loop = () => {
-      update()
-      draw(ctx, canvas.width, canvas.height)
+      try {
+        updateRef.current()
+        drawRef.current(ctx, canvas.width, canvas.height)
+      } catch (e) {
+        console.warn('Game loop error:', e)
+      }
       requestRef.current = requestAnimationFrame(loop)
     }
 
@@ -348,6 +352,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
   // Update Game Physics
   const update = () => {
     const v = gameVars.current
+    if (!canvasRef.current) return
     
     // Increase speed slowly
     if (v.speed < v.maxSpeed) {
@@ -432,10 +437,13 @@ export function TasteRace({ onClose }: TasteRaceProps) {
     v.obstacles = v.obstacles.filter(obs => {
       obs.y += v.speed - obs.speed
       
+      const cw = canvasRef.current?.width || 300
+      const ch = canvasRef.current?.height || 600
+      
       // Collision check with player
-      const obsScreenX = getScreenX(obs.x, canvasRef.current!.width) - obs.width / 2
-      const playerScreenX = getScreenX(v.playerX, canvasRef.current!.width) - v.playerWidth / 2
-      const playerY = canvasRef.current!.height - 130
+      const obsScreenX = getScreenX(obs.x, cw) - obs.width / 2
+      const playerScreenX = getScreenX(v.playerX, cw) - v.playerWidth / 2
+      const playerY = ch - 130
       
       if (
         v.invulnerableFrames === 0 &&
@@ -457,12 +465,12 @@ export function TasteRace({ onClose }: TasteRaceProps) {
           }
           return nextLives
         })
-        v.invulnerableFrames = 90 // 1.5 seconds invulnerability
-        v.speed = Math.max(5, v.speed - 3) // slow down
-        return false // destroy obstacle
+        v.invulnerableFrames = 90
+        v.speed = Math.max(5, v.speed - 3)
+        return false
       }
       
-      return obs.y < canvasRef.current!.height + 100
+      return obs.y < ch + 100
     })
 
     // Update Collectibles
@@ -470,10 +478,13 @@ export function TasteRace({ onClose }: TasteRaceProps) {
       item.y += v.speed
       item.pulse = (item.pulse + 0.1) % (Math.PI * 2)
       
+      const cw = canvasRef.current?.width || 300
+      const ch = canvasRef.current?.height || 600
+      
       // Collision check with player
-      const itemScreenX = getScreenX(item.x, canvasRef.current!.width)
-      const playerScreenX = getScreenX(v.playerX, canvasRef.current!.width) - v.playerWidth / 2
-      const playerY = canvasRef.current!.height - 130
+      const itemScreenX = getScreenX(item.x, cw)
+      const playerScreenX = getScreenX(v.playerX, cw) - v.playerWidth / 2
+      const playerY = ch - 130
       
       if (
         playerScreenX < itemScreenX + item.size &&
@@ -491,7 +502,7 @@ export function TasteRace({ onClose }: TasteRaceProps) {
         return false
       }
       
-      return item.y < canvasRef.current!.height + 100
+      return item.y < ch + 100
     })
   }
 
@@ -684,6 +695,11 @@ export function TasteRace({ onClose }: TasteRaceProps) {
       ctx.shadowBlur = 0 // reset
     }
   }
+
+  // Keep refs updated for game loop (must be after both update and draw are defined)
+  const updateRef = useRef(update)
+  const drawRef = useRef(draw)
+  useEffect(() => { updateRef.current = update; drawRef.current = draw })
 
   // Handle WhatsApp claim click
   const handleWhatsAppClaim = (type: 'taste' | 'ton') => {
