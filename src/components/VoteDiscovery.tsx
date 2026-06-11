@@ -16,11 +16,81 @@ export function VoteDiscovery() {
 
     const votingLinks: SocialLink[] = [
         {
-            id: 'coinmooner',
-            icon: '🌕',
-            label: 'CoinMooner',
-            sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
-            link: 'https://coinmooner.com/coins/taste-taste',
+            id: 'binance',
+            icon: '🟡',
+            label: 'Binance Web3',
+            sublabel: isEn ? 'Track on Binance Web3' : 'Binance Web3\'te Takip Et',
+            link: 'https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=UQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxcr7&binanceChainId=CT_607&chain=undefined',
+        },
+        {
+            id: 'okx',
+            icon: '⬛',
+            label: 'OKX Web3',
+            sublabel: isEn ? 'Track on OKX' : 'OKX\'te Takip Et',
+            link: `https://web3.okx.com/token/ton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-`,
+        },
+        {
+            id: 'bitget',
+            icon: '🔵',
+            label: 'Bitget Wallet',
+            sublabel: isEn ? 'Track on Bitget' : 'Bitget\'te Takip Et',
+            link: 'https://web3.bitget.com/ton-wallet',
+        },
+        {
+            id: 'tonkeeper',
+            icon: '💎',
+            label: 'Tonkeeper',
+            sublabel: isEn ? 'Buy via Tonkeeper' : 'Tonkeeper ile Al',
+            link: 'https://app.tonkeeper.com/dapp/https%3A%2F%2Fapp.ston.fi%2Fswap%3Fft%3DTON%26tt%3DEQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+        },
+        {
+            id: 'mytonwallet',
+            icon: '🌐',
+            label: 'MyTonWallet',
+            sublabel: isEn ? 'View on MyTonWallet' : 'MyTonWallet\'ta Gör',
+            link: 'https://mytonwallet.io',
+        },
+        {
+            id: 'dedust',
+            icon: '💧',
+            label: 'DeDust.io',
+            sublabel: isEn ? 'Buy TASTE/USDT on DeDust' : 'DeDust\'ta TASTE/USDT Al',
+            link: 'https://dedust.io/pools/EQALRRSemBV0YDhoOe8VCRg8LcoXEWg7IGSk3BJ2Xk4h3oC',
+        },
+        {
+            id: 'coinmarketcap',
+            icon: '📈',
+            label: 'CoinMarketCap (DEX)',
+            sublabel: isEn ? 'Check price & Support!' : 'Fiyatı takip et ve destekle!',
+            link: 'https://dex.coinmarketcap.com/token/ton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+        },
+        {
+            id: 'dextools',
+            icon: '📊',
+            label: 'DEXTools',
+            sublabel: isEn ? 'Live Chart & Favorites' : 'Canlı Grafik, Favoriye Al!',
+            link: 'https://www.dextools.io/app/ton/pair-explorer/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
+        },
+        {
+            id: 'geckoterminal',
+            icon: '🦎',
+            label: 'GeckoTerminal',
+            sublabel: isEn ? 'Live Chart & Favorites' : 'Canlı Grafik ve Favoriler',
+            link: 'https://www.geckoterminal.com/ton/tokens/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+        },
+        {
+            id: 'dyor',
+            icon: '📊',
+            label: 'DYOR.io',
+            sublabel: isEn ? 'Track on DYOR Ninja' : 'DYOR.io Üzerinden Takip Et',
+            link: 'https://dyor.io/token/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+        },
+        {
+            id: 'coinranking',
+            icon: '🏅',
+            label: 'Coinranking',
+            sublabel: isEn ? 'Listed! Check & Support!' : 'Listelendi! Takip et!',
+            link: 'https://coinranking.com/coin/UdsbdHXyf+taste-taste',
         },
         {
             id: 'coinsniper',
@@ -57,76 +127,6 @@ export function VoteDiscovery() {
             sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
             link: 'https://coingem.com/ton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
         },
-        {
-            id: 'coinmarketcap',
-            icon: '📈',
-            label: 'CoinMarketCap (DEX)',
-            sublabel: isEn ? 'Check price & Support!' : 'Fiyatı takip et ve destekle!',
-            link: 'https://dex.coinmarketcap.com/token/ton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
-        },
-        {
-            id: 'dextools',
-            icon: '📊',
-            label: 'DEXTools',
-            sublabel: isEn ? 'Live Chart & Favorites' : 'Canlı Grafik, Favoriye Al!',
-            link: 'https://www.dextools.io/app/ton/pair-explorer/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
-        },
-        {
-            id: 'geckoterminal',
-            icon: '🦎',
-            label: 'GeckoTerminal',
-            sublabel: isEn ? 'Live Chart & Favorites' : 'Canlı Grafik ve Favoriler',
-            link: 'https://www.geckoterminal.com/ton/tokens/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
-        },
-        {
-            id: 'coinranking',
-            icon: '🏅',
-            label: 'Coinranking',
-            sublabel: isEn ? 'Listed! Check & Support!' : 'Listelendi! Takip et!',
-            link: 'https://coinranking.com/coin/UdsbdHXyf+taste-taste',
-        },
-        {
-            id: 'dedust',
-            icon: '💧',
-            label: 'DeDust.io',
-            sublabel: isEn ? 'Buy TASTE/USDT on DeDust' : 'DeDust\'ta TASTE/USDT Al',
-            link: 'https://dedust.io/pools/EQALRRSemBV0YDhoOe8VCRg8LcoXEWg7IGSk3BJ2Xk4h3oC',
-        },
-        {
-            id: 'okx',
-            icon: '⬛',
-            label: 'OKX Web3',
-            sublabel: isEn ? 'Track on OKX' : 'OKX\'te Takip Et',
-            link: `https://web3.okx.com/token/ton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-`,
-        },
-        {
-            id: 'bitget',
-            icon: '🔵',
-            label: 'Bitget Wallet',
-            sublabel: isEn ? 'Track on Bitget' : 'Bitget\'te Takip Et',
-            link: 'https://web3.bitget.com/ton-wallet',
-        },
-        {
-            id: 'tonkeeper',
-            icon: '💎',
-            label: 'Tonkeeper',
-            sublabel: isEn ? 'Buy via Tonkeeper' : 'Tonkeeper ile Al',
-            link: 'https://app.tonkeeper.com/dapp/https%3A%2F%2Fapp.ston.fi%2Fswap%3Fft%3DTON%26tt%3DEQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
-        },
-        {
-            id: 'mytonwallet',
-            icon: '🌐',
-            label: 'MyTonWallet',
-            sublabel: isEn ? 'View on MyTonWallet' : 'MyTonWallet\'ta Gör',
-            link: 'https://mytonwallet.io',
-        },
-        {
-            id: 'dyor',
-            icon: '📊',
-            label: 'DYOR.io',
-            sublabel: isEn ? 'Track on DYOR Ninja' : 'DYOR.io Üzerinden Takip Et',
-            link: 'https://dyor.io/token/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
-        },
     ]
 
     const handleLinkClick = (link: string) => {
@@ -142,7 +142,7 @@ export function VoteDiscovery() {
             key={item.id}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 * idx }}
+            transition={{ delay: 0.05 * idx }}
             whileHover={{ scale: 1.02, background: glowColor || 'rgba(255,255,255,0.08)' }}
             whileTap={{ scale: 0.98 }}
             onClick={() => handleLinkClick(item.link)}
@@ -183,13 +183,13 @@ export function VoteDiscovery() {
                 }}
             >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-                    <span style={{ fontSize: '24px' }}>🏆</span>
+                    <span style={{ fontSize: '24px' }}>🌐</span>
                     <div>
                         <h3 style={{ fontSize: '1rem', margin: 0, color: 'var(--text-accent, #eab308)' }}>
-                            {isEn ? 'Vote & Discovery Platforms' : 'Oylama ve Keşif Platformları'}
+                            {isEn ? 'Our Place in Web3' : 'Web3\'teki Yerimiz'}
                         </h3>
                         <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>
-                            {isEn ? 'Support us on listing platforms' : 'Listeleme platformlarında bizi destekle'}
+                            {isEn ? 'Track and support us on Web3 wallets and platforms' : 'Web3 cüzdanlarında ve platformlarında bizi takip et/destekle'}
                         </p>
                     </div>
                 </div>

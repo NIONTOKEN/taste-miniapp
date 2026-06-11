@@ -782,7 +782,7 @@ function App() {
                     { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
                     { id: 'install', label: i18n.language?.startsWith('tr') ? 'Yükle' : 'Install', color: '#10b981', emojiImage: '📲', isNew: true },
                     { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
-                    { id: 'vote', label: i18n.language?.startsWith('tr') ? 'Listeler' : 'Listings', color: '#eab308', emojiImage: '🏆' },
+                    { id: 'vote', label: i18n.language?.startsWith('tr') ? "Web3'teki Yerimiz" : 'Our Place in Web3', color: '#eab308', emojiImage: '🌐' },
                     { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
                     { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
                     { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📖' },
