@@ -87,7 +87,7 @@ function App() {
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Language Persistence & Initialization
+  // Telegram SDK Initialization
   useEffect(() => {
     if (window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp;
@@ -97,27 +97,6 @@ function App() {
         tg.setHeaderColor('#0a0f1c');
         tg.setBackgroundColor('#0a0f1c');
       } catch (e) { }
-
-      const savedLang = localStorage.getItem('i18nextLng');
-      if (!savedLang) {
-        // 1) Try Telegram user language
-        const tgLang = tg.initDataUnsafe?.user?.language_code;
-        // 2) Fallback: browser/system language
-        const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
-        const detectedLang = tgLang || browserLang;
-        
-        if (detectedLang?.startsWith('tr')) {
-          i18n.changeLanguage('tr');
-        } else if (detectedLang?.startsWith('ru')) {
-          i18n.changeLanguage('ru');
-        } else if (detectedLang?.startsWith('ar')) {
-          i18n.changeLanguage('ar');
-        } else if (detectedLang?.startsWith('zh')) {
-          i18n.changeLanguage('zh');
-        } else {
-          i18n.changeLanguage('en');
-        }
-      }
     }
   }, []);
 

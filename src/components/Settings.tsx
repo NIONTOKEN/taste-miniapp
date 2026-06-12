@@ -163,19 +163,24 @@ export function Settings() {
 
             {/* LANGUAGE SETTINGS */}
             <Card title={isTr ? 'Dil (Language)' : 'Language'} icon={Globe}>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '8px' }}>
                     {languages.map(l => (
                         <button
                             key={l.code}
                             onClick={() => { i18n.changeLanguage(l.code); localStorage.setItem('i18nextLng', l.code); }}
                             style={{
-                                flex: 1, padding: '12px', borderRadius: '12px',
+                                padding: '10px 8px', borderRadius: '12px',
                                 background: i18n.language?.startsWith(l.code) ? 'rgba(245, 159, 11, 0.2)' : 'rgba(255,255,255,0.05)',
                                 border: `1px solid ${i18n.language?.startsWith(l.code) ? 'var(--primary)' : 'transparent'}`,
-                                color: '#fff', fontWeight: 700, cursor: 'pointer'
+                                color: '#fff', fontWeight: 700, cursor: 'pointer',
+                                fontSize: '13px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '6px'
                             }}
                         >
-                            {l.flag} {l.label}
+                            <span style={{ fontSize: '16px' }}>{l.flag}</span> <span>{l.label}</span>
                         </button>
                     ))}
                 </div>

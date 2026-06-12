@@ -1233,8 +1233,9 @@ const resources = {
                     "diamond": "Şef"
                 }
             }
-        },
-        ru: {
+        }
+    },
+    ru: {
             translation: {
                 "app": {
                     "title": "TASTE",
@@ -1333,11 +1334,29 @@ const resources = {
                 }
             }
         }
-    }
-};
+    };
 
 const savedLang = localStorage.getItem('i18nextLng');
-const initialLang = savedLang?.toLowerCase().startsWith('tr') ? 'tr' : 'en';
+const getInitialLang = () => {
+    const supported = ['tr', 'en', 'ru', 'ar', 'zh'];
+    if (savedLang) {
+        const lang = savedLang.toLowerCase().split('-')[0];
+        if (supported.includes(lang)) {
+            return lang;
+        }
+    }
+    
+    // Auto detect from Telegram or browser
+    const tgLang = (window as any).Telegram?.WebApp?.initDataUnsafe?.user?.language_code;
+    const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
+    const detectedLang = (tgLang || browserLang || '').toLowerCase().split('-')[0];
+    
+    if (supported.includes(detectedLang)) {
+        return detectedLang;
+    }
+    return 'en';
+};
+const initialLang = getInitialLang();
 
 i18n
     .use(initReactI18next)
