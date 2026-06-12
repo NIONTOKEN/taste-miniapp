@@ -34,6 +34,7 @@ import { PWAInstallBanner } from './components/PWAInstallBanner'
 import { InstallModal } from './components/InstallModal'
 import { TasteRace } from './components/TasteRace'
 import { OfficialSocials } from './components/OfficialSocials'
+import { Team } from './components/Team'
 import {
   Home,
   Map,
@@ -71,7 +72,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'game' | 'settings' | 'socials'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'game' | 'settings' | 'socials' | 'team'>('home');
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
@@ -575,6 +576,11 @@ function App() {
           <TasteRace onClose={() => setActiveTab('home')} />
         </motion.div>
       );
+      case 'team': return (
+        <motion.div key="team" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+          <Team onClose={() => setActiveTab('home')} />
+        </motion.div>
+      );
       case 'settings': return (
         <motion.div key="settings" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
           <Settings />
@@ -734,6 +740,7 @@ function App() {
                     { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
                     { id: 'vote', label: i18n.language?.startsWith('tr') ? "Web3'teki Yerimiz" : 'Our Place in Web3', color: '#eab308', emojiImage: '🌐' },
                     { id: 'socials', label: i18n.language?.startsWith('tr') ? 'Sosyal Ağlar' : 'Social Media', color: '#25D366', emojiImage: '📱', isNew: true },
+                    { id: 'team', label: i18n.language?.startsWith('tr') ? 'Ekip' : 'Team', color: '#c084fc', emojiImage: '👥', isNew: true },
                     { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
                     { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
                     { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📖' },
