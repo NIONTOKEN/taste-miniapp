@@ -32,7 +32,6 @@ import { Settings } from './components/Settings'
 import { PinLock } from './components/PinLock'
 import { PWAInstallBanner } from './components/PWAInstallBanner'
 import { InstallModal } from './components/InstallModal'
-import { TasteRace } from './components/TasteRace'
 import { OfficialSocials } from './components/OfficialSocials'
 import { Team } from './components/Team'
 import {
@@ -72,7 +71,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'game' | 'settings' | 'socials' | 'team'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team'>('home');
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
@@ -571,11 +570,6 @@ function App() {
           </div>
         </motion.div>
       );
-      case 'game': return (
-        <motion.div key="game" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-          <TasteRace onClose={() => setActiveTab('home')} />
-        </motion.div>
-      );
       case 'team': return (
         <motion.div key="team" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
           <Team onClose={() => setActiveTab('home')} />
@@ -813,10 +807,6 @@ function App() {
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
 
-          <button className={`nav-item ${activeTab === 'game' ? 'active' : ''}`} onClick={() => { setActiveTab('game'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
-            <span className="nav-icon" style={{ fontSize: '22px' }}>🎮</span><span className="nav-label">{i18n.language?.startsWith('tr') ? 'Oyna' : 'Play'}</span>
-            <span style={{ position: 'absolute', top: '4px', right: '14px', width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 8px #ef4444', animation: 'pulse 2s infinite' }} />
-          </button>
 
           <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
             <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>

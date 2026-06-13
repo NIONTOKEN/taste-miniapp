@@ -63,16 +63,7 @@ const resources = {
                 "wallet": "Wallet",
                 "chef": "Taste Chef"
             },
-            "game": {
-                "title": "Chef Career",
-                "next": "NEXT",
-                "back": "Back",
-                "reward": "REWARD",
-                "excellent": "Excellent!",
-                "success_message": "You've successfully prepared {{dish}}.",
-                "return_map": "Back to Map",
-                "complete_info": "Complete levels to earn TASTE assets! 🍳💎"
-            },
+
             "roadmap": {
                 "title": "Roadmap 2026",
                 "philosophy_title": "TASTE Philosophy",
@@ -679,16 +670,7 @@ const resources = {
                 "wallet": "Cüzdan",
                 "chef": "Taste Şef"
             },
-            "game": {
-                "title": "Şef Kariyeri",
-                "next": "SIRADAKİ",
-                "back": "Geri",
-                "reward": "ÖDÜL",
-                "excellent": "Harika!",
-                "success_message": "{{dish}} başarıyla hazırlandı.",
-                "return_map": "Haritaya Dön",
-                "complete_info": "Bölümleri geçerek TASTE sadakat birimi kazanın! 🍳💎"
-            },
+
             "roadmap": {
                 "title": "Yol Haritası 2026",
                 "philosophy_title": "TASTE Felsefesi",
