@@ -83,7 +83,8 @@ const resources = {
                 "faq": "F.A.Q.",
                 "tech": "Tech",
                 "settings": "Settings",
-                "menu": "Menu"
+                "menu": "Menu",
+                "ecosystem": "Taste Ecosystem"
             },
             "roadmap": {
                 "title": "Roadmap 2026",
@@ -959,7 +960,8 @@ const resources = {
                 "faq": "S.S.S.",
                 "tech": "Teknoloji",
                 "settings": "Ayarlar",
-                "menu": "Menü"
+                "menu": "Menü",
+                "ecosystem": "Taste Ekosistem"
             },
             "roadmap": {
                 "title": "Yol Haritası 2026",
@@ -1828,7 +1830,8 @@ const resources = {
                 "faq": "ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ.",
                 "tech": "Технология",
                 "settings": "Настройки",
-                "menu": "Меню"
+                "menu": "Меню",
+                "ecosystem": "Taste Экосистема"
             },
             "home": {
                 "live_badge": "Живая активность",
@@ -2704,7 +2707,8 @@ const resources = {
                 "faq": "التعليمات.",
                 "tech": "التكنولوجيا",
                 "settings": "إعدادات",
-                "menu": "قائمة طعام"
+                "menu": "قائمة طعام",
+                "ecosystem": "نظام Taste البيئي"
             },
             "home": {
                 "live_badge": "النشاط المباشر",
@@ -3580,7 +3584,8 @@ const resources = {
                 "faq": "常问问题。",
                 "tech": "科技",
                 "settings": "设置",
-                "menu": "菜单"
+                "menu": "菜单",
+                "ecosystem": "Taste 生态系统"
             },
             "home": {
                 "live_badge": "现场活动",

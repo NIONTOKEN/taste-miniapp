@@ -42,9 +42,11 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,woff2}'],
-        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MB limit
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         runtimeCaching: [
-          // Supabase API - NetworkFirst (güncel veri önemli)
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
             handler: 'NetworkFirst',
@@ -52,21 +54,18 @@ export default defineConfig({
               cacheName: 'supabase-cache',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 5, // 5 dakika
+                maxAgeSeconds: 60 * 5,
               },
             },
           },
-          // TON blockchain - NetworkOnly (kesinlikle cache yapma)
           {
             urlPattern: /^https:\/\/(.*\.ton\.org|.*\.orbs\.com|.*\.toncenter\.com)\/.*/i,
             handler: 'NetworkOnly',
           },
-          // TonConnect - NetworkOnly
           {
             urlPattern: /^https:\/\/bridge\.tonapi\.io\/.*/i,
             handler: 'NetworkOnly',
           },
-          // Harici görseller - CacheFirst
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
             handler: 'CacheFirst',
@@ -74,11 +73,10 @@ export default defineConfig({
               cacheName: 'images-cache',
               expiration: {
                 maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 gün
+                maxAgeSeconds: 60 * 60 * 24 * 30,
               },
             },
           },
-          // Video dosyaları - CacheFirst (precache'de değil, runtime'da)
           {
             urlPattern: /\.(?:mp4|webm|ogg)$/,
             handler: 'CacheFirst',
@@ -86,12 +84,11 @@ export default defineConfig({
               cacheName: 'video-cache',
               expiration: {
                 maxEntries: 5,
-                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 gün
+                maxAgeSeconds: 60 * 60 * 24 * 7,
               },
               rangeRequests: true,
             },
           },
-          // Google Fonts - CacheFirst
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
             handler: 'CacheFirst',
@@ -99,17 +96,16 @@ export default defineConfig({
               cacheName: 'google-fonts-cache',
               expiration: {
                 maxEntries: 20,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 yıl
+                maxAgeSeconds: 60 * 60 * 24 * 365,
               },
             },
           },
         ],
-        // Offline fallback
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//, /^\/tonconnect-manifest\.json/],
       },
       devOptions: {
-        enabled: false, // dev'de service worker kapalı (debugging kolaylaşır)
+        enabled: false,
       },
     }),
   ],
@@ -123,14 +119,16 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: false,
     minify: 'esbuild',
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'ton-core': ['@ton/core', '@ton/crypto'],
-          'tonconnect': ['@tonconnect/ui-react'],
-          'react-vendor': ['react', 'react-dom'],
-          'framer': ['framer-motion'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@ton')) return 'vendor-ton';
+            if (id.includes('@tonconnect')) return 'vendor-tonconnect';
+            if (id.includes('framer-motion')) return 'vendor-framer';
+            return 'vendor';
+          }
         },
       },
     },

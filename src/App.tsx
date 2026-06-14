@@ -641,7 +641,7 @@ function App() {
         <motion.div key="ecosystem" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>🌐 {t('nav.ecosystem') || 'TASTE Ekosistemi'}</h3>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>🌐 {t('nav.ecosystem')}</h3>
             <TasteEcosystem
               onNavigate={(tab) => setActiveTab(tab as any)}
               onOpenTastePay={() => setIsTastePayOpen(true)}
@@ -802,8 +802,8 @@ function App() {
                 </div>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-                   {[
-                    { id: 'ecosystem', label: t('nav.ecosystem') || 'Ekosistem', color: '#f59e0b', emojiImage: '🌐', isNew: true },
+                  {[
+                    { id: 'ecosystem', label: t('nav.ecosystem'), color: '#f59e0b', emojiImage: '🌐', isNew: true },
                     { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
                     { id: 'install', label: t('nav.install'), color: '#10b981', emojiImage: '📲', isNew: true },
                     { id: 'partners', label: t('nav.partners'), color: '#3b82f6', emojiImage: '🤝', isNew: true },
@@ -882,14 +882,9 @@ function App() {
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
 
-          <button
-            className={`nav-item ${activeTab === 'ecosystem' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('ecosystem'); setIsMenuOpen(false); }}
-            style={{ position: 'relative' }}
-          >
-            <span className="nav-icon"><Layers size={22} /></span>
-            <span className="nav-label">{t('nav.ecosystem') || 'Ekosistem'}</span>
-            <span style={{ position: 'absolute', top: '4px', right: '10px', width: '7px', height: '7px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 8px #f59e0b', animation: 'pulse 2s infinite' }} />
+          <button className={`nav-item ${activeTab === 'spin' ? 'active' : ''}`} onClick={() => { setActiveTab('spin'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
+            <span className="nav-icon"><span style={{ fontSize: '20px' }}>🎰</span></span>
+            <span className="nav-label">{t('nav.spin')}</span>
           </button>
 
           <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>

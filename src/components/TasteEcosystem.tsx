@@ -216,6 +216,40 @@ const ECO_SECTIONS = [
 ];
 
 const FALLBACK_TRANSLATIONS: Record<string, string> = {
+  // Header
+  'eco.header.title': 'TASTE EKOSİSTEMİ',
+  'eco.header.subtitle': 'Yiyecek-içecek sektörü için kurulmuş TON tabanlı Web3 ekosistemi',
+  'eco.header.stat.token': 'Token',
+  'eco.header.stat.chain': 'Zincir',
+  'eco.header.stat.modules': 'Modüller',
+  'eco.header.stat.lang': 'Dil',
+  // Flow diagram
+  'eco.flow.title': 'EKOSİSTEM AKIŞI',
+  'eco.flow.step1': 'TON Al',
+  'eco.flow.step2': 'TASTE Swap',
+  'eco.flow.step3': 'Tut & Kazan',
+  'eco.flow.step4': 'Chef Ol',
+  'eco.flow.step5': 'Kullan & Öde',
+  'eco.flow.step6': 'Büyü',
+  // CTA buttons
+  'eco.cta.token': 'TASTE SATIN AL →',
+  'eco.cta.swap': 'SWAP\'A GİT →',
+  'eco.cta.pay': 'TASTE PAY AÇ →',
+  'eco.cta.chef': 'CHEF MODU →',
+  'eco.cta.jobs': 'İŞ İLANLARINA BAK →',
+  'eco.cta.spin': 'ÇARKI ÇEVİR →',
+  'eco.cta.ai': 'AI\'YI AÇ →',
+  'eco.cta.charity': 'HAYIR KURUMUNA GİT →',
+  'eco.cta.community': 'TOPLULUĞA KATIL →',
+  'eco.cta.partners': 'ORTAKLARI GÖR →',
+  'eco.cta.vote': 'OY VER →',
+  'eco.cta.whitepaper': 'DÖKÜMANLARI OKU →',
+  'eco.cta.default': 'GİT →',
+  // Bottom banner
+  'eco.banner.title': 'TASTE Ekosistemi Büyüyor',
+  'eco.banner.desc': 'Yiyecek-içecek sektörünün Web3 dönüşümüne öncülük ediyoruz. Her yeni modül, topluluğun gücüyle hayata geçiyor.',
+  'eco.banner.whitepaper': '📖 Whitepaper',
+  'eco.banner.roadmap': '🗺️ Roadmap',
   // Token
   'eco.token.title': 'TASTE Token',
   'eco.token.desc': 'TON blockchain üzerinde 25 milyon arzlı, %88 kilitli, yiyecek-içecek sektörü için tasarlanmış utility token.',
@@ -366,10 +400,10 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
           WebkitTextFillColor: 'transparent',
           letterSpacing: '1px'
         }}>
-          TASTE EKOSİSTEMİ
+          {tr('eco.header.title')}
         </h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '13px', margin: 0, lineHeight: 1.6 }}>
-          Yiyecek-içecek sektörü için kurulmuş TON tabanlı Web3 ekosistemi
+          {tr('eco.header.subtitle')}
         </p>
 
         {/* Live stats bar */}
@@ -381,10 +415,10 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
           flexWrap: 'wrap'
         }}>
           {[
-            { label: 'Token', value: 'TASTE', color: '#f59e0b' },
-            { label: 'Chain', value: 'TON', color: '#3b82f6' },
-            { label: 'Modüller', value: `${ECO_SECTIONS.length}`, color: '#10b981' },
-            { label: 'Dil', value: '5', color: '#c084fc' },
+            { label: tr('eco.header.stat.token'), value: 'TASTE', color: '#f59e0b' },
+            { label: tr('eco.header.stat.chain'), value: 'TON', color: '#3b82f6' },
+            { label: tr('eco.header.stat.modules'), value: `${ECO_SECTIONS.length}`, color: '#10b981' },
+            { label: tr('eco.header.stat.lang'), value: '5', color: '#c084fc' },
           ].map(stat => (
             <div key={stat.label} style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '16px', fontWeight: 900, color: stat.color }}>{stat.value}</div>
@@ -404,16 +438,16 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
         textAlign: 'center'
       }}>
         <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>
-          EKOSİSTEM AKIŞI
+          {tr('eco.flow.title')}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '4px', fontSize: '11px', color: 'var(--text-muted)' }}>
           {[
-            { icon: '💎', label: 'TON Al' },
-            { icon: '⚡', label: 'TASTE Swap' },
-            { icon: '🏦', label: 'Tut & Kazan' },
-            { icon: '👨‍🍳', label: 'Chef Ol' },
-            { icon: '💳', label: 'Kullan & Öde' },
-            { icon: '🌍', label: 'Büyü' },
+            { icon: '💎', labelKey: 'eco.flow.step1' },
+            { icon: '⚡', labelKey: 'eco.flow.step2' },
+            { icon: '🏦', labelKey: 'eco.flow.step3' },
+            { icon: '👨‍🍳', labelKey: 'eco.flow.step4' },
+            { icon: '💳', labelKey: 'eco.flow.step5' },
+            { icon: '🌍', labelKey: 'eco.flow.step6' },
           ].map((step, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <div style={{
@@ -426,7 +460,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                 gap: '4px'
               }}>
                 <span>{step.icon}</span>
-                <span style={{ fontWeight: 700, color: '#e2e8f0' }}>{step.label}</span>
+                <span style={{ fontWeight: 700, color: '#e2e8f0' }}>{tr(step.labelKey)}</span>
               </div>
               {i < 5 && <span style={{ color: '#f59e0b', fontWeight: 900 }}>→</span>}
             </div>
@@ -604,21 +638,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                           }}
                         >
                           <span>{section.icon}</span>
-                          <span>
-                            {section.id === 'token' ? 'TASTE SATIN AL →' :
-                             section.id === 'swap' ? 'SWAP\'A GİT →' :
-                             section.id === 'pay' ? 'TASTE PAY AÇ →' :
-                             section.id === 'chef' ? 'CHEF MODU →' :
-                             section.id === 'jobs' ? 'İŞ İLANLARINA BAK →' :
-                             section.id === 'spin' ? 'ÇARKI ÇEVİR →' :
-                             section.id === 'ai' ? 'AI\'YI AÇ →' :
-                             section.id === 'charity' ? 'HAYIR KURUMUNA GİT →' :
-                             section.id === 'community' ? 'TOPLULUĞA KATIL →' :
-                             section.id === 'partners' ? 'ORTAKLARI GÖR →' :
-                             section.id === 'vote' ? 'OY VER →' :
-                             section.id === 'whitepaper' ? 'DÖKÜMANLARI OKU →' :
-                             'GİT →'}
-                          </span>
+                          <span>{tr(`eco.cta.${section.id}`) !== `eco.cta.${section.id}` ? tr(`eco.cta.${section.id}`) : tr('eco.cta.default')}</span>
                         </motion.button>
                       )}
                     </div>
@@ -646,10 +666,10 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
       >
         <div style={{ fontSize: '28px', marginBottom: '10px' }}>🚀</div>
         <h3 style={{ margin: '0 0 8px', fontWeight: 900, fontSize: '16px', color: '#f1f5f9' }}>
-          TASTE Ekosistemi Büyüyor
+          {tr('eco.banner.title')}
         </h3>
         <p style={{ margin: '0 0 16px', fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-          Yiyecek-içecek sektörünün Web3 dönüşümüne öncülük ediyoruz. Her yeni modül, topluluğun gücüyle hayata geçiyor.
+          {tr('eco.banner.desc')}
         </p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <motion.button
@@ -667,7 +687,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
               cursor: 'pointer'
             }}
           >
-            📖 Whitepaper
+            {tr('eco.banner.whitepaper')}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -684,7 +704,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
               cursor: 'pointer'
             }}
           >
-            🗺️ Roadmap
+            {tr('eco.banner.roadmap')}
           </motion.button>
         </div>
       </motion.div>
