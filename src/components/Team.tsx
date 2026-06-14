@@ -25,6 +25,18 @@ export function Team({ onClose }: TeamProps) {
 
     const members: TeamMember[] = [
         {
+            id: 'fatih_kaya',
+            name: 'Fatih Şef (Fatih Kaya)',
+            roleTr: 'Kurucu, Planlayıcı & Mali İşler Sorumlusu',
+            roleEn: 'Founder, Planner & Head of Finance',
+            bioTr: 'TASTE projesini sahiplenen, üstlenen ve yürüten yol göstericidir. Projenin mali işleri mutfak ekiplerince finanse edilmekte olup, bu alanın sorumlusu da bizzat Fatih Şef\'tir.',
+            bioEn: 'The guiding founder who embraces, undertakes, and executes the TASTE project. Financial operations are funded by the kitchen teams under his direct responsibility.',
+            tgHandle: '',
+            tgLink: '',
+            photoUrl: '/fatih_kaya.jpg',
+            color: '#fbbf24' // Amber/Gold color for founder
+        },
+        {
             id: 'little_queen',
             name: 'Little Queen',
             roleTr: 'Topluluk Yöneticisi',
@@ -183,32 +195,34 @@ export function Team({ onClose }: TeamProps) {
                         </p>
 
                         {/* Telegram Button */}
-                        <motion.button
-                            whileHover={{ scale: 1.02, background: `linear-gradient(135deg, ${member.color}25, ${member.color}10)` }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleTelegramClick(member.tgLink)}
-                            style={{
-                                width: '100%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                background: 'rgba(255,255,255,0.03)',
-                                border: '1px solid rgba(255,255,255,0.08)',
-                                padding: '12px 16px',
-                                borderRadius: '14px',
-                                cursor: 'pointer',
-                                color: '#fff',
-                                transition: 'all 0.2s'
-                            }}
-                        >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <MessageCircle size={18} color="#3b82f6" />
-                                <span style={{ fontSize: '13px', fontWeight: 700 }}>{member.tgHandle}</span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#64748b', fontWeight: 600 }}>
-                                {isEn ? 'Contact' : 'İletişim'} <ExternalLink size={12} />
-                            </div>
-                        </motion.button>
+                        {member.tgLink && (
+                            <motion.button
+                                whileHover={{ scale: 1.02, background: `linear-gradient(135deg, ${member.color}25, ${member.color}10)` }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => handleTelegramClick(member.tgLink)}
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    background: 'rgba(255,255,255,0.03)',
+                                    border: '1px solid rgba(255,255,255,0.08)',
+                                    padding: '12px 16px',
+                                    borderRadius: '14px',
+                                    cursor: 'pointer',
+                                    color: '#fff',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <MessageCircle size={18} color="#3b82f6" />
+                                    <span style={{ fontSize: '13px', fontWeight: 700 }}>{member.tgHandle}</span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#64748b', fontWeight: 600 }}>
+                                    {isEn ? 'Contact' : 'İletişim'} <ExternalLink size={12} />
+                                </div>
+                            </motion.button>
+                        )}
                     </motion.div>
                 ))}
             </div>
