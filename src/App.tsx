@@ -882,11 +882,6 @@ function App() {
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
 
-          <button className={`nav-item ${activeTab === 'spin' ? 'active' : ''}`} onClick={() => { setActiveTab('spin'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
-            <span className="nav-icon"><span style={{ fontSize: '20px' }}>🎰</span></span>
-            <span className="nav-label">{t('nav.spin')}</span>
-          </button>
-
           <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
             <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>
             <span style={{ position: 'absolute', top: '4px', right: '10px', width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', animation: 'pulse 2s infinite' }} />
