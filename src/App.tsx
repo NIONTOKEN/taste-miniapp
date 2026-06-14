@@ -201,9 +201,66 @@ function App() {
               />
             </motion.div>
 
-
-
-
+            {/* Flashy TASTE Ad Banner */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              style={{
+                background: 'linear-gradient(135deg, #1e1b4b, #312e81)',
+                border: '2px solid #6366f1',
+                borderRadius: '24px',
+                padding: '24px',
+                marginBottom: '20px',
+                textAlign: 'center',
+                boxShadow: '0 0 30px rgba(99, 102, 241, 0.3), inset 0 0 20px rgba(99, 102, 241, 0.2)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Animated overlay */}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle, rgba(192, 132, 252, 0.15) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none' }} />
+              
+              <motion.div animate={{ rotate: [0, -5, 5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} style={{ fontSize: '40px', marginBottom: '10px' }}>
+                🌟
+              </motion.div>
+              
+              <h2 style={{ margin: '0 0 10px 0', fontSize: '24px', fontWeight: 900, background: 'linear-gradient(to right, #818cf8, #c084fc, #f472b6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
+                TASTE Geleceğe Gidiyor!
+              </h2>
+              
+              <p style={{ margin: '0 0 20px 0', fontSize: '15px', color: '#e2e8f0', lineHeight: '1.5', fontWeight: 600 }}>
+                TASTE yarının parlayan yıldızı. Hemen TASTE Al, bu muhteşem yolculukta yerini al!
+              </p>
+              
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleBuy}
+                style={{
+                  background: 'linear-gradient(135deg, #f59e0b, #f97316)',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '16px 32px',
+                  borderRadius: '16px',
+                  fontSize: '18px',
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  boxShadow: '0 10px 25px rgba(245, 159, 11, 0.5)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  width: '100%',
+                  position: 'relative',
+                  zIndex: 2
+                }}
+              >
+                <span>🔥 TASTE AL 🔥</span>
+              </motion.button>
+            </motion.div>
 
             {/* Premium Swap Widget */}
             <motion.div 
