@@ -226,11 +226,11 @@ function App() {
               </motion.div>
               
               <h2 style={{ margin: '0 0 10px 0', fontSize: '24px', fontWeight: 900, background: 'linear-gradient(to right, #818cf8, #c084fc, #f472b6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
-                TASTE Geleceğe Gidiyor!
+                {t('app.banner_title')}
               </h2>
               
               <p style={{ margin: '0 0 20px 0', fontSize: '15px', color: '#e2e8f0', lineHeight: '1.5', fontWeight: 600 }}>
-                TASTE yarının parlayan yıldızı. Hemen TASTE Al, bu muhteşem yolculukta yerini al!
+                {t('app.banner_desc')}
               </p>
               
               <motion.button
@@ -260,7 +260,7 @@ function App() {
                   zIndex: 2
                 }}
               >
-                <span>🔥 TASTE AL 🔥</span>
+                <span>🔥 {t('app.banner_buy')} 🔥</span>
               </motion.button>
             </motion.div>
 
@@ -472,7 +472,7 @@ function App() {
                   style={{ fontSize: '13px', color: '#f59e0b', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}
                   onClick={() => document.getElementById('allocation-info')?.click()}
                 >
-                  ✦ {i18n.language?.startsWith('tr') ? 'BİLGİ İÇİN DOKUN' : 'TAP FOR INFO'} ✦
+                  ✦ {t('app.tap_for_info')} ✦
                 </motion.div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>TON Blockchain</div>
 
@@ -519,7 +519,7 @@ function App() {
               </div>
               <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)' }} />
               <div>
-                <p style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '14px', marginBottom: '12px' }}>🔗 {i18n.language?.startsWith('tr') ? 'Hızlı Bağlantılar' : 'Quick Links'}</p>
+                <p style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '14px', marginBottom: '12px' }}>🔗 {t('app.quick_links')}</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {[
                     { label: 'Token Locks', url: 'https://tonscan.org/jetton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-', color: '#22c55e' },
@@ -585,7 +585,7 @@ function App() {
         <motion.div key="ai" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE AI</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>🤖 {i18n.language?.startsWith('tr') ? 'Proje Asistanı' : 'Project Assistant'}</h3>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>🤖 {t('app.project_assistant')}</h3>
             <TasteAI />
           </div>
         </motion.div>
@@ -594,7 +594,7 @@ function App() {
         <motion.div key="wallet" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.wallet')}</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>💰 {i18n.language?.startsWith('tr') ? 'Hızlı Cüzdan & Transfer' : 'Quick Wallet & Transfer'}</h3>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>💰 {t('app.quick_wallet')}</h3>
             <WalletTransfer />
           </div>
         </motion.div>
@@ -603,7 +603,7 @@ function App() {
         <motion.div key="chef" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.chef')}</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👨‍🍳 {i18n.language?.startsWith('tr') ? 'Taste Şef Dijital Statü' : 'Taste Chef Digital Status'}</h3>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👨‍🍳 {t('app.chef_status')}</h3>
             <TasteChef />
           </div>
         </motion.div>
@@ -613,7 +613,7 @@ function App() {
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE JOBS</div>
             <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>
-              🧑‍🍳 {i18n.language?.startsWith('tr') ? 'Gastronomi Kariyer & Topluluk' : 'Gastronomy Career & Community'}
+              🧑‍🍳 {t('app.gastronomy_career')}
             </h3>
             <TasteJobs />
           </div>
@@ -622,9 +622,9 @@ function App() {
       case 'partners': return (
         <motion.div key="partners" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{i18n.language?.startsWith('tr') ? 'Web3 & İş Ortakları' : 'Web3 & Partners'}</div>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('app.web3_partners')}</div>
             <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>
-              🤝 {i18n.language?.startsWith('tr') ? 'Ortak Projeler' : 'Joint Projects'}
+              🤝 {t('app.joint_projects')}
             </h3>
             <Partners />
           </div>
@@ -710,7 +710,7 @@ function App() {
           <WalletSelector />
           <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowLangMenu(!showLangMenu)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--bg-card-border)', color: 'var(--text-main)', padding: '5px 12px', borderRadius: '15px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Globe size={14} />
-            <span style={{ fontWeight: 800 }}>{i18n.language?.startsWith('tr') ? 'Dil' : 'Lang'}</span>
+            <span style={{ fontWeight: 800 }}>{t('app.lang')}</span>
             {currentLang.flag}
           </motion.button>
 
@@ -780,7 +780,7 @@ function App() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <LayoutGrid size={20} color="#f59e0b" />
-                    {i18n.language?.startsWith('tr') ? 'Keşfet' : 'Discover'}
+                    {t('nav.discover')}
                   </h3>
                   <button onClick={() => setIsMenuOpen(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}>
                     <X size={24} />
@@ -790,21 +790,21 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
                     { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
-                    { id: 'install', label: i18n.language?.startsWith('tr') ? 'Yükle' : 'Install', color: '#10b981', emojiImage: '📲', isNew: true },
-                    { id: 'partners', label: i18n.language?.startsWith('tr') ? 'Ortaklar' : 'Partners', color: '#3b82f6', emojiImage: '🤝', isNew: true },
-                    { id: 'vote', label: i18n.language?.startsWith('tr') ? "Web3'teki Yerimiz" : 'Our Place in Web3', color: '#eab308', emojiImage: '🌐' },
-                    { id: 'socials', label: i18n.language?.startsWith('tr') ? 'Sosyal Ağlar' : 'Social Media', color: '#25D366', emojiImage: '📱', isNew: true },
-                    { id: 'team', label: i18n.language?.startsWith('tr') ? 'Ekip' : 'Team', color: '#c084fc', emojiImage: '👥', isNew: true },
+                    { id: 'install', label: t('nav.install'), color: '#10b981', emojiImage: '📲', isNew: true },
+                    { id: 'partners', label: t('nav.partners'), color: '#3b82f6', emojiImage: '🤝', isNew: true },
+                    { id: 'vote', label: t('nav.vote'), color: '#eab308', emojiImage: '🌐' },
+                    { id: 'socials', label: t('nav.socials'), color: '#25D366', emojiImage: '📱', isNew: true },
+                    { id: 'team', label: t('nav.team'), color: '#c084fc', emojiImage: '👥', isNew: true },
                     { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
                     { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
                     { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📖' },
                     { id: 'charity', label: t('nav.charity'), color: '#f43f5e', emojiImage: '❤️' },
                     { id: 'chef', label: t('nav.chef'), color: '#10b981', emojiImage: '👨‍🍳', isDemo: true },
                     { id: 'wallet', label: 'Taste Wallet', color: '#f59e0b', image: '/wallet-icon.png' },
-                    { id: 'faq', label: i18n.language?.startsWith('tr') ? 'S.S.S.' : 'F.A.Q.', color: '#22c55e', emojiImage: '❓' },
-                    { id: 'tech', label: i18n.language?.startsWith('tr') ? 'Teknoloji' : 'Tech', color: '#10b981', emojiImage: '💻' },
+                    { id: 'faq', label: t('nav.faq'), color: '#22c55e', emojiImage: '❓' },
+                    { id: 'tech', label: t('nav.tech'), color: '#10b981', emojiImage: '💻' },
                     { id: 'legal', label: t('nav.legal'), color: '#64748b', emojiImage: '⚖️' },
-                    { id: 'settings', label: i18n.language?.startsWith('tr') ? 'Ayarlar' : 'Settings', color: '#64748b', emojiImage: '⚙️' }
+                    { id: 'settings', label: t('nav.settings'), color: '#64748b', emojiImage: '⚙️' }
                   ].map((item: any) => (
                     <button
                       key={item.id}
@@ -874,7 +874,7 @@ function App() {
           </button>
           
           <button className={`nav-item ${isMenuOpen ? 'active' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <span className="nav-icon"><LayoutGrid size={22} /></span><span className="nav-label">{i18n.language?.startsWith('tr') ? 'Menü' : 'Menu'}</span>
+            <span className="nav-icon"><LayoutGrid size={22} /></span><span className="nav-label">{t('nav.menu')}</span>
           </button>
         </nav>
 

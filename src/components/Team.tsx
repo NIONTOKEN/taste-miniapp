@@ -20,7 +20,7 @@ interface TeamProps {
 }
 
 export function Team({ onClose }: TeamProps) {
-    const { i18n } = useTranslation()
+    const { t, i18n } = useTranslation()
     const isEn = i18n.language === 'en'
 
     const members: TeamMember[] = [
@@ -108,9 +108,9 @@ export function Team({ onClose }: TeamProps) {
                     </button>
                 )}
                 <div>
-                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 900 }}>👥 {isEn ? 'Project Team Members' : 'Proje Ekip Üyeleri'}</h3>
+                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 900 }}>👥 {t('team.title')}</h3>
                     <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: '#64748b' }}>
-                        {isEn ? 'The visionary minds building the TASTE ecosystem' : 'TASTE ekosistemini inşa eden vizyoner ekip'}
+                        {t('team.subtitle')}
                     </p>
                 </div>
             </div>
@@ -175,7 +175,7 @@ export function Team({ onClose }: TeamProps) {
                                     letterSpacing: '0.8px',
                                     marginTop: '4px'
                                 }}>
-                                    {isEn ? member.roleEn : member.roleTr}
+                                    {t(`team.roles.${member.id}`)}
                                 </div>
                             </div>
                         </div>
@@ -191,7 +191,7 @@ export function Team({ onClose }: TeamProps) {
                             borderRadius: '12px',
                             borderLeft: `2px solid ${member.color}`
                         }}>
-                            {isEn ? member.bioEn : member.bioTr}
+                            {t(`team.bios.${member.id}`)}
                         </p>
 
                         {/* Telegram Button */}
@@ -219,7 +219,7 @@ export function Team({ onClose }: TeamProps) {
                                     <span style={{ fontSize: '13px', fontWeight: 700 }}>{member.tgHandle}</span>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#64748b', fontWeight: 600 }}>
-                                    {isEn ? 'Contact' : 'İletişim'} <ExternalLink size={12} />
+                                    {t('team.contact')} <ExternalLink size={12} />
                                 </div>
                             </motion.button>
                         )}

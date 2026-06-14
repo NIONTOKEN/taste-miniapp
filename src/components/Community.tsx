@@ -230,7 +230,7 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
                     </div>
                     {isJob && (
                         <div style={{ background: '#f59e0b', color: '#000', borderRadius: '8px', padding: '4px 8px', fontSize: '10px', fontWeight: 900 }}>
-                            {i18n.language === 'tr' ? 'İŞ İLANI' : 'JOB POST'}
+                            {t('community.job_post')}
                         </div>
                     )}
                 </div>
@@ -249,7 +249,7 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
                     <div style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '10px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ fontSize: '14px' }}>💰</span>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: '9px', color: '#10b981', fontWeight: 800, textTransform: 'uppercase' }}>{i18n.language === 'tr' ? 'ÖDÜL CÜZDANI' : 'REWARD WALLET'}</div>
+                            <div style={{ fontSize: '9px', color: '#10b981', fontWeight: 800, textTransform: 'uppercase' }}>{t('community.reward_wallet')}</div>
                             <div style={{ fontSize: '10px', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis' }}>{post.rewardWallet}</div>
                         </div>
                     </div>
@@ -277,7 +277,7 @@ function PostCard({ post, onClick, onLike }: { post: Post; onClick: () => void; 
                         }}
                         style={{ width: '100%', background: '#f59e0b', color: '#000', border: 'none', borderRadius: '12px', padding: '12px', fontSize: '13px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                     >
-                        💬 {i18n.language === 'tr' ? 'İlan Verenle Yazış' : 'Chat with Poster'}
+                        💬 {t('community.chat_poster')}
                     </motion.button>
                 ) : (
                     <div style={{ display: 'flex', gap: '10px' }}>
@@ -483,9 +483,9 @@ export function Community() {
         // Show success alert
         const tgApp = (window as any).Telegram?.WebApp
         if (tgApp?.showAlert) {
-            tgApp.showAlert(i18n.language === 'tr' ? 'Harika! İlanın paylaşıldı ve tüm dünyaya duyuruldu. 🚀' : 'Great! Your post has been shared globally! 🚀')
+            tgApp.showAlert(t('community.alert_success_global'))
         } else {
-            alert(i18n.language === 'tr' ? 'İlanın Paylaşıldı! 🚀' : 'Post Shared! 🚀')
+            alert(t('community.alert_success'))
         }
     }
 
@@ -515,14 +515,14 @@ export function Community() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                 <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '4px', gap: '2px' }}>
                     <button onClick={() => setView('feed')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'feed' ? '#f59e0b' : 'transparent', color: view === 'feed' ? '#000' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
-                       <span style={{ fontSize: '14px' }}>🍽️</span> {i18n.language === 'tr' ? 'Akış' : 'Feed'}
+                       <span style={{ fontSize: '14px' }}>🍽️</span> {t('community.tab_feed')}
                     </button>
                     <button onClick={() => setView('jobs')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'jobs' ? '#f59e0b' : 'transparent', color: view === 'jobs' ? '#000' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', position: 'relative' }}>
-                       <span style={{ fontSize: '14px' }}>💼</span> {i18n.language === 'tr' ? 'İş İlanı' : 'Jobs'}
+                       <span style={{ fontSize: '14px' }}>💼</span> {t('community.tab_jobs')}
                        <span style={{ position: 'absolute', top: '4px', right: '4px', width: '6px', height: '6px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 6px #f59e0b' }} />
                     </button>
                     <button onClick={() => setView('chat')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'chat' ? '#3b82f6' : 'transparent', color: view === 'chat' ? '#fff' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
-                       <span style={{ fontSize: '14px' }}>💬</span> {i18n.language === 'tr' ? 'Sohbet' : 'Chat'}
+                       <span style={{ fontSize: '14px' }}>💬</span> {t('community.tab_chat')}
                     </button>
                 </div>
                 {view !== 'jobs' && (
@@ -592,7 +592,7 @@ export function Community() {
                 <div style={{ fontSize: '24px' }}>🎁</div>
                 <div style={{ flex: 1, textAlign: 'left' }}>
                     <div style={{ fontSize: '13px', fontWeight: 900, color: '#10b981' }}>
-                        {i18n.language === 'tr' ? '🚀 PAYLAŞ & 5 TASTE KAZAN!' : '🚀 SHARE & WIN 5 TASTE!'}
+                        {t('community.btn_share_win')}
                     </div>
                     <div style={{ fontSize: '10px', color: '#94a3b8', lineHeight: 1.5, marginTop: '2px' }}>
                         {i18n.language === 'tr' 
@@ -667,8 +667,8 @@ export function Community() {
             ) : filtered.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
                     <div style={{ fontSize: '48px', marginBottom: '12px' }}>👨‍🍳</div>
-                    <div style={{ fontWeight: 800, color: '#fff' }}>{i18n.language === 'tr' ? 'Henüz İlan Yok' : 'No Posts Yet'}</div>
-                    <div style={{ fontSize: '12px', marginTop: '4px' }}>{i18n.language === 'tr' ? 'İlk ilanı veya paylaşımı sen yap!' : 'Be the first to share something!'}</div>
+                    <div style={{ fontWeight: 800, color: '#fff' }}>{t('community.no_posts')}</div>
+                    <div style={{ fontSize: '12px', marginTop: '4px' }}>{t('community.no_posts_desc')}</div>
                 </div>
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -703,7 +703,7 @@ export function Community() {
                             value={cMsg}
                             onChange={e => setCMsg(e.target.value)}
                             onKeyPress={e => e.key === 'Enter' && handleChatSend()}
-                            placeholder={i18n.language === 'tr' ? 'Mesaj yaz...' : 'Type a message...'} 
+                            placeholder={t('community.ph_chat')} 
                             style={{ flex: 1, background: 'transparent', border: 'none', padding: '12px', color: '#fff', fontSize: '14px', outline: 'none' }} 
                         />
                         <button 
@@ -753,7 +753,7 @@ export function Community() {
 
                             {(cType === 'menu' || cType === 'career' || cType === 'yemek') && (
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '12px' }}>
-                                    <input value={cVenueName} onChange={e => setCVenueName(e.target.value)} placeholder={cType === 'career' ? (i18n.language === 'tr' ? 'Lokantadaki Pozisyon' : 'Position in Restaurant') : t('community.venue_ph')}
+                                    <input value={cVenueName} onChange={e => setCVenueName(e.target.value)} placeholder={cType === 'career' ? (t('community.ph_position')) : t('community.venue_ph')}
                                         style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', fontSize: '13px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
                                     <input value={cCity} onChange={e => setCCity(e.target.value)} placeholder={t('community.city_ph')}
                                         style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', fontSize: '13px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
@@ -765,15 +765,15 @@ export function Community() {
                             )}
 
                             <textarea value={cText} onChange={e => setCText(e.target.value)} rows={3}
-                                placeholder={cType === 'yemek' ? t('community.ph_food') : cType === 'tarif' ? t('community.ph_recipe') : cType === 'career' ? (i18n.language === 'tr' ? 'İş ilanı veya iş arayışınızı buraya yazın...' : 'Write your job post or seeking details here...') : t('community.ph_menu')}
+                                placeholder={cType === 'yemek' ? t('community.ph_food') : cType === 'tarif' ? t('community.ph_recipe') : cType === 'career' ? (t('community.ph_job_desc')) : t('community.ph_menu')}
                                 style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', fontSize: '13px', color: '#fff', outline: 'none', resize: 'none', marginBottom: '12px', boxSizing: 'border-box', fontFamily: 'inherit', lineHeight: 1.6 }} />
 
                              {/* Wallet Address for Rewards */}
                              {cType !== 'career' && (
                                  <div style={{ marginBottom: '14px' }}>
-                                     <div style={{ fontSize: '11px', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>💰 {i18n.language === 'tr' ? 'Ödül İçin Cüzdan Adresi' : 'Wallet Address for Reward'}</div>
+                                     <div style={{ fontSize: '11px', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>💰 {t('community.lbl_wallet_reward')}</div>
                                      <input value={cRewardWallet} onChange={e => setCRewardWallet(e.target.value)} placeholder="UQ... or EQ..." style={{ width: '100%', background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '10px', padding: '11px 14px', fontSize: '12px', color: '#fff', outline: 'none', boxSizing: 'border-box' }} />
-                                     <div style={{ fontSize: '9px', color: '#475569', marginTop: '4px' }}>{i18n.language === 'tr' ? '* Paylaştıktan sonra ekran görüntüsü alıp TG grubuna atmayı unutmayın!' : '* Don\'t forget to take a screenshot and share in TG group after posting!'}</div>
+                                     <div style={{ fontSize: '9px', color: '#475569', marginTop: '4px' }}>{t('community.lbl_wallet_note')}</div>
                                  </div>
                              )}
 
