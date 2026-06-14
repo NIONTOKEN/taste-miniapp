@@ -35,6 +35,18 @@ export function Team({ onClose }: TeamProps) {
             tgLink: 'https://t.me/Little_quin11',
             photoUrl: '/little_queen.png',
             color: '#c084fc' // Light purple to match her avatar theme
+        },
+        {
+            id: 'legend_love',
+            name: 'Legend Love',
+            roleTr: 'Topluluk ve Medya Yöneticisi',
+            roleEn: 'Community & Media Manager',
+            bioTr: 'Moderatör, sosyal medya uzmanı ve reklamcı. Ayrıca yarışma düzenleyici ve topluluk oluşturucu.',
+            bioEn: 'Moderator, social media expert, and advertiser. Also a contest organizer and community builder.',
+            tgHandle: '@legendlove90',
+            tgLink: 'https://t.me/legendlove90',
+            photoUrl: '/photo_2026-06-14_05-49-44.jpg',
+            color: '#6366f1' // Indigo color to match the avatar theme
         }
     ]
 
