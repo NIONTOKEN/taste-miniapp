@@ -236,7 +236,9 @@ function App() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={handleBuy}
+                onClick={() => {
+                  document.getElementById('taste-swap-widget')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }}
                 style={{
                   background: 'linear-gradient(135deg, #f59e0b, #f97316)',
                   color: '#fff',
@@ -264,6 +266,7 @@ function App() {
 
             {/* Premium Swap Widget */}
             <motion.div 
+              id="taste-swap-widget"
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
