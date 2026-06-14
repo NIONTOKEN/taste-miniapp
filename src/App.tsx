@@ -34,6 +34,7 @@ import { PWAInstallBanner } from './components/PWAInstallBanner'
 import { InstallModal } from './components/InstallModal'
 import { OfficialSocials } from './components/OfficialSocials'
 import { Team } from './components/Team'
+import { TasteEcosystem } from './components/TasteEcosystem'
 import {
   Home,
   Map,
@@ -59,7 +60,8 @@ import {
   ShieldCheck,
   ScrollText,
   BookOpen,
-  Wallet
+  Wallet,
+  Layers
 } from 'lucide-react'
 import { apiService } from './services/api'
 
@@ -71,7 +73,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem'>('home');
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
@@ -635,6 +637,18 @@ function App() {
           <Team onClose={() => setActiveTab('home')} />
         </motion.div>
       );
+      case 'ecosystem': return (
+        <motion.div key="ecosystem" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>🌐 {t('nav.ecosystem') || 'TASTE Ekosistemi'}</h3>
+            <TasteEcosystem
+              onNavigate={(tab) => setActiveTab(tab as any)}
+              onOpenTastePay={() => setIsTastePayOpen(true)}
+            />
+          </div>
+        </motion.div>
+      );
       case 'settings': return (
         <motion.div key="settings" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
           <Settings />
@@ -789,6 +803,7 @@ function App() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                    {[
+                    { id: 'ecosystem', label: t('nav.ecosystem') || 'Ekosistem', color: '#f59e0b', emojiImage: '🌐', isNew: true },
                     { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
                     { id: 'install', label: t('nav.install'), color: '#10b981', emojiImage: '📲', isNew: true },
                     { id: 'partners', label: t('nav.partners'), color: '#3b82f6', emojiImage: '🤝', isNew: true },
@@ -862,15 +877,24 @@ function App() {
         </AnimatePresence>
 
         {/* Primary Bottom Navigation */}
-        <nav className="bottom-nav" style={{ padding: '0 10px' }}>
+        <nav className="bottom-nav" style={{ padding: '0 4px' }}>
           <button className={`nav-item ${activeTab === 'home' ? 'active' : ''}`} onClick={() => { setActiveTab('home'); setIsMenuOpen(false); }}>
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
 
+          <button
+            className={`nav-item ${activeTab === 'ecosystem' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('ecosystem'); setIsMenuOpen(false); }}
+            style={{ position: 'relative' }}
+          >
+            <span className="nav-icon"><Layers size={22} /></span>
+            <span className="nav-label">{t('nav.ecosystem') || 'Ekosistem'}</span>
+            <span style={{ position: 'absolute', top: '4px', right: '10px', width: '7px', height: '7px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 8px #f59e0b', animation: 'pulse 2s infinite' }} />
+          </button>
 
           <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
             <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>
-            <span style={{ position: 'absolute', top: '4px', right: '14px', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', animation: 'pulse 2s infinite' }} />
+            <span style={{ position: 'absolute', top: '4px', right: '10px', width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', animation: 'pulse 2s infinite' }} />
           </button>
           
           <button className={`nav-item ${isMenuOpen ? 'active' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
