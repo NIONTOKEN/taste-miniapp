@@ -95,23 +95,6 @@ const ECO_SECTIONS = [
     ]
   },
   {
-    id: 'spin',
-    icon: '🎰',
-    titleKey: 'eco.spin.title',
-    descKey: 'eco.spin.desc',
-    color: '#a855f7',
-    glow: 'rgba(168,85,247,0.25)',
-    badge: 'EARN',
-    badgeColor: '#a855f7',
-    navTarget: 'spin',
-    items: ['eco.spin.i1', 'eco.spin.i2', 'eco.spin.i3'],
-    stats: [
-      { label: 'Daily Spin', value: 'Free' },
-      { label: 'Leaderboard', value: '🏆 Active' },
-      { label: 'Rewards', value: 'TASTE' },
-    ]
-  },
-  {
     id: 'ai',
     icon: '🤖',
     titleKey: 'eco.ai.title',
