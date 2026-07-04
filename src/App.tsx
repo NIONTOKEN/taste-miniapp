@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTonConnectUI } from '@tonconnect/ui-react'
@@ -166,105 +166,7 @@ function App() {
       case 'home':
         return (
           <motion.div key="home" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            {/* Hero (Logo & Intro) */}
-            <div style={{ textAlign: 'center', marginBottom: '20px', marginTop: '10px' }}>
-              <div style={{ position: 'relative', width: '140px', height: '140px', margin: '0 auto 10px' }}>
-                <svg viewBox="0 0 180 180" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', animation: 'spin-text 12s linear infinite' }}>
-                  <defs>
-                    <path id="circlePath" d="M 90,90 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
-                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#f59e0b" /><stop offset="50%" stopColor="#fbbf24" /><stop offset="100%" stopColor="#f59e0b" />
-                    </linearGradient>
-                  </defs>
-                  <text fill="url(#goldGradient)" fontSize="13" fontWeight="800" letterSpacing="5">
-                    <textPath href="#circlePath" startOffset="0%">TASTE AI • TAI • WEB3 • AI •</textPath>
-                  </text>
-                </svg>
-                <motion.div
-                  animate={{ y: [0, -6, 0], scale: [1, 1.03, 1] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                  style={{
-                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    width: '85px', height: '85px', borderRadius: '50%', boxShadow: '0 0 30px var(--primary-glow)',
-                    border: '4px solid rgba(245, 159, 11, 0.3)', overflow: 'hidden'
-                  }}
-                >
-                  <video src="/logo-gif.mp4" autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                </motion.div>
-              </div>
-              <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '13px' }}>{t('app.description')}</p>
-            </div>
-
-            {/* Intro Video - Compact Card */}
-            <motion.div className="glass-panel" style={{ padding: '8px', borderRadius: '20px', marginBottom: '20px', background: 'rgba(15, 23, 42, 0.6)' }}>
-              <video
-                src="/taste-intro.mp4" controls playsInline preload="metadata" poster={TASTE_LOGO}
-                style={{ width: '100%', borderRadius: '16px', maxHeight: '200px', objectFit: 'cover' }}
-              />
-            </motion.div>
-
-            {/* Flashy TASTE Ad Banner */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              style={{
-                background: 'linear-gradient(135deg, #1e1b4b, #312e81)',
-                border: '2px solid #6366f1',
-                borderRadius: '24px',
-                padding: '24px',
-                marginBottom: '20px',
-                textAlign: 'center',
-                boxShadow: '0 0 30px rgba(99, 102, 241, 0.3), inset 0 0 20px rgba(99, 102, 241, 0.2)',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              {/* Animated overlay */}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle, rgba(192, 132, 252, 0.15) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none' }} />
-              
-              <motion.div animate={{ rotate: [0, -5, 5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} style={{ fontSize: '40px', marginBottom: '10px' }}>
-                🌟
-              </motion.div>
-              
-              <h2 style={{ margin: '0 0 10px 0', fontSize: '24px', fontWeight: 900, background: 'linear-gradient(to right, #818cf8, #c084fc, #f472b6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
-                {t('app.banner_title')}
-              </h2>
-              
-              <p style={{ margin: '0 0 20px 0', fontSize: '15px', color: '#e2e8f0', lineHeight: '1.5', fontWeight: 600 }}>
-                {t('app.banner_desc')}
-              </p>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  document.getElementById('taste-swap-widget')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }}
-                style={{
-                  background: 'linear-gradient(135deg, #f59e0b, #f97316)',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '16px 32px',
-                  borderRadius: '16px',
-                  fontSize: '18px',
-                  fontWeight: 900,
-                  cursor: 'pointer',
-                  boxShadow: '0 10px 25px rgba(245, 159, 11, 0.5)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '2px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  width: '100%',
-                  position: 'relative',
-                  zIndex: 2
-                }}
-              >
-                <span>🔥 {t('app.banner_buy')} 🔥</span>
-              </motion.button>
-            </motion.div>
+            {/* Hero Section Removed */}
 
             {/* Premium Swap Widget */}
             <motion.div 
@@ -425,63 +327,8 @@ function App() {
               <div className="glass-panel" style={{ padding: '0', overflow: 'hidden', borderRadius: '24px' }}>
                 <LiveMarketData />
               </div>
-              <div className="glass-panel" style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'linear-gradient(135deg, rgba(245,159,11,0.06), rgba(0,0,0,0.3))' }}>
-                {/* Spinning Logo Animation - NOW CLICKABLE */}
-                <motion.div 
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                        // Toggle allocation info
-                        const el = document.getElementById('allocation-info');
-                        if (el) {
-                            el.style.display = el.style.display === 'none' ? 'block' : 'none';
-                            if (el.style.display === 'block') {
-                                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }
-                        }
-                    }}
-                    style={{ position: 'relative', width: '180px', height: '180px', margin: '0 auto 16px', cursor: 'pointer' }}
-                >
-                  <svg viewBox="0 0 180 180" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', animation: 'spin-text 10s linear infinite' }}>
-                    <defs>
-                      <path id="circlePath2" d="M 90,90 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
-                      <linearGradient id="goldGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#f59e0b" />
-                        <stop offset="50%" stopColor="#fbbf24" />
-                        <stop offset="100%" stopColor="#f59e0b" />
-                      </linearGradient>
-                    </defs>
-                    <text fill="url(#goldGradient2)" fontSize="13" fontWeight="800" letterSpacing="5">
-                      <textPath href="#circlePath2" startOffset="0%">TASTE AI • TAI • WEB3 • AI •</textPath>
-                    </text>
-                  </svg>
-                  <motion.div
-                    animate={{ y: [0, -6, 0], scale: [1, 1.03, 1] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                    style={{
-                      position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                      width: '105px', height: '105px', borderRadius: '50%',
-                      boxShadow: '0 0 40px rgba(245,159,11,0.5), 0 0 80px rgba(245,159,11,0.2)',
-                      border: '4px solid rgba(245,159,11,0.4)', overflow: 'hidden'
-                    }}
-                  >
-                    <video src="/logo-gif.mp4" autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                  </motion.div>
-                </motion.div>
-                
-                <motion.div
-                  animate={{ opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  style={{ fontSize: '13px', color: '#f59e0b', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}
-                  onClick={() => document.getElementById('allocation-info')?.click()}
-                >
-                  ✦ {t('app.tap_for_info')} ✦
-                </motion.div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>TON Blockchain</div>
-
-                {/* Hidden Allocation Info - appears on click */}
-                <div id="allocation-info" style={{ display: 'none', width: '100%', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                    <TokenAllocation />
-                </div>
+              <div className="glass-panel" style={{ padding: '16px', borderRadius: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'linear-gradient(135deg, rgba(245,159,11,0.06), rgba(0,0,0,0.3))' }}>
+                <TokenAllocation />
               </div>
             </div>
 
@@ -803,7 +650,7 @@ function App() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                   {[
-                    { id: 'ecosystem', label: t('nav.ecosystem'), color: '#f59e0b', emojiImage: '🌐', isNew: true },
+                    { id: 'ecosystem', label: 'TAI EKOSİSTEM', color: '#f59e0b', image: '/logo.jpg', isNew: true },
                     { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
                     { id: 'install', label: t('nav.install'), color: '#10b981', emojiImage: '📲', isNew: true },
                     { id: 'partners', label: t('nav.partners'), color: '#3b82f6', emojiImage: '🤝', isNew: true },
@@ -814,7 +661,6 @@ function App() {
                     { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
                     { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📖' },
                     { id: 'charity', label: t('nav.charity'), color: '#f43f5e', emojiImage: '❤️' },
-                    { id: 'chef', label: t('nav.chef'), color: '#10b981', emojiImage: '👨‍🍳', isDemo: true },
                     { id: 'wallet', label: 'Taste Wallet', color: '#f59e0b', image: '/wallet-icon.png' },
                     { id: 'faq', label: t('nav.faq'), color: '#22c55e', emojiImage: '❓' },
                     { id: 'tech', label: t('nav.tech'), color: '#10b981', emojiImage: '💻' },
