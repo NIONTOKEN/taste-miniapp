@@ -464,7 +464,11 @@ function App() {
       );
       case 'wallet': return (
         <motion.div key="wallet" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <WalletApp onClose={() => setActiveTab('home')} />
+          <WalletApp 
+            onClose={() => setActiveTab('home')} 
+            parentLang={currentLangCode}
+            onParentLangChange={changeLanguage}
+          />
         </motion.div>
       );
       case 'chef': return (

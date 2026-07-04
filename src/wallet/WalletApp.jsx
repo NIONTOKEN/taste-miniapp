@@ -21,7 +21,7 @@ import { translations } from './i18n';
 import { WALLET_CONFIG } from './config';
 import { Home as HomeIcon, Clock, QrCode, Grid, User, RefreshCw, LayoutGrid, Bot, X } from 'lucide-react';
 
-const WalletApp = ({ onClose }) => {
+const WalletApp = ({ onClose, parentLang, onParentLangChange }) => {
   // ── TOAST BİLDİRİM SİSTEMİ ───────────────────────────────────────────────
   const [toasts, setToasts] = useState([]);
 
@@ -55,7 +55,20 @@ const WalletApp = ({ onClose }) => {
   const [tgUser, setTgUser] = useState(null);
   const [tab, setTab] = useState('home');
   const [activeToken, setActiveToken] = useState(null);
-  const [lang, setLang] = useState('tr');
+  const [lang, setLangState] = useState(parentLang || 'tr');
+
+  useEffect(() => {
+    if (parentLang && parentLang !== lang) {
+      setLangState(parentLang);
+    }
+  }, [parentLang]);
+
+  const setLang = (newLang) => {
+    setLangState(newLang);
+    if (onParentLangChange) {
+      onParentLangChange(newLang);
+    }
+  };
   const [balances, setBalances] = useState({});
   const [tokens, setTokens] = useState(() => {
     const saved = localStorage.getItem('active_tokens');

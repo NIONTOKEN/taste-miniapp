@@ -311,7 +311,7 @@ const resources = {
                 "pitch": {
                     "title": "Why TASTE?",
                     "text1": "The world is changing rapidly. As the era of paper money slowly comes to an end, the digital economy is taking its place.\n\nSo what does TASTE do in this new order?",
-                    "text2": "TASTE is not just a cryptocurrency (token) — it is building a massive ecosystem with real-world utility behind it. You will now be able to pay directly with TASTE at partner businesses, and enjoy <highlight>TASTE AI holder-exclusive</highlight> discounts and privileges while paying. 🛍️🤝",
+                    "text2": "TASTE is building a massive ecosystem with real-world utility. Thanks to the newly integrated TAI Wallet (non-custodial TON wallet) and the TastePay QR payment engine, you can now securely manage your TON and TASTE tokens and make instant mobile payments at partner businesses with exclusive discounts. 🛍️🤝",
                     "text3": "This is where the biggest difference separating TASTE from tens of thousands of other projects emerges:",
                     "text4": "<highlight>Not just a speculative investment, real-life use + instant advantage!</highlight> 🔥",
                     "text5": "Those who hold TASTE in their wallets today will not just be spectators in tomorrow's digital economy; they will be one step ahead.",
@@ -1188,7 +1188,7 @@ const resources = {
                 "pitch": {
                     "title": "Neden TASTE?",
                     "text1": "Dünya hızla değişiyor. Kağıt para dönemi yavaş yavaş sona ererken, yerini tam anlamıyla dijital ekonomi alıyor.\n\nPeki bu yeni düzende TASTE ne yapıyor?",
-                    "text2": "TASTE, sadece bir kripto para (token) değil — arkasında gerçek kullanım alanı olan devasa bir ekosistem kuruyor. Artık anlaşmalı işletmelerde ödemelerinizi doğrudan TASTE ile yapabilecek, üstelik ödeme yaparken <highlight>TASTE AI tutucularına özel</highlight> indirimlerden ve ayrıcalıklardan faydalanabileceksiniz. 🛍️🤝",
+                    "text2": "TASTE, arkasında gerçek kullanım alanı olan devasa bir ekosistem kuruyor. Yeni entegre edilen TAI Wallet (öz-velayet TON cüzdanı) ve TastePay QR ödeme motoru sayesinde, artık TON ve TASTE tokenlerinizi güvenle yönetebilir, anlaşmalı işletmelerde TASTE ile anında mobil ödeme yaparak size özel indirimlerden ve ayrıcalıklardan faydalanabilirsiniz. 🛍️🤝",
                     "text3": "İşte TASTE’i diğer on binlerce projeden ayıran en büyük fark burada ortaya çıkıyor:",
                     "text4": "<highlight>Sadece spekülatif bir yatırım değil, gerçek hayatta kullanım + anında avantaj!</highlight> 🔥",
                     "text5": "Bugün cüzdanında TASTE tutanlar, yarının dijital ekonomisinde sadece seyirci kalmayacak; bir adım önde olacak.",
