@@ -1,12 +1,12 @@
 /**
- * QAI Wallet — Multi-Language Support (i18n)
+ * TAI Wallet — Multi-Language Support (i18n)
  * Full coverage: tr, en, ru, zh, ar
  */
 
 export const translations = {
   tr: {
     welcome: {
-      title: "QAI Wallet",
+      title: "TAI Wallet",
       subtitle: "Web4 çağının en güvenli çok zincirli cüzdanı.",
       create: "Yeni Cüzdan Oluştur",
       import: "Cüzdanımı İçe Aktar",
@@ -52,8 +52,8 @@ export const translations = {
       marketSentiment: "PİYASA GÖRÜNÜMÜ", btcDom: "BTC DOM (BTCD)", trend: "TREND", bull: "BOĞA", bear: "AYI", neutral: "NÖTR",
       greed_fear: "Korku", greed_greed: "Açgözlü", greed_extremeFear: "Aşırı Korku", greed_extremeGreed: "Aşırı Açgözlü", greed_neutral: "Nötr",
       tasteWelcomeTitle: "Yeni Cüzdan = 50 TASTE HEDİYE!",
-      tasteWelcomeDesc: "QAI cüzdanını ilk kez açtın mı? Telegram kanalımıza katıl ve 50 TASTE ödülünü al!",
-      tasteWelcomeClaimBtn: "📩 @QAI_WALLET – 50 TASTE Talep Et",
+      tasteWelcomeDesc: "TAI Wallet'ı ilk kez açtın mı? Telegram kanalımıza katıl ve 50 TASTE ödülünü al!",
+      tasteWelcomeClaimBtn: "📩 @TASTE_AI – 50 TASTE Talep Et",
       trendingTab: "🔥 Trend", saveBtn: "KAYDET", manageAssets: "Varlıkları Yönet", priceChart: "FİYAT GRAFİĞİ",
       sendAction: "GÖNDER", receiveAction: "AL", swapAction: "SWAP",
       walletAddressTitle: "CÜZDAN ADRESİNİZ", tokenContractTitle: "TOKEN KONTRAT ADRESİ",
@@ -244,7 +244,7 @@ export const translations = {
     },
     // home bloğu yukarıda birleştirildi
     menu: {
-      title: "QAI Menü",
+      title: "TAI Menü",
       swap: "Takas & Köprü",
       swap_desc: "Varlıklarını anında dönüştür ve aktar.",
       listing: "Yeni Token Listeleme",
@@ -253,10 +253,10 @@ export const translations = {
       staking_desc: "Boştaki varlıklarından günlük faiz kazan.",
       psd2: "PSD2 Ödeme Portalı",
       psd2_desc: "Altyapı, araştırma ve izinler aşamasında.",
-      footer_desc: "QAI Web4 ekosistemi sürekli gelişiyor. Yakında daha fazla özellik burada olacak.",
+      footer_desc: "TAI Wallet ekosistemi sürekli gelişiyor. Yakında daha fazla özellik burada olacak.",
       discovery: "Keşif Hub",
       discovery_desc: "Yeni çıkan coinler, trend tokenlar, SPL & Jetton",
-      trending: "QAI'de Trend Olanlar",
+      trending: "TAI'de Trend Olanlar",
       trending_desc: "Admin onaylı trend tokenlar — 24/48 saat öne çıkarılmış",
       listing2: "Proje Listele",
       listing2_desc: "Tokenını listele, puanlama al, yatırımcılara ulaş",
@@ -271,7 +271,7 @@ export const translations = {
       defi_tools: "🛠 DEFİ ARAÇLARI",
       quick_swap: "⚡ EKOSİSTEM HIZLI SWAP",
       taste_swap: "TASTE Swap (TON)",
-      taste_swap_desc: "QAI İç Swap · TON Ağı",
+      taste_swap_desc: "TAI İç Swap · TON Ağı",
       footer_links: "Cüzdan · Swap · Staking · Discovery · Listeleme",
       coming_soon: "YAKINDA",
       live: "CANLI",
@@ -424,7 +424,7 @@ export const translations = {
       list_btn: "Listele",
       scanning: "Tokenlar taranıyor...",
       none_found: "için sonuç bulunamadı",
-      qai_trending: "🔥 QAI'DE TREND OLANLAR",
+      qai_trending: "🔥 TAI'DE TREND OLANLAR",
       hours_left: "s kaldı",
       new_badge: "YENİ",
     },
@@ -457,7 +457,7 @@ export const translations = {
       processing: "İşleniyor...",
       request_received: "Başvuru Alındı!",
       success_free: "Tokeniniz cüzdana eklendi. Keşif Hub'da görünür.",
-      success_paid: "Ödemeniz başarıyla alındı. Gerekli incelemelerden sonra \"QAI'de Trend Olanlar\" listesine eklenecektir.",
+      success_paid: "Ödemeniz başarıyla alındı. Gerekli incelemelerden sonra \"TAI'de Trend Olanlar\" listesine eklenecektir.",
       next_steps: "Sonraki Adımlar:",
       step_review: "Admin panelinde başvurunuz inceleniyor",
       step_trend: "Onay sonrası trend bölümüne ekleniyor",
@@ -471,19 +471,19 @@ export const translations = {
     },
     faq: {
       title: "S.S.S & Yasal",
-      q1: "QAI Wallet nedir?",
-      a1: "QAI Wallet, ETH, BNB, TON ve daha fazlasını destekleyen Web4 çağının çok zincirli kripto cüzdanıdır.",
+      q1: "TAI Wallet nedir?",
+      a1: "TAI Wallet, TON ağı üzerinde güvenli, hızlı ve kullanımı kolay Taste AI ekosistem cüzdanıdır.",
       q2: "Seed phrase nedir?",
       a2: "12 kelimelik gizli kurtarma ifadenizdir. Kimseyle paylaşmayın, cüzdanınızın tek anahtarıdır.",
       q3: "Fonlarım güvende mi?",
-      a3: "Anahtarlarınız yalnızca cihazınızda saklanır. QAI sunucularına aktarılmaz.",
+      a3: "Anahtarlarınız yalnızca cihazınızda saklanır. Hiçbir sunucuya aktarılmaz.",
     },
   },
 
   en: {
     welcome: {
-      title: "QAI Wallet",
-      subtitle: "The most secure multi-chain wallet for the Web4 era.",
+      title: "TAI Wallet",
+      subtitle: "The secure TON-native wallet for the Taste AI ecosystem.",
       create: "Create New Wallet",
       import: "Import Existing Wallet",
       secretTitle: "Secret Recovery Phrase",
@@ -528,8 +528,8 @@ export const translations = {
       marketSentiment: "MARKET SENTIMENT", btcDom: "BTC DOM (BTCD)", trend: "TREND", bull: "BULL", bear: "BEAR", neutral: "NEUTRAL",
       greed_fear: "Fear", greed_greed: "Greed", greed_extremeFear: "Extreme Fear", greed_extremeGreed: "Extreme Greed", greed_neutral: "Neutral",
       tasteWelcomeTitle: "New Wallet = 50 TASTE GIFT!",
-      tasteWelcomeDesc: "First time using QAI? Join our Telegram and claim 50 TASTE!",
-      tasteWelcomeClaimBtn: "📩 @QAI_WALLET – Claim 50 TASTE",
+      tasteWelcomeDesc: "First time using TAI Wallet? Join our Telegram and claim 50 TASTE!",
+      tasteWelcomeClaimBtn: "📩 @TASTE_AI – Claim 50 TASTE",
       trendingTab: "🔥 Trending", saveBtn: "SAVE", manageAssets: "Manage Assets", priceChart: "PRICE CHART",
       sendAction: "Send", receiveAction: "Receive", swapAction: "Swap",
       walletAddressTitle: "YOUR WALLET ADDRESS", tokenContractTitle: "TOKEN CONTRACT ADDRESS",
@@ -702,7 +702,7 @@ export const translations = {
     },
     // en.home block merged above
     menu: {
-      title: "QAI Menu",
+      title: "TAI Menu",
       swap: "Swap & Bridge",
       swap_desc: "Convert and transfer assets instantly.",
       listing: "New Token Listing",
@@ -711,10 +711,10 @@ export const translations = {
       staking_desc: "Earn daily interest on idle assets.",
       psd2: "PSD2 Payment Portal",
       psd2_desc: "Under infrastructure, research and licensing phase.",
-      footer_desc: "QAI Web4 ecosystem is evolving. More features coming soon.",
+      footer_desc: "TAI Wallet ecosystem is evolving. More features coming soon.",
       discovery: "Discovery Hub",
       discovery_desc: "New coins, trending tokens, SPL & Jetton",
-      trending: "Trending on QAI",
+      trending: "Trending on TAI",
       trending_desc: "Admin-approved trending tokens — featured 24/48h",
       listing2: "List a Project",
       listing2_desc: "List your token, get rated, reach investors",
@@ -730,7 +730,7 @@ export const translations = {
       defi_tools: "🛠 DEFI TOOLS",
       quick_swap: "⚡ ECOSYSTEM QUICK SWAP",
       taste_swap: "TASTE Swap (TON)",
-      taste_swap_desc: "QAI Internal Swap · TON Network",
+      taste_swap_desc: "TAI Internal Swap · TON Network",
       footer_links: "Wallet · Swap · Staking · Discovery · Listing",
       coming_soon: "SOON",
       live: "LIVE",
@@ -883,7 +883,7 @@ export const translations = {
       list_btn: "List",
       scanning: "Scanning tokens...",
       none_found: "no results found for",
-      qai_trending: "🔥 QAI TRENDING",
+      qai_trending: "🔥 TAI TRENDING",
       hours_left: "h left",
       new_badge: "NEW",
     },

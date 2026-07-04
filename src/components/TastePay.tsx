@@ -268,7 +268,10 @@ export function TastePay({ onClose }: { onClose: () => void }) {
     ? (parseFloat(receiveAmount) / tastePriceInFiat).toFixed(2)
     : '0.00';
 
-  const qrData = `tastepay://pay?address=${TASTEPAY_ADMIN_WALLET}` +
+  // QR should point to the merchant's own TON address (connected wallet)
+  const merchantAddress = activeAddress || TASTEPAY_ADMIN_WALLET;
+
+  const qrData = `tastepay://pay?address=${merchantAddress}` +
     `&amount=${receiveAmount || 0}` +
     `&currency=${currency}` +
     `&tasteAmount=${calculatedTaste}` +
@@ -295,7 +298,7 @@ export function TastePay({ onClose }: { onClose: () => void }) {
 
     createTastePayInvoice({
       invoice_code: invoiceId,
-      merchant_wallet: TASTEPAY_ADMIN_WALLET,
+      merchant_wallet: merchantAddress,
       merchant_name: merchantName,
       fiat_amount: amt,
       fiat_currency: currency,

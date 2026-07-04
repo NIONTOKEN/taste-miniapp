@@ -1,4 +1,4 @@
-﻿import i18n from 'i18next';
+import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -173,8 +173,8 @@ const resources = {
                         "desc": "Global Real-time Food Feed & Job Board launched with Supabase. Direct Telegram integration for instant contact with job posters. 'Share & Win' campaigns active with reward wallet visibility. Global live chat active."
                     },
                     "v2_6": {
-                        "title": "Mini App v2.6 Wallet & Transfer System — March 2026",
-                        "desc": "Fully integrated Wallet component with Send, Receive, Buy, and Sell tabs powered by STON.fi deep links."
+                        "title": "Mini App v2.6 TAI Wallet — July 2026",
+                        "desc": "Full non-custodial TON wallet (TAI Wallet) integrated into the Taste AI ecosystem. Users can generate seed phrases, manage TON addresses, send/receive TASTE & TON, scan QR codes for payments (TastePay), and use the built-in AI assistant — all without leaving the app."
                     },
                     "growth": {
                         "title": "Community Growth",
@@ -1050,8 +1050,8 @@ const resources = {
                         "desc": "Supabase ile küresel gerçek zamanlı Yemek Akışı ve İş İlanı panosu yayına girdi. İlan verenlerle Telegram üzerinden anlık iletişim özelliği eklendi. 'Paylaş Kazan' kampanyaları ve ödül cüzdanı görünürlüğü aktifleşti. Küresel canlı sohbet devreye alındı."
                     },
                     "v2_6": {
-                        "title": "Mini App v2.6 Cüzdan Güncellemesi — Mart 2026",
-                        "desc": "4 sekmeli (Gönder, Al, Satın Al, Sat) gelişmiş cüzdan modülü STON.fi entegrasyonuyla yayına girdi."
+                        "title": "Mini App v2.6 TAI Wallet Entegrasyonu — Temmuz 2026",
+                        "desc": "Taste AI ekosistemine tam entegre, öz-velayet TON cüzdanı (TAI Wallet) eklendi. Kullanıcılar uygulama içinde tohum ifadesi (seed phrase) oluşturabilir, TON adreslerini yönetebilir, TASTE & TON gönderip alabilir, TastePay ile QR ödeme yapabilir ve yerleşik yapay zeka asistanını kullanabilir — uygulamayı terk etmeden."
                     },
                     "growth": {
                         "title": "Topluluk Büyütme",
