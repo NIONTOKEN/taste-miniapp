@@ -219,10 +219,20 @@ export function TasteAI() {
       { role: 'user', content: userMessage }
     ]
 
-    const response = await fetch('/api/chat', {
+    const apiKey = import.meta.env.VITE_GROQ_API_KEY || import.meta.env.VITE_OPENAI_API_KEY;
+    if (!apiKey) throw new Error('GROQ_KEY_MISSING');
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: reqMessages }),
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({ 
+        model: 'llama3-8b-8192', 
+        messages: reqMessages,
+        temperature: 0.7 
+      }),
     })
 
     if (!response.ok) {

@@ -35,7 +35,16 @@ class InternalWalletService {
     }
 
     async getWalletInfo(): Promise<InternalWalletInfo | null> {
-        const stored = localStorage.getItem(STORAGE_KEY);
+        let stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) {
+            const walletData = localStorage.getItem('walletData');
+            if (walletData) {
+                try {
+                    const parsed = JSON.parse(walletData);
+                    if (parsed.mnemonic) stored = parsed.mnemonic;
+                } catch(e) {}
+            }
+        }
         if (!stored) return null;
 
         const mnemonic = stored.split(' ');
@@ -72,7 +81,16 @@ class InternalWalletService {
     }
 
     async sendTon(recipient: string, amount: string, memo: string = '') {
-        const stored = localStorage.getItem(STORAGE_KEY);
+        let stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) {
+            const walletData = localStorage.getItem('walletData');
+            if (walletData) {
+                try {
+                    const parsed = JSON.parse(walletData);
+                    if (parsed.mnemonic) stored = parsed.mnemonic;
+                } catch(e) {}
+            }
+        }
         if (!stored) throw new Error('Cüzdan bulunamadı');
 
         const client = await this.getClient();
@@ -108,7 +126,16 @@ class InternalWalletService {
     }
 
     async sendTaste(recipient: string, amount: string, jettonMasterAddress: string, memo: string = '') {
-        const stored = localStorage.getItem(STORAGE_KEY);
+        let stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) {
+            const walletData = localStorage.getItem('walletData');
+            if (walletData) {
+                try {
+                    const parsed = JSON.parse(walletData);
+                    if (parsed.mnemonic) stored = parsed.mnemonic;
+                } catch(e) {}
+            }
+        }
         if (!stored) throw new Error('Cüzdan bulunamadı');
 
         const client = await this.getClient();

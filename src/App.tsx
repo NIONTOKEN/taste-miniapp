@@ -63,7 +63,8 @@ import {
   ScrollText,
   BookOpen,
   Wallet,
-  Layers
+  Layers,
+  ArrowLeft
 } from 'lucide-react'
 import { apiService } from './services/api'
 
@@ -164,8 +165,28 @@ function App() {
   };
 
   const renderContent = () => {
-    switch (activeTab) {
-      case 'home':
+    const isSubPage = !['home', 'games', 'wallet', 'tasks', 'socials'].includes(activeTab);
+    return (
+      <>
+        {isSubPage && (
+          <motion.button 
+            onClick={() => setActiveTab('home')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '8px',
+              background: 'rgba(255,255,255,0.05)', border: '1px solid var(--bg-card-border)',
+              padding: '8px 16px', borderRadius: '20px', color: 'var(--text-main)',
+              cursor: 'pointer', marginBottom: '20px', fontWeight: 800
+            }}
+          >
+            <ArrowLeft size={16} />
+            {t('app.back', 'Geri')}
+          </motion.button>
+        )}
+        {(() => {
+          switch (activeTab) {
+            case 'home':
         return (
           <motion.div key="home" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
             {/* Hero Section Removed */}
@@ -499,8 +520,11 @@ function App() {
           <Settings />
         </motion.div>
       );
-      default: return null;
-    }
+      default: return <Home />;
+          }
+        })()}
+      </>
+    );
   };
 
   return (
