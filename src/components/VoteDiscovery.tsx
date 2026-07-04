@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+﻿import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
 
@@ -54,7 +54,7 @@ export function VoteDiscovery() {
             id: 'dedust',
             icon: '💧',
             label: 'DeDust.io',
-            sublabel: isEn ? 'Buy TASTE/USDT on DeDust' : 'DeDust\'ta TASTE/USDT Al',
+            sublabel: isEn ? 'Buy TAI/USDT on DeDust' : 'DeDust\'ta TASTE/USDT Al',
             link: 'https://dedust.io/pools/EQALRRSemBV0YDhoOe8VCRg8LcoXEWg7IGSk3BJ2Xk4h3oC',
         },
         {

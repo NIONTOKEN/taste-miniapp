@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { X, Copy, ExternalLink, Smartphone, Apple, Check } from 'lucide-react'
@@ -78,7 +78,7 @@ export function InstallModal({ isOpen, onClose }: InstallModalProps) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ fontSize: '24px' }}>📲</span>
                 <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 900, color: '#fbbf24' }}>
-                  {isTR ? "TASTE'i Ana Ekrana Ekle" : "Install TASTE to Home Screen"}
+                  {isTR ? "TASTE AI'ı Ana Ekrana Ekle" : "Install TASTE AI to Home Screen"}
                 </h3>
               </div>
               <button

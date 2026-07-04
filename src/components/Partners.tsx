@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+﻿import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { ExternalLink, MapPin, Building, Megaphone, Stethoscope, ShoppingBag, GraduationCap, Rocket, Brain, Cpu, Layers, Link2, Wallet, Shield, Zap, Globe } from 'lucide-react'
 
@@ -28,8 +28,8 @@ export function Partners() {
             <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                 <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.6' }}>
                     {isTr
-                        ? "TASTE ekosisteminin gerçek dünyadaki kullanım alanlarını genişleten ve Web3 dönüşümüne öncülük eden resmi iş ortaklarımız."
-                        : "Our official partners expanding the real-world utility of the TASTE ecosystem and leading the Web3 transition."}
+                        ? "TASTE AI ekosisteminin gerçek dünyadaki kullanım alanlarını genişleten ve Web3 dönüşümüne öncülük eden resmi iş ortaklarımız."
+                        : "Our official partners expanding the real-world utility of the TASTE AI ecosystem and leading the Web3 transition."}
                 </p>
             </div>
 
@@ -67,8 +67,8 @@ export function Partners() {
 
                 <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px', position: 'relative', zIndex: 1 }}>
                     {isTr
-                        ? "Şehrin nabzını tutan sanal not paylaşım platformu. Eğitim, kültür/sanat, sağlık, emlak ve kayıp ilanlarına kadar günlük hayata dair her şey burada. TASTE Token'ın dijital ekosistem entegrasyonları için güçlerimizi birleştirdik."
-                        : "The virtual note-sharing platform keeping the pulse of the city. From education and arts to health and real estate. We joined forces to integrate TASTE Token for digital ecosystem integrations."}
+                        ? "Şehrin nabzını tutan sanal not paylaşım platformu. Eğitim, kültür/sanat, sağlık, emlak ve kayıp ilanlarına kadar günlük hayata dair her şey burada. TASTE AI'ın dijital ekosistem entegrasyonları için güçlerimizi birleştirdik."
+                        : "The virtual note-sharing platform keeping the pulse of the city. From education and arts to health and real estate. We joined forces to integrate TASTE AI for digital ecosystem integrations."}
                 </p>
 
                 {/* Categories/Features */}
@@ -155,8 +155,8 @@ export function Partners() {
 
                 <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px', position: 'relative', zIndex: 1 }}>
                     {isTr
-                        ? "TASTE ekosisteminin teknoloji ve yapay zeka kanadını temsil eden NION, Solana ağındaki vizyoner projelerden biridir. Geleceğin dijital varlıkları ve AI entegrasyonları için TASTE ile omuz omuza bir gelişim süreci içerisindeyiz."
-                        : "Representing the technology and AI wing of the TASTE ecosystem, NION is a visionary project on the Solana network. We are in a strategic growth process alongside TASTE for future digital assets and AI integrations."}
+                        ? "TASTE AI ekosisteminin teknoloji ve yapay zeka kanadını temsil eden NION, Solana ağındaki vizyoner projelerden biridir. Geleceğin dijital varlıkları ve AI entegrasyonları için TASTE ile omuz omuza bir gelişim süreci içerisindeyiz."
+                        : "Representing the technology and AI wing of the TASTE AI ecosystem, NION is a visionary project on the Solana network. We are in a strategic growth process alongside TASTE for future digital assets and AI integrations."}
                 </p>
 
                 {/* Categories/Features */}
@@ -274,8 +274,8 @@ export function Partners() {
                 {/* Description */}
                 <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px', position: 'relative', zIndex: 1 }}>
                     {isTr
-                        ? "QAI Wallet, yapay zeka destekli Web4 finans altyapısıyla kripto dünyasını yeniden tanımlıyor. TASTE Token ile kurduğumuz stratejik ortaklık; ödeme sistemleri, AI tabanlı portföy yönetimi ve çok zincirli varlık transferleri alanında güçlü bir sinerji yaratıyor."
-                        : "QAI Wallet redefines the crypto world with its AI-powered Web4 financial infrastructure. Our strategic partnership with TASTE Token creates powerful synergy in payment systems, AI-based portfolio management, and multi-chain asset transfers."}
+                        ? "QAI Wallet, yapay zeka destekli Web4 finans altyapısıyla kripto dünyasını yeniden tanımlıyor. TASTE AI ile kurduğumuz stratejik ortaklık; ödeme sistemleri, AI tabanlı portföy yönetimi ve çok zincirli varlık transferleri alanında güçlü bir sinerji yaratıyor."
+                        : "QAI Wallet redefines the crypto world with its AI-powered Web4 financial infrastructure. Our strategic partnership with TASTE AI creates powerful synergy in payment systems, AI-based portfolio management, and multi-chain asset transfers."}
                 </p>
 
                 {/* Feature pills */}
@@ -305,8 +305,8 @@ export function Partners() {
                     </div>
                     <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: '1.7' }}>
                         {isTr
-                            ? '✦ TASTE Token entegrasyonu  ✦ AI portföy yönetimi  ✦ Çapraz zincir transferler'
-                            : '✦ TASTE Token integration  ✦ AI portfolio management  ✦ Cross-chain transfers'}
+                            ? '✦ TASTE AI entegrasyonu  ✦ AI portföy yönetimi  ✦ Çapraz zincir transferler'
+                            : '✦ TASTE AI ecosystem integration  ✦ AI portfolio management  ✦ Cross-chain transfers'}
                     </div>
                 </div>
 

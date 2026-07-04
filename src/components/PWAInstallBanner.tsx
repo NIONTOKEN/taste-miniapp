@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+﻿import { motion, AnimatePresence } from 'framer-motion'
 import { usePWA } from '../hooks/usePWA'
 import { Download, RefreshCw, X } from 'lucide-react'
 import { useState } from 'react'
@@ -137,7 +137,7 @@ export function PWAInstallBanner() {
             {/* Text */}
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff', marginBottom: '2px' }}>
-                TASTE'i Yükle 🚀
+                TASTE AI'ı Yükle 🚀
               </div>
               <div style={{ fontSize: '11px', color: '#94a3b8', lineHeight: '1.4' }}>
                 Ana ekrana ekle, offline çalışır

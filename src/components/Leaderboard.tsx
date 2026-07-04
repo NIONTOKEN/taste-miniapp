@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 
@@ -110,7 +110,7 @@ export function Leaderboard() {
                     onClick={() => setActiveTab('claimed')}
                     style={{ flex: 1, padding: '8px', border: 'none', borderRadius: '8px', background: activeTab === 'claimed' ? 'var(--primary)' : 'none', color: activeTab === 'claimed' ? '#000' : '#fff', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}
                 >
-                    🎁 {isTr ? 'Kazanılan TASTE' : 'Earned TASTE'}
+                    🎁 {isTr ? 'Kazanılan TASTE' : 'Earned TAI'}
                 </button>
             </div>
 

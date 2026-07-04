@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+﻿import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -6,9 +6,9 @@ const resources = {
     "en": {
         "translation": {
             "app": {
-                "title": "TASTE",
-                "description": "The Art and Education of Culinary Digital Assets",
-                "buy_title": "🔥 Early Access — Buy TASTE",
+                "title": "TASTE AI",
+                "description": "The New Face of Web3 — AI Powered Food Ecosystem",
+                "buy_title": "🔥 Early Access — Buy TAI",
                 "buy_with": "Buy with TON",
                 "holders": "Holders",
                 "my_balance": "My Balance",
@@ -16,7 +16,7 @@ const resources = {
                 "invite_gain": "Grow the community together",
                 "invite_desc": "Grow the community together",
                 "share_link": "Share Invite Link",
-                "referral_message": "Join TASTE and start earning TON ecosystem rewards! 🍳",
+                "referral_message": "Join TASTE AI — the new face of Web3! 🍳",
                 "connect_wallet_first": "Please connect your wallet first",
                 "tap_to_earn": "Tap to Earn",
                 "no_energy": "Gimme some rest! (No Energy)",
@@ -24,7 +24,7 @@ const resources = {
                 "early_access_ending": "🚀 Early Access Tier 1 Ending in:",
                 "you_get": "You get",
                 "swap_opening": "Swapping via STON.fi...",
-                "reward_end": "🎁 Reward Distribution Ends — May 20, 2026",
+                "reward_end": "🌐 TASTE AI — Web3 Ecosystem",
                 "units": {
                     "day": "DAYS",
                     "hr": "HRS",
@@ -36,8 +36,8 @@ const resources = {
                 },
                 "faq": {
                     "title": "❓ Frequently Asked Questions",
-                    "what_is": "What is TASTE?",
-                    "what_is_ans": "TASTE is a gastronomy and education-focused digital loyalty asset built on the TON blockchain. It targets real-world use in restaurants, hotels, and the food & beverage industry.",
+                    "what_is": "What is TASTE AI?",
+                    "what_is_ans": "TASTE is a new face of the Web3 world — AI-powered food ecosystem built on the TON blockchain. It targets real-world use in restaurants, hotels, and the food & beverage industry.",
                     "how_to": "How to Buy?",
                     "how_to_ans": "1. Load TON into your TON wallet (Tonkeeper, @wallet).<br />2. Select the desired amount from the panel above.<br />3. Click 'Buy with TON' and swap via STON.fi."
                 },
@@ -50,13 +50,13 @@ const resources = {
                 "web3_partners": "Web3 & Partners",
                 "joint_projects": "Joint Projects",
                 "lang": "Lang",
-                "banner_title": "TASTE is going to the future!",
-                "banner_desc": "TASTE is the shining star of tomorrow. Buy TASTE now and take your place in this amazing journey!",
-                "banner_buy": "BUY TASTE"
+                "banner_title": "TASTE AI — The New Face of Web3!",
+                "banner_desc": "TASTE is the shining star of tomorrow. Buy TAI now and take your place in this amazing journey!",
+                "banner_buy": "BUY TAI"
             },
             "home": {
                 "live_badge": "Live Activity",
-                "live_title": "📡 TASTE Activity"
+                "live_title": "📡 TASTE AI AI Activity"
             },
             "market": {
                 "live_chart": "Live Market Analysis"
@@ -239,7 +239,7 @@ const resources = {
                 "section4": {
                     "title": "🚪 Entering the Kitchen",
                     "box": "Light the stove. Do you hear it? That's not just the sound of a flame. That is the <highlight>sound of transformation</highlight>.",
-                    "p1": "When metal turned into digital, value was born… But meaning was not born. <highlight>TASTE was established to cook the meaning.</highlight>",
+                    "p1": "When metal turned into digital, value was born… But meaning was not born. <highlight>TASTE AI was established to cook the meaning.</highlight>",
                     "p2": "When you step through the door, you feel this:",
                     "quote": "Nothing is done fast here. Nothing is done in vain here. Nothing exists just to exist here.",
                     "p3": "Every material has a reason. Every recipe has a history. Every master has burn marks."
@@ -263,7 +263,7 @@ const resources = {
                     "title": "💎 TASTE is Not a Trend",
                     "p1": "Today, countless assets circulate in the digital world. Some exist only to be seen. Some exist only to be sold. Some are born only to be forgotten.",
                     "quote": "But some things… are born out of necessity.",
-                    "p2": "<highlight>TASTE</highlight> is not a trend. Not a copy. Not a noise.",
+                    "p2": "<highlight>TASTE AI</highlight> is not a trend. Not a copy. Not a noise.",
                     "p3": "This kitchen was established to fill a void. Where people don't just transact… <highlight>Producing… learning… transforming and developing…</highlight> to be a system."
                 },
                 "section8": {
@@ -311,7 +311,7 @@ const resources = {
                 "pitch": {
                     "title": "Why TASTE?",
                     "text1": "The world is changing rapidly. As the era of paper money slowly comes to an end, the digital economy is taking its place.\n\nSo what does TASTE do in this new order?",
-                    "text2": "TASTE is not just a cryptocurrency (token) — it is building a massive ecosystem with real-world utility behind it. You will now be able to pay directly with TASTE at partner businesses, and enjoy <highlight>TASTE holder-exclusive</highlight> discounts and privileges while paying. 🛍️🤝",
+                    "text2": "TASTE is not just a cryptocurrency (token) — it is building a massive ecosystem with real-world utility behind it. You will now be able to pay directly with TASTE at partner businesses, and enjoy <highlight>TASTE AI holder-exclusive</highlight> discounts and privileges while paying. 🛍️🤝",
                     "text3": "This is where the biggest difference separating TASTE from tens of thousands of other projects emerges:",
                     "text4": "<highlight>Not just a speculative investment, real-life use + instant advantage!</highlight> 🔥",
                     "text5": "Those who hold TASTE in their wallets today will not just be spectators in tomorrow's digital economy; they will be one step ahead.",
@@ -319,7 +319,7 @@ const resources = {
                 },
                 "summary": {
                     "badge": "💎 On TON Blockchain",
-                    "subtitle": "Gastronomy and education focused, targeting real-world use utility token",
+                    "subtitle": "New face of the Web3 world — AI-powered food ecosystem",
                     "fixed_supply": "Fixed Supply",
                     "no_mint": "TASTE — Hiç mint yok",
                     "secured": "secured",
@@ -481,7 +481,7 @@ const resources = {
                     }
                 },
                 "footer": {
-                    "last_updated": "Last updated: March 2025 · TASTE Token © 2025",
+                    "last_updated": "Last updated: March 2025 · TASTE AI © 2025",
                     "network": "Built on The Open Network"
                 },
                 "doc_info": "Last updated: March 2025 | This document is prepared in Turkish and English.",
@@ -495,7 +495,7 @@ const resources = {
                     "section2": {
                         "title": "⚖️ Limitation of Liability",
                         "sub": "Legal Limits",
-                        "text": "The TASTE Token team shall not be held legally responsible for any decisions made based on this application, including direct or indirect financial losses.",
+                        "text": "The TASTE AI team shall not be held legally responsible for any decisions made based on this application, including direct or indirect financial losses.",
                         "eng_note": "Turkish follows. <1>English is the primary legal language.</1>"
                     },
                     "section3": {
@@ -688,7 +688,7 @@ const resources = {
                 "tab_feed": "Feed",
                 "tab_jobs": "Jobs",
                 "tab_chat": "Chat",
-                "btn_share_win": "🚀 SHARE & WIN 5 TASTE!",
+                "btn_share_win": "🚀 SHARE & WIN 5 TAI!",
                 "no_posts": "No Posts Yet",
                 "ph_chat": "Type a message...",
                 "ph_position": "Position in Restaurant",
@@ -723,7 +723,7 @@ const resources = {
                     "publishing": "Publishing...",
                     "sending": "Sending...",
                     "saving": "Saving...",
-                    "submit_review": "⭐ Add Review (+5 TASTE)",
+                    "submit_review": "⭐ Add Review (+5 TAI)",
                     "submit_cv": "💾 Publish My CV",
                     "success_listing": "Listing published successfully! 🎉",
                     "success_apply": "Application sent!",
@@ -745,14 +745,14 @@ const resources = {
                 },
                 "reviews": {
                     "title": "Business Reviews",
-                    "tip": "Review your workplace. Help the community! Earn <1>+5 TASTE</1>.",
+                    "tip": "Review your workplace. Help the community! Earn <1>+5 TAI</1>.",
                     "business_ph": "Business name",
                     "overall": "OVERALL SCORE",
                     "salary": "Salary",
                     "env": "Env",
                     "mgmt": "Mgmt",
                     "comment_ph": "Your comment...",
-                    "success": "Review published! +5 TASTE won 🎉"
+                    "success": "Review published! +5 TAI won 🎉"
                 },
                 "profiles": {
                     "title": "Profiles & CV",
@@ -769,7 +769,7 @@ const resources = {
                 "feed": {
                     "title": "Kitchen Feed",
                     "new_post": "New Post",
-                    "success_post": "Post published! Share screenshot to TG Group → +5 TASTE! 🎉",
+                    "success_post": "Post published! Share screenshot to TG Group → +5 TAI! 🎉",
                     "types": {
                         "food": "Food",
                         "recipe": "Recipe",
@@ -857,7 +857,7 @@ const resources = {
             },
             "team": {
                 "title": "Project Team Members",
-                "subtitle": "The visionary minds building the TASTE ecosystem",
+                "subtitle": "The visionary minds building the TASTE AI ecosystem",
                 "contact": "Contact",
                 "roles": {
                     "founder": "Founder / Strategy & Vision",
@@ -883,7 +883,7 @@ const resources = {
     "tr": {
         "translation": {
             "app": {
-                "title": "TASTE",
+                "title": "TASTE AI",
                 "description": "Gastronomi ve Eğitim Odaklı Dijital Varlıklar",
                 "buy_title": "🔥 Erken Erişim — TASTE Satın Al",
                 "buy_with": "TON ile Edinin",
@@ -914,7 +914,7 @@ const resources = {
                 "faq": {
                     "title": "❓ Sıkça Sorulan Sorular",
                     "what_is": "TASTE Nedir?",
-                    "what_is_ans": "TASTE, TON blockchain üzerinde kurulmuş gastronomi ve eğitim odaklı bir dijital sadakat varlığıdır. Restoranlar, oteller ve yeme-içme sektöründe gerçek kullanım hedefler.",
+                    "what_is_ans": "TASTE, TON blockchain üzerinde kurulmuş yapay zeka destekli Web3 bir dijital sadakat varlığıdır. Restoranlar, oteller ve yeme-içme sektöründe gerçek kullanım hedefler.",
                     "how_to": "Nasıl Satın Alınır?",
                     "how_to_ans": "1. TON cüzdanınıza (Tonkeeper, @wallet) TON yükleyin.<br />2. Yukarıdaki panelden istediğiniz miktarı seçin.<br />3. 'TON ile Satın Al' butonuna basıp STON.fi üzerinden swap yapın."
                 },
@@ -933,7 +933,7 @@ const resources = {
             },
             "home": {
                 "live_badge": "Canlı Veriler",
-                "live_title": "📡 TASTE Aktivitesi"
+                "live_title": "📡 TASTE AI Aktivitesi"
             },
             "market": {
                 "live_chart": "Canlı Piyasa Analizi"
@@ -1116,7 +1116,7 @@ const resources = {
                 "section4": {
                     "title": "🚪 Mutfağa Giriyoruz",
                     "box": "Ocağın altını yak. Duyuyor musun? Bu sadece bir alev sesi değil. Bu <highlight>dönüşümün sesi</highlight>.",
-                    "p1": "Metal dijitale dönüştüğünde değer doğmuştu… Ama anlam doğmamıştı. <highlight>TASTE anlamı pişirmek için kuruldu.</highlight>",
+                    "p1": "Metal dijitale dönüştüğünde değer doğmuştu… Ama anlam doğmamıştı. <highlight>TASTE AI anlamı pişirmek için kuruldu.</highlight>",
                     "p2": "Kapıdan adım attığında şunu hissedersin:",
                     "quote": "Burada hiçbir şey hızlı yapılmaz. Burada hiçbir şey boşuna yapılmaz. Burada hiçbir şey sadece var olmak için var değildir.",
                     "p3": "Her malzemenin nedeni vardır. Her tarifin geçmişi vardır. Her ustanın yanık izleri vardır."
@@ -1140,7 +1140,7 @@ const resources = {
                     "title": "💎 TASTE Bir Trend Değil",
                     "p1": "Bugün dijital dünyada sayısız varlık dolaşıyor. Bazıları sadece görülmek için var. Bazıları sadece satılmak için var. Bazıları sadece unutulmak için doğuyor.",
                     "quote": "Ama bazı şeyler… ihtiyaçtan doğar.",
-                    "p2": "<highlight>TASTE</highlight> bir trend değil. Bir kopya değil. Bir gürültü değil.",
+                    "p2": "<highlight>TASTE AI</highlight> bir trend değil. Bir kopya değil. Bir gürültü değil.",
                     "p3": "Bu mutfak bir boşluğu doldurmak için kuruldu. İnsanların sadece işlem yapmadığı… <highlight>Ürettiği… öğrendiği… dönüşüp geliştiği…</highlight> bir sistem olmak için."
                 },
                 "section8": {
@@ -1188,7 +1188,7 @@ const resources = {
                 "pitch": {
                     "title": "Neden TASTE?",
                     "text1": "Dünya hızla değişiyor. Kağıt para dönemi yavaş yavaş sona ererken, yerini tam anlamıyla dijital ekonomi alıyor.\n\nPeki bu yeni düzende TASTE ne yapıyor?",
-                    "text2": "TASTE, sadece bir kripto para (token) değil — arkasında gerçek kullanım alanı olan devasa bir ekosistem kuruyor. Artık anlaşmalı işletmelerde ödemelerinizi doğrudan TASTE ile yapabilecek, üstelik ödeme yaparken <highlight>TASTE tutucularına özel</highlight> indirimlerden ve ayrıcalıklardan faydalanabileceksiniz. 🛍️🤝",
+                    "text2": "TASTE, sadece bir kripto para (token) değil — arkasında gerçek kullanım alanı olan devasa bir ekosistem kuruyor. Artık anlaşmalı işletmelerde ödemelerinizi doğrudan TASTE ile yapabilecek, üstelik ödeme yaparken <highlight>TASTE AI tutucularına özel</highlight> indirimlerden ve ayrıcalıklardan faydalanabileceksiniz. 🛍️🤝",
                     "text3": "İşte TASTE’i diğer on binlerce projeden ayıran en büyük fark burada ortaya çıkıyor:",
                     "text4": "<highlight>Sadece spekülatif bir yatırım değil, gerçek hayatta kullanım + anında avantaj!</highlight> 🔥",
                     "text5": "Bugün cüzdanında TASTE tutanlar, yarının dijital ekonomisinde sadece seyirci kalmayacak; bir adım önde olacak.",
@@ -1358,7 +1358,7 @@ const resources = {
                     }
                 },
                 "footer": {
-                    "last_updated": "Son güncelleme: Mart 2025 · TASTE Token © 2025",
+                    "last_updated": "Son güncelleme: Mart 2025 · TASTE AI © 2025",
                     "network": "Built on The Open Network"
                 },
                 "doc_info": "Son güncelleme: Mart 2025 | Bu belge Türkçe ve İngilizce olarak hazırlanmıştır.",
@@ -1372,7 +1372,7 @@ const resources = {
                     "section2": {
                         "title": "⚖️ Sorumluluk Sınırlaması",
                         "sub": "Limitation of Liability",
-                        "text": "TASTE Token ekibi; bu uygulamaya dayanarak alınan herhangi bir karar sonucunda ortaya çıkabilecek mali kayıplar için hiçbir hukuki sorumluluk kabul etmez.",
+                        "text": "TASTE AI ekibi; bu uygulamaya dayanarak alınan herhangi bir karar sonucunda ortaya çıkabilecek mali kayıplar için hiçbir hukuki sorumluluk kabul etmez.",
                         "eng_note": "Aşağıda Türkçe metin yer almaktadır. <1>İngilizce asıl yasal dildir.</1>"
                     },
                     "section3": {
@@ -1565,7 +1565,7 @@ const resources = {
                 "tab_feed": "Akış",
                 "tab_jobs": "İş İlanı",
                 "tab_chat": "Sohbet",
-                "btn_share_win": "🚀 PAYLAŞ & 5 TASTE KAZAN!",
+                "btn_share_win": "🚀 PAYLAŞ & 5 TAI KAZAN!",
                 "no_posts": "Henüz İlan Yok",
                 "ph_chat": "Mesaj yaz...",
                 "ph_position": "Lokantadaki Pozisyon",
@@ -1600,7 +1600,7 @@ const resources = {
                     "publishing": "Yayınlanıyor...",
                     "sending": "Gönderiliyor...",
                     "saving": "Kaydediliyor...",
-                    "submit_review": "⭐ Yorum Yap (+5 TASTE)",
+                    "submit_review": "⭐ Yorum Yap (+5 TAI)",
                     "submit_cv": "💾 CV'mi Yayınla",
                     "success_listing": "İlanınız başarıyla yayınlandı! 🎉",
                     "success_apply": "Başvuru iletildi!",
@@ -1622,14 +1622,14 @@ const resources = {
                 },
                 "reviews": {
                     "title": "İşletme Değerlendirmeleri",
-                    "tip": "Çalıştığın işletmeyi değerlendir. Topluluğa yardım et! <1>+5 TASTE</1> kazan.",
+                    "tip": "Çalıştığın işletmeyi değerlendir. Topluluğa yardım et! <1>+5 TAI</1> kazan.",
                     "business_ph": "İşletme adı",
                     "overall": "GENEL PUAN",
                     "salary": "Maaş",
                     "env": "Ortam",
                     "mgmt": "Yönetim",
                     "comment_ph": "Yorumunuz...",
-                    "success": "Yorumun yayınlandı! +5 TASTE kazandın 🎉"
+                    "success": "Yorumun yayınlandı! +5 TAI kazandın 🎉"
                 },
                 "profiles": {
                     "title": "Profiller & CV",
@@ -1646,7 +1646,7 @@ const resources = {
                 "feed": {
                     "title": "Mutfak Akışı",
                     "new_post": "Yeni Paylaşım",
-                    "success_post": "Paylaşımın yayınlandı! Ekran görüntüsü alıp TG grubuna gönder → +5 TASTE! 🎉",
+                    "success_post": "Paylaşımın yayınlandı! Ekran görüntüsü alıp TG grubuna gönder → +5 TAI! 🎉",
                     "types": {
                         "food": "Yemek",
                         "recipe": "Tarif",
@@ -1769,7 +1769,7 @@ const resources = {
                 "invite_friend": "Пригласить друга",
                 "share_link": "Поделиться ссылкой",
                 "invite_gain": "Давайте расширять сообщество вместе",
-                "buy_title": "Erken Erişim — Купить TASTE",
+                "buy_title": "🔥 Ранний Доступ — Купить TAI",
                 "buy_with": "Получить с помощью TON",
                 "you_get": "Вы получите",
                 "swap_opening": "Открытие обмена на STON.fi...",
@@ -1993,7 +1993,7 @@ const resources = {
                 "section4": {
                     "title": "🚪 Вход на кухню",
                     "box": "Зажгите печь. Вы слышите это? Это не просто звук пламени. Это <highlight>звук трансформации</highlight>.",
-                    "p1": "Когда металл превратился в цифровой, родилась ценность… Но смысл не родился. <highlight>TASTE был создан для того, чтобы придавать смысл.</highlight>",
+                    "p1": "Когда металл превратился в цифровой, родилась ценность… Но смысл не родился. <highlight>TASTE AI был создан для того, чтобы придавать смысл.</highlight>",
                     "p2": "Когда вы входите в дверь, вы чувствуете это:",
                     "quote": "Здесь ничего не делается быстро. Здесь ничего не делается зря. Ничто не существует только для того, чтобы существовать здесь.",
                     "p3": "У каждого материала есть причина. У каждого рецепта есть история. У каждого мастера есть следы ожогов."
@@ -2249,7 +2249,7 @@ const resources = {
                     "section2": {
                         "title": "⚖️ Ограничение ответственности",
                         "sub": "Правовые ограничения",
-                        "text": "Команда TASTE Token не несет юридической ответственности за любые решения, принятые на основании этого заявления, включая прямые или косвенные финансовые потери.",
+                        "text": "Команда TASTE AI не несет юридической ответственности за любые решения, принятые на основании этого заявления, включая прямые или косвенные финансовые потери.",
                         "eng_note": "Далее следует турецкий. <1>Английский — основной юридический язык.</1>"
                     },
                     "section3": {
@@ -2646,7 +2646,7 @@ const resources = {
                 "invite_friend": "دعوة صديق",
                 "share_link": "مشاركة الرابط",
                 "invite_gain": "دعونا ننمي المجتمع معاً",
-                "buy_title": "Erken Erişim — شراء TASTE",
+                "buy_title": "🔥 الوصول المبكر — شراء TAI",
                 "buy_with": "احصل عليه باستخدام TON",
                 "you_get": "سوف تحصل على",
                 "swap_opening": "فتح التداول على STON.fi...",
@@ -2894,7 +2894,7 @@ const resources = {
                     "title": "💎الذوق ليس اتجاهًا",
                     "p1": "اليوم، يتم تداول عدد لا يحصى من الأصول في العالم الرقمي. بعضها موجود فقط ليتم رؤيته. بعضها موجود فقط ليتم بيعه. البعض يولد لكي يُنسى.",
                     "quote": "لكن بعض الأشياء... تولد من الضرورة.",
-                    "p2": "<highlight>TASTE</highlight> ليس اتجاهًا. ليست نسخة. ليس ضجيجا.",
+                    "p2": "<highlight>TASTE AI</highlight> ليس اتجاهًا. ليست نسخة. ليس ضجيجا.",
                     "p3": "تم إنشاء هذا المطبخ لملء الفراغ. حيث لا يقوم الأشخاص بالمعاملات فقط... <highlight>الإنتاج... التعلم... التحويل والتطوير...</highlight> ليكونوا نظامًا."
                 },
                 "section8": {
@@ -3126,7 +3126,7 @@ const resources = {
                     "section2": {
                         "title": "⚖️ حدود المسؤولية",
                         "sub": "الحدود القانونية",
-                        "text": "لن يتحمل فريق TASTE Token المسؤولية القانونية عن أي قرارات يتم اتخاذها بناءً على هذا الطلب، بما في ذلك الخسائر المالية المباشرة أو غير المباشرة.",
+                        "text": "لن يتحمل فريق TASTE AI المسؤولية القانونية عن أي قرارات يتم اتخاذها بناءً على هذا الطلب، بما في ذلك الخسائر المالية المباشرة أو غير المباشرة.",
                         "eng_note": "يتبع التركي. <1>اللغة الإنجليزية هي اللغة القانونية الأساسية.</1>"
                     },
                     "section3": {
@@ -3400,7 +3400,7 @@ const resources = {
                 "feed": {
                     "title": "تغذية المطبخ",
                     "new_post": "مشاركة جديدة",
-                    "success_post": "تم نشر المنشور! مشاركة لقطة الشاشة مع TG Group → +5 TASTE! 🎉",
+                    "success_post": "تم نشر المنشور! مشاركة لقطة الشاشة مع TG Group → +5 TAI! 🎉",
                     "types": {
                         "food": "طعام",
                         "recipe": "وصفة",
@@ -3523,7 +3523,7 @@ const resources = {
                 "invite_friend": "邀请好友",
                 "share_link": "分享链接",
                 "invite_gain": "共同拓展社区",
-                "buy_title": "Erken Erişim — 购买 TASTE",
+                "buy_title": "🔥 抢先体验 — 购买 TAI",
                 "buy_with": "使用 TON 获取",
                 "you_get": "您将获得",
                 "swap_opening": "在 STON.fi 上开放兑换...",
@@ -3747,7 +3747,7 @@ const resources = {
                 "section4": {
                     "title": "🚪 进入厨房",
                     "box": "点燃炉子。你听到了吗？那不仅仅是火焰的声音。那是<highlight>转变的声音</highlight>。",
-                    "p1": "当金属变成数字时，价值诞生了……但意义并没有诞生。 <highlight>TASTE的成立是为了烹饪的意思。</highlight>",
+                    "p1": "当金属变成数字时，价值诞生了……但意义并没有诞生。 <highlight>TASTE AI的成立是为了烹饪的意思。</highlight>",
                     "p2": "当你踏进门的时候，你会有这样的感觉：",
                     "quote": "这里没有什么是快速完成的。这里没有任何事情是徒劳的。没有什么东西只是为了存在而存在的。",
                     "p3": "每种材料都有其存在的理由。每个食谱都有历史。每个大师都有烧伤的痕迹。"
@@ -3771,7 +3771,7 @@ const resources = {
                     "title": "💎 品味不是一种趋势",
                     "p1": "如今，无数资产在数字世界中流通。有些存在只是为了被看到。有些只是为了出售而存在。有些人出生只是为了被遗忘。",
                     "quote": "但有些东西……是出于必然而诞生的。",
-                    "p2": "<highlight>TASTE</highlight>不是一种趋势。不是副本。没有一点噪音。",
+                    "p2": "<highlight>TASTE AI</highlight>不是一种趋势。不是副本。没有一点噪音。",
                     "p3": "这个厨房的建立是为了填补一个空白。人们不只是进行交易……<highlight>生产……学习……转型和发展……</highlight>成为一个系统。"
                 },
                 "section8": {
@@ -3819,11 +3819,11 @@ const resources = {
                 "pitch": {
                     "title": "为什么要品尝？",
                     "text1": "世界正在迅速变化。随着纸币时代慢慢结束，数字经济正在取而代之。\n\n那么 TASTE 在这个新秩序中做了什么？",
-                    "text2": "TASTE 不仅仅是一种加密货币（代币）——它正在构建一个庞大的生态系统，其背后具有现实世界的实用性。您现在可以在合作商家直接使用 TASTE 付款，并在付款时享受<highlight>TASTE 持有者专享</highlight>折扣和特权。 🛍️🤝",
+                    "text2": "TASTE 不仅仅是一种加密货币（代币）——它正在构建一个庞大的生态系统，其背后具有现实世界的实用性。您现在可以在合作商家直接使用 TASTE 付款，并在付款时享受<highlight>TASTE AI 持有者专享</highlight>折扣和特权。 🛍️🤝",
                     "text3": "这就是 TASTE 与数以万计的其他项目最大的区别：",
                     "text4": "<highlight>不仅仅是投机投资，现实生活中的使用+即时优势！</highlight> 🔥",
                     "text5": "今天钱包里持有 TASTE 的人将不仅仅是明天数字经济的旁观者；他们将领先一步。",
-                    "text6": "Web3 世界一个全新的时代已经开始……\n<highlight>TASTE现已登上这个舞台。</highlight> 🚀💎"
+                    "text6": "Web3 世界一个全新的时代已经开始……\n<highlight>TASTE AI现已登上这个舞台。</highlight> 🚀💎"
                 },
                 "summary": {
                     "badge": "💎 在 TON 区块链上",
@@ -4003,7 +4003,7 @@ const resources = {
                     "section2": {
                         "title": "⚖️ 责任限制",
                         "sub": "法律限制",
-                        "text": "TASTE Token 团队不对基于本申请做出的任何决定承担法律责任，包括直接或间接的经济损失。",
+                        "text": "TASTE AI 团队不对基于本申请做出的任何决定承担法律责任，包括直接或间接的经济损失。",
                         "eng_note": "土耳其语紧随其后。 <1>英语是主要法律语言。</1>"
                     },
                     "section3": {
@@ -4277,7 +4277,7 @@ const resources = {
                 "feed": {
                     "title": "厨房饲料",
                     "new_post": "新帖子",
-                    "success_post": "帖子发布了！分享截图至 TG Group → +5 TASTE！ 🎉",
+                    "success_post": "帖子发布了！分享截图至 TG Group → +5 TAI！ 🎉",
                     "types": {
                         "food": "食物",
                         "recipe": "食谱",

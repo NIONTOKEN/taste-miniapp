@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useUser } from '../context/UserContext';
 import { Lock, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -96,7 +96,7 @@ export function LevelMap({ onSelectLevel }: LevelMapProps) {
                 color: 'var(--text-muted)',
                 marginTop: '20px'
             }}>
-                Complete levels to earn TASTE tokens! 🍳💎
+                Complete levels to earn TAI tokens! 🍳💎
             </p>
         </div>
     );

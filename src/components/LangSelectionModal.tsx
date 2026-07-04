@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 
 interface LangSelectionModalProps {
   onSelect: (code: string) => void
@@ -135,7 +135,7 @@ export function LangSelectionModal({ onSelect }: LangSelectionModalProps) {
 
         {/* Footer */}
         <p style={{ textAlign: 'center', fontSize: '10px', color: 'rgba(255,255,255,0.2)', marginTop: '20px', letterSpacing: '0.5px' }}>
-          TASTE © 2026 · Ecosystem Initialization
+          TASTE AI © 2026 · Ecosystem Initialization
         </p>
       </motion.div>
     </motion.div>

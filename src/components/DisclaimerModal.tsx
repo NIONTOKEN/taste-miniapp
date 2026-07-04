@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 
@@ -97,7 +97,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         color="#22d3ee"
                         title={isEn ? "Community Utility Asset" : "Topluluk ve Ekosistem Varlığı"}
                         subtitle="Utility Token"
-                        text={isEn ? "TASTE is a blockchain-based digital utility asset on TON, not a fiat currency and not a licensed payment service. [REBRANDING IN PROGRESS — TASTE is transitioning to a brand-new ecosystem structure. New utility features will be announced soon.]" : "TASTE, TON blokzinciri üzerinde yer alan bir dijital topluluk varlığıdır — fiat para değildir ve lisanslı bir ödeme hizmeti değildir. [EVRİM SÜRECİ — TASTE yepyeni bir ekosistem yapısına geçiş yapmaktadır. Yeni kullanım alanları yakında açıklanacaktır.]"}
+                        text={isEn ? "TASTE AI is the new face of Web3 — an AI-powered food ecosystem on TON blockchain. Not fiat currency. — TASTE is transitioning to a brand-new ecosystem structure. New utility features will be announced soon.]" : "TASTE AI, Web3 dünyasının yeni yüzüdür — TON blokzinciri üzerinde yapay zeka destekli yemek ekosistemi. Fiat para değildir."}
                     />
 
                     <DisclaimerItem
@@ -121,7 +121,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         color="#818cf8"
                         title={isEn ? "Limitation of Liability" : "Sorumluluk Reddi"}
                         subtitle="Liability"
-                        text={isEn ? "The TASTE team cannot be held responsible for any damage resulting from decisions based on this application." : "TASTE ekibi, bu uygulamaya dayanarak alınan kararlar sonucunda oluşabilecek herhangi bir zarardan sorumlu tutulamaz."}
+                        text={isEn ? "The TASTE AI team cannot be held responsible for any damage resulting from decisions based on this application." : "TASTE AI ekibi, bu uygulamaya dayanarak alınan kararlar sonucunda oluşabilecek herhangi bir zarardan sorumlu tutulamaz."}
                     />
 
                     <DisclaimerItem
@@ -165,7 +165,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         {checked && '✓'}
                     </div>
                     <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
-                        {isEn ? 'I am over 18 years old and I have read and understood the risk warnings. I understand that TASTE is a digital utility asset, not fiat currency.' : '18 yaşından büyüğüm, risk uyarılarını okudum ve anladım. TASTE\'in dijital bir topluluk varlığı olduğunu, fiat para olmadığını kabul ediyorum.'}
+                        {isEn ? 'I am over 18 years old and I have read and understood the risk warnings. I understand that TASTE AI is a Web3 ecosystem token, not fiat currency.' : '18 yaşından büyüğüm, risk uyarılarını okudum ve anladım. TASTE\'in dijital bir topluluk varlığı olduğunu, fiat para olmadığını kabul ediyorum.'}
                     </span>
                 </motion.label>
 
@@ -195,7 +195,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                 </motion.button>
 
                 <p style={{ textAlign: 'center', fontSize: '10px', color: 'rgba(255,255,255,0.2)', marginTop: '12px' }}>
-                    TASTE © 2026 · Built on The Open Network
+                    TASTE AI © 2026 · Built on The Open Network
                 </p>
             </motion.div>
         </motion.div>

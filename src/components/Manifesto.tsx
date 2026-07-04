@@ -130,7 +130,7 @@ export function Manifesto() {
                 </Quote>
             </Section>
 
-            {/* Bölüm 3: TASTE'in Doğuşu */}
+            {/* Bölüm 3: TASTE AI'ın Doğuşu */}
             <Section delay={0.15}>
                 <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '16px' }}>
                     {t('manifesto.section3.title')}

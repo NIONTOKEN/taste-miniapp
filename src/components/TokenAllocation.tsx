@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 
-// ─── TASTE Token Data ────────────────────────────────────────────────────────
+// ─── TASTE AI Data ────────────────────────────────────────────────────────
 const JETTON_ADDRESS = 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
 
 const ALLOCATION = [

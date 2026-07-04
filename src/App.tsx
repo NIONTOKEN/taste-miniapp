@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTonConnectUI } from '@tonconnect/ui-react'
@@ -177,7 +177,7 @@ function App() {
                     </linearGradient>
                   </defs>
                   <text fill="url(#goldGradient)" fontSize="13" fontWeight="800" letterSpacing="5">
-                    <textPath href="#circlePath" startOffset="0%">TASTE • TOKEN • TASTE • TOKEN •</textPath>
+                    <textPath href="#circlePath" startOffset="0%">TASTE AI • TAI • WEB3 • AI •</textPath>
                   </text>
                 </svg>
                 <motion.div
@@ -304,7 +304,7 @@ function App() {
                     ⚡
                   </motion.div>
                   <div>
-                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 900, letterSpacing: '0.5px' }}>TASTE SWAP</h3>
+                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 900, letterSpacing: '0.5px' }}>TAI SWAP</h3>
                   </div>
                 </div>
                 <div style={{ fontSize: '12px', color: '#10b981', background: 'rgba(16,185,129,0.15)', padding: '6px 12px', borderRadius: '14px', fontWeight: 800, border: '1px solid rgba(16,185,129,0.3)', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 0 10px rgba(16,185,129,0.2)' }}>
@@ -451,7 +451,7 @@ function App() {
                       </linearGradient>
                     </defs>
                     <text fill="url(#goldGradient2)" fontSize="13" fontWeight="800" letterSpacing="5">
-                      <textPath href="#circlePath2" startOffset="0%">TASTE • TOKEN • TASTE • TOKEN •</textPath>
+                      <textPath href="#circlePath2" startOffset="0%">TASTE AI • TAI • WEB3 • AI •</textPath>
                     </text>
                   </svg>
                   <motion.div
@@ -527,7 +527,7 @@ function App() {
                     { label: 'Token Locks', url: 'https://tonscan.org/jetton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-', color: '#22c55e' },
                     { label: 'LP Lock (81.6%)', url: 'https://tonscan.org/jetton/0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef', color: '#818cf8' },
                     { label: 'Audit & Safety', url: 'https://taste-miniapp-xy8k.vercel.app/audit.html', color: '#f59e0b' },
-                    { label: 'TASTE Website', url: 'https://tastetoken.net', color: '#3b82f6' },
+                    { label: 'TASTE AI Website', url: 'https://tastetoken.net', color: '#3b82f6' },
                   ].map((item, i) => (
                     <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${item.color}30`, borderRadius: '14px', padding: '12px 16px', fontSize: '12px', color: item.color, textDecoration: 'none', fontWeight: 600, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       {item.label} <ExternalLink size={14} />
@@ -715,7 +715,7 @@ function App() {
                 gap: '8px'
               }}
             >
-              🔔 ≈{pingAmount.toLocaleString()} TASTE {t('app.swap_opening')}
+              🔔 ≈{pingAmount.toLocaleString()} TAI {t('app.swap_opening')}
             </motion.div>
           )}
         </AnimatePresence>

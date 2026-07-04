@@ -1,4 +1,4 @@
-import { useTranslation, Trans } from 'react-i18next'
+﻿import { useTranslation, Trans } from 'react-i18next'
 import { motion } from 'framer-motion'
 
 export function Whitepaper() {
@@ -57,7 +57,7 @@ export function Whitepaper() {
                 {/* Başlık */}
                 <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                     <div style={{ fontSize: '28px', fontWeight: 900, color: '#f59e0b', letterSpacing: '-0.5px', lineHeight: 1.1, marginBottom: '8px' }}>
-                        TASTE Token
+                        TASTE AI
                     </div>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, margin: 0, maxWidth: '280px', marginInline: 'auto' }}>
                         {t('whitepaper.summary.subtitle')}

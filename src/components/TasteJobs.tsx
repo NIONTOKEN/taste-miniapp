@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation, Trans } from 'react-i18next'
 import {
@@ -520,7 +520,7 @@ function AddReviewForm({ onSuccess, onBack }: { onSuccess: () => void; onBack: (
 
         setSubmitting(false)
         onSuccess()
-        const msg = 'Yorumun yayınlandı! +5 TASTE kazandın 🎉'
+        const msg = 'Yorumun yayınlandı! +5 TAI kazandın 🎉'
         if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert(msg)
         else alert(msg)
     }
@@ -856,7 +856,7 @@ function FeedView() {
             >
                 <span style={{ fontSize: '24px' }}>🎁</span>
                 <div style={{ textAlign: 'left', flex: 1 }}>
-                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#f97316' }}>🚀 PAYLAŞ & 5 TASTE KAZAN!</div>
+                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#f97316' }}>🚀 PAYLAŞ & 5 TAI KAZAN!</div>
                     <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>Yemek / Tarif / Menü paylaş → TG grubuna gönder → kazan!</div>
                 </div>
                 <div style={{ background: 'linear-gradient(135deg, #f97316, #ea580c)', color: '#fff', padding: '6px 10px', borderRadius: '10px', fontSize: '11px', fontWeight: 900, flexShrink: 0, textAlign: 'center' }}>+5<br/>TASTE</div>

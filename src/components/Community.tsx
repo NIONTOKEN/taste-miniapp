@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { getPosts, insertPost, getMessages, sendMessage, updatePostLikes, type SupaPost } from '../services/supabase'
@@ -596,8 +596,8 @@ export function Community() {
                     </div>
                     <div style={{ fontSize: '10px', color: '#94a3b8', lineHeight: 1.5, marginTop: '2px' }}>
                         {i18n.language === 'tr' 
-                            ? 'Yemek/Tarif/Menü paylaş → Ekran görüntüsü al → TG grubuna gönder → 5 TASTE kazan!' 
-                            : 'Share Food/Recipe/Menu → Screenshot → Send to TG group → Win 5 TASTE!'}
+                            ? 'Yemek/Tarif/Menü paylaş → Ekran görüntüsü al → TG grubuna gönder → 5 TAI kazan!' 
+                            : 'Share Food/Recipe/Menu → Screenshot → Send to TG group → Win 5 TAI!'}
                     </div>
                 </div>
                 <div style={{ background: 'linear-gradient(135deg, #10b981, #059669)', color: '#000', padding: '6px 10px', borderRadius: '10px', fontSize: '11px', fontWeight: 900, flexShrink: 0 }}>

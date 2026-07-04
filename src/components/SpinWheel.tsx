@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTonConnectUI } from '@tonconnect/ui-react'
 import { useWallet } from '../context/WalletContext'
@@ -438,7 +438,7 @@ export function SpinWheel() {
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
                     {i18n.language === 'tr' ? 'Günde 1 çevirme hakkı' : '1 spin per day'}
                     <br />
-                    <span style={{ color: '#f59e0b', fontSize: '11px', fontWeight: 700 }}>🎁 {i18n.language === 'tr' ? '2.000 Puan = 25 TASTE' : '2,000 Points = 25 TASTE'}</span>
+                    <span style={{ color: '#f59e0b', fontSize: '11px', fontWeight: 700 }}>🎁 {i18n.language === 'tr' ? '2.000 Puan = 25 TAI' : '2,000 Points = 25 TAI'}</span>
                     <br />
                     <span style={{ color: '#60a5fa', fontSize: '11px', fontWeight: 700 }}>💎 {i18n.language === 'tr' ? '5 TON Biriktir = Çekim Yap!' : 'Accumulate 5 TON = Withdraw!'}</span>
                 </p>
@@ -570,7 +570,7 @@ export function SpinWheel() {
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
                     <div style={{ fontSize: '18px', fontWeight: '900', color: '#22c55e' }}>{totalClaimed}</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '3px' }}>{i18n.language === 'tr' ? 'Kazanılan TASTE' : 'Earned TASTE'}</div>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '3px' }}>{i18n.language === 'tr' ? 'Kazanılan TASTE' : 'Earned TAI'}</div>
                 </div>
             </div>
 
@@ -736,7 +736,7 @@ export function SpinWheel() {
                             </h3>
                             <p style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '18px', lineHeight: 1.7 }}>
                                 {i18n.language === 'tr' ? 'Çarkta' : 'You won a'} <strong style={{ color: '#fbbf24' }}>{tasteWon} TASTE</strong> {i18n.language === 'tr' ? 'bonusu kazandın!' : 'bonus on the wheel!'}<br />
-                                <span style={{ color: '#2dd4bf' }}>📌 {i18n.language === 'tr' ? 'Önemli:' : 'Important:'}</span> {i18n.language === 'tr' ? 'Ödemeler minimum' : 'Payments are made at a minimum threshold of'} <strong style={{ color: '#fff' }}>25 TASTE</strong> {i18n.language === 'tr' ? 'eşiğinde yapılır.' : ''}<br />
+                                <span style={{ color: '#2dd4bf' }}>📌 {i18n.language === 'tr' ? 'Önemli:' : 'Important:'}</span> {i18n.language === 'tr' ? 'Ödemeler minimum' : 'Payments are made at a minimum threshold of'} <strong style={{ color: '#fff' }}>25 TAI</strong> {i18n.language === 'tr' ? 'eşiğinde yapılır.' : ''}<br />
                                 {i18n.language === 'tr' ? 'Mesajını WhatsApp grubuna gönder, yönetici birikimi takip ederek gönderecek.' : 'Send your message to the WhatsApp group, the admin will track the accumulation and send it.'}
                             </p>
                             {walletAddress && (

@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+﻿import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { ExternalLink, MessageSquare, Megaphone, Globe, Twitter, Phone, MessageCircle, Instagram, Video, Facebook, Mail, ArrowLeft } from 'lucide-react'
 
@@ -129,7 +129,7 @@ export function OfficialSocials({ onClose }: OfficialSocialsProps) {
             id: 'facebook',
             icon: <Facebook size={22} />,
             label: 'Facebook',
-            sublabel: 'TASTE Token',
+            sublabel: 'TASTE AI',
             link: 'https://www.facebook.com/share/1DGWE1ZQoR/',
             color: '#1877f2'
         }

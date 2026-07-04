@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X,
@@ -297,7 +297,7 @@ const ECOSYSTEM_SECTIONS = [
     icon: Coins,
     emoji: '🪙',
     title: 'Token Utility',
-    subtitle: '$TASTE Token Kullanım Alanları',
+    subtitle: '$TASTE AI Kullanım Alanları',
     color: '#F59E0B',
     glow: 'rgba(245,158,11,0.3)',
     gradient: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.05))',
