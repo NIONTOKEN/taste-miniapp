@@ -19,9 +19,9 @@ import { loadWallet, deriveAllAddresses } from './walletService';
 import { fetchAllBalances, withTimeout, clearMemCache } from './blockchainService';
 import { translations } from './i18n';
 import { WALLET_CONFIG } from './config';
-import { Home as HomeIcon, Clock, QrCode, Grid, User, RefreshCw, LayoutGrid, Bot } from 'lucide-react';
+import { Home as HomeIcon, Clock, QrCode, Grid, User, RefreshCw, LayoutGrid, Bot, X } from 'lucide-react';
 
-const WalletApp = () => {
+const WalletApp = ({ onClose }) => {
   // ── TOAST BİLDİRİM SİSTEMİ ───────────────────────────────────────────────
   const [toasts, setToasts] = useState([]);
 
@@ -501,10 +501,10 @@ const WalletApp = () => {
               <motion.div
                 animate={{ boxShadow: ['0 0 20px rgba(124,58,237,0.4)', '0 0 60px rgba(124,58,237,0.8)', '0 0 20px rgba(124,58,237,0.4)'] }}
                 transition={{ repeat: Infinity, duration: 2.5 }}
-                style={{ width: '100px', height: '100px', borderRadius: '28px', overflow: 'hidden', border: '2px solid rgba(124,58,237,0.6)', background: '#0f0f1a' }}
               >
-                <img src="/logo.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="QAI" />
-              </motion.div>
+               <div style={{ width: '100px', height: '100px', borderRadius: '30px', background: '#fff', padding: '5px', overflow: 'hidden', boxShadow: '0 15px 35px rgba(245, 159, 11, 0.4)' }}>
+                <img src="/logo.jpg" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '25px' }} alt="TAI" />
+              </div></motion.div>
               {/* Köşe parıltıları */}
               {[0, 90, 180, 270].map(deg => (
                 <motion.div key={deg}
@@ -522,9 +522,9 @@ const WalletApp = () => {
               transition={{ delay: 0.6, duration: 0.6 }}
               style={{ position: 'relative', zIndex: 2, textAlign: 'center', marginBottom: '32px' }}
             >
-              <div style={{ fontSize: '2.2rem', fontWeight: '900', color: '#fff', letterSpacing: '-1px', lineHeight: 1 }}>
-                QAI <span style={{ background: 'linear-gradient(135deg,#7c3aed,#ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>WALLET</span>
-              </div>
+              <h1 style={{ fontSize: '2.5rem', fontWeight: '900', letterSpacing: '-1px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                TAI <span style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>WALLET</span>
+            </h1>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -565,7 +565,7 @@ const WalletApp = () => {
       <AnimatePresence mode="wait">
         {!hasWallet || isAddingWallet ? (
           <motion.div key="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ minHeight: '100vh' }}>
-             <Welcome setHasWallet={setHasWallet} setWalletData={addNewWalletToList} t={t} lang={lang} setLang={setLang} onCancel={hasWallet ? () => setIsAddingWallet(false) : null} />
+              <Welcome setHasWallet={setHasWallet} setWalletData={setWalletData} lang={lang} setLang={setLang} t={t} onCancel={onClose} />
           </motion.div>
         ) : isLocked && walletData?.pin && (walletData?.settings?.pinEnabled !== false) ? (
           <motion.div key="pinlock" initial={{ opacity: 0, scale: 1.1 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}>
@@ -581,8 +581,16 @@ const WalletApp = () => {
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: -20, opacity: 0 }}
                     transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                    style={{ minHeight: '100vh' }}
+                    style={{ minHeight: '100vh', position: 'relative' }}
                 >
+                    {onClose && (
+                        <div 
+                            onClick={onClose}
+                            style={{ position: 'absolute', top: '15px', right: '15px', zIndex: 9999, background: 'rgba(255,255,255,0.1)', padding: '8px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                            <X size={20} color="#fff" />
+                        </div>
+                    )}
                     {tab === 'home'    && <Home allWallets={allWallets} switchWallet={switchWallet} tokens={tokens} addNewToken={addNewToken} removeToken={removeToken} livePrices={livePrices} priceChanges={priceChanges} balances={balances} stakedBalances={stakedBalances} setTab={setTab} setActiveToken={setActiveToken} setReceiveNet={setReceiveNet} walletData={walletData} tgUser={tgUser} t={t} hideBalance={hideBalance} setHideBalance={setHideBalance} onRefresh={onRefresh} isRefreshing={isRefreshing} onAddWallet={() => setIsAddingWallet(true)} onAccountSwitch={onAccountSwitch} />}
                     {tab === 'send'    && <SendScreen    token={activeToken || tokens[0]} onBack={() => setTab('home')} balances={balances} setBalances={setBalances} walletData={walletData} livePrices={livePrices} t={t} />}
                     {tab === 'receive' && <ReceiveScreen initialNetwork={receiveNet} onBack={() => setTab('home')} walletData={walletData} t={t} />}
@@ -600,7 +608,7 @@ const WalletApp = () => {
             </AnimatePresence>
 
             {/* Bottom Navigation */}
-            <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(9,9,11,0.9)', backdropFilter: 'blur(20px)', display: 'flex', justifyContent: 'space-around', padding: '12px 10px 35px', borderTop: '1px solid var(--glass-border)', zIndex: 1000, maxWidth: '480px', margin: '0 auto' }}>
+            <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(9,9,11,0.95)', backdropFilter: 'blur(20px)', display: 'flex', justifyContent: 'center', gap: '15px', padding: '12px 10px 35px', borderTop: '1px solid var(--glass-border)', zIndex: 1000, maxWidth: '480px', margin: '0 auto' }}>
                 <NavButton active={tab==='home'} icon={<HomeIcon />} label="Home" onClick={() => setTab('home')} />
                 <NavButton active={tab==='swap'} icon={<RefreshCw />} label="Swap" onClick={() => setTab('swap')} />
                 
@@ -626,7 +634,7 @@ const WalletApp = () => {
                            style={{ position: 'absolute', top: '15px', left: '15px', width: '25px', height: '2px', background: 'white', borderRadius: '5px', opacity: 0.8 }}
                         />
                     </motion.div>
-                    <span style={{ fontSize: '0.65rem', fontWeight: '900', color: tab === 'qai' ? 'var(--primary)' : 'var(--text-muted)', marginTop: '5px' }}>QAI Hub</span>
+                    <span style={{ fontSize: '0.65rem', fontWeight: '900', color: tab === 'qai' ? 'var(--primary)' : 'var(--text-muted)', marginTop: '5px' }}>TAI Hub</span>
                 </div>
 
                 <NavButton active={tab==='history'} icon={<Clock />} label="History" onClick={() => setTab('history')} />
@@ -644,9 +652,9 @@ const NavButton = ({ icon, label, active, onClick }) => (
     <motion.div 
         whileTap={{ scale: 0.9 }}
         onClick={onClick} 
-        style={{ cursor: 'pointer', color: active ? 'var(--primary)' : 'var(--text-muted)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', transition: 'all 0.2s' }}
+        style={{ cursor: 'pointer', color: active ? 'var(--primary)' : 'var(--text-muted)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', transition: 'all 0.2s', padding: '5px 8px' }}
     >
-        {React.cloneElement(icon, { size: 22, strokeWidth: active ? 2.8 : 2 })}
+        {React.cloneElement(icon, { size: 24, strokeWidth: active ? 2.8 : 2 })}
         <span style={{ fontSize: '0.65rem', fontWeight: active ? '900' : '600', color: active ? 'var(--primary)' : 'var(--text-muted)' }}>{label}</span>
         {active && <motion.div layoutId="nav-dot" style={{ width: '4px', height: '4px', background: 'var(--primary)', borderRadius: '50%', marginTop: '1px' }} />}
     </motion.div>

@@ -1,4 +1,4 @@
-﻿import * as bip39 from 'bip39';
+import * as bip39 from 'bip39';
 import { Buffer } from 'buffer';
 import { mnemonicNew, mnemonicToWalletKey, mnemonicValidate, mnemonicToSeed as tonMnemonicToSeed } from '@ton/crypto';
 import { WalletContractV4, WalletContractV3R2 } from '@ton/ton';
@@ -82,4 +82,7 @@ export const getSolanaKeyPair = async () => null;
 export const loadWallet = () => {
   const data = localStorage.getItem('walletData');
   return data ? JSON.parse(data) : null;
+};
+export const saveWallet = (walletObj) => {
+  localStorage.setItem('walletData', JSON.stringify(walletObj));
 };

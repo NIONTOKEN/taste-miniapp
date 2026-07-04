@@ -857,8 +857,35 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                   </div>
                 </div>
 
-                {/* Pool specific: New Pool CTA */}
+                {/* Pool specific: Active Pools and New Pool CTA */}
                 {activeSection.id === 'pool' && (
+                  <>
+                  <div style={{
+                    background: 'rgba(14,165,233,0.08)',
+                    border: '1px solid rgba(14,165,233,0.25)',
+                    borderRadius: '14px',
+                    padding: '16px',
+                    marginBottom: '16px',
+                  }}>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#0EA5E9', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Droplets size={16} /> Aktif Havuzlar (Active Pools)
+                    </div>
+                    
+                    <div style={{ marginBottom: '10px' }}>
+                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>STON.fi (TON/TASTE):</div>
+                        <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS")}>EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS 📋</div>
+                    </div>
+
+                    <div style={{ marginBottom: '10px' }}>
+                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>DeDust (TASTE/USDT):</div>
+                        <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI")}>EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI 📋</div>
+                    </div>
+
+                    <div>
+                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>LP Wallet Address:</div>
+                        <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQDKuT7ysqMRK0lFdseCv6TGkfBljEdbMCc-dqWSc8HoeKg2")}>EQDKuT7ysqMRK0lFdseCv6TGkfBljEdbMCc-dqWSc8HoeKg2 📋</div>
+                    </div>
+                  </div>
                   <div style={{
                     background: 'rgba(14,165,233,0.08)',
                     border: '1px solid rgba(14,165,233,0.25)',
@@ -908,6 +935,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                       <ExternalLink size={12} />
                     </button>
                   </div>
+                  </>
                 )}
 
                 {/* Action Button */}
