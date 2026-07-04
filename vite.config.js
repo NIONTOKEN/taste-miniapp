@@ -5,10 +5,18 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    'global': 'globalThis',
+  },
   plugins: [
     react(),
     nodePolyfills({
-      include: ['buffer', 'process'],
+      include: ['buffer', 'crypto', 'stream', 'util', 'process'],
+      globals: {
+        Buffer: true,
+        global: true,
+        process: true,
+      },
     }),
     VitePWA({
       registerType: 'autoUpdate',

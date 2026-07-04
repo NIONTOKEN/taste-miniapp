@@ -35,6 +35,8 @@ import { InstallModal } from './components/InstallModal'
 import { OfficialSocials } from './components/OfficialSocials'
 import { Team } from './components/Team'
 import { TasteEcosystem } from './components/TasteEcosystem'
+// @ts-ignore
+import WalletApp from './wallet/WalletApp'
 import {
   Home,
   Map,
@@ -440,12 +442,8 @@ function App() {
         </motion.div>
       );
       case 'wallet': return (
-        <motion.div key="wallet" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.wallet')}</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>💰 {t('app.quick_wallet')}</h3>
-            <WalletTransfer />
-          </div>
+        <motion.div key="wallet" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <WalletApp />
         </motion.div>
       );
       case 'chef': return (
