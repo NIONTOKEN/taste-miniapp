@@ -618,20 +618,20 @@ function App() {
               />
               {/* Drawer Container */}
               <motion.div
-                initial={{ y: '100%' }}
-                animate={{ y: 0 }}
-                exit={{ y: '100%' }}
+                initial={{ y: '-100%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: '-100%', opacity: 0 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                 style={{
                   position: 'fixed',
-                  left: 0, right: 0, bottom: '70px', /* just above the bottom nav */
+                  left: 0, right: 0, top: 0,
                   background: 'rgba(30, 41, 59, 0.95)',
                   backdropFilter: 'blur(16px)',
-                  borderTopLeftRadius: '24px',
-                  borderTopRightRadius: '24px',
+                  borderBottomLeftRadius: '24px',
+                  borderBottomRightRadius: '24px',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderBottom: 'none',
-                  padding: '24px 20px 30px',
+                  borderTop: 'none',
+                  padding: '50px 20px 30px',
                   zIndex: 999,
                   display: 'flex',
                   flexDirection: 'column',
@@ -650,18 +650,18 @@ function App() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
                   {[
-                    { id: 'ecosystem', label: 'TAI EKOSİSTEM', color: '#f59e0b', image: '/logo.jpg', isNew: true },
-                    { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', emojiImage: '💳', isNew: true },
+                    { id: 'ecosystem', label: 'TAI EKOSİSTEM', color: '#f59e0b', image: '/tai-logo-gold.png', isNew: true },
+                    { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', image: '/tai-logo-gold.png', isNew: true },
                     { id: 'install', label: t('nav.install'), color: '#10b981', emojiImage: '📲', isNew: true },
                     { id: 'partners', label: t('nav.partners'), color: '#3b82f6', emojiImage: '🤝', isNew: true },
                     { id: 'vote', label: t('nav.vote'), color: '#eab308', emojiImage: '🌐' },
                     { id: 'socials', label: t('nav.socials'), color: '#25D366', emojiImage: '📱', isNew: true },
                     { id: 'team', label: t('nav.team'), color: '#c084fc', emojiImage: '👥', isNew: true },
                     { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
-                    { id: 'roadmap', label: t('nav.roadmap'), color: '#8b5cf6', emojiImage: '🗺️' },
+                    { id: 'roadmap', label: 'TAI Haritası', color: '#8b5cf6', image: '/tai-logo-gold.png' },
                     { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📖' },
                     { id: 'charity', label: t('nav.charity'), color: '#f43f5e', emojiImage: '❤️' },
-                    { id: 'wallet', label: 'Taste Wallet', color: '#f59e0b', image: '/wallet-icon.png' },
+                    { id: 'wallet', label: 'TAI Wallet', color: '#f59e0b', image: '/tai-logo-gold.png' },
                     { id: 'faq', label: t('nav.faq'), color: '#22c55e', emojiImage: '❓' },
                     { id: 'tech', label: t('nav.tech'), color: '#10b981', emojiImage: '💻' },
                     { id: 'legal', label: t('nav.legal'), color: '#64748b', emojiImage: '⚖️' },

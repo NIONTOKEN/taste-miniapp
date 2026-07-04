@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X,
@@ -400,7 +400,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
             filter: 'drop-shadow(0 0 20px rgba(168,85,247,0.6))',
           }}
         >
-          🧠
+          <img src="/tai-logo-gold.png" alt="TASTE AI Logo" style={{ width: '80px', height: '80px', borderRadius: '16px', objectFit: 'cover' }} />
         </motion.div>
 
         <h1 style={{
@@ -413,7 +413,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
           backgroundClip: 'text',
           letterSpacing: '-0.5px',
         }}>
-          TASTE AI
+          TASTE AI EKOSİSTEMİ
         </h1>
 
         <p style={{

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 
@@ -41,6 +41,11 @@ function DonutChart({ active, onSliceClick }: { active: number | null; onSliceCl
 
     return (
         <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} style={{ overflow: 'visible' }}>
+            <defs>
+              <clipPath id="center-logo-clip">
+                <rect x={cx - 22} y={cy - 42} width="44" height="44" rx="12" />
+              </clipPath>
+            </defs>
             {/* Background circle */}
             <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth={STROKE} />
 
@@ -63,11 +68,12 @@ function DonutChart({ active, onSliceClick }: { active: number | null; onSliceCl
                 />
             ))}
 
-            {/* Center text */}
-            <text x={cx} y={cy - 10} textAnchor="middle" fill="#f59e0b" fontSize="22" fontWeight="900">
-                TASTE
+            {/* Center content */}
+            <image href="/tai-logo-gold.png" x={cx - 22} y={cy - 42} width="44" height="44" clipPath="url(#center-logo-clip)" preserveAspectRatio="xMidYMid slice" />
+            <text x={cx} y={cy + 18} textAnchor="middle" fill="#f59e0b" fontSize="22" fontWeight="900">
+                TAI
             </text>
-            <text x={cx} y={cy + 12} textAnchor="middle" fill="#64748b" fontSize="10" fontWeight="600">
+            <text x={cx} y={cy + 32} textAnchor="middle" fill="#64748b" fontSize="10" fontWeight="600">
                 TON JETTON
             </text>
             {active !== null && (
