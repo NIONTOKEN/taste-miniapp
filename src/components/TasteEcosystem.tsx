@@ -881,9 +881,18 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                         <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI")}>EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI 📋</div>
                     </div>
 
-                    <div>
+                    <div style={{ marginBottom: '10px' }}>
+                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>DeDust (TASTE/DOGS):</div>
+                        <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQD1Wg3gqcejslDzdwZbDFbqc2CecRNIKhGHJXU5cG1MNqzu")}>EQD1Wg3gqcejslDzdwZbDFbqc2CecRNIKhGHJXU5cG1MNqzu 📋</div>
+                    </div>
+
+                    <div style={{ marginBottom: '10px' }}>
                         <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>LP Wallet Address:</div>
                         <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQDKuT7ysqMRK0lFdseCv6TGkfBljEdbMCc-dqWSc8HoeKg2")}>EQDKuT7ysqMRK0lFdseCv6TGkfBljEdbMCc-dqWSc8HoeKg2 📋</div>
+                    </div>
+
+                    <div style={{ fontSize: '9px', color: '#10b981', fontWeight: 800, marginTop: '12px', textAlign: 'center', letterSpacing: '0.5px', background: 'rgba(16,185,129,0.08)', padding: '6px', borderRadius: '8px', border: '1px solid rgba(16,185,129,0.15)' }}>
+                       🔥 YENİ HAVUZLAR YAKINDA! (MORE POOLS TO COME...)
                     </div>
                   </div>
                   <div style={{
