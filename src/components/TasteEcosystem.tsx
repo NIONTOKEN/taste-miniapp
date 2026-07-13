@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X,
@@ -27,6 +28,367 @@ interface EcosystemProps {
   onNavigate: (tab: string) => void
   onOpenTastePay?: () => void
 }
+
+const LOCALIZED_SECTIONS: Record<string, any> = {
+  tr: {
+    title: 'TASTE AI EKOSİSTEMİ',
+    subtitle: 'Yapay zeka, blockchain ve gastronomiyi buluşturan ekosistem',
+    features_title: 'ÖZELLİKLER',
+    new_pool_title: 'Yeni Havuz Oluştur',
+    new_pool_desc: 'STON.fi üzerinde yeni bir TASTE likidite havuzu oluşturun. TON, USDT, DOGS, NOT ve diğer tokenlerle çift oluşturabilirsiniz.',
+    new_pool_btn: 'Havuz Oluştur (STON.fi)',
+    go_pools_btn: 'STON.fi Havuzlarına Git',
+    explore_btn: 'Keşfet',
+    open_external_btn: 'Dışarıda Aç',
+    coming_soon_note: 'Bu özellik yakında kullanıma açılacak',
+    details_title: 'Detaylar',
+    close_btn: 'Kapat',
+    active_pools: 'Aktif Havuzlar (Active Pools)',
+    lp_wallet: 'LP Cüzdan Adresi:',
+    more_pools: '🔥 YENİ HAVUZLAR YAKINDA! (MORE POOLS TO COME...)',
+    items: {
+      'ai-recipes': {
+        subtitle: 'Akıllı Tarifler',
+        description: 'Yapay zeka destekli tarif motoru ile malzemelerinizi girin, size özel yemek tarifleri alın. Gastronomi dünyasını AI ile keşfedin.',
+        features: [
+          'Malzemeye göre otomatik tarif üretimi',
+          'Beslenme değeri ve kalori hesaplama',
+          'Alerjen uyarı sistemi (14 AB standardı)',
+          'Kişiselleştirilmiş diyet önerileri',
+          'Tarif paylaşım ve sosyal feed',
+        ],
+        stats: [
+          { label: 'Motor', value: 'Gemini AI' },
+          { label: 'Dil', value: '5+ Dil' },
+          { label: 'Tarif', value: 'Sınırsız' },
+        ]
+      },
+      'restaurant-cafe': {
+        subtitle: 'İşletme Listeleme',
+        description: 'Restoranlar ve kafeler TASTE ekosisteminde yerini alıyor. İşletmenizi kaydedin, $TASTE ile ödeme kabul edin, müşterilerinize özel avantajlar sunun.',
+        features: [
+          'İşletme profili ve vitrin oluşturma',
+          '$TASTE ile ödeme kabul etme',
+          'Blockchain tabanlı müşteri puanlama',
+          'Akıllı menü entegrasyonu',
+          'Rezervasyon ve sadakat sistemi',
+        ],
+        stats: [
+          { label: 'Sektör', value: 'Gastronomi' },
+          { label: 'Ödeme', value: '$TASTE / TON' },
+          { label: 'Durum', value: 'Yakında' },
+        ]
+      },
+      'smart-menus': {
+        subtitle: 'Akıllı Menüler',
+        description: 'İşletmeler için AI destekli dijital menü sistemi. QR kod ile erişilebilen, dinamik fiyat güncellemeli, alerjen bilgili akıllı menüler.',
+        features: [
+          'QR kod ile erişilebilir dijital menü',
+          'Alerjen ve beslenme bilgisi',
+          'Dinamik fiyat ve sezon güncellemeleri',
+          'Çoklu dil desteği',
+          '$TASTE entegrasyonlu sipariş sistemi',
+        ],
+        stats: [
+          { label: 'Format', value: 'QR / Web' },
+          { label: 'Güncelleme', value: 'Anlık' },
+          { label: 'Dil', value: 'Çoklu' },
+        ]
+      },
+      'blockchain': {
+        subtitle: 'Güvenli & Şeffaf & Merkeziyetsiz',
+        description: 'TON Blockchain üzerinde inşa edilmiş TASTE ekosistemi. Tüm işlemler şeffaf, güvenli ve merkeziyetsiz yapıda gerçekleşir.',
+        features: [
+          'TON Blockchain altyapısı',
+          'Şeffaf on-chain işlemler',
+          'Merkeziyetsiz likidite havuzları',
+          'Akıllı kontrat ile güvenli kilitler',
+          'DAO tabanlı yönetim yapısı',
+        ],
+        stats: [
+          { label: 'Zincir', value: 'TON' },
+          { label: 'Şeffaflık', value: '% 100' },
+          { label: 'Kontrat', value: 'EQB0be...' },
+        ]
+      },
+      'ton': {
+        subtitle: 'Hızlı, Güvenli Ödemeler',
+        description: 'The Open Network ile anlık, düşük maliyetli ve güvenli ödemeler. Tonkeeper, @wallet Telegram entegrasyonu ile seamless kullanıcı deneyimi.',
+        features: [
+          'Anlık TON/TASTE swaplama',
+          'Düşük işlem ücretleri (~0.05 TON)',
+          'Tonkeeper & @wallet entegrasyonu',
+          'STON.fi DEX üzerinde likidite',
+          'Telegram native ödeme sistemi',
+        ],
+        stats: [
+          { label: 'Hız', value: 'Anlık' },
+          { label: 'Ücret', value: '~0.05 TON' },
+          { label: 'DEX', value: 'STON.fi' },
+        ]
+      },
+      'web3': {
+        subtitle: 'Cüzdan Entegrasyonu',
+        description: 'TonConnect 2.0 ile güvenli cüzdan bağlantısı. Seed phrase ile içe aktarma, QR kod ile ödeme alma, tam Web3 deneyimi.',
+        features: [
+          'TonConnect 2.0 entegrasyonu',
+          '24 kelime seed phrase ile import',
+          'QR kod ile ödeme alma/gönderme',
+          'TastePay ile işletme ödemeleri',
+          'Çoklu cüzdan desteği',
+        ],
+        stats: [
+          { label: 'Protokol', value: 'TonConnect 2' },
+          { label: 'Cüzdanlar', value: 'Tonkeeper+' },
+          { label: 'Güvenlik', value: 'E2E' },
+        ]
+      },
+      'global': {
+        subtitle: 'Topluluk Gücü',
+        description: 'Dünya genelinde büyüyen gastronomi topluluğu. 5+ dil desteği, global live chat, uluslararası etkinlikler ve iş birliği fırsatları.',
+        features: [
+          '5+ dil desteği (TR, EN, RU, DE, FR)',
+          'Global live chat topluluğu',
+          'Uluslararası ortaklık ağı',
+          'Ülkeler arası tarif & kültür paylaşımı',
+          'Global liderlik tablosu',
+        ],
+        stats: [
+          { label: 'Dil', value: '5+' },
+          { label: 'Ağ', value: 'Telegram' },
+          { label: 'Kapsam', value: 'Global' },
+        ]
+      },
+      'community': {
+        subtitle: 'Topluluk & Etkinlikler',
+        description: 'TASTE topluluğu ile yemek paylaş, tarif keşfet, etkinliklere katıl. Günlük görevler, sosyal ödüller ve aktif topluluk etkileşimi.',
+        features: [
+          'Günlük yemek paylaşım feed\'i',
+          'Sosyal görevler ve ödüller',
+          'Topluluk etkinlikleri ve yarışmalar',
+          'Liderlik tablosu ve rozetler',
+          'DAO oylama ve öneri sistemi',
+        ],
+        stats: [
+          { label: 'Platform', value: 'Telegram' },
+          { label: 'Ödül', value: '+TASTE' },
+          { label: 'Görevler', value: 'Günlük' },
+        ]
+      },
+      'pool': {
+        subtitle: 'Likidite Havuzu & Yeni Havuz Oluştur',
+        description: 'TASTE likidite havuzları ve yeni havuz oluşturma. STON.fi üzerinde TON/TASTE, USDT/TASTE ve diğer çiftlerde likidite sağlayın.',
+        features: [
+          'Mevcut havuzları görüntüle',
+          'Yeni havuz oluştur',
+          'Likidite sağla ve kazan',
+          'Havuz APY ve istatistikleri',
+          'STON.fi entegrasyonu',
+        ],
+        stats: [
+          { label: 'DEX', value: 'STON.fi' },
+          { label: 'Ana Çift', value: 'TON/TASTE' },
+          { label: 'Model', value: 'AMM' },
+        ]
+      },
+      'token-utility': {
+        subtitle: '$TASTE AI Kullanım Alanları',
+        description: '$TASTE token, ekosistemi besleyen temel değer birimi. İşletme ödemeleri, ödül sistemi, DAO oylama ve premium özellik erişiminden oluşan zengin utility.',
+        features: [
+          'İşletmelerde ödeme aracı',
+          'Topluluk ödül sistemi',
+          'DAO oylama gücü',
+          'Premium özellik erişimi',
+          'Likidite havuzu geliri',
+        ],
+        stats: [
+          { label: 'Arz', value: '25M TASTE' },
+          { label: 'Kilitli', value: '%88.4' },
+          { label: 'Ağ', value: 'TON' },
+        ]
+      }
+    }
+  },
+  en: {
+    title: 'TASTE AI ECOSYSTEM',
+    subtitle: 'The ecosystem bringing artificial intelligence, blockchain, and gastronomy together',
+    features_title: 'FEATURES',
+    new_pool_title: 'Create New Pool',
+    new_pool_desc: 'Create a new TASTE liquidity pool on STON.fi. You can pair it with TON, USDT, DOGS, NOT, and other tokens.',
+    new_pool_btn: 'Create Pool (STON.fi)',
+    go_pools_btn: 'Go to STON.fi Pools',
+    explore_btn: 'Explore',
+    open_external_btn: 'Open Externally',
+    coming_soon_note: 'This feature will be available soon',
+    details_title: 'Details',
+    close_btn: 'Close',
+    active_pools: 'Active Pools',
+    lp_wallet: 'LP Wallet Address:',
+    more_pools: '🔥 NEW POOLS COMING SOON!',
+    items: {
+      'ai-recipes': {
+        subtitle: 'Smart Recipes',
+        description: 'Enter your ingredients into our AI-powered recipe engine and get personalized recipes. Explore the culinary world with AI.',
+        features: [
+          'Automatic recipe generation by ingredients',
+          'Nutritional value and calorie calculation',
+          'Allergen warning system (14 EU standards)',
+          'Personalized diet suggestions',
+          'Recipe sharing and social feed',
+        ],
+        stats: [
+          { label: 'Engine', value: 'Gemini AI' },
+          { label: 'Language', value: '5+ Languages' },
+          { label: 'Recipes', value: 'Unlimited' },
+        ]
+      },
+      'restaurant-cafe': {
+        subtitle: 'Business Listing',
+        description: 'Restaurants and cafes join the TASTE ecosystem. Register your business, accept payments in $TASTE, and offer exclusive benefits to your customers.',
+        features: [
+          'Create business profile and showcase',
+          'Accept payments with $TASTE',
+          'Blockchain-based customer rating',
+          'Smart menu integration',
+          'Reservation and loyalty system',
+        ],
+        stats: [
+          { label: 'Sector', value: 'Gastronomy' },
+          { label: 'Payment', value: '$TASTE / TON' },
+          { label: 'Status', value: 'Soon' },
+        ]
+      },
+      'smart-menus': {
+        subtitle: 'Smart Menus',
+        description: 'AI-powered digital menu system for businesses. Smart menus accessible via QR code, with dynamic price updates and allergen information.',
+        features: [
+          'Digital menu accessible via QR code',
+          'Allergen and nutritional information',
+          'Dynamic price and seasonal updates',
+          'Multi-language support',
+          'Ordering system with $TASTE integration',
+        ],
+        stats: [
+          { label: 'Format', value: 'QR / Web' },
+          { label: 'Updates', value: 'Instant' },
+          { label: 'Language', value: 'Multi' },
+        ]
+      },
+      'blockchain': {
+        subtitle: 'Secure, Transparent & Decentralized',
+        description: 'TASTE ecosystem built on TON Blockchain. All transactions happen transparently, securely, and in a decentralized manner.',
+        features: [
+          'TON Blockchain infrastructure',
+          'Transparent on-chain transactions',
+          'Decentralized liquidity pools',
+          'Secure locks with smart contracts',
+          'DAO-based governance structure',
+        ],
+        stats: [
+          { label: 'Chain', value: 'TON' },
+          { label: 'Transparency', value: '100%' },
+          { label: 'Contract', value: 'EQB0be...' },
+        ]
+      },
+      'ton': {
+        subtitle: 'Fast, Secure Payments',
+        description: 'Instant, low-cost, and secure payments with The Open Network. Seamless user experience with Tonkeeper and @wallet Telegram integration.',
+        features: [
+          'Instant TON/TASTE swapping',
+          'Low transaction fees (~0.05 TON)',
+          'Tonkeeper & @wallet integration',
+          'Liquidity on STON.fi DEX',
+          'Telegram native payment system',
+        ],
+        stats: [
+          { label: 'Speed', value: 'Instant' },
+          { label: 'Fee', value: '~0.05 TON' },
+          { label: 'DEX', value: 'STON.fi' },
+        ]
+      },
+      'web3': {
+        subtitle: 'Wallet Integration',
+        description: 'Secure wallet connection via TonConnect 2.0. Import with seed phrase, receive payments with QR code, full Web3 experience.',
+        features: [
+          'TonConnect 2.0 integration',
+          'Import with 24-word seed phrase',
+          'Receive/send payments via QR code',
+          'Business payments with TastePay',
+          'Multi-wallet support',
+        ],
+        stats: [
+          { label: 'Protocol', value: 'TonConnect 2' },
+          { label: 'Wallets', value: 'Tonkeeper+' },
+          { label: 'Security', value: 'E2E' },
+        ]
+      },
+      'global': {
+        subtitle: 'Community Power',
+        description: 'Growing gastronomy community worldwide. 5+ language support, global live chat, international events, and collaboration opportunities.',
+        features: [
+          '5+ language support (TR, EN, RU, DE, FR)',
+          'Global live chat community',
+          'International partner network',
+          'Cross-border recipe & culture sharing',
+          'Global leaderboard',
+        ],
+        stats: [
+          { label: 'Languages', value: '5+' },
+          { label: 'Network', value: 'Telegram' },
+          { label: 'Scope', value: 'Global' },
+        ]
+      },
+      'community': {
+        subtitle: 'Community & Events',
+        description: 'Share food, discover recipes, and join events with the TASTE community. Daily tasks, social rewards, and active community interaction.',
+        features: [
+          'Daily food sharing feed',
+          'Social tasks and rewards',
+          'Community events and contests',
+          'Leaderboard and badges',
+          'DAO voting and proposal system',
+        ],
+        stats: [
+          { label: 'Platform', value: 'Telegram' },
+          { label: 'Reward', value: '+TASTE' },
+          { label: 'Tasks', value: 'Daily' },
+        ]
+      },
+      'pool': {
+        subtitle: 'Liquidity Pool & Create Pool',
+        description: 'TASTE liquidity pools and creating new pools. Provide liquidity in TON/TASTE, USDT/TASTE, and other pairs on STON.fi.',
+        features: [
+          'View active pools',
+          'Create new pool',
+          'Provide liquidity and earn',
+          'Pool APY and statistics',
+          'STON.fi integration',
+        ],
+        stats: [
+          { label: 'DEX', value: 'STON.fi' },
+          { label: 'Primary Pair', value: 'TON/TASTE' },
+          { label: 'Model', value: 'AMM' },
+        ]
+      },
+      'token-utility': {
+        subtitle: '$TASTE AI Use Cases',
+        description: '$TASTE token is the core value unit powering the ecosystem. Rich utility consisting of merchant payments, reward systems, DAO voting, and premium features.',
+        features: [
+          'Payment method in businesses',
+          'Community reward system',
+          'DAO voting power',
+          'Access to premium features',
+          'Liquidity pool revenue',
+        ],
+        stats: [
+          { label: 'Supply', value: '25M TASTE' },
+          { label: 'Locked', value: '88.4%' },
+          { label: 'Network', value: 'TON' },
+        ]
+      }
+    }
+  }
+};
 
 // ─── 10 Ekosistem Bölümü ────────────────────────────────────────────────────
 const ECOSYSTEM_SECTIONS = [
@@ -325,10 +687,29 @@ const ECOSYSTEM_SECTIONS = [
 
 // ─── Main Component ──────────────────────────────────────────────────────────
 export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
+  const { t, i18n } = useTranslation()
+  const langCode = i18n.language?.startsWith('tr') ? 'tr' : 'en'
+  const localTexts = LOCALIZED_SECTIONS[langCode]
+
+  const translatedSections = ECOSYSTEM_SECTIONS.map(section => {
+    const translation = localTexts.items[section.id] || {};
+    return {
+      ...section,
+      subtitle: translation.subtitle || section.subtitle,
+      description: translation.description || section.description,
+      features: translation.features || section.features,
+      stats: section.stats.map((stat, i) => ({
+        ...stat,
+        label: translation.stats?.[i]?.label || stat.label,
+        value: translation.stats?.[i]?.value || stat.value
+      }))
+    };
+  });
+
   const [selectedSection, setSelectedSection] = useState<string | null>(null)
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
 
-  const activeSection = ECOSYSTEM_SECTIONS.find(s => s.id === selectedSection)
+  const activeSection = translatedSections.find(s => s.id === selectedSection)
 
   const handleCardAction = (section: typeof ECOSYSTEM_SECTIONS[0]) => {
     if (section.id === 'pool') {
@@ -413,7 +794,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
           backgroundClip: 'text',
           letterSpacing: '-0.5px',
         }}>
-          TASTE AI EKOSİSTEMİ
+          {localTexts.title}
         </h1>
 
         <p style={{
@@ -436,7 +817,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
           marginRight: 'auto',
           lineHeight: '1.5',
         }}>
-          Yapay zeka, blockchain ve gastronomiyi buluşturan ekosistem
+          {localTexts.subtitle}
         </p>
 
         {/* Decorative line */}
@@ -447,7 +828,6 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
         }} />
       </motion.div>
 
-      {/* ── Section Labels ── */}
       <div style={{ padding: '0 16px 12px' }}>
         <div style={{
           display: 'flex',
@@ -457,7 +837,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
         }}>
           <Sparkles size={14} color="#A855F7" />
           <span style={{ fontSize: '12px', color: 'rgba(148,163,184,0.7)', fontWeight: 600, letterSpacing: '1px' }}>
-            EKOSİSTEM BÖLÜMLERİ
+            {langCode === 'tr' ? 'EKOSİSTEM BÖLÜMLERİ' : 'ECOSYSTEM SECTIONS'}
           </span>
         </div>
 
@@ -467,7 +847,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
           gridTemplateColumns: 'repeat(2, 1fr)',
           gap: '12px',
         }}>
-          {ECOSYSTEM_SECTIONS.map((section, index) => {
+          {translatedSections.map((section, index) => {
             const Icon = section.icon
             const isHovered = hoveredCard === section.id
             return (
@@ -576,7 +956,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                   gap: '6px',
                   flexWrap: 'wrap',
                 }}>
-                  {section.stats.slice(0, 2).map((stat, i) => (
+                  {section.stats.slice(0, 2).map((stat: any, i: number) => (
                     <div key={i} style={{
                       background: `${section.color}12`,
                       border: `1px solid ${section.color}20`,
@@ -782,7 +1162,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                   gap: '8px',
                   marginBottom: '24px',
                 }}>
-                  {activeSection.stats.map((stat, i) => (
+                  {activeSection.stats.map((stat: any, i: number) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, scale: 0.9 }}
@@ -829,10 +1209,10 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                     textTransform: 'uppercase',
                     marginBottom: '12px',
                   }}>
-                    ÖZELLİKLER
+                    {localTexts.features_title}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {activeSection.features.map((feature, i) => (
+                    {activeSection.features.map((feature: any, i: number) => (
                       <motion.div
                         key={i}
                         initial={{ opacity: 0, x: -10 }}
@@ -868,7 +1248,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                     marginBottom: '16px',
                   }}>
                     <div style={{ fontSize: '13px', fontWeight: 700, color: '#0EA5E9', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Droplets size={16} /> Aktif Havuzlar (Active Pools)
+                      <Droplets size={16} /> {localTexts.active_pools}
                     </div>
                     
                     <div style={{ marginBottom: '10px' }}>
@@ -887,12 +1267,12 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                     </div>
 
                     <div style={{ marginBottom: '10px' }}>
-                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>LP Wallet Address:</div>
+                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>{localTexts.lp_wallet}</div>
                         <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQDKuT7ysqMRK0lFdseCv6TGkfBljEdbMCc-dqWSc8HoeKg2")}>EQDKuT7ysqMRK0lFdseCv6TGkfBljEdbMCc-dqWSc8HoeKg2 📋</div>
                     </div>
 
                     <div style={{ fontSize: '9px', color: '#10b981', fontWeight: 800, marginTop: '12px', textAlign: 'center', letterSpacing: '0.5px', background: 'rgba(16,185,129,0.08)', padding: '6px', borderRadius: '8px', border: '1px solid rgba(16,185,129,0.15)' }}>
-                       🔥 YENİ HAVUZLAR YAKINDA! (MORE POOLS TO COME...)
+                       {localTexts.more_pools}
                     </div>
                   </div>
                   <div style={{
@@ -910,7 +1290,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                     }}>
                       <Plus size={16} color="#0EA5E9" />
                       <span style={{ fontSize: '13px', fontWeight: 700, color: '#0EA5E9' }}>
-                        Yeni Havuz Oluştur
+                        {localTexts.new_pool_title}
                       </span>
                     </div>
                     <p style={{
@@ -919,7 +1299,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                       margin: '0 0 12px',
                       lineHeight: '1.5',
                     }}>
-                      STON.fi üzerinde yeni bir TASTE likidite havuzu oluşturun. TON, USDT, DOGS, NOT ve diğer tokenlerle çift oluşturabilirsiniz.
+                      {localTexts.new_pool_desc}
                     </p>
                     <button
                       onClick={() => window.open('https://app.ston.fi/pools/create', '_blank')}
@@ -940,7 +1320,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                       }}
                     >
                       <Plus size={14} />
-                      Havuz Oluştur (STON.fi)
+                      {localTexts.new_pool_btn}
                       <ExternalLink size={12} />
                     </button>
                   </div>
@@ -970,10 +1350,10 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                   }}
                 >
                   {activeSection.id === 'pool'
-                    ? <><Droplets size={16} /> STON.fi Havuzlarına Git <ExternalLink size={14} /></>
+                    ? <><Droplets size={16} /> {localTexts.go_pools_btn} <ExternalLink size={14} /></>
                     : activeSection.navTarget
-                    ? <><Zap size={16} /> Keşfet <ArrowRight size={16} /></>
-                    : <><ExternalLink size={16} /> Dışarıda Aç <ExternalLink size={14} /></>
+                    ? <><Zap size={16} /> {localTexts.explore_btn} <ArrowRight size={16} /></>
+                    : <><ExternalLink size={16} /> {localTexts.open_external_btn} <ExternalLink size={14} /></>
                   }
                 </motion.button>
 
@@ -990,7 +1370,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                     gap: '4px',
                   }}>
                     <Star size={10} color="#EF4444" />
-                    Bu özellik yakında kullanıma açılacak
+                    {localTexts.coming_soon_note}
                   </div>
                 )}
 
