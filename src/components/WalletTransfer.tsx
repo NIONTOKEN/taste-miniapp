@@ -54,7 +54,10 @@ export const WalletTransfer = () => {
   }
 
   const handleSend = async () => {
-    if (!activeAddress) return setStatus({ type: 'error', message: t('app.connect_wallet_first') })
+    if (!activeAddress) {
+      tonConnectUI.openModal();
+      return;
+    }
     
     if (!recipientAddress) return setStatus({ type: 'error', message: i18n.language === 'tr' ? 'Lütfen alıcı adresi girin' : 'Please enter recipient address' })
     if (!amount || Number(amount) <= 0) return setStatus({ type: 'error', message: i18n.language === 'tr' ? 'Geçersiz miktar' : 'Invalid amount' })
@@ -255,7 +258,7 @@ export const WalletTransfer = () => {
               <input type="text" value={memo} onChange={e => setMemo(e.target.value)} placeholder={i18n.language === 'tr' ? 'Açıklama girin...' : 'Enter memo...'} style={{ width: '100%', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 12px', borderRadius: '12px', color: '#fff', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }} />
             </div>
 
-            <button onClick={handleSend} disabled={isLoading || !activeAddress} style={{ width: '100%', padding: '15px', borderRadius: '12px', border: 'none', background: 'var(--gradient-gold)', color: '#000', fontWeight: 900, fontSize: '14px', cursor: 'pointer', opacity: (isLoading || !activeAddress) ? 0.6 : 1 }}>
+            <button onClick={handleSend} disabled={isLoading} style={{ width: '100%', padding: '15px', borderRadius: '12px', border: 'none', background: 'var(--gradient-gold)', color: '#000', fontWeight: 900, fontSize: '14px', cursor: 'pointer', opacity: isLoading ? 0.6 : 1 }}>
               {isLoading ? (i18n.language === 'tr' ? 'İŞLEM YAPILIYOR...' : 'PROCESSING...') : (activeAddress ? (i18n.language === 'tr' ? `GÖNDER: ${selectedToken.symbol}` : `SEND: ${selectedToken.symbol}`) : (i18n.language === 'tr' ? 'CÜZDAN BAĞLAYIN' : 'CONNECT WALLET'))}
             </button>
             

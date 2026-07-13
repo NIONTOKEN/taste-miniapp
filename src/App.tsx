@@ -36,7 +36,7 @@ import { OfficialSocials } from './components/OfficialSocials'
 import { Team } from './components/Team'
 import { TasteEcosystem } from './components/TasteEcosystem'
 // @ts-ignore
-import WalletApp from './wallet/WalletApp'
+// WalletApp removed since TAI Wallet standalone is discontinued
 import {
   Home,
   Map,
@@ -463,12 +463,12 @@ function App() {
         </motion.div>
       );
       case 'wallet': return (
-        <motion.div key="wallet" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <WalletApp 
-            onClose={() => setActiveTab('home')} 
-            parentLang={currentLangCode}
-            onParentLangChange={changeLanguage}
-          />
+        <motion.div key="wallet" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TAI WALLET</div>
+            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👛 {t('nav.wallet') || 'Cüzdan & Transfer'}</h3>
+            <WalletTransfer />
+          </div>
         </motion.div>
       );
       case 'chef': return (
