@@ -219,21 +219,42 @@ export function TasteAI() {
       { role: 'user', content: userMessage }
     ]
 
-    const apiKey = import.meta.env.VITE_GROQ_API_KEY || import.meta.env.VITE_OPENAI_API_KEY;
-    if (!apiKey) throw new Error('GROQ_KEY_MISSING');
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const localApiKey = import.meta.env.VITE_GROQ_API_KEY || import.meta.env.VITE_OPENAI_API_KEY;
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({ 
-        model: 'llama3-8b-8192', 
-        messages: reqMessages,
-        temperature: 0.7 
-      }),
-    })
+    if (isLocal && !localApiKey) {
+      throw new Error('GROQ_KEY_MISSING');
+    }
+
+    let response;
+    try {
+      if (isLocal && localApiKey) {
+        response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localApiKey}`
+          },
+          body: JSON.stringify({ 
+            model: 'llama-3.3-70b-specdec', 
+            messages: reqMessages,
+            temperature: 0.7 
+          }),
+        });
+      } else {
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            messages: reqMessages
+          }),
+        });
+      }
+    } catch (e: any) {
+      throw new Error(`API_ERROR:500:${e.message}`);
+    }
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
