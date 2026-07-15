@@ -1,4 +1,6 @@
-export default async function handler(req, res) {
+const https = require('https');
+
+module.exports = function handler(req, res) {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,35 +14,55 @@ export default async function handler(req, res) {
   }
 
   const { messages } = req.body;
-  // Support both versions of the key name
   const apiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY;
 
   if (!apiKey) {
     return res.status(500).json({ error: 'Groq API Key is not configured in Vercel settings.' });
   }
 
-  try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-specdec', // Upgraded to Llama 3.3 70B (highly advanced!)
-        messages: messages,
-        temperature: 0.7
-      })
+  const postData = JSON.stringify({
+    model: 'llama-3.3-70b-specdec',
+    messages: messages,
+    temperature: 0.7
+  });
+
+  const options = {
+    hostname: 'api.groq.com',
+    port: 443,
+    path: '/openai/v1/chat/completions',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Length': Buffer.byteLength(postData)
+    }
+  };
+
+  const groqReq = https.request(options, (groqRes) => {
+    let rawData = '';
+
+    groqRes.on('data', (chunk) => {
+      rawData += chunk;
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      return res.status(response.status).json(errorData);
-    }
+    groqRes.on('end', () => {
+      try {
+        const parsedData = JSON.parse(rawData);
+        if (groqRes.statusCode >= 200 && groqRes.statusCode < 300) {
+          return res.status(200).json(parsedData);
+        } else {
+          return res.status(groqRes.statusCode).json(parsedData || { error: `Groq error ${groqRes.statusCode}` });
+        }
+      } catch (e) {
+        return res.status(500).json({ error: 'Malformed JSON response from Groq API' });
+      }
+    });
+  });
 
-    const data = await response.json();
-    return res.status(200).json(data);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-}
+  groqReq.on('error', (e) => {
+    return res.status(500).json({ error: e.message });
+  });
+
+  groqReq.write(postData);
+  groqReq.end();
+};

@@ -258,8 +258,9 @@ export function TasteAI() {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      const apiMsg = errorData?.error?.message || `HTTP ${response.status}`
-      // The API error object format can be different depending on the endpoint but type or code is useful
+      const apiMsg = typeof errorData?.error === 'string'
+        ? errorData.error
+        : (errorData?.error?.message || errorData?.message || `HTTP ${response.status}`);
       const apiCode = errorData?.error?.code || errorData?.error?.type || response.status
       console.error('Groq API error:', errorData)
       throw new Error(`API_ERROR:${apiCode}:${apiMsg}`)
