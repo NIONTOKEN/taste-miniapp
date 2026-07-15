@@ -17,7 +17,8 @@ module.exports = function handler(req, res) {
   const apiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'Groq API Key is not configured in Vercel settings.' });
+    const envKeys = Object.keys(process.env).filter(k => k.startsWith('VITE_') || k.includes('API') || k.includes('KEY') || k.includes('GROQ') || k.includes('GEMINI'));
+    return res.status(500).json({ error: `Groq API Key is not configured in Vercel settings. Found keys: ${envKeys.join(', ')}` });
   }
 
   const postData = JSON.stringify({
