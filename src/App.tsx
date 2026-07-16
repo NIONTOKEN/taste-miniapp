@@ -77,6 +77,7 @@ function App() {
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
   const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem'>('home');
+  const [navHistory, setNavHistory] = useState<string[]>([]);
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
@@ -164,13 +165,31 @@ function App() {
     }
   };
 
+  // Navigate with history tracking
+  const navigateTo = (tab: typeof activeTab) => {
+    if (tab === activeTab) return;
+    setNavHistory(prev => [...prev, activeTab]);
+    setActiveTab(tab);
+  };
+
+  // Go back to previous page
+  const goBack = () => {
+    if (navHistory.length > 0) {
+      const prev = navHistory[navHistory.length - 1];
+      setNavHistory(h => h.slice(0, -1));
+      setActiveTab(prev as typeof activeTab);
+    } else {
+      setActiveTab('home');
+    }
+  };
+
   const renderContent = () => {
     const isSubPage = !['home', 'games', 'wallet', 'tasks', 'socials'].includes(activeTab);
     return (
       <>
         {isSubPage && (
           <motion.button 
-            onClick={() => setActiveTab('home')}
+            onClick={() => goBack()}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             style={{
@@ -421,7 +440,7 @@ function App() {
       );
       case 'socials': return (
         <motion.div key="socials" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            <OfficialSocials onClose={() => setActiveTab('home')} />
+            <OfficialSocials onClose={() => goBack()} />
         </motion.div>
       );
       case 'manifesto': return <Manifesto />;
@@ -504,7 +523,7 @@ function App() {
       );
       case 'team': return (
         <motion.div key="team" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-          <Team onClose={() => setActiveTab('home')} />
+          <Team onClose={() => goBack()} />
         </motion.div>
       );
       case 'ecosystem': return (
@@ -513,7 +532,7 @@ function App() {
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE</div>
             <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>🌐 {t('nav.ecosystem')}</h3>
             <TasteEcosystem
-              onNavigate={(tab) => setActiveTab(tab as any)}
+              onNavigate={(tab) => navigateTo(tab as any)}
               onOpenTastePay={() => setIsTastePayOpen(true)}
             />
           </div>
@@ -701,7 +720,7 @@ function App() {
                         } else if (item.id === 'install') {
                            setIsInstallModalOpen(true);
                         } else {
-                           setActiveTab(item.id as any);
+                           navigateTo(item.id as any);
                         }
                         setIsMenuOpen(false);
                       }}
@@ -754,7 +773,7 @@ function App() {
             <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
           </button>
 
-          <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { setActiveTab('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
+          <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { navigateTo('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
             <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>
             <span style={{ position: 'absolute', top: '4px', right: '10px', width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', animation: 'pulse 2s infinite' }} />
           </button>
