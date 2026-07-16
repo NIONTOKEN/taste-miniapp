@@ -1,4 +1,4 @@
-﻿import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
 
@@ -126,6 +126,27 @@ export function VoteDiscovery() {
             label: 'CoinGem',
             sublabel: isEn ? 'Vote & Support us!' : 'Oy ver ve destekle!',
             link: 'https://coingem.com/ton/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+        },
+        {
+            id: 'github',
+            icon: '🐙',
+            label: 'GitHub',
+            sublabel: isEn ? 'Open Source — Star us!' : 'Açık Kaynak — Yıldızla!',
+            link: 'https://github.com/NIONTOKEN/taste-miniapp',
+        },
+        {
+            id: 'tonhub',
+            icon: '💎',
+            label: 'Tonhub Wallet',
+            sublabel: isEn ? 'View on Tonhub' : 'Tonhub Cüzdanda Gör',
+            link: 'https://tonhub.com',
+        },
+        {
+            id: 'mytonwallet_track',
+            icon: '🌐',
+            label: 'MyTonWallet',
+            sublabel: isEn ? 'Track on MyTonWallet' : 'MyTonWallet ile Takip Et',
+            link: 'https://mytonwallet.io',
         },
     ]
 

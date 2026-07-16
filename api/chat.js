@@ -19,7 +19,7 @@ module.exports = function handler(req, res) {
   const apiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY || String.fromCharCode(...codes);
 
   const postData = JSON.stringify({
-    model: 'llama-3.3-70b-specdec',
+    model: 'llama-3.3-70b-versatile',
     messages: messages,
     temperature: 0.7
   });

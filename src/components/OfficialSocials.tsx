@@ -1,6 +1,6 @@
-﻿import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { ExternalLink, MessageSquare, Megaphone, Globe, Twitter, Phone, MessageCircle, Instagram, Video, Facebook, Mail, ArrowLeft } from 'lucide-react'
+import { ExternalLink, MessageSquare, Megaphone, Globe, Twitter, Phone, MessageCircle, Instagram, Video, Facebook, Mail, ArrowLeft, Github } from 'lucide-react'
 
 interface SocialLinkItem {
     id: string
@@ -132,6 +132,15 @@ export function OfficialSocials({ onClose }: OfficialSocialsProps) {
             sublabel: 'TASTE AI',
             link: 'https://www.facebook.com/share/1DGWE1ZQoR/',
             color: '#1877f2'
+        },
+        {
+            id: 'github',
+            icon: <Github size={22} />,
+            label: 'GitHub',
+            sublabel: 'NIONTOKEN / taste-miniapp',
+            link: 'https://github.com/NIONTOKEN/taste-miniapp',
+            color: '#f0f6fc',
+            badge: '⭐ Open Source'
         }
     ]
 

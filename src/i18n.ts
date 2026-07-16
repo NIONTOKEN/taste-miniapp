@@ -321,7 +321,7 @@ const resources = {
                     "badge": "💎 On TON Blockchain",
                     "subtitle": "New face of the Web3 world — AI-powered food ecosystem",
                     "fixed_supply": "Fixed Supply",
-                    "no_mint": "TASTE — Hiç mint yok",
+                    "no_mint": "TASTE — No Mint Ever",
                     "secured": "secured",
                     "governance": "Governance",
                     "community_decision": "Community decision",
