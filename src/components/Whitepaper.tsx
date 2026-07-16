@@ -1,4 +1,4 @@
-﻿import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import { motion } from 'framer-motion'
 
 export function Whitepaper() {
@@ -222,13 +222,28 @@ export function Whitepaper() {
                     👥 {t('whitepaper.team.title')}
                 </h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '15px' }}>
-                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                        <div style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--primary)' }}>{t('whitepaper.team.fatih.name')}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{t('whitepaper.team.fatih.role')}</div>
+                    {/* Fatih Card */}
+                    <div style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.08), rgba(0,0,0,0.3))', padding: '16px', borderRadius: '16px', border: '1px solid rgba(251,191,36,0.25)', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{
+                            width: '64px', height: '64px', borderRadius: '14px',
+                            overflow: 'hidden', flexShrink: 0,
+                            boxShadow: '0 0 20px rgba(251,191,36,0.4)',
+                            border: '2px solid rgba(251,191,36,0.5)',
+                        }}>
+                            <img src="/fatih_kaya.jpg" alt="Fatih" style={{ width: '100%', height: '100%', objectFit: 'cover', background: '#000' }} />
+                        </div>
+                        <div>
+                            <div style={{ fontWeight: 900, fontSize: '17px', color: '#fbbf24', marginBottom: '3px' }}>Fatih</div>
+                            <div style={{ fontSize: '11px', color: 'rgba(251,191,36,0.7)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>{t('whitepaper.team.fatih.role')}</div>
+                        </div>
                     </div>
-                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                        <div style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--primary)' }}>{t('whitepaper.team.angel.name')}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{t('whitepaper.team.angel.role')}</div>
+                    {/* Angel Card */}
+                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ fontSize: '36px', flexShrink: 0 }}>👼</div>
+                        <div>
+                            <div style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--primary)' }}>{t('whitepaper.team.angel.name')}</div>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{t('whitepaper.team.angel.role')}</div>
+                        </div>
                     </div>
                 </div>
             </motion.div>

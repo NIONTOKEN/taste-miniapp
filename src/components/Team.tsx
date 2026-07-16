@@ -26,10 +26,10 @@ export function Team({ onClose }: TeamProps) {
     const members: TeamMember[] = [
         {
             id: 'fatih_kaya',
-            name: 'Fatih Şef (Fatih Kaya)',
+            name: 'Fatih',
             roleTr: 'Kurucu, Planlayıcı & Mali İşler Sorumlusu',
             roleEn: 'Founder, Planner & Head of Finance',
-            bioTr: 'TASTE projesini sahiplenen, üstlenen ve yürüten yol göstericidir. Projenin mali işleri mutfak ekiplerince finanse edilmekte olup, bu alanın sorumlusu da bizzat Fatih Şef\'tir.',
+            bioTr: 'TASTE projesini sahiplenen, üstlenen ve yürüten yol göstericidir. Projenin mali işleri mutfak ekiplerince finanse edilmekte olup, bu alanın sorumlulsu da bizzat Fatih\'tir.',
             bioEn: 'The guiding founder who embraces, undertakes, and executes the TASTE project. Financial operations are funded by the kitchen teams under his direct responsibility.',
             tgHandle: '',
             tgLink: '',
@@ -140,7 +140,7 @@ export function Team({ onClose }: TeamProps) {
                             <div style={{
                                 width: '70px',
                                 height: '70px',
-                                borderRadius: '50%',
+                                borderRadius: member.id === 'fatih_kaya' ? '16px' : '50%',
                                 padding: '3px',
                                 background: `linear-gradient(135deg, ${member.color}, rgba(255,255,255,0.1))`,
                                 boxShadow: `0 0 15px ${member.color}40`,
@@ -154,9 +154,9 @@ export function Team({ onClose }: TeamProps) {
                                     style={{
                                         width: '100%',
                                         height: '100%',
-                                        borderRadius: '50%',
+                                        borderRadius: member.id === 'fatih_kaya' ? '14px' : '50%',
                                         objectFit: 'cover',
-                                        background: '#1e293b'
+                                        background: '#000'
                                     }}
                                 />
                             </div>
