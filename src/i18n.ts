@@ -371,7 +371,15 @@ const resources = {
                     "lock_prefix": "Lock",
                     "lp_lock_title": "💧 LP Token Lock (tinu-locker.ton)",
                     "lp_lock_status": "✅ pTON-TASTE LP Token — 81.6% Locked",
-                    "lp_lock_contract": "Lock Contract: tinu-locker.ton"
+                    "lp_lock_contract": "Lock Contract: tinu-locker.ton",
+                    "hard_cap_title": "✅ Hard Cap Commitment",
+                    "hard_cap_desc": "TASTE is committed to a strict hard cap. The maximum supply will never be exceeded without community approval via DAO voting.",
+                    "hard_cap_points": [
+                        "Maximum 25,000,000 TASTE will ever exist",
+                        "No unilateral minting by the team",
+                        "Any change requires DAO community vote",
+                        "All actions are transparent and recorded on-chain"
+                    ]
                 },
                 "general_info": {
                     "title": "General Info",
@@ -1248,7 +1256,15 @@ const resources = {
                     "lock_prefix": "Kilit",
                     "lp_lock_title": "💧 LP Token Kilidi (tinu-locker.ton)",
                     "lp_lock_status": "✅ pTON-TASTE LP Tokeni — %81.6 Kilitli",
-                    "lp_lock_contract": "Kilit Kontratı: tinu-locker.ton"
+                    "lp_lock_contract": "Kilit Kontratı: tinu-locker.ton",
+                    "hard_cap_title": "✅ Hard Cap Taahhüdü",
+                    "hard_cap_desc": "TASTE, katı bir maksimum arz sınırına bağlıdır. Topluluk DAO oylaması olmadan maksimum arz hiçbir zaman aşılmayacaktır.",
+                    "hard_cap_points": [
+                        "Toplamda yalnızca maksimum 25.000.000 TASTE var olacak",
+                        "Ekip tarafından tek taraflı mint yapılamaz",
+                        "Herhangi bir değişiklik için DAO topluluk oylaması gerekir",
+                        "Tüm işlemler şeffaf ve zincir üzerinde kayıtlıdır"
+                    ]
                 },
                 "general_info": {
                     "title": "Genel Bilgi",
@@ -2125,7 +2141,15 @@ const resources = {
                     "lock_prefix": "Замок",
                     "lp_lock_title": "💧 Блокировка токена LP (tinu-locker.ton)",
                     "lp_lock_status": "✅ Токен pTON-TASTE LP — 81,6% заблокировано",
-                    "lp_lock_contract": "Контракт блокировки:tinu-locker.ton"
+                    "lp_lock_contract": "Контракт блокировки:tinu-locker.ton",
+                    "hard_cap_title": "✅ Обязательство Hard Cap",
+                    "hard_cap_desc": "TASTE придерживается строгого лимита предложения. Максимальное предложение не будет превышено без одобрения сообщества через голосование DAO.",
+                    "hard_cap_points": [
+                        "Максимум 25 000 000 TASTE существует когда-либо",
+                        "Нет одностороннего минтинга командой",
+                        "Любое изменение требует голосования DAO",
+                        "Все действия прозрачны и записаны в блокчейне"
+                    ]
                 },
                 "general_info": {
                     "title": "Общая информация",
@@ -3002,7 +3026,15 @@ const resources = {
                     "lock_prefix": "قفل",
                     "lp_lock_title": "💧 قفل رمز LP (tinu-locker.ton)",
                     "lp_lock_status": "✅ رمز pTON-TASTE LP — مغلق بنسبة 81.6%",
-                    "lp_lock_contract": "عقد القفل: tinu-locker.ton"
+                    "lp_lock_contract": "عقد القفل: tinu-locker.ton",
+                    "hard_cap_title": "✅ التزام الحد الأقصى",
+                    "hard_cap_desc": "تلتزم TASTE بحد أقصى صارم للعرض. لن يتم تجاوز الحد الأقصى للعرض دون موافقة المجتمع عبر تصويت DAO.",
+                    "hard_cap_points": [
+                        "الحد الأقصى 25,000,000 TASTE فقط",
+                        "لا يمكن للفريق سك عملات بشكل أحادي",
+                        "أي تغيير يتطلب تصويت مجتمع DAO",
+                        "جميع الإجراءات شفافة ومسجلة على البلوكتشين"
+                    ]
                 },
                 "general_info": {
                     "title": "معلومات عامة",
@@ -3879,7 +3911,15 @@ const resources = {
                     "lock_prefix": "锁",
                     "lp_lock_title": "💧 LP 代币锁定（tinu-locker.ton）",
                     "lp_lock_status": "✅ pTON-TASTE LP 代币 — 81.6% 锁定",
-                    "lp_lock_contract": "锁定合约：tinu-locker.ton"
+                    "lp_lock_contract": "锁定合约：tinu-locker.ton",
+                    "hard_cap_title": "✅ 硬上限承诺",
+                    "hard_cap_desc": "TASTE 致力于严格的最大供应上限。未经社区 DAO 投票批准，最大供应量永远不会超出。",
+                    "hard_cap_points": [
+                        "最多只有 25,000,000 TASTE",
+                        "团队不能单方面铸造代币",
+                        "任何变更都需要 DAO 社区投票",
+                        "所有操作透明且记录在链上"
+                    ]
                 },
                 "general_info": {
                     "title": "一般信息",
