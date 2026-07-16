@@ -1,15 +1,35 @@
-﻿import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { usePWA } from '../hooks/usePWA'
 import { Download, RefreshCw, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-export function PWAInstallBanner() {
+interface PWAInstallBannerProps {
+  onManualInstall?: () => void
+}
+
+export function PWAInstallBanner({ onManualInstall }: PWAInstallBannerProps) {
   const { isInstallable, promptInstall, needRefresh, updateServiceWorker, dismissUpdate } = usePWA()
   const [dismissed, setDismissed] = useState(false)
+  const [isStandalone, setIsStandalone] = useState(false)
+
+  useEffect(() => {
+    const checkStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true
+    setIsStandalone(checkStandalone)
+  }, [])
 
   const handleInstall = async () => {
-    await promptInstall()
-    setDismissed(true)
+    if (isInstallable) {
+      const accepted = await promptInstall()
+      if (accepted) {
+        setDismissed(true)
+      }
+    } else {
+      if (onManualInstall) {
+        onManualInstall()
+      }
+    }
   }
 
   const handleDismiss = () => {
@@ -22,7 +42,8 @@ export function PWAInstallBanner() {
   const lastDismissed = localStorage.getItem('pwa-banner-dismissed')
   const dismissedRecently = lastDismissed && Date.now() - parseInt(lastDismissed) < 24 * 60 * 60 * 1000
 
-  const showInstallBanner = isInstallable && !dismissed && !dismissedRecently
+  // Standalone değilse ve dismiss edilmediyse banner'ı göster
+  const showInstallBanner = !isStandalone && !dismissed && !dismissedRecently
 
   return (
     <>

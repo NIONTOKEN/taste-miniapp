@@ -552,7 +552,7 @@ function App() {
 
   return (
     <PinLock>
-      <PWAInstallBanner />
+      <PWAInstallBanner onManualInstall={() => setIsInstallModalOpen(true)} />
       <InstallModal isOpen={isInstallModalOpen} onClose={() => setIsInstallModalOpen(false)} />
       <AnimatePresence>
         {langSelectionVisible && (
