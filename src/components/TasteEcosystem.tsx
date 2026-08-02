@@ -1268,7 +1268,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
 
                     {/* YENİ: TAI Havuzu */}
                     <div style={{ marginBottom: '10px', border: '1px solid rgba(251,191,36,0.4)', borderRadius: '8px', padding: '8px', background: 'rgba(251,191,36,0.06)' }}>
-                        <div style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 800, marginBottom: '4px' }}>🆕 STON.fi (TAI/TON) <span style={{ color: '#22c55e', fontWeight: 700, fontSize: '9px' }}>✓ YENİ</span></div>
+                        <div style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 800, marginBottom: '4px' }}>🆕 STON.fi (UTYA/TAI) <span style={{ color: '#22c55e', fontWeight: 700, fontSize: '9px' }}>✓ YENİ</span></div>
                         <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(251,191,36,0.2)' }}
                           onClick={() => {
                             const url = 'https://app.tonkeeper.com/dapp/https%3A%2F%2Fapp.ston.fi%2Fpools%2FEQCNVeyMxn-APCrwgT9e27SR24c9zYOQhsSxUc4XSaONhmL3';
