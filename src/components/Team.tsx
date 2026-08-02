@@ -37,18 +37,6 @@ export function Team({ onClose }: TeamProps) {
             color: '#fbbf24' // Amber/Gold color for founder
         },
         {
-            id: 'little_queen',
-            name: 'Little Queen',
-            roleTr: 'Topluluk Yöneticisi',
-            roleEn: 'Community Manager',
-            bioTr: 'Topluluk büyümesi, sosyal medya etkileşimleri ve TASTE destekçilerinin bir araya getirilmesinden sorumludur.',
-            bioEn: 'Responsible for community growth, social media engagement, and uniting TASTE supporters.',
-            tgHandle: '@Little_quin11',
-            tgLink: 'https://t.me/Little_quin11',
-            photoUrl: '/little_queen.png',
-            color: '#c084fc' // Light purple to match her avatar theme
-        },
-        {
             id: 'legend_love',
             name: 'Legend Love',
             roleTr: 'Topluluk ve Medya Yöneticisi',
