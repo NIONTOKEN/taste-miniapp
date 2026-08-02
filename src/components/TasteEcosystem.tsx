@@ -1252,18 +1252,31 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                     </div>
                     
                     <div style={{ marginBottom: '10px' }}>
-                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>STON.fi (TON/TASTE):</div>
+                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>STON.fi (TON/TASTE) <span style={{ color: '#22c55e', fontWeight: 700, fontSize: '9px' }}>✓ AKTİF</span>:</div>
                         <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS")}>EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS 📋</div>
                     </div>
 
                     <div style={{ marginBottom: '10px' }}>
-                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>DeDust (TASTE/USDT):</div>
+                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>DeDust (TASTE/USDT) <span style={{ color: '#22c55e', fontWeight: 700, fontSize: '9px' }}>✓ AKTİF</span>:</div>
                         <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI")}>EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI 📋</div>
                     </div>
 
                     <div style={{ marginBottom: '10px' }}>
-                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>STON.fi (TASTE/DOGS):</div>
+                        <div style={{ fontSize: '11px', color: 'rgba(148,163,184,0.8)' }}>STON.fi (TASTE/DOGS) <span style={{ color: '#22c55e', fontWeight: 700, fontSize: '9px' }}>✓ AKTİF</span>:</div>
                         <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }} onClick={() => navigator.clipboard.writeText("EQD1Wg3gqcejslDzdwZbDFbqc2CecRNIKhGHJXU5cG1MNqzu")}>EQD1Wg3gqcejslDzdwZbDFbqc2CecRNIKhGHJXU5cG1MNqzu 📋</div>
+                    </div>
+
+                    {/* YENİ: TAI Havuzu */}
+                    <div style={{ marginBottom: '10px', border: '1px solid rgba(251,191,36,0.4)', borderRadius: '8px', padding: '8px', background: 'rgba(251,191,36,0.06)' }}>
+                        <div style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 800, marginBottom: '4px' }}>🆕 STON.fi (TAI/TON) <span style={{ color: '#22c55e', fontWeight: 700, fontSize: '9px' }}>✓ YENİ</span></div>
+                        <div style={{ fontSize: '10px', color: '#fff', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px', marginTop: '4px', cursor: 'pointer', border: '1px solid rgba(251,191,36,0.2)' }}
+                          onClick={() => {
+                            const url = 'https://app.tonkeeper.com/dapp/https%3A%2F%2Fapp.ston.fi%2Fpools%2FEQCNVeyMxn-APCrwgT9e27SR24c9zYOQhsSxUc4XSaONhmL3';
+                            if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(url);
+                            else window.open(url, '_blank');
+                          }}>
+                          EQCNVeyMxn-APCrwgT9e27SR24c9zYOQhsSxUc4XSaONhmL3 🔗
+                        </div>
                     </div>
 
                     <div style={{ marginBottom: '10px' }}>
@@ -1272,7 +1285,7 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                     </div>
 
                     <div style={{ fontSize: '9px', color: '#10b981', fontWeight: 800, marginTop: '12px', textAlign: 'center', letterSpacing: '0.5px', background: 'rgba(16,185,129,0.08)', padding: '6px', borderRadius: '8px', border: '1px solid rgba(16,185,129,0.15)' }}>
-                       {localTexts.more_pools}
+                       🔥 4 AKTİF HAVUZ | MORE POOLS COMING!
                     </div>
                   </div>
                   <div style={{
