@@ -1,12 +1,26 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Share2, Key, Palette, Globe, Shield, Wallet, ChevronRight, X, AlertTriangle } from 'lucide-react';
+import { Share2, Key, Palette, Globe, Shield, Wallet, ChevronRight, X, AlertTriangle, Bell, Info } from 'lucide-react';
 import { internalWalletService } from '../services/internalWallet';
 
 export function Settings() {
     const { t, i18n } = useTranslation();
     const isTr = i18n.language?.startsWith('tr');
+    
+    // Notification toggles (TTCoin style)
+    const [notifs, setNotifs] = useState({
+        spin: JSON.parse(localStorage.getItem('notif_spin') || 'true'),
+        chef: JSON.parse(localStorage.getItem('notif_chef') || 'true'),
+        staking: JSON.parse(localStorage.getItem('notif_staking') || 'true'),
+        community: JSON.parse(localStorage.getItem('notif_community') || 'false'),
+    });
+
+    const toggleNotif = (key: keyof typeof notifs) => {
+        const next = { ...notifs, [key]: !notifs[key] };
+        setNotifs(next);
+        localStorage.setItem(`notif_${key}`, JSON.stringify(next[key]));
+    };
     
     // States
     const [currentTheme, setCurrentTheme] = useState(localStorage.getItem('taste_theme') || 'default');
@@ -141,7 +155,87 @@ export function Settings() {
                 </p>
             </div>
 
-            {/* THEME SETTINGS */}
+            {/* ── NOTIFICATIONS (TTCoin style) ── */}
+            <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 11, letterSpacing: 2, color: '#64748b', fontWeight: 700, textTransform: 'uppercase', marginBottom: 10, paddingLeft: 4 }}>
+                    {isTr ? 'Bildirimler' : 'Notifications'}
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 18, overflow: 'hidden' }}>
+                    {[
+                        { key: 'spin', emoji: '🎡', label: isTr ? 'Çark & Ödüller' : 'Spin & Rewards' },
+                        { key: 'chef', emoji: '👨‍🍳', label: isTr ? 'Taste Chef' : 'Taste Chef' },
+                        { key: 'staking', emoji: '🏆', label: 'Staking' },
+                        { key: 'community', emoji: '👥', label: isTr ? 'Topluluk' : 'Community' },
+                    ].map((item, i, arr) => (
+                        <div
+                            key={item.key}
+                            style={{
+                                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                                padding: '15px 18px',
+                                borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                            }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <span style={{ fontSize: 20 }}>{item.emoji}</span>
+                                <span style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{item.label}</span>
+                            </div>
+                            {/* Toggle switch */}
+                            <motion.button
+                                onClick={() => toggleNotif(item.key as any)}
+                                animate={{ backgroundColor: notifs[item.key as keyof typeof notifs] ? '#10b981' : '#334155' }}
+                                transition={{ duration: 0.2 }}
+                                style={{
+                                    width: 48, height: 26, borderRadius: 13, border: 'none',
+                                    cursor: 'pointer', position: 'relative', flexShrink: 0,
+                                }}
+                            >
+                                <motion.div
+                                    animate={{ x: notifs[item.key as keyof typeof notifs] ? 23 : 2 }}
+                                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                                    style={{
+                                        position: 'absolute', top: 3, width: 20, height: 20,
+                                        borderRadius: '50%', background: '#fff',
+                                        boxShadow: '0 1px 4px rgba(0,0,0,0.3)',
+                                    }}
+                                />
+                            </motion.button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* ── APP INFO (TTCoin style) ── */}
+            <div style={{ marginBottom: 24 }}>
+                <div style={{ fontSize: 11, letterSpacing: 2, color: '#64748b', fontWeight: 700, textTransform: 'uppercase', marginBottom: 10, paddingLeft: 4 }}>
+                    {isTr ? 'Uygulama Bilgisi' : 'App Info'}
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 18, overflow: 'hidden' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px 18px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <span style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{isTr ? 'Sürüm' : 'Version'}</span>
+                        <span style={{ fontSize: 14, fontWeight: 800, color: '#f59e0b' }}>1.0</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px 18px' }}>
+                        <span style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{isTr ? 'Dili Değiştir' : 'Change Language'}</span>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                            {[{ code: 'tr', flag: '🇹🇷' }, { code: 'en', flag: '🇺🇸' }, { code: 'ru', flag: '🇷🇺' }].map(l => (
+                                <button
+                                    key={l.code}
+                                    onClick={() => { i18n.changeLanguage(l.code); localStorage.setItem('i18nextLng', l.code); }}
+                                    style={{
+                                        fontSize: 20, background: i18n.language?.startsWith(l.code) ? 'rgba(245,159,11,0.2)' : 'transparent',
+                                        border: i18n.language?.startsWith(l.code) ? '1px solid #f59e0b' : '1px solid transparent',
+                                        borderRadius: 8, padding: '2px 6px', cursor: 'pointer'
+                                    }}
+                                >
+                                    {l.flag}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <Card title={isTr ? 'Görünüm ve Tema' : 'Appearance & Theme'} icon={Palette}>
                 <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
                     {themes.map(t => (

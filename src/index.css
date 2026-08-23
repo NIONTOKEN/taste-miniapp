@@ -210,44 +210,58 @@ h3 {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70px;
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  height: 76px;
+  background: rgba(10, 15, 28, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(245, 159, 11, 0.12);
   display: flex;
   justify-content: space-around;
   align-items: center;
   z-index: 1000;
   padding-bottom: env(safe-area-inset-bottom);
+  /* subtle gold top line */
+  box-shadow: 0 -1px 0 rgba(245,159,11,0.08), 0 -8px 32px rgba(0,0,0,0.4);
 }
 
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  transition: all 0.3s;
-  padding: 10px;
+  transition: color 0.25s, transform 0.15s;
+  padding: 8px 6px;
   flex: 1;
+}
+
+.nav-item:active {
+  transform: scale(0.92);
 }
 
 .nav-item.active {
   color: var(--primary);
 }
 
+.nav-item.active .nav-icon svg {
+  filter: drop-shadow(0 0 6px var(--primary-glow));
+}
+
 .nav-icon {
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-label {
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 9px;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 
 /* Price Ticker */
@@ -424,4 +438,43 @@ div[id^="tc-widget-root"],
 .tc-modal-container,
 .tc-modal-portal {
   z-index: 999999 !important;
+}
+
+/* ── Left Drawer swipe feel ── */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Profile overlay ── */
+.profile-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--gradient-main);
+  z-index: 8500;
+  overflow-y: auto;
+  padding: 60px 20px 100px;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Ping dot animation ── */
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* ── Center home button lift effect ── */
+.home-center-btn {
+  margin-top: -14px;
+  transition: transform 0.15s;
+}
+.home-center-btn:active {
+  transform: scale(0.88);
 }

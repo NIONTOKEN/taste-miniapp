@@ -34,6 +34,8 @@ import { PWAInstallBanner } from './components/PWAInstallBanner'
 import { InstallModal } from './components/InstallModal'
 import { OfficialSocials } from './components/OfficialSocials'
 import { Team } from './components/Team'
+import { SplashScreen } from './components/SplashScreen'
+import { Profile } from './components/Profile'
 import { TasteEcosystem } from './components/TasteEcosystem'
 // @ts-ignore
 // WalletApp removed since TAI Wallet standalone is discontinued
@@ -64,7 +66,13 @@ import {
   BookOpen,
   Wallet,
   Layers,
-  ArrowLeft
+  ArrowLeft,
+  Bell,
+  Menu,
+  Droplets,
+  Waves,
+  Settings as SettingsIcon,
+  User
 } from 'lucide-react'
 import { apiService } from './services/api'
 
@@ -92,6 +100,10 @@ function App() {
 
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  const [showProfile, setShowProfile] = useState(false);
+  // 5-tab bottom nav active key: 'wallet' | 'team' | 'home' | 'pool' | 'settings'
+  const [activeBottomTab, setActiveBottomTab] = useState<'wallet' | 'team' | 'home' | 'pool' | 'settings'>('home');
 
   // Telegram SDK Initialization
   useEffect(() => {
@@ -552,6 +564,10 @@ function App() {
 
   return (
     <PinLock>
+      {/* ── Splash Screen (shown on every app launch) ── */}
+      <AnimatePresence>
+        {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+      </AnimatePresence>
       <PWAInstallBanner onManualInstall={() => setIsInstallModalOpen(true)} />
       <InstallModal isOpen={isInstallModalOpen} onClose={() => setIsInstallModalOpen(false)} />
       <AnimatePresence>
@@ -612,19 +628,76 @@ function App() {
           )}
         </AnimatePresence>
 
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', position: 'relative' }}>
-          <WalletSelector />
-          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowLangMenu(!showLangMenu)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--bg-card-border)', color: 'var(--text-main)', padding: '5px 12px', borderRadius: '15px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Globe size={14} />
-            <span style={{ fontWeight: 800 }}>{t('app.lang')}</span>
-            {currentLang.flag}
-          </motion.button>
+        {/* ── TTCoin-style Top Bar ── */}
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            paddingTop: '10px', paddingBottom: '8px', position: 'relative'
+          }}
+        >
+          {/* Left: hamburger + title */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsMenuOpen(true)}
+              style={{
+                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 10, padding: '7px 9px', color: '#fff', cursor: 'pointer',
+                display: 'flex', alignItems: 'center'
+              }}
+            >
+              <Menu size={19} />
+            </motion.button>
+            <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: 0.5,
+              background: 'linear-gradient(135deg,#ffd700,#f59e0b)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+            }}>$TASTE</span>
+          </div>
+
+          {/* Right: KYC + Bell + Lang + Avatar */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {/* KYC badge */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.35)',
+              borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 700, color: '#10b981'
+            }}>
+              <ShieldCheck size={12} />
+              KYC
+            </div>
+
+            {/* Notification bell */}
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '7px', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', position: 'relative' }}
+            >
+              <Bell size={16} />
+              <span style={{ position: 'absolute', top: 5, right: 5, width: 6, height: 6, borderRadius: '50%', background: '#ef4444', border: '1px solid #0a0f1c' }} />
+            </motion.button>
+
+            {/* Lang button */}
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowLangMenu(!showLangMenu)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--bg-card-border)', color: 'var(--text-main)', padding: '5px 10px', borderRadius: '15px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Globe size={13} />
+              {currentLang.flag}
+            </motion.button>
+
+            {/* Profile avatar */}
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setShowProfile(true)}
+              style={{ padding: 0, background: 'none', border: '2px solid #f59e0b', borderRadius: '50%', cursor: 'pointer', boxShadow: '0 0 10px rgba(245,159,11,0.4)' }}
+            >
+              <img src="/logo.jpg" alt="profil" style={{ width: 34, height: 34, borderRadius: '50%', display: 'block', objectFit: 'cover' }} />
+            </motion.button>
+          </div>
 
           <AnimatePresence>
             {showLangMenu && (
               <>
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowLangMenu(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100 }} />
-                <motion.div initial={{ opacity: 0, scale: 0.9, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 10 }} style={{ position: 'absolute', top: '40px', right: '0', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--bg-card-border)', borderRadius: '15px', padding: '10px', zIndex: 101, minWidth: '150px', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}>
+                <motion.div initial={{ opacity: 0, scale: 0.9, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 10 }} style={{ position: 'absolute', top: '50px', right: '0', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--bg-card-border)', borderRadius: '15px', padding: '10px', zIndex: 101, minWidth: '150px', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}>
                   {languages.map(l => (
                     <motion.button key={l.code} whileHover={{ background: 'rgba(255,255,255,0.05)' }} onClick={() => changeLanguage(l.code)} style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', padding: '10px', background: 'none', border: 'none', color: 'var(--text-main)', fontSize: '14px', cursor: 'pointer', borderRadius: '8px', textAlign: 'left' }}>
                       <span style={{ fontSize: '18px' }}>{l.flag}</span>
@@ -642,7 +715,7 @@ function App() {
           <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
         </main>
 
-        {/* Secondary Menu Drawer */}
+        {/* ── Left Side Drawer (TTCoin style) ── */}
         <AnimatePresence>
           {isMenuOpen && (
             <>
@@ -651,115 +724,98 @@ function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.25 }}
                 onClick={() => setIsMenuOpen(false)}
-                style={{
-                  position: 'fixed',
-                  top: 0, left: 0, right: 0, bottom: 0,
-                  background: 'rgba(15, 23, 42, 0.7)',
-                  backdropFilter: 'blur(4px)',
-                  zIndex: 998
-                }}
+                style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(5px)', zIndex: 9000 }}
               />
-              {/* Drawer Container */}
+              {/* Left Drawer */}
               <motion.div
-                initial={{ y: '-100%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: '-100%', opacity: 0 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                initial={{ x: '-100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '-100%' }}
+                transition={{ type: 'spring', damping: 28, stiffness: 250 }}
                 style={{
-                  position: 'fixed',
-                  left: 0, right: 0, top: 0,
-                  background: 'rgba(30, 41, 59, 0.95)',
-                  backdropFilter: 'blur(16px)',
-                  borderBottomLeftRadius: '24px',
-                  borderBottomRightRadius: '24px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderTop: 'none',
-                  padding: '50px 20px 30px',
-                  zIndex: 999,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '20px'
+                  position: 'fixed', top: 0, left: 0, bottom: 0, width: '78%', maxWidth: 300,
+                  background: 'linear-gradient(180deg, rgba(10,15,28,0.98) 0%, rgba(15,23,42,0.99) 100%)',
+                  backdropFilter: 'blur(20px)',
+                  borderRight: '1px solid rgba(245,159,11,0.15)',
+                  zIndex: 9001, display: 'flex', flexDirection: 'column', overflowY: 'auto',
+                  paddingBottom: 30,
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <LayoutGrid size={20} color="#f59e0b" />
-                    {t('nav.discover')}
-                  </h3>
-                  <button onClick={() => setIsMenuOpen(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}>
-                    <X size={24} />
+                {/* Drawer header */}
+                <div style={{
+                  padding: '52px 20px 20px',
+                  borderBottom: '1px solid rgba(255,255,255,0.06)',
+                  display: 'flex', alignItems: 'center', gap: 14,
+                  background: 'linear-gradient(135deg, rgba(245,159,11,0.08), transparent)'
+                }}>
+                  <img src="/logo.jpg" alt="TAI" style={{ width: 52, height: 52, borderRadius: '50%', border: '2px solid #f59e0b', boxShadow: '0 0 16px rgba(245,159,11,0.4)' }} />
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: '#fff' }}>$TASTE</div>
+                    <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>Taste AI Tarafından Desteklenmektedir</div>
+                  </div>
+                  <button onClick={() => setIsMenuOpen(false)} style={{ marginLeft: 'auto', background: 'transparent', border: 'none', color: '#475569', cursor: 'pointer', padding: 4 }}>
+                    <X size={20} />
                   </button>
                 </div>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-                  {[
-                    { id: 'ecosystem', label: 'TAI EKOSİSTEM', color: '#f59e0b', image: '/tai-logo-gold.png', isNew: true },
-                    { id: 'pay', label: 'Taste Pay', color: '#0ea5e9', image: '/tai-logo-gold.png', isNew: true },
-                    { id: 'install', label: t('nav.install'), color: '#10b981', emojiImage: '📲', isNew: true },
-                    { id: 'partners', label: t('nav.partners'), color: '#3b82f6', emojiImage: '🤝', isNew: true },
-                    { id: 'vote', label: t('nav.vote'), color: '#eab308', emojiImage: '🌐' },
-                    { id: 'socials', label: t('nav.socials'), color: '#25D366', emojiImage: '📱', isNew: true },
-                    { id: 'team', label: t('nav.team'), color: '#c084fc', emojiImage: '👥', isNew: true },
-                    { id: 'manifesto', label: 'Manifesto', color: '#f97316', emojiImage: '📜' },
-                    { id: 'roadmap', label: 'TAI Haritası', color: '#8b5cf6', image: '/tai-logo-gold.png' },
-                    { id: 'whitepaper', label: t('nav.whitepaper'), color: '#3b82f6', emojiImage: '📖' },
-                    { id: 'charity', label: t('nav.charity'), color: '#f43f5e', emojiImage: '❤️' },
-                    { id: 'wallet', label: 'TAI Wallet', color: '#f59e0b', image: '/tai-logo-gold.png' },
-                    { id: 'faq', label: t('nav.faq'), color: '#22c55e', emojiImage: '❓' },
-                    { id: 'tech', label: t('nav.tech'), color: '#10b981', emojiImage: '💻' },
-                    { id: 'legal', label: t('nav.legal'), color: '#64748b', emojiImage: '⚖️' },
-                    { id: 'settings', label: t('nav.settings'), color: '#64748b', emojiImage: '⚙️' }
-                  ].map((item: any) => (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        if (item.id === 'pay') {
-                           setIsTastePayOpen(true);
-                        } else if (item.id === 'install') {
-                           setIsInstallModalOpen(true);
-                        } else {
-                           navigateTo(item.id as any);
-                        }
-                        setIsMenuOpen(false);
-                      }}
-                      style={{
-                        background: activeTab === item.id ? `linear-gradient(145deg, ${item.color}33, ${item.color}11)` : 'rgba(255,255,255,0.03)',
-                        border: `1px solid ${activeTab === item.id ? item.color : 'rgba(255,255,255,0.05)'}`,
-                        borderRadius: '14px',
-                        padding: '12px 4px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: '6px',
-                        color: activeTab === item.id ? '#fff' : '#94a3b8',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        position: 'relative',
-                        overflow: 'hidden'
-                      }}
-                    >
-                      {activeTab === item.id && (
-                         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: item.color, boxShadow: `0 0 8px ${item.color}` }} />
-                      )}
-                      {item.isDemo && (
-                         <div style={{ position: 'absolute', top: '2px', right: '2px', background: '#ef4444', color: '#fff', fontSize: '6px', fontWeight: 900, padding: '1px 3px', borderRadius: '4px', zIndex: 2 }}>DEMO</div>
-                      )}
-                      {item.isNew && (
-                         <div style={{ position: 'absolute', top: '2px', right: '2px', background: 'linear-gradient(135deg, #f97316, #ea580c)', color: '#fff', fontSize: '6px', fontWeight: 900, padding: '1px 3px', borderRadius: '4px', zIndex: 2 }}>YENİ</div>
-                      )}
-                      
-                      {item.image ? (
-                        <img src={item.image} alt={item.label} style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${item.color}`, boxShadow: `0 0 10px ${item.color}66` }} />
-                      ) : item.emojiImage ? (
-                        <span style={{ fontSize: '26px', filter: `drop-shadow(0 0 8px ${item.color}88)`, display: 'block', height: '28px', lineHeight: '28px' }}>{item.emojiImage}</span>
-                      ) : (
-                        item.icon && <item.icon size={22} color={activeTab === item.id ? item.color : '#64748b'} />
-                      )}
 
-                      <span style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.2px', textAlign: 'center', textTransform: 'uppercase' }}>{item.label}</span>
-                    </button>
+                {/* Drawer menu items */}
+                <div style={{ padding: '12px 0', flex: 1 }}>
+                  {[
+                    { id: 'ecosystem', icon: '🌐', label: 'TAI Ekosistemi', isNew: true },
+                    { id: 'socials', icon: '📱', label: 'Sosyal Kanallar', isNew: true },
+                    { id: 'team', icon: '👥', label: 'Takım', isNew: true },
+                    { id: 'community', icon: '💼', label: 'Kullanıcı Satın Alımları' },
+                    null,
+                    { id: 'whitepaper', icon: '📖', label: 'Whitepaper' },
+                    { id: 'tech', icon: '⛓️', label: 'TAI Blockchain' },
+                    null,
+                    { id: 'ai', icon: '🤖', label: 'Taste AI' },
+                    { id: 'faq', icon: '❓', label: 'Yardım' },
+                    { id: 'vote', icon: '🗳️', label: 'Web Sitesini Ziyaret Et' },
+                  ].map((item: any, idx: number) => {
+                    if (item === null) return <div key={idx} style={{ height: 1, background: 'rgba(255,255,255,0.05)', margin: '6px 20px' }} />;
+                    return (
+                      <motion.button
+                        key={item.id}
+                        whileHover={{ background: 'rgba(245,159,11,0.07)', x: 4 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => { navigateTo(item.id as any); setIsMenuOpen(false); }}
+                        style={{
+                          width: '100%', background: 'transparent', border: 'none',
+                          display: 'flex', alignItems: 'center', gap: 14,
+                          padding: '13px 20px', cursor: 'pointer',
+                          color: activeTab === item.id ? '#f59e0b' : '#cbd5e1',
+                          textAlign: 'left', position: 'relative',
+                        }}
+                      >
+                        {activeTab === item.id && (
+                          <div style={{ position: 'absolute', left: 0, top: 6, bottom: 6, width: 3, background: '#f59e0b', borderRadius: '0 3px 3px 0' }} />
+                        )}
+                        <span style={{ fontSize: 20, width: 28, textAlign: 'center' }}>{item.icon}</span>
+                        <span style={{ fontSize: 14, fontWeight: 600 }}>{item.label}</span>
+                        {item.isNew && (
+                          <span style={{ marginLeft: 'auto', background: 'linear-gradient(135deg,#f97316,#ea580c)', color: '#fff', fontSize: 8, fontWeight: 900, padding: '2px 6px', borderRadius: 6 }}>YENİ</span>
+                        )}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+
+                {/* Bottom links */}
+                <div style={{ padding: '0 20px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14 }}>
+                  {[{ id: 'legal', icon: '⚖️', label: t('nav.legal') }, { id: 'settings', icon: '⚙️', label: 'Ayarlar' }].map((item) => (
+                    <motion.button
+                      key={item.id}
+                      whileHover={{ background: 'rgba(255,255,255,0.05)', x: 4 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => { navigateTo(item.id as any); setIsMenuOpen(false); }}
+                      style={{ width: '100%', background: 'transparent', border: 'none', display: 'flex', alignItems: 'center', gap: 14, padding: '11px 0', cursor: 'pointer', color: '#64748b', textAlign: 'left' }}
+                    >
+                      <span style={{ fontSize: 18 }}>{item.icon}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600 }}>{item.label}</span>
+                    </motion.button>
                   ))}
                 </div>
               </motion.div>
@@ -767,19 +823,81 @@ function App() {
           )}
         </AnimatePresence>
 
-        {/* Primary Bottom Navigation */}
+        {/* ── Profile Page Overlay ── */}
+        <AnimatePresence>
+          {showProfile && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{ position: 'fixed', inset: 0, background: 'var(--gradient-main)', zIndex: 8500, overflowY: 'auto', padding: '60px 20px 100px' }}
+            >
+              <Profile onClose={() => setShowProfile(false)} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── 5-Tab Bottom Navigation (TTCoin style) ── */}
         <nav className="bottom-nav" style={{ padding: '0 4px' }}>
-          <button className={`nav-item ${activeTab === 'home' ? 'active' : ''}`} onClick={() => { setActiveTab('home'); setIsMenuOpen(false); }}>
-            <span className="nav-icon"><Home size={22} /></span><span className="nav-label">{t('nav.home')}</span>
+          {/* 1. Cüzdan */}
+          <button
+            className={`nav-item ${activeBottomTab === 'wallet' ? 'active' : ''}`}
+            onClick={() => { setActiveBottomTab('wallet'); navigateTo('wallet'); setIsMenuOpen(false); }}
+          >
+            <span className="nav-icon"><Wallet size={21} /></span>
+            <span className="nav-label">Cüzdan</span>
           </button>
 
-          <button className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => { navigateTo('ai'); setIsMenuOpen(false); }} style={{ position: 'relative' }}>
-            <span className="nav-icon"><Bot size={22} /></span><span className="nav-label">AI</span>
-            <span style={{ position: 'absolute', top: '4px', right: '10px', width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', animation: 'pulse 2s infinite' }} />
+          {/* 2. Takım */}
+          <button
+            className={`nav-item ${activeBottomTab === 'team' ? 'active' : ''}`}
+            onClick={() => { setActiveBottomTab('team'); navigateTo('team'); setIsMenuOpen(false); }}
+          >
+            <span className="nav-icon"><Users size={21} /></span>
+            <span className="nav-label">Takım</span>
           </button>
-          
-          <button className={`nav-item ${isMenuOpen ? 'active' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <span className="nav-icon"><LayoutGrid size={22} /></span><span className="nav-label">{t('nav.menu')}</span>
+
+          {/* 3. Ana Sayfa — center big button */}
+          <button
+            onClick={() => { setActiveBottomTab('home'); setActiveTab('home'); setIsMenuOpen(false); }}
+            style={{ position: 'relative', flex: '1.3', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer', gap: 4 }}
+          >
+            <motion.div
+              whileTap={{ scale: 0.9 }}
+              animate={activeBottomTab === 'home' ? { boxShadow: ['0 0 12px rgba(245,159,11,0.5)', '0 0 24px rgba(245,159,11,0.9)', '0 0 12px rgba(245,159,11,0.5)'] } : {}}
+              transition={{ duration: 1.8, repeat: Infinity }}
+              style={{
+                width: 50, height: 50, borderRadius: '50%',
+                background: activeBottomTab === 'home'
+                  ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                  : 'rgba(245,159,11,0.15)',
+                border: '2px solid #f59e0b',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginTop: -14,
+                boxShadow: activeBottomTab === 'home' ? '0 0 20px rgba(245,159,11,0.6)' : 'none',
+              }}
+            >
+              <Home size={22} color={activeBottomTab === 'home' ? '#000' : '#f59e0b'} />
+            </motion.div>
+            <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', color: activeBottomTab === 'home' ? '#f59e0b' : '#64748b', letterSpacing: 0.5 }}>Ana Sayfa</span>
+          </button>
+
+          {/* 4. Havuz */}
+          <button
+            className={`nav-item ${activeBottomTab === 'pool' ? 'active' : ''}`}
+            onClick={() => { setActiveBottomTab('pool'); navigateTo('spin'); setIsMenuOpen(false); }}
+          >
+            <span className="nav-icon"><Waves size={21} /></span>
+            <span className="nav-label">Havuz</span>
+          </button>
+
+          {/* 5. Ayarlar */}
+          <button
+            className={`nav-item ${activeBottomTab === 'settings' ? 'active' : ''}`}
+            onClick={() => { setActiveBottomTab('settings'); navigateTo('settings'); setIsMenuOpen(false); }}
+          >
+            <span className="nav-icon"><SettingsIcon size={21} /></span>
+            <span className="nav-label">Ayarlar</span>
           </button>
         </nav>
 
