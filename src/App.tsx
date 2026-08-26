@@ -88,7 +88,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'jobs' | 'tokenomics'>('home');
   const [navHistory, setNavHistory] = useState<string[]>([]);
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
@@ -324,6 +324,16 @@ function App() {
           </motion.div>
         );
 
+      case 'jobs': return (
+        <motion.div key="jobs" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <TasteJobs />
+        </motion.div>
+      );
+      case 'tokenomics': return (
+        <motion.div key="tokenomics" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <TokenAllocation />
+        </motion.div>
+      );
       case 'pool': return (
         <motion.div key="pool" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <DeFiPool />
@@ -731,8 +741,11 @@ function App() {
                     { id: 'ecosystem', icon: '🌐', label: 'TAI Ekosistemi', isNew: true },
                     { id: 'socials', icon: '📱', label: 'Sosyal Kanallar', isNew: true },
                     { id: 'team', icon: '👥', label: 'Takım', isNew: true },
-                    { id: 'community', icon: '💼', label: 'Kullanıcı Satın Alımları' },
                     null,
+                    { id: 'jobs', icon: '💼', label: 'İş ve Kariyer' },
+                    { id: 'swap', icon: '⚡', label: 'Kullanıcı Satın Alımları' },
+                    null,
+                    { id: 'tokenomics', icon: '🥧', label: 'Token Dağılımı' },
                     { id: 'whitepaper', icon: '📖', label: 'Whitepaper' },
                     { id: 'tech', icon: '⛓️', label: 'TAI Blockchain' },
                     null,
@@ -746,7 +759,14 @@ function App() {
                         key={item.id}
                         whileHover={{ background: 'rgba(245,159,11,0.07)', x: 4 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={() => { navigateTo(item.id as any); setIsMenuOpen(false); }}
+                        onClick={() => {
+                          if (item.id === 'swap') {
+                            setShowSwapScreen(true);
+                          } else {
+                            navigateTo(item.id as any);
+                          }
+                          setIsMenuOpen(false);
+                        }}
                         style={{
                           width: '100%', background: 'transparent', border: 'none',
                           display: 'flex', alignItems: 'center', gap: 14,
@@ -810,7 +830,7 @@ function App() {
             onClick={() => { setActiveBottomTab('wallet'); navigateTo('wallet'); setIsMenuOpen(false); }}
           >
             <span className="nav-icon"><Wallet size={21} /></span>
-            <span className="nav-label">Cüzdan</span>
+            <span className="nav-label">{t('nav.wallet', 'Cüzdan')}</span>
           </button>
 
           {/* 2. Takım */}
@@ -819,7 +839,7 @@ function App() {
             onClick={() => { setActiveBottomTab('team'); navigateTo('team'); setIsMenuOpen(false); }}
           >
             <span className="nav-icon"><Users size={21} /></span>
-            <span className="nav-label">Takım</span>
+            <span className="nav-label">{t('nav.team', 'Takım')}</span>
           </button>
 
           {/* 3. Ana Sayfa — center big button */}
@@ -844,7 +864,7 @@ function App() {
             >
               <Home size={22} color={activeBottomTab === 'home' ? '#000' : '#f59e0b'} />
             </motion.div>
-            <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', color: activeBottomTab === 'home' ? '#f59e0b' : '#64748b', letterSpacing: 0.5 }}>Ana Sayfa</span>
+            <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', color: activeBottomTab === 'home' ? '#f59e0b' : '#64748b', letterSpacing: 0.5 }}>{t('nav.home', 'Ana Sayfa')}</span>
           </button>
 
           {/* 4. Havuz */}
@@ -853,7 +873,7 @@ function App() {
             onClick={() => { setActiveBottomTab('pool'); navigateTo('pool'); setIsMenuOpen(false); }}
           >
             <span className="nav-icon"><Waves size={21} /></span>
-            <span className="nav-label">Havuz</span>
+            <span className="nav-label">{t('nav.pool', 'Havuz')}</span>
           </button>
 
           {/* 5. Ayarlar */}
@@ -862,7 +882,7 @@ function App() {
             onClick={() => { setActiveBottomTab('settings'); navigateTo('settings'); setIsMenuOpen(false); }}
           >
             <span className="nav-icon"><SettingsIcon size={21} /></span>
-            <span className="nav-label">Ayarlar</span>
+            <span className="nav-label">{t('nav.settings', 'Ayarlar')}</span>
           </button>
         </nav>
 

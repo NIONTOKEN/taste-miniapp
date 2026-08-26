@@ -171,51 +171,7 @@ export function SplashScreen({ onFinish }: SplashScreenProps) {
               textAlign: 'center',
             }}
           >
-            {/* Logo */}
-            <motion.div
-              initial={{ scale: 0.4, opacity: 0, rotate: -10 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
-              style={{ position: 'relative' }}
-            >
-              {/* Glow ring */}
-              <motion.div
-                animate={{
-                  boxShadow: [
-                    '0 0 20px rgba(245,159,11,0.4), 0 0 60px rgba(245,159,11,0.2)',
-                    '0 0 40px rgba(245,159,11,0.8), 0 0 100px rgba(245,159,11,0.4)',
-                    '0 0 20px rgba(245,159,11,0.4), 0 0 60px rgba(245,159,11,0.2)',
-                  ],
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                style={{
-                  width: 110,
-                  height: 110,
-                  borderRadius: '50%',
-                  border: '2.5px solid rgba(245,159,11,0.7)',
-                  overflow: 'hidden',
-                }}
-              >
-                <img
-                  src="/logo.jpg"
-                  alt="TASTE"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </motion.div>
-
-              {/* Rotating ring */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-                style={{
-                  position: 'absolute',
-                  inset: -6,
-                  borderRadius: '50%',
-                  border: '1.5px dashed rgba(245,159,11,0.35)',
-                  pointerEvents: 'none',
-                }}
-              />
-            </motion.div>
+            {/* Logo removed - keeping only airship background */}
 
             {/* $TASTE title */}
             <motion.div

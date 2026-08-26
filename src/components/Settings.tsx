@@ -51,12 +51,8 @@ export function Settings() {
     }, []);
 
     const themes = [
-        { id: 'default', name: 'Premium Gold', color: '#f59e0b' },
-        { id: 'red', name: 'Ruby Red', color: '#ef4444' },
-        { id: 'green', name: 'Emerald Green', color: '#22c55e' },
-        { id: 'blue', name: 'Ocean Blue', color: '#3b82f6' },
-        { id: 'black', name: 'Midnight Black', color: '#64748b' },
-        { id: 'light', name: 'Light Mode', color: '#f8fafc' }
+        { id: 'default', name: isTr ? 'Gece Modu' : 'Dark Mode', color: '#000000' },
+        { id: 'light', name: isTr ? 'Gündüz Modu' : 'Light Mode', color: '#ffffff' }
     ];
 
     const languages = [
