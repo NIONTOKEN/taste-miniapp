@@ -281,7 +281,7 @@ export function TasteAI() {
             'Authorization': `Bearer ${localApiKey}`
           },
           body: JSON.stringify({ 
-            model: 'llama-3.3-70b-specdec', 
+            model: 'llama3-8b-8192', 
             messages: reqMessages,
             temperature: 0.7 
           }),
