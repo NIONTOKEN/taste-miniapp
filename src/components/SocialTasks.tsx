@@ -71,18 +71,6 @@ export function SocialTasks() {
             link: 'https://x.com/intent/tweet?text=Taste%20Token%20is%20taking%20over%20the%20kitchen%20on%20TON!%20Join%20the%20movement%20%23TasteToken%20%23TON%20%40taste_token',
         },
         {
-            id: 'facebook',
-            icon: '📘',
-            label: 'Facebook',
-            link: 'https://www.facebook.com/share/1DGWE1ZQoR/',
-        },
-        {
-            id: 'instagram',
-            icon: '📸',
-            label: 'Instagram',
-            link: 'https://www.instagram.com/taste_ton_taste',
-        },
-        {
             id: 'tiktok',
             icon: '🎵',
             label: 'TikTok',

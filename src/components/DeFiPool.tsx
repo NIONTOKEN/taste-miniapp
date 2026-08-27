@@ -5,7 +5,7 @@ const POOLS = [
   {
     id: 1,
     pair: 'TON / TAI',
-    icons: ['https://ton.org/download/ton_symbol.png', '/logo.jpg'],
+    icons: ['https://ton.org/download/ton_symbol.svg', '/logo.jpg'],
     dex: 'STON.fi',
     status: 'active',
     color: '#3b82f6',
@@ -14,9 +14,20 @@ const POOLS = [
     link: 'https://app.ston.fi/pools/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
   },
   {
+    id: 5,
+    pair: 'TON / TAI',
+    icons: ['https://ton.org/download/ton_symbol.svg', '/logo.jpg'],
+    dex: 'DeDust.io',
+    status: 'new',
+    color: '#3b82f6',
+    apy: '—',
+    address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+    link: 'https://dedust.io/swap/TON/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+  },
+  {
     id: 2,
     pair: 'USDT / TAI',
-    icons: ['https://cryptologos.cc/logos/tether-usdt-logo.png', '/logo.jpg'],
+    icons: ['https://s2.coinmarketcap.com/static/img/coins/64x64/825.png', '/logo.jpg'],
     dex: 'DeDust',
     status: 'active',
     color: '#10b981',
@@ -27,7 +38,7 @@ const POOLS = [
   {
     id: 3,
     pair: 'DOGS / TAI',
-    icons: ['https://dogs.tg/logo.png', '/logo.jpg'],
+    icons: ['https://s2.coinmarketcap.com/static/img/coins/64x64/31693.png', '/logo.jpg'],
     dex: 'STON.fi',
     status: 'active',
     color: '#f97316',
@@ -37,8 +48,8 @@ const POOLS = [
   },
   {
     id: 4,
-    pair: 'UTYA / TAI',
-    icons: ['https://asset.ston.fi/img/EQC-tdRjjoYMz3MXKW4pj95bNZgvRyWwZ43-M8zvwDeCeec2/image', '/logo.jpg'],
+    pair: 'NOT / TAI',
+    icons: ['https://s2.coinmarketcap.com/static/img/coins/64x64/28850.png', '/logo.jpg'],
     dex: 'STON.fi',
     status: 'new',
     color: '#a855f7',
@@ -106,12 +117,12 @@ export function DeFiPool() {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-              {/* Stacked icons */}
-              <div style={{ position: 'relative', width: 52, height: 34, flexShrink: 0 }}>
-                <img src={pool.icons[0]} alt="" style={{ width: 34, height: 34, borderRadius: '50%', position: 'absolute', left: 0, top: 0, border: `2px solid ${pool.color}`, background: '#1e293b', objectFit: 'cover' }}
+              {/* Side-by-side icons */}
+              <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                <img src={pool.icons[0]} alt="" style={{ width: 34, height: 34, borderRadius: '50%', border: `1px solid ${pool.color}`, background: '#1e293b', objectFit: 'cover' }}
                   onError={e => { e.currentTarget.src = '/logo.jpg' }}
                 />
-                <img src={pool.icons[1]} alt="" style={{ width: 34, height: 34, borderRadius: '50%', position: 'absolute', left: 20, top: 0, border: '2px solid #f59e0b', background: '#1e293b' }} />
+                <img src={pool.icons[1]} alt="" style={{ width: 34, height: 34, borderRadius: '50%', border: '1px solid #f59e0b', background: '#1e293b' }} />
               </div>
               <div>
                 <div style={{ fontSize: 17, fontWeight: 900, color: '#f8fafc', marginBottom: 3 }}>{pool.pair}</div>

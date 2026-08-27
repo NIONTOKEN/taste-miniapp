@@ -1,5 +1,7 @@
 {
   "url": "https://taste-miniapp-xy8k.vercel.app",
-  "name": "Taste Token",
-  "iconUrl": "https://taste-miniapp-xy8k.vercel.app/logo.jpg"
+  "name": "TASTE AI",
+  "iconUrl": "https://taste-miniapp-xy8k.vercel.app/logo.jpg",
+  "termsOfUseUrl": "https://taste-miniapp-xy8k.vercel.app/litepaper.html",
+  "privacyPolicyUrl": "https://taste-miniapp-xy8k.vercel.app/audit.html"
 }

@@ -228,98 +228,143 @@ function App() {
         return (
           <motion.div key="home" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} style={{ paddingBottom: 10 }}>
 
+            {/* Hero Image Carousel */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{ borderRadius: 22, overflow: 'hidden', marginBottom: 16, position: 'relative', height: 200 }}
+            >
+              {['/photo_5.jpg', '/photo_6.jpg', '/photo_7.jpg', '/photo_8.jpg', '/photo_9.jpg', '/photo_10.jpg'].map((src, i) => (
+                <motion.img
+                  key={src}
+                  src={src}
+                  alt={`TASTE Banner ${i + 1}`}
+                  initial={false}
+                  animate={{
+                    opacity: Math.floor((Date.now() / 5000) % 6) === i ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.8 }}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', borderRadius: 22 }}
+                />
+              ))}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,15,28,0.85) 0%, transparent 60%)', borderRadius: 22 }} />
+              <div style={{ position: 'absolute', bottom: 16, left: 18, zIndex: 2 }}>
+                <div style={{ fontSize: 20, fontWeight: 900, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>$TASTE</div>
+                <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>{t('app.description', 'Web3 Food Ecosystem')}</div>
+              </div>
+              {/* Carousel dots */}
+              <div style={{ position: 'absolute', bottom: 8, right: 16, display: 'flex', gap: 4, zIndex: 2 }}>
+                {[0,1,2,3,4,5].map(i => (
+                  <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.4)' }} />
+                ))}
+              </div>
+            </motion.div>
+
             {/* Quick Stats Bar */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 18, padding: '14px 16px', marginBottom: 16 }}
+              transition={{ delay: 0.1 }}
+              style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)', borderRadius: 18, padding: '14px 16px', marginBottom: 16 }}
             >
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: 'var(--primary)' }}>{holdersCount}</div>
                 <div style={{ fontSize: 8, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>HOLDER</div>
               </div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.06)' }} />
+              <div style={{ width: 1, background: 'var(--bg-card-border)' }} />
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: 'var(--primary)' }}>25M</div>
                 <div style={{ fontSize: 8, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>SUPPLY</div>
               </div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.06)' }} />
+              <div style={{ width: 1, background: 'var(--bg-card-border)' }} />
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: '#10b981' }}>88.4%</div>
                 <div style={{ fontSize: 8, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>LOCKED</div>
               </div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.06)' }} />
+              <div style={{ width: 1, background: 'var(--bg-card-border)' }} />
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: '#3b82f6' }}>${tonUsdPrice.toFixed(2)}</div>
                 <div style={{ fontSize: 8, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>TON</div>
               </div>
             </motion.div>
 
-            {/* Mini Swap & DeFi Pool Buttons */}
+            {/* TAI Swap & DeFi Pool — with images */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
               <motion.button
                 whileTap={{ scale: 0.96 }}
                 onClick={() => setShowSwapScreen(true)}
-                style={{ background: 'linear-gradient(135deg, rgba(245,159,11,0.15), rgba(217,119,6,0.1))', border: '1px solid rgba(245,159,11,0.35)', borderRadius: 18, padding: '18px 14px', cursor: 'pointer', textAlign: 'center' }}
+                style={{
+                  background: 'var(--bg-card)', border: '1px solid rgba(245,159,11,0.25)',
+                  borderRadius: 20, padding: 0, cursor: 'pointer', overflow: 'hidden', textAlign: 'center'
+                }}
               >
-                <div style={{ fontSize: 28, marginBottom: 6 }}>⚡</div>
-                <div style={{ fontSize: 14, fontWeight: 900, color: '#f59e0b' }}>TAI Al</div>
-                <div style={{ fontSize: 11, color: '#64748b', marginTop: 3 }}>TON, USDT, DOGS</div>
+                <div style={{ width: '100%', height: 80, overflow: 'hidden' }}>
+                  <img src="/photo_14.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ padding: '10px 12px' }}>
+                  <div style={{ fontSize: 14, fontWeight: 900, color: 'var(--primary)' }}>⚡ {t('app.buy_with', 'TAI Al')}</div>
+                  <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>TON, USDT, DOGS</div>
+                </div>
               </motion.button>
 
               <motion.button
                 whileTap={{ scale: 0.96 }}
                 onClick={() => { setActiveBottomTab('pool'); navigateTo('pool'); }}
-                style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(5,150,105,0.08))', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 18, padding: '18px 14px', cursor: 'pointer', textAlign: 'center' }}
+                style={{
+                  background: 'var(--bg-card)', border: '1px solid rgba(16,185,129,0.25)',
+                  borderRadius: 20, padding: 0, cursor: 'pointer', overflow: 'hidden', textAlign: 'center'
+                }}
               >
-                <div style={{ fontSize: 28, marginBottom: 6 }}>💧</div>
-                <div style={{ fontSize: 14, fontWeight: 900, color: '#10b981' }}>DeFi Havuz</div>
-                <div style={{ fontSize: 11, color: '#64748b', marginTop: 3 }}>4 Aktif Havuz</div>
+                <div style={{ width: '100%', height: 80, overflow: 'hidden' }}>
+                  <img src="/photo_15.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ padding: '10px 12px' }}>
+                  <div style={{ fontSize: 14, fontWeight: 900, color: '#10b981' }}>💧 DeFi {t('nav.pool', 'Havuz')}</div>
+                  <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>STON.fi & DeDust</div>
+                </div>
               </motion.button>
             </div>
 
             {/* Quick Access Grid */}
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 10, letterSpacing: 2, color: '#64748b', fontWeight: 700, textTransform: 'uppercase', marginBottom: 10 }}>Hızlı Erişim</div>
+              <div style={{ fontSize: 10, letterSpacing: 2, color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: 10 }}>{t('app.quick_links', 'Hızlı Erişim')}</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
                 {[
-                  { emoji: '🤖', label: 'AI', tab: 'ai' },
+                  { emoji: '🤖', label: t('drawer.ai', 'AI'), tab: 'ai' },
                   { emoji: '👨‍🍳', label: 'Chef', tab: 'chef' },
-                  { emoji: '🎡', label: 'Çark', tab: 'spin' },
-                  { emoji: '❤️', label: 'Bağış', tab: 'charity' },
-                  { emoji: '🌐', label: 'Ekosistem', tab: 'ecosystem' },
-                  { emoji: '👥', label: 'Takım', tab: 'team' },
-                  { emoji: '📱', label: 'Sosyal', tab: 'socials' },
-                  { emoji: '⚙️', label: 'Ayarlar', tab: 'settings' },
+                  { emoji: '🎡', label: t('nav.spin', 'Çark'), tab: 'spin' },
+                  { emoji: '❤️', label: t('nav.charity', 'Bağış'), tab: 'charity' },
+                  { emoji: '🌐', label: t('drawer.ecosystem', 'Ekosistem'), tab: 'ecosystem' },
+                  { emoji: '👥', label: t('nav.team', 'Takım'), tab: 'team' },
+                  { emoji: '📱', label: t('drawer.socials', 'Sosyal'), tab: 'socials' },
+                  { emoji: '⚙️', label: t('nav.settings', 'Ayarlar'), tab: 'settings' },
                 ].map(item => (
                   <motion.button
-                    key={item.label}
+                    key={item.tab}
                     whileTap={{ scale: 0.92 }}
                     onClick={() => navigateTo(item.tab as any)}
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14, padding: '12px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)', borderRadius: 14, padding: '12px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}
                   >
                     <span style={{ fontSize: 22 }}>{item.emoji}</span>
-                    <span style={{ fontSize: 9, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 0.3 }}>{item.label}</span>
+                    <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.3 }}>{item.label}</span>
                   </motion.button>
                 ))}
               </div>
             </div>
 
-            {/* Compact Live Chart */}
-            <div style={{ background: 'rgba(15,23,42,0.6)', borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px' }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)' }}>📈 Canlı Grafik</span>
-                <span style={{ fontSize: 10, color: '#475569' }}>GeckoTerminal</span>
+            {/* Featured image banner */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid var(--bg-card-border)' }}
+            >
+              <img src="/photo_16.jpg" alt="TASTE Community" style={{ width: '100%', height: 140, objectFit: 'cover' }} />
+              <div style={{ padding: '14px 16px', background: 'var(--bg-card)' }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)' }}>🍳 {t('app.banner_title', 'TASTE AI — Web3\'ün Yeni Yüzü!')}</div>
+                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.5 }}>{t('app.banner_desc', 'Toplulukla birlikte büyüyen, yapay zeka destekli gastronomi ekosistemi.')}</div>
               </div>
-              <div style={{ position: 'relative', width: '100%', paddingTop: '50%', overflow: 'hidden' }}>
-                <iframe
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
-                  title="TASTE / TON Chart"
-                  src="https://www.geckoterminal.com/ton/pools/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS?embed=1&info=0&swaps=0&grayscale=0&light_chart=0&chart_type=price&resolution=15m"
-                  allow="clipboard-write"
-                />
-              </div>
-            </div>
+            </motion.div>
 
           </motion.div>
         );

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { ExternalLink, MessageSquare, Megaphone, Globe, Twitter, Phone, MessageCircle, Instagram, Video, Facebook, Mail, ArrowLeft, Github } from 'lucide-react'
+import { ExternalLink, MessageSquare, Megaphone, Globe, Twitter, Phone, MessageCircle, Video, Mail, ArrowLeft, Github } from 'lucide-react'
 
 interface SocialLinkItem {
     id: string
@@ -110,28 +110,12 @@ export function OfficialSocials({ onClose }: OfficialSocialsProps) {
             color: '#cbd5e1'
         },
         {
-            id: 'instagram',
-            icon: <Instagram size={22} />,
-            label: 'Instagram',
-            sublabel: '@taste_ton_taste',
-            link: 'https://www.instagram.com/taste_ton_taste',
-            color: '#e1306c'
-        },
-        {
             id: 'tiktok',
             icon: <Video size={22} />,
             label: 'TikTok',
             sublabel: '@taste_ton',
             link: 'https://www.tiktok.com/@taste_ton',
             color: '#00f2fe'
-        },
-        {
-            id: 'facebook',
-            icon: <Facebook size={22} />,
-            label: 'Facebook',
-            sublabel: 'TASTE AI',
-            link: 'https://www.facebook.com/share/1DGWE1ZQoR/',
-            color: '#1877f2'
         },
         {
             id: 'github',

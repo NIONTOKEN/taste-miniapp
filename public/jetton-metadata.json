@@ -1,49 +1,14 @@
 {
-    "name": "Taste AI",
-    "description": "TASTE AI is an AI-powered gastronomy ecosystem on the TON blockchain, designed for smart recipes, rewards, payments, and access within the Telegram Mini App ecosystem.",
-    "symbol": "TAI",
-    "decimals": "9",
-    "image": "https://tastetoken.net/taste-ai-logo.jpg",
-    "image_data": "",
-    "uri": "https://tastetoken.net/jetton-metadata.json",
-    "attributes": [
-        {
-            "trait_type": "Network",
-            "value": "TON"
-        },
-        {
-            "trait_type": "Standard",
-            "value": "Jetton"
-        },
-        {
-            "trait_type": "Token Type",
-            "value": "Utility"
-        },
-        {
-            "trait_type": "Ecosystem",
-            "value": "Telegram Mini Apps"
-        },
-        {
-            "trait_type": "Use Case",
-            "value": "AI Recipes, Rewards, Payments"
-        },
-        {
-            "trait_type": "Launch Year",
-            "value": "2025"
-        }
-    ],
-    "social_links": [
-        "https://t.me/btastechain",
-        "https://t.me/taste_launch_bot",
-        "https://x.com/taste_token",
-        "https://www.instagram.com/taste_ton_taste",
-        "https://www.tiktok.com/@taste_ton",
-        "https://www.facebook.com/share/1BC81LDmjg/",
-        "https://whatsapp.com/channel/0029Vb7ACtI1CYoNo8B1e21N"
-    ],
-    "websites": [
-        "https://www.tastetoken.net"
-    ],
-    "telegram": "https://t.me/btastechain",
-    "twitter": "https://x.com/taste_token"
+  "name": "TASTE AI",
+  "symbol": "TAI",
+  "decimals": "9",
+  "description": "TASTE AI — AI Powered Web3 Food Ecosystem on TON",
+  "image": "https://taste-miniapp-xy8k.vercel.app/logo.jpg",
+  "social": [
+    "https://t.me/TasteAIToken",
+    "https://x.com/AiTaste"
+  ],
+  "websites": [
+    "https://taste-miniapp-xy8k.vercel.app"
+  ]
 }

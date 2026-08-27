@@ -1,203 +1,108 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { usePWA } from '../hooks/usePWA'
-import { Download, RefreshCw, X } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Download, X, Share, Plus } from 'lucide-react';
 
-interface PWAInstallBannerProps {
-  onManualInstall?: () => void
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-export function PWAInstallBanner({ onManualInstall }: PWAInstallBannerProps) {
-  const { isInstallable, promptInstall, needRefresh, updateServiceWorker, dismissUpdate } = usePWA()
-  const [dismissed, setDismissed] = useState(false)
-  const [isStandalone, setIsStandalone] = useState(false)
+export function PWAInstallBanner() {
+  const [show, setShow] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
-    const checkStandalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone === true
-    setIsStandalone(checkStandalone)
-  }, [])
+    if (localStorage.getItem('pwa_dismissed') === 'true') return;
+    if (window.matchMedia('(display-mode: standalone)').matches) return;
+
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    setIsIOS(ios);
+
+    if (!ios) {
+      const handler = (e: Event) => {
+        e.preventDefault();
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
+        setTimeout(() => setShow(true), 3000);
+      };
+      window.addEventListener('beforeinstallprompt', handler);
+      const fallback = setTimeout(() => setShow(true), 5000);
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handler);
+        clearTimeout(fallback);
+      };
+    } else {
+      const timer = setTimeout(() => setShow(true), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const handleInstall = async () => {
-    if (isInstallable) {
-      const accepted = await promptInstall()
-      if (accepted) {
-        setDismissed(true)
-      }
-    } else {
-      if (onManualInstall) {
-        onManualInstall()
-      }
+    if (deferredPrompt) {
+      await deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice.outcome === 'accepted') setShow(false);
+      setDeferredPrompt(null);
     }
-  }
+  };
 
   const handleDismiss = () => {
-    setDismissed(true)
-    // 24 saat sonra tekrar göster
-    localStorage.setItem('pwa-banner-dismissed', Date.now().toString())
-  }
+    setShow(false);
+    localStorage.setItem('pwa_dismissed', 'true');
+  };
 
-  // 24 saat içinde reddedildiyse gösterme
-  const lastDismissed = localStorage.getItem('pwa-banner-dismissed')
-  const dismissedRecently = lastDismissed && Date.now() - parseInt(lastDismissed) < 24 * 60 * 60 * 1000
-
-  // Standalone değilse ve dismiss edilmediyse banner'ı göster
-  const showInstallBanner = !isStandalone && !dismissed && !dismissedRecently
+  if (!show) return null;
 
   return (
-    <>
-      {/* SW Update Notification */}
-      <AnimatePresence>
-        {needRefresh && (
-          <motion.div
-            initial={{ opacity: 0, y: -60 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -60 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            style={{
-              position: 'fixed',
-              top: '12px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 9999,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              background: 'linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,41,59,0.98))',
-              border: '1px solid rgba(245,159,11,0.5)',
-              borderRadius: '20px',
-              padding: '12px 16px',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(245,159,11,0.15)',
-              backdropFilter: 'blur(20px)',
-              maxWidth: '340px',
-              width: 'calc(100vw - 32px)',
-            }}
-          >
-            <div style={{
-              width: '36px', height: '36px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0
+    <AnimatePresence>
+      <motion.div
+        initial={{ y: 120, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 120, opacity: 0 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        style={{
+          position: 'fixed', bottom: 85, left: 12, right: 12, zIndex: 9500,
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+          border: '1px solid rgba(245,159,11,0.3)', borderRadius: 20,
+          padding: '16px 18px',
+          boxShadow: '0 -4px 32px rgba(0,0,0,0.5), 0 0 20px rgba(245,159,11,0.15)',
+        }}
+      >
+        <button onClick={handleDismiss} style={{
+          position: 'absolute', top: 10, right: 12, background: 'none',
+          border: 'none', color: '#64748b', cursor: 'pointer', padding: 4
+        }}>
+          <X size={16} />
+        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 14,
+            background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+          }}>
+            <Download size={24} color="#000" />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: '#fff', marginBottom: 3 }}>
+              📲 TASTE AI Uygulamasını Kur
+            </div>
+            <div style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.4 }}>
+              {isIOS
+                ? <>Safari'de <Share size={11} style={{ display: 'inline', verticalAlign: 'middle' }} /> Paylaş → <Plus size={11} style={{ display: 'inline', verticalAlign: 'middle' }} /> Ana Ekrana Ekle</>
+                : 'Hızlı erişim için ana ekranına ekle!'}
+            </div>
+          </div>
+          {!isIOS && (
+            <motion.button whileTap={{ scale: 0.92 }} onClick={handleInstall} style={{
+              background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000',
+              border: 'none', borderRadius: 12, padding: '10px 18px',
+              fontSize: 12, fontWeight: 800, cursor: 'pointer', flexShrink: 0
             }}>
-              <RefreshCw size={16} color="#000" />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff', marginBottom: '2px' }}>
-                Güncelleme Hazır!
-              </div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>
-                Yeni sürümü yüklemek için yenile
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: '6px' }}>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => updateServiceWorker(true)}
-                style={{
-                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                  color: '#000', border: 'none', borderRadius: '12px',
-                  padding: '7px 12px', fontSize: '12px', fontWeight: 800,
-                  cursor: 'pointer', whiteSpace: 'nowrap'
-                }}
-              >
-                Yenile
-              </motion.button>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={dismissUpdate}
-                style={{
-                  background: 'rgba(255,255,255,0.08)', color: '#94a3b8',
-                  border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px',
-                  padding: '7px', cursor: 'pointer', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center'
-                }}
-              >
-                <X size={14} />
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Install Banner */}
-      <AnimatePresence>
-        {showInstallBanner && (
-          <motion.div
-            initial={{ opacity: 0, y: 80 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 80 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 1.5 }}
-            style={{
-              position: 'fixed',
-              bottom: '85px',
-              left: '12px',
-              right: '12px',
-              zIndex: 9998,
-              background: 'linear-gradient(135deg, rgba(15,23,42,0.98), rgba(20,30,48,0.98))',
-              border: '1px solid rgba(245,159,11,0.4)',
-              borderRadius: '24px',
-              padding: '16px 16px',
-              boxShadow: '0 -4px 40px rgba(0,0,0,0.6), 0 0 30px rgba(245,159,11,0.1)',
-              backdropFilter: 'blur(20px)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-            }}
-          >
-            {/* Logo */}
-            <div style={{
-              width: '48px', height: '48px', borderRadius: '14px',
-              overflow: 'hidden', flexShrink: 0,
-              border: '2px solid rgba(245,159,11,0.4)',
-              boxShadow: '0 0 15px rgba(245,159,11,0.3)'
-            }}>
-              <img src="/logo.jpg" alt="TASTE" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-
-            {/* Text */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff', marginBottom: '2px' }}>
-                TASTE AI'ı Yükle 🚀
-              </div>
-              <div style={{ fontSize: '11px', color: '#94a3b8', lineHeight: '1.4' }}>
-                Ana ekrana ekle, offline çalışır
-              </div>
-            </div>
-
-            {/* Buttons */}
-            <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleInstall}
-                style={{
-                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                  color: '#000', border: 'none', borderRadius: '14px',
-                  padding: '10px 14px', fontSize: '12px', fontWeight: 900,
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
-                  boxShadow: '0 4px 15px rgba(245,159,11,0.4)'
-                }}
-              >
-                <Download size={14} />
-                Kur
-              </motion.button>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={handleDismiss}
-                style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  color: '#64748b', border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: '14px', padding: '10px',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center'
-                }}
-              >
-                <X size={14} />
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  )
+              YÜKLE
+            </motion.button>
+          )}
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
 }

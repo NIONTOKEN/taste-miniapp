@@ -5,6 +5,14 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
     "en": {
         "translation": {
+            "drawer": { "ecosystem": "Ecosystem", "socials": "Socials", "team": "Team", "jobs": "Jobs", "swap": "Swap", "tokenomics": "Tokenomics", "whitepaper": "Whitepaper", "blockchain": "Blockchain", "ai": "AI", "help": "Help", "website": "Website", "legal": "Legal", "settings": "Settings" },
+            "kyc": { "title": "KYC Verification", "description": "Verify your identity", "verify_button": "Verify Now", "step1": "Step 1", "step2": "Step 2", "pending": "Pending", "done": "Done" },
+            "pool": { "title": "Liquidity Pool", "description": "Provide liquidity and earn rewards" },
+            "swap": { "title": "Swap Tokens", "select_pair": "Select Pair" },
+            "notifications": { "title": "Notifications", "mark_all": "Mark all as read" },
+            "profile": { "logout": "Logout", "level": "Level", "upgrade": "Upgrade" },
+            "settings": { "dark_mode": "Dark Mode", "light_mode": "Light Mode", "language": "Language", "theme": "Theme", "pin": "PIN", "share": "Share" },
+            "pwa": { "install_title": "Install App", "install_description": "Install our app for a better experience", "install_button": "Install", "ios_instructions": "Tap the share button and select 'Add to Home Screen'" },
             "app": {
                 "title": "TASTE AI",
                 "description": "The New Face of Web3 — AI Powered Food Ecosystem",
@@ -62,6 +70,7 @@ const resources = {
                 "live_chart": "Live Market Analysis"
             },
             "nav": {
+                "pool": "Pool",
                 "home": "Home",
                 "roadmap": "Roadmap",
                 "whitepaper": "Whitepaper",
@@ -890,6 +899,14 @@ const resources = {
     },
     "tr": {
         "translation": {
+            "drawer": { "ecosystem": "Ekosistem", "socials": "Sosyal Medya", "team": "Takım", "jobs": "İş İlanları", "swap": "Takas", "tokenomics": "Tokenomi", "whitepaper": "Whitepaper", "blockchain": "Blokzincir", "ai": "Yapay Zeka", "help": "Yardım", "website": "Web Sitesi", "legal": "Yasal", "settings": "Ayarlar" },
+            "kyc": { "title": "KYC Doğrulaması", "description": "Kimliğinizi doğrulayın", "verify_button": "Şimdi Doğrula", "step1": "Adım 1", "step2": "Adım 2", "pending": "Bekliyor", "done": "Tamamlandı" },
+            "pool": { "title": "Likidite Havuzu", "description": "Likidite sağlayın ve ödüller kazanın" },
+            "swap": { "title": "Token Takası", "select_pair": "Çift Seçin" },
+            "notifications": { "title": "Bildirimler", "mark_all": "Tümünü okundu işaretle" },
+            "profile": { "logout": "Çıkış Yap", "level": "Seviye", "upgrade": "Yükselt" },
+            "settings": { "dark_mode": "Karanlık Mod", "light_mode": "Aydınlık Mod", "language": "Dil", "theme": "Tema", "pin": "PIN", "share": "Paylaş" },
+            "pwa": { "install_title": "Uygulamayı Yükle", "install_description": "Daha iyi bir deneyim için uygulamamızı yükleyin", "install_button": "Yükle", "ios_instructions": "Paylaş butonuna dokunun ve 'Ana Ekrana Ekle'yi seçin" },
             "app": {
                 "title": "TASTE AI",
                 "description": "Gastronomi ve Eğitim Odaklı Dijital Varlıklar",
@@ -947,6 +964,7 @@ const resources = {
                 "live_chart": "Canlı Piyasa Analizi"
             },
             "nav": {
+                "pool": "Havuz",
                 "home": "Ana Sayfa",
                 "roadmap": "Yol Haritası",
                 "whitepaper": "Beyaz Kağıt",
@@ -1775,6 +1793,14 @@ const resources = {
     },
     "ru": {
         "translation": {
+            "drawer": { "ecosystem": "Экосистема", "socials": "Соцсети", "team": "Команда", "jobs": "Вакансии", "swap": "Обмен", "tokenomics": "Токеномика", "whitepaper": "Whitepaper", "blockchain": "Блокчейн", "ai": "ИИ", "help": "Помощь", "website": "Веб-сайт", "legal": "Правовая информация", "settings": "Настройки" },
+            "kyc": { "title": "Верификация KYC", "description": "Подтвердите свою личность", "verify_button": "Подтвердить", "step1": "Шаг 1", "step2": "Шаг 2", "pending": "В ожидании", "done": "Готово" },
+            "pool": { "title": "Пул ликвидности", "description": "Обеспечьте ликвидность и получайте награды" },
+            "swap": { "title": "Обмен токенов", "select_pair": "Выберите пару" },
+            "notifications": { "title": "Уведомления", "mark_all": "Отметить все как прочитанные" },
+            "profile": { "logout": "Выйти", "level": "Уровень", "upgrade": "Улучшить" },
+            "settings": { "dark_mode": "Темный режим", "light_mode": "Светлый режим", "language": "Язык", "theme": "Тема", "pin": "PIN-код", "share": "Поделиться" },
+            "pwa": { "install_title": "Установить приложение", "install_description": "Установите наше приложение для лучшего опыта", "install_button": "Установить", "ios_instructions": "Нажмите кнопку «Поделиться» и выберите «На экран «Домой»" },
             "app": {
                 "title": "ВКУС",
                 "description": "Утилитарные цифровые активы в сфере гастрономии и обучения",
@@ -1825,6 +1851,7 @@ const resources = {
                 "banner_buy": "КУПИТЬ ВКУС"
             },
             "nav": {
+                "pool": "Пул",
                 "home": "Главная",
                 "roadmap": "Дорожная карта",
                 "whitepaper": "Белая бумага",
@@ -2660,6 +2687,14 @@ const resources = {
     },
     "ar": {
         "translation": {
+            "drawer": { "ecosystem": "النظام البيئي", "socials": "الشبكات الاجتماعية", "team": "الفريق", "jobs": "الوظائف", "swap": "تبديل", "tokenomics": "اقتصاد الرموز", "whitepaper": "الورقة البيضاء", "blockchain": "بلوكتشين", "ai": "الذكاء الاصطناعي", "help": "مساعدة", "website": "الموقع الإلكتروني", "legal": "قانوني", "settings": "الإعدادات" },
+            "kyc": { "title": "التحقق من اعرف عميلك", "description": "تحقق من هويتك", "verify_button": "تحقق الآن", "step1": "الخطوة 1", "step2": "الخطوة 2", "pending": "قيد الانتظار", "done": "تم" },
+            "pool": { "title": "مجمع السيولة", "description": "توفير السيولة وكسب المكافآت" },
+            "swap": { "title": "تبديل الرموز", "select_pair": "حدد الزوج" },
+            "notifications": { "title": "الإشعارات", "mark_all": "تحديد الكل كمقروء" },
+            "profile": { "logout": "تسجيل الخروج", "level": "مستوى", "upgrade": "ترقية" },
+            "settings": { "dark_mode": "الوضع الداكن", "light_mode": "الوضع الفاتح", "language": "اللغة", "theme": "السمة", "pin": "رمز PIN", "share": "مشاركة" },
+            "pwa": { "install_title": "تثبيت التطبيق", "install_description": "قم بتثبيت تطبيقنا لتجربة أفضل", "install_button": "تثبيت", "ios_instructions": "انقر على زر المشاركة وحدد 'إضافة إلى الشاشة الرئيسية'" },
             "app": {
                 "title": "ذوق",
                 "description": "الأصول الرقمية الخدمية الموجهة نحو فن الطهي والتعليم",
@@ -2710,6 +2745,7 @@ const resources = {
                 "banner_buy": "شراء الذوق"
             },
             "nav": {
+                "pool": "المسبح",
                 "home": "الرئيسية",
                 "roadmap": "خارطة الطريق",
                 "whitepaper": "الورقة البيضاء",
@@ -3545,6 +3581,14 @@ const resources = {
     },
     "zh": {
         "translation": {
+            "drawer": { "ecosystem": "生态系统", "socials": "社交媒体", "team": "团队", "jobs": "工作", "swap": "交换", "tokenomics": "代币经济学", "whitepaper": "白皮书", "blockchain": "区块链", "ai": "人工智能", "help": "帮助", "website": "网站", "legal": "法律", "settings": "设置" },
+            "kyc": { "title": "KYC 验证", "description": "验证您的身份", "verify_button": "立即验证", "step1": "步骤 1", "step2": "步骤 2", "pending": "待定", "done": "完成" },
+            "pool": { "title": "流动性池", "description": "提供流动性并赚取奖励" },
+            "swap": { "title": "交换代币", "select_pair": "选择对" },
+            "notifications": { "title": "通知", "mark_all": "全部标记为已读" },
+            "profile": { "logout": "登出", "level": "水平", "upgrade": "升级" },
+            "settings": { "dark_mode": "暗模式", "light_mode": "亮模式", "language": "语言", "theme": "主题", "pin": "PIN码", "share": "分享" },
+            "pwa": { "install_title": "安装应用程序", "install_description": "安装我们的应用程序以获得更好的体验", "install_button": "安装", "ios_instructions": "点击分享按钮，然后选择“添加到主屏幕”" },
             "app": {
                 "title": "品尝",
                 "description": "专注于美食与教育的实用数字资产",
@@ -3595,6 +3639,7 @@ const resources = {
                 "banner_buy": "购买口味"
             },
             "nav": {
+                "pool": "池",
                 "home": "首页",
                 "roadmap": "路线图",
                 "whitepaper": "白皮书",

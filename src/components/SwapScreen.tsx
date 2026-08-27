@@ -6,13 +6,13 @@ interface SwapScreenProps {
   onClose: () => void
 }
 
-type PairKey = 'TON_TAI' | 'USDT_TAI' | 'DOGS_TAI' | 'UTYA_TAI'
+type PairKey = 'TON_TAI' | 'USDT_TAI' | 'DOGS_TAI' | 'NOT_TAI'
 
 const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon: string; color: string; dex: string; link: string }[] = [
   {
     key: 'TON_TAI',
     from: 'TON', to: 'TAI',
-    fromIcon: 'https://ton.org/download/ton_symbol.png',
+    fromIcon: 'https://ton.org/download/ton_symbol.svg',
     toIcon: '/logo.jpg',
     color: '#3b82f6',
     dex: 'STON.fi',
@@ -21,7 +21,7 @@ const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon:
   {
     key: 'USDT_TAI',
     from: 'USDT', to: 'TAI',
-    fromIcon: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
     toIcon: '/logo.jpg',
     color: '#10b981',
     dex: 'DeDust',
@@ -30,20 +30,20 @@ const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon:
   {
     key: 'DOGS_TAI',
     from: 'DOGS', to: 'TAI',
-    fromIcon: 'https://dogs.tg/logo.png',
+    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/31693.png',
     toIcon: '/logo.jpg',
     color: '#f97316',
     dex: 'STON.fi',
     link: 'https://app.ston.fi/swap?ft=DOGS&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
   },
   {
-    key: 'UTYA_TAI',
-    from: 'UTYA', to: 'TAI',
-    fromIcon: 'https://asset.ston.fi/img/EQC-tdRjjoYMz3MXKW4pj95bNZgvRyWwZ43-M8zvwDeCeec2/image',
+    key: 'NOT_TAI',
+    from: 'NOT', to: 'TAI',
+    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28850.png',
     toIcon: '/logo.jpg',
     color: '#a855f7',
     dex: 'STON.fi',
-    link: 'https://app.ston.fi/swap?ft=UTYA&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+    link: 'https://app.ston.fi/swap?ft=NOT&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
   },
 ]
 
