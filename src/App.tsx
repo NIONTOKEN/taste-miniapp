@@ -253,7 +253,7 @@ function App() {
               ))}
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,15,28,0.85) 0%, transparent 60%)', borderRadius: 22 }} />
               <div style={{ position: 'absolute', bottom: 16, left: 18, zIndex: 2 }}>
-                <div style={{ fontSize: 20, fontWeight: 900, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>$TASTE</div>
+                <div style={{ fontSize: 20, fontWeight: 900, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>TASTE TAI</div>
                 <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>{t('app.description', 'Web3 Food Ecosystem')}</div>
               </div>
               {/* Carousel dots */}
@@ -261,6 +261,41 @@ function App() {
                 {[0,1,2,3,4,5].map(i => (
                   <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.4)' }} />
                 ))}
+              </div>
+            </motion.div>
+
+            {/* PWA Direct Install Card on Home */}
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setIsInstallModalOpen(true)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                background: 'linear-gradient(135deg, rgba(245,159,11,0.12) 0%, rgba(59,130,246,0.08) 100%)',
+                border: '1px solid rgba(245,159,11,0.3)', borderRadius: 18,
+                padding: '12px 16px', marginBottom: 16, cursor: 'pointer'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: 12,
+                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 18, flexShrink: 0
+                }}>
+                  📲
+                </div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 900, color: 'var(--text-main)' }}>TASTE AI Uygulamasını Kur (PWA)</div>
+                  <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 1 }}>Hızlı ve çevrimdışı kullanım için ana ekrana ekle</div>
+                </div>
+              </div>
+              <div style={{
+                background: 'var(--primary)', color: '#000',
+                padding: '6px 12px', borderRadius: 10, fontSize: 11, fontWeight: 900
+              }}>
+                KUR
               </div>
             </motion.div>
 
@@ -675,7 +710,7 @@ function App() {
             <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: 0.5,
               background: 'linear-gradient(135deg,#ffd700,#f59e0b)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-            }}>$TASTE</span>
+            }}>TASTE TAI</span>
           </div>
 
           {/* Right: KYC + Bell + Lang + Avatar */}
@@ -776,7 +811,7 @@ function App() {
                 }}>
                   <img src="/logo.jpg" alt="TAI" style={{ width: 52, height: 52, borderRadius: '50%', border: '2px solid #f59e0b', boxShadow: '0 0 16px rgba(245,159,11,0.4)' }} />
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 900, color: '#fff' }}>$TASTE</div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: '#fff' }}>TASTE TAI</div>
                     <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>Taste AI Tarafından Desteklenmektedir</div>
                   </div>
                   <button onClick={() => setIsMenuOpen(false)} style={{ marginLeft: 'auto', background: 'transparent', border: 'none', color: '#475569', cursor: 'pointer', padding: 4 }}>

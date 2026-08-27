@@ -193,7 +193,7 @@ export function SplashScreen({ onFinish }: SplashScreenProps) {
                   lineHeight: 1,
                 }}
               >
-                $TASTE
+                TASTE TAI
               </div>
 
               {/* Divider line */}
