@@ -13,7 +13,7 @@ export function KYCModal({ onClose }: KYCModalProps) {
 
   const startKYC = () => {
     const text = encodeURIComponent('I want to verify my identity for KYC')
-    const url = `https://t.me/TasteAIToken?text=${text}`
+    const url = `https://t.me/TASTEAIOPEN?text=${text}`
     if (window.Telegram?.WebApp) {
       window.Telegram.WebApp.openLink(url)
     } else {
