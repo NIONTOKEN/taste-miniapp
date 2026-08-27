@@ -552,7 +552,7 @@ function App() {
       <AnimatePresence>
         {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
       </AnimatePresence>
-      <PWAInstallBanner onManualInstall={() => setIsInstallModalOpen(true)} />
+      <PWAInstallBanner />
       <InstallModal isOpen={isInstallModalOpen} onClose={() => setIsInstallModalOpen(false)} />
       <AnimatePresence>
         {langSelectionVisible && (
