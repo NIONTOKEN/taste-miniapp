@@ -130,7 +130,7 @@ export function Settings() {
     };
 
     const Card = ({ title, icon: Icon, children }: any) => (
-        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px', marginBottom: '16px' }}>
+        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)', borderRadius: '16px', padding: '16px', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--primary)' }}>
                 <Icon size={20} />
                 <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800 }}>{title}</h3>
@@ -173,7 +173,7 @@ export function Settings() {
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                 <span style={{ fontSize: 20 }}>{item.emoji}</span>
-                                <span style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{item.label}</span>
+                                <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)' }}>{item.label}</span>
                             </div>
                             {/* Toggle switch */}
                             <motion.button
@@ -207,11 +207,11 @@ export function Settings() {
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 18, overflow: 'hidden' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px 18px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <span style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{isTr ? 'Sürüm' : 'Version'}</span>
+                        <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)' }}>{isTr ? 'Sürüm' : 'Version'}</span>
                         <span style={{ fontSize: 14, fontWeight: 800, color: '#f59e0b' }}>1.0</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px 18px' }}>
-                        <span style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{isTr ? 'Dili Değiştir' : 'Change Language'}</span>
+                        <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)' }}>{isTr ? 'Dili Değiştir' : 'Change Language'}</span>
                         <div style={{ display: 'flex', gap: 8 }}>
                             {[{ code: 'tr', flag: '🇹🇷' }, { code: 'en', flag: '🇺🇸' }, { code: 'ru', flag: '🇷🇺' }].map(l => (
                                 <button
@@ -262,7 +262,7 @@ export function Settings() {
                                 padding: '10px 8px', borderRadius: '12px',
                                 background: i18n.language?.startsWith(l.code) ? 'rgba(245, 159, 11, 0.2)' : 'rgba(255,255,255,0.05)',
                                 border: `1px solid ${i18n.language?.startsWith(l.code) ? 'var(--primary)' : 'transparent'}`,
-                                color: '#fff', fontWeight: 700, cursor: 'pointer',
+                                color: 'var(--text-main)', fontWeight: 700, cursor: 'pointer',
                                 fontSize: '13px',
                                 display: 'flex',
                                 alignItems: 'center',
