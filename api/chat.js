@@ -19,7 +19,7 @@ module.exports = function handler(req, res) {
   const apiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY || String.fromCharCode(...codes);
 
   const postData = JSON.stringify({
-    model: 'mixtral-8x7b-32768',
+    model: 'gemma2-9b-it',
     messages: messages,
     temperature: 0.7
   });
