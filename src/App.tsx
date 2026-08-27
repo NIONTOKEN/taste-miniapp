@@ -114,6 +114,7 @@ function App() {
 
   // Telegram SDK Initialization
   useEffect(() => {
+    (window as any).openPWAInstall = () => setIsInstallModalOpen(true);
     if (window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp;
       tg.ready();
@@ -123,6 +124,9 @@ function App() {
         tg.setBackgroundColor('#0a0f1c');
       } catch (e) { }
     }
+    return () => {
+      delete (window as any).openPWAInstall;
+    };
   }, []);
 
   // Fetch holders count + TASTE per TON calculation
@@ -795,6 +799,7 @@ function App() {
                     { id: 'tech', icon: '⛓️', label: 'TAI Blockchain' },
                     null,
                     { id: 'ai', icon: '🤖', label: 'Taste AI' },
+                    { id: 'install_pwa', icon: '📲', label: 'Uygulamayı Kur (PWA)' },
                     { id: 'faq', icon: '❓', label: 'Yardım' },
                     { id: 'vote', icon: '🗳️', label: 'Web Sitesini Ziyaret Et' },
                   ].map((item: any, idx: number) => {
@@ -807,6 +812,8 @@ function App() {
                         onClick={() => {
                           if (item.id === 'swap') {
                             setShowSwapScreen(true);
+                          } else if (item.id === 'install_pwa') {
+                            setIsInstallModalOpen(true);
                           } else {
                             navigateTo(item.id as any);
                           }

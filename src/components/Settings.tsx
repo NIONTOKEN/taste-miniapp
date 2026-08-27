@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Share2, Key, Palette, Globe, Shield, Wallet, ChevronRight, X, AlertTriangle, Bell, Info } from 'lucide-react';
+import { Share2, Key, Palette, Globe, Shield, Wallet, ChevronRight, X, AlertTriangle, Bell, Info, Smartphone } from 'lucide-react';
 import { internalWalletService } from '../services/internalWallet';
 
 export function Settings() {
@@ -329,6 +329,29 @@ export function Settings() {
                     </div>
                     <button onClick={handleShare} style={{ background: 'var(--primary)', color: '#000', border: 'none', padding: '0 16px', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}>
                         {isTr ? 'Paylaş' : 'Share'}
+                    </button>
+                </div>
+            </Card>
+
+            {/* PWA INSTALLATION AND DIRECT LINK */}
+            <Card title={isTr ? 'Uygulamayı Kur / PWA' : 'Install App / PWA'} icon={Smartphone}>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '12px' }}>
+                    {isTr ? 'Uygulamayı doğrudan cihazınıza yükleyerek çevrimdışı (offline) ve çok daha hızlı kullanın.' : 'Install the app directly on your device to run offline and faster.'}
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ background: 'rgba(0,0,0,0.1)', padding: '10px', borderRadius: '8px', fontSize: '11px', color: 'var(--text-muted)', wordBreak: 'break-all', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span>https://taste-miniapp-xy8k.vercel.app</span>
+                        <button onClick={() => {
+                            navigator.clipboard.writeText('https://taste-miniapp-xy8k.vercel.app');
+                            alert(isTr ? 'Kopyalandı!' : 'Copied!');
+                        }} style={{ background: 'transparent', border: 'none', color: 'var(--primary)', cursor: 'pointer', fontWeight: 800 }}>{isTr ? 'Kopyala' : 'Copy'}</button>
+                    </div>
+                    <button onClick={() => {
+                        if (typeof (window as any).openPWAInstall === 'function') {
+                            (window as any).openPWAInstall();
+                        }
+                    }} style={{ background: 'var(--primary)', color: '#000', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', width: '100%' }}>
+                        🚀 {isTr ? 'Yükleme Rehberini Aç' : 'Open Install Guide'}
                     </button>
                 </div>
             </Card>
