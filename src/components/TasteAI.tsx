@@ -281,7 +281,7 @@ export function TasteAI() {
             'Authorization': `Bearer ${localApiKey}`
           },
           body: JSON.stringify({ 
-            model: 'gemma2-9b-it', 
+            model: 'openai/gpt-oss-120b', 
             messages: reqMessages,
             temperature: 0.7 
           }),
