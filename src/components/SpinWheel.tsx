@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTonConnectUI } from '@tonconnect/ui-react'
 import { useWallet } from '../context/WalletContext'
@@ -12,6 +12,7 @@ import {
 
 // ─── Config ────────────────────────────────────────────────────
 const WHATSAPP_GROUP = 'https://chat.whatsapp.com/G2Q6xjoYt94GzseLmFnUtO'
+const TELEGRAM_GROUP = 'https://t.me/TASTEAIOPEN'
 const TARGET_POINTS = 2_000
 const TARGET_TON = 5
 const REWARD_TASTE = 25
@@ -679,6 +680,23 @@ export function SpinWheel() {
                                     whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                                     onClick={() => {
                                         handleClaimReward()
+                                        if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(TELEGRAM_GROUP)
+                                        else window.open(TELEGRAM_GROUP, '_blank')
+                                    }}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #0088cc, #005580)',
+                                        color: '#fff', border: 'none', borderRadius: '12px',
+                                        padding: '13px', fontSize: '13px', fontWeight: 800,
+                                        cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,136,204,0.3)'
+                                    }}
+                                >
+                                    {i18n.language === 'tr' ? '✈️ Telegram Kanalından Talep Et' : '✈️ Claim via Telegram'}
+                                </motion.button>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                                    onClick={() => {
+                                        handleClaimReward()
                                         if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(whatsappLink)
                                         else window.open(whatsappLink, '_blank')
                                     }}
@@ -767,6 +785,22 @@ export function SpinWheel() {
                                     whileTap={{ scale: 0.97 }}
                                     onClick={() => {
                                         handleClaimTaste()
+                                        if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(TELEGRAM_GROUP)
+                                        else window.open(TELEGRAM_GROUP, '_blank')
+                                    }}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #0088cc, #005580)',
+                                        color: '#fff', border: 'none', borderRadius: '12px',
+                                        padding: '13px', fontSize: '13px', fontWeight: 800,
+                                        cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,136,204,0.3)'
+                                    }}
+                                >
+                                    {i18n.language === 'tr' ? '✈️ Telegram Kanalından Talep Et' : '✈️ Claim via Telegram'}
+                                </motion.button>
+                                <motion.button
+                                    whileTap={{ scale: 0.97 }}
+                                    onClick={() => {
+                                        handleClaimTaste()
                                         if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(WHATSAPP_GROUP)
                                         else window.open(WHATSAPP_GROUP, '_blank')
                                     }}
@@ -833,6 +867,23 @@ export function SpinWheel() {
                                     }}
                                 >
                                     {copied ? (i18n.language === 'tr' ? '✅ Mesaj Kopyalandı!' : '✅ Message Copied!') : (i18n.language === 'tr' ? '📋 Mesajı Kopyala' : '📋 Copy Message')}
+                                </motion.button>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                                    onClick={() => {
+                                        handleClaimTonReward()
+                                        if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(TELEGRAM_GROUP)
+                                        else window.open(TELEGRAM_GROUP, '_blank')
+                                    }}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #0088cc, #005580)',
+                                        color: '#fff', border: 'none', borderRadius: '12px',
+                                        padding: '13px', fontSize: '13px', fontWeight: 800,
+                                        cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,136,204,0.3)'
+                                    }}
+                                >
+                                    {i18n.language === 'tr' ? '✈️ Telegram Kanalından Talep Et' : '✈️ Claim via Telegram'}
                                 </motion.button>
 
                                 <motion.button
@@ -908,6 +959,22 @@ export function SpinWheel() {
                                     whileTap={{ scale: 0.97 }}
                                     onClick={() => {
                                         handleClaimTonWin()
+                                        if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(TELEGRAM_GROUP)
+                                        else window.open(TELEGRAM_GROUP, '_blank')
+                                    }}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #0088cc, #005580)',
+                                        color: '#fff', border: 'none', borderRadius: '12px',
+                                        padding: '13px', fontSize: '13px', fontWeight: 800,
+                                        cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,136,204,0.3)'
+                                    }}
+                                >
+                                    {i18n.language === 'tr' ? '✈️ Telegram Kanalından Talep Et' : '✈️ Claim via Telegram'}
+                                </motion.button>
+                                <motion.button
+                                    whileTap={{ scale: 0.97 }}
+                                    onClick={() => {
+                                        handleClaimTonWin()
                                         if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(WHATSAPP_GROUP)
                                         else window.open(WHATSAPP_GROUP, '_blank')
                                     }}
@@ -918,7 +985,7 @@ export function SpinWheel() {
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    {i18n.language === 'tr' ? '💬 Gruba Bildir' : '💬 Notify Group'}
+                                    {i18n.language === 'tr' ? '💬 WhatsApp Grubuna Bildir' : '💬 Notify WhatsApp Group'}
                                 </motion.button>
                                 <button onClick={() => setShowTonWin(false)} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '12px', cursor: 'pointer' }}>{i18n.language === 'tr' ? 'Kapat' : 'Close'}</button>
                             </div>

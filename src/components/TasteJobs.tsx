@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation, Trans } from 'react-i18next'
 import {
@@ -991,6 +991,57 @@ export function TasteJobs() {
                     <div style={{ fontSize: '11px', color: '#64748b' }}>
                         {isTr ? 'Gastronomi Sektöründe Kariyer' : 'Gastronomy Career Platform'}
                     </div>
+                </div>
+            </div>
+
+            {/* ── Reward Claim Banner (Telegram / WhatsApp) ── */}
+            <div style={{
+                background: 'linear-gradient(135deg, rgba(245,159,11,0.12), rgba(37,211,102,0.08))',
+                border: '1px solid rgba(245,159,11,0.3)', borderRadius: '18px',
+                padding: '16px', marginBottom: '20px'
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '24px' }}>🎁</span>
+                    <div>
+                        <div style={{ fontSize: '14px', fontWeight: 900, color: 'var(--primary)' }}>
+                            {isTr ? 'Paylaş Kazan & Görev Ödülleri' : 'Share & Earn Task Rewards'}
+                        </div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                            {isTr ? 'İlanları paylaşın, görevleri tamamlayın ve ödüllerinizi hemen talep edin!' : 'Share listings, complete tasks and claim your rewards instantly!'}
+                        </div>
+                    </div>
+                </div>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+                    <button
+                        onClick={() => {
+                            const url = 'https://t.me/TASTEAIOPEN';
+                            if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(url);
+                            else window.open(url, '_blank');
+                        }}
+                        style={{
+                            flex: 1, background: 'linear-gradient(135deg, #0088cc, #005580)',
+                            color: '#fff', border: 'none', borderRadius: '12px',
+                            padding: '10px', fontSize: '12px', fontWeight: 800, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                        }}
+                    >
+                        ✈️ Telegram Talep
+                    </button>
+                    <button
+                        onClick={() => {
+                            const url = 'https://chat.whatsapp.com/G2Q6xjoYt94GzseLmFnUtO';
+                            if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(url);
+                            else window.open(url, '_blank');
+                        }}
+                        style={{
+                            flex: 1, background: 'linear-gradient(135deg, #25d366, #128c7e)',
+                            color: '#fff', border: 'none', borderRadius: '12px',
+                            padding: '10px', fontSize: '12px', fontWeight: 800, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                        }}
+                    >
+                        💬 WhatsApp Talep
+                    </button>
                 </div>
             </div>
 

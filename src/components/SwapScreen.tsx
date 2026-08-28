@@ -6,7 +6,7 @@ interface SwapScreenProps {
   onClose: () => void
 }
 
-type PairKey = 'TON_TAI' | 'USDT_TAI' | 'DOGS_TAI' | 'NOT_TAI'
+type PairKey = 'TON_TAI' | 'USDT_TAI' | 'GRAM_TAI' | 'UTYA_TAI' | 'DOGS_TAI'
 
 const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon: string; color: string; dex: string; link: string }[] = [
   {
@@ -20,12 +20,30 @@ const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon:
   },
   {
     key: 'USDT_TAI',
-    from: 'USDT', to: 'TAI',
+    from: 'USD₮', to: 'TAI',
     fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
     toIcon: '/logo.jpg',
     color: '#10b981',
     dex: 'DeDust',
     link: 'https://dedust.io/swap/EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+  },
+  {
+    key: 'GRAM_TAI',
+    from: 'GRAM', to: 'TAI',
+    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/29845.png',
+    toIcon: '/logo.jpg',
+    color: '#0284c7',
+    dex: 'STON.fi',
+    link: 'https://app.ston.fi/swap?ft=EQC47093oX5Xhb0xuk2lCr2RhS8ur-7W5uE_j045FsXdNYea&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+  },
+  {
+    key: 'UTYA_TAI',
+    from: 'UTYA', to: 'TAI',
+    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/30815.png',
+    toIcon: '/logo.jpg',
+    color: '#eab308',
+    dex: 'STON.fi',
+    link: 'https://app.ston.fi/swap?search=TAI',
   },
   {
     key: 'DOGS_TAI',
@@ -35,15 +53,6 @@ const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon:
     color: '#f97316',
     dex: 'STON.fi',
     link: 'https://app.ston.fi/swap?ft=DOGS&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
-  },
-  {
-    key: 'NOT_TAI',
-    from: 'NOT', to: 'TAI',
-    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28850.png',
-    toIcon: '/logo.jpg',
-    color: '#a855f7',
-    dex: 'STON.fi',
-    link: 'https://app.ston.fi/swap?ft=NOT&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
   },
 ]
 
