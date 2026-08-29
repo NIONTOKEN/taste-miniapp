@@ -1,6 +1,7 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ArrowLeftRight, ChevronDown, ExternalLink } from 'lucide-react'
+import { X, ArrowLeftRight, ExternalLink } from 'lucide-react'
+import { LogoGRAM, LogoDOGS, LogoUTYA, LogoUSDT, LogoTON, LogoTAI } from './TokenLogos'
 
 interface SwapScreenProps {
   onClose: () => void
@@ -8,12 +9,11 @@ interface SwapScreenProps {
 
 type PairKey = 'TON_TAI' | 'USDT_TAI' | 'GRAM_TAI' | 'UTYA_TAI' | 'DOGS_TAI'
 
-const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon: string; color: string; dex: string; link: string }[] = [
+const PAIRS: { key: PairKey; from: string; to: string; FromLogo: any; color: string; dex: string; link: string }[] = [
   {
     key: 'TON_TAI',
     from: 'TON', to: 'TAI',
-    fromIcon: 'https://ton.org/download/ton_symbol.svg',
-    toIcon: '/logo.jpg',
+    FromLogo: LogoTON,
     color: '#3b82f6',
     dex: 'STON.fi',
     link: 'https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
@@ -21,8 +21,7 @@ const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon:
   {
     key: 'USDT_TAI',
     from: 'USD₮', to: 'TAI',
-    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
-    toIcon: '/logo.jpg',
+    FromLogo: LogoUSDT,
     color: '#10b981',
     dex: 'DeDust',
     link: 'https://dedust.io/swap/EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
@@ -30,8 +29,7 @@ const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon:
   {
     key: 'GRAM_TAI',
     from: 'GRAM', to: 'TAI',
-    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/29845.png',
-    toIcon: '/logo.jpg',
+    FromLogo: LogoGRAM,
     color: '#0284c7',
     dex: 'STON.fi',
     link: 'https://app.ston.fi/swap?ft=EQC47093oX5Xhb0xuk2lCr2RhS8ur-7W5uE_j045FsXdNYea&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
@@ -39,8 +37,7 @@ const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon:
   {
     key: 'UTYA_TAI',
     from: 'UTYA', to: 'TAI',
-    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/30815.png',
-    toIcon: '/logo.jpg',
+    FromLogo: LogoUTYA,
     color: '#eab308',
     dex: 'STON.fi',
     link: 'https://app.ston.fi/swap?search=TAI',
@@ -48,8 +45,7 @@ const PAIRS: { key: PairKey; from: string; to: string; fromIcon: string; toIcon:
   {
     key: 'DOGS_TAI',
     from: 'DOGS', to: 'TAI',
-    fromIcon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/31693.png',
-    toIcon: '/logo.jpg',
+    FromLogo: LogoDOGS,
     color: '#f97316',
     dex: 'STON.fi',
     link: 'https://app.ston.fi/swap?ft=DOGS&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
@@ -99,7 +95,7 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
                 background: selectedPair === p.key ? `linear-gradient(135deg,${p.color}22,${p.color}08)` : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${selectedPair === p.key ? p.color : 'rgba(255,255,255,0.08)'}`,
                 borderRadius: 16,
-                padding: '14px 16px',
+                padding: '12px 14px',
                 cursor: 'pointer',
                 textAlign: 'left',
                 position: 'relative',
@@ -109,14 +105,14 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
               {selectedPair === p.key && (
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: p.color, boxShadow: `0 0 8px ${p.color}` }} />
               )}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <div style={{ position: 'relative', width: 32, height: 20 }}>
-                  <img src={p.fromIcon} alt={p.from} style={{ width: 20, height: 20, borderRadius: '50%', position: 'absolute', left: 0, top: 0, border: '1px solid rgba(255,255,255,0.1)' }}
-                    onError={e => { e.currentTarget.src = '/logo.jpg' }}
-                  />
-                  <img src={p.toIcon} alt={p.to} style={{ width: 20, height: 20, borderRadius: '50%', position: 'absolute', left: 14, top: 0, border: '1px solid rgba(255,255,255,0.1)' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <p.FromLogo size={22} />
+                  <div style={{ marginLeft: -6, zIndex: 1 }}>
+                    <LogoTAI size={22} />
+                  </div>
                 </div>
-                <span style={{ fontSize: 13, fontWeight: 800, color: selectedPair === p.key ? '#fff' : '#94a3b8' }}>{p.from}/{p.to}</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: selectedPair === p.key ? '#fff' : '#94a3b8' }}>{p.from}/TAI</span>
               </div>
               <div style={{ fontSize: 10, color: p.color, fontWeight: 700 }}>via {p.dex}</div>
             </motion.button>
@@ -135,9 +131,7 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <img src={pair.fromIcon} alt={pair.from} style={{ width: 42, height: 42, borderRadius: '50%', border: `2px solid ${pair.color}` }}
-                onError={e => { e.currentTarget.src = '/logo.jpg' }}
-              />
+              <pair.FromLogo size={48} />
               <div>
                 <div style={{ fontSize: 18, fontWeight: 900 }}>{pair.from}</div>
                 <div style={{ fontSize: 11, color: '#64748b' }}>Satış token</div>
@@ -151,7 +145,7 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
                 <div style={{ fontSize: 18, fontWeight: 900 }}>TAI</div>
                 <div style={{ fontSize: 11, color: '#64748b' }}>Alış token</div>
               </div>
-              <img src="/logo.jpg" alt="TAI" style={{ width: 42, height: 42, borderRadius: '50%', border: '2px solid #f59e0b' }} />
+              <LogoTAI size={48} />
             </div>
           </div>
 

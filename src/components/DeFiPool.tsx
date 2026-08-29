@@ -1,11 +1,12 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { ExternalLink, Droplets, Plus } from 'lucide-react'
+import { LogoGRAM, LogoDOGS, LogoUTYA, LogoUSDT, LogoTON, LogoTAI } from './TokenLogos'
 
 const POOLS = [
   {
     id: 1,
     pair: 'TAI / GRAM',
-    icons: ['/logo.jpg', 'https://s2.coinmarketcap.com/static/img/coins/64x64/29845.png'],
+    Logo1: LogoTAI, Logo2: LogoGRAM,
     dex: 'STON.fi V2',
     status: 'active',
     color: '#0284c7',
@@ -17,7 +18,7 @@ const POOLS = [
   {
     id: 2,
     pair: 'UTYA / TAI',
-    icons: ['https://s2.coinmarketcap.com/static/img/coins/64x64/30815.png', '/logo.jpg'],
+    Logo1: LogoUTYA, Logo2: LogoTAI,
     dex: 'STON.fi V2',
     status: 'active',
     color: '#eab308',
@@ -29,7 +30,7 @@ const POOLS = [
   {
     id: 3,
     pair: 'TAI / DOGS',
-    icons: ['/logo.jpg', 'https://s2.coinmarketcap.com/static/img/coins/64x64/31693.png'],
+    Logo1: LogoTAI, Logo2: LogoDOGS,
     dex: 'STON.fi V2',
     status: 'active',
     color: '#f97316',
@@ -41,7 +42,7 @@ const POOLS = [
   {
     id: 4,
     pair: 'USD₮ / TAI',
-    icons: ['https://s2.coinmarketcap.com/static/img/coins/64x64/825.png', '/logo.jpg'],
+    Logo1: LogoUSDT, Logo2: LogoTAI,
     dex: 'DeDust CPMM V2',
     status: 'active',
     color: '#10b981',
@@ -53,7 +54,7 @@ const POOLS = [
   {
     id: 5,
     pair: 'TON / TAI',
-    icons: ['https://ton.org/download/ton_symbol.svg', '/logo.jpg'],
+    Logo1: LogoTON, Logo2: LogoTAI,
     dex: 'STON.fi & DeDust',
     status: 'active',
     color: '#3b82f6',
@@ -84,7 +85,7 @@ export function DeFiPool() {
           </div>
           <div>
             <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900 }}>DeFi Havuzları</h2>
-            <p style={{ margin: 0, fontSize: 12, color: '#64748b' }}>4 Aktif Likidite Havuzu</p>
+            <p style={{ margin: 0, fontSize: 12, color: '#64748b' }}>5 Aktif Likidite Havuzu</p>
           </div>
         </div>
         <div style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 12, padding: '10px 14px', fontSize: 12, color: '#10b981', fontWeight: 600 }}>
@@ -112,27 +113,32 @@ export function DeFiPool() {
             {/* Status badge */}
             <div style={{
               position: 'absolute', top: 14, right: 14,
-              background: pool.status === 'new' ? 'linear-gradient(135deg,#a855f7,#7c3aed)' : `${pool.color}22`,
+              background: `${pool.color}22`,
               border: `1px solid ${pool.color}55`,
               borderRadius: 20, padding: '3px 10px',
-              fontSize: 10, fontWeight: 800, color: pool.status === 'new' ? '#fff' : pool.color,
+              fontSize: 10, fontWeight: 800, color: pool.color,
               textTransform: 'uppercase', letterSpacing: 0.5,
             }}>
-              {pool.status === 'new' ? '🆕 YENİ' : '✓ Aktif'}
+              ✓ Aktif
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-              {/* Side-by-side icons */}
-              <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <img src={pool.icons[0]} alt="" style={{ width: 34, height: 34, borderRadius: '50%', border: `1px solid ${pool.color}`, background: '#1e293b', objectFit: 'cover' }}
-                  onError={e => { e.currentTarget.src = '/logo.jpg' }}
-                />
-                <img src={pool.icons[1]} alt="" style={{ width: 34, height: 34, borderRadius: '50%', border: '1px solid #f59e0b', background: '#1e293b' }} />
+              {/* Side-by-side SVG logos */}
+              <div style={{ display: 'flex', gap: 4, flexShrink: 0, alignItems: 'center' }}>
+                <pool.Logo1 size={36} />
+                <div style={{ marginLeft: -8, zIndex: 1 }}>
+                  <pool.Logo2 size={36} />
+                </div>
               </div>
               <div>
                 <div style={{ fontSize: 17, fontWeight: 900, color: '#f8fafc', marginBottom: 3 }}>{pool.pair}</div>
                 <div style={{ fontSize: 12, color: pool.color, fontWeight: 700 }}>via {pool.dex}</div>
               </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+              <div style={{ fontSize: 11, color: '#64748b' }}>TVL</div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: pool.color }}>{pool.tvl}</div>
             </div>
 
             <div style={{ fontSize: 10, color: '#334155', fontFamily: 'monospace', marginBottom: 14, wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px 10px', borderRadius: 8 }}>
