@@ -41,6 +41,7 @@ import { KYCModal } from './components/KYCModal'
 import { SwapScreen } from './components/SwapScreen'
 import { DeFiPool } from './components/DeFiPool'
 import { NotificationPanel } from './components/NotificationPanel'
+import { TasteSocial } from './components/TasteSocial'
 // @ts-ignore
 // WalletApp removed since TAI Wallet standalone is discontinued
 import {
@@ -88,7 +89,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'jobs' | 'tokenomics'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'jobs' | 'tokenomics' | 'social'>('home');
   const [navHistory, setNavHistory] = useState<string[]>([]);
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
@@ -110,7 +111,7 @@ function App() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSwapScreen, setShowSwapScreen] = useState(false);
   // 5-tab bottom nav active key: 'wallet' | 'team' | 'home' | 'pool' | 'settings'
-  const [activeBottomTab, setActiveBottomTab] = useState<'wallet' | 'team' | 'home' | 'pool' | 'settings'>('home');
+  const [activeBottomTab, setActiveBottomTab] = useState<'wallet' | 'social' | 'home' | 'pool' | 'settings'>('home');
 
   // Telegram SDK Initialization
   useEffect(() => {
@@ -408,6 +409,11 @@ function App() {
           </motion.div>
         );
 
+      case 'social': return (
+        <motion.div key="social" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <TasteSocial />
+        </motion.div>
+      );
       case 'jobs': return (
         <motion.div key="jobs" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <TasteJobs />
@@ -822,6 +828,7 @@ function App() {
                 {/* Drawer menu items */}
                 <div style={{ padding: '12px 0', flex: 1 }}>
                   {[
+                    { id: 'social', icon: '📸', label: 'TASTE Social', isNew: true },
                     { id: 'ecosystem', icon: '🌐', label: 'TAI Ekosistemi', isNew: true },
                     { id: 'socials', icon: '📱', label: 'Sosyal Kanallar', isNew: true },
                     { id: 'team', icon: '👥', label: 'Takım', isNew: true },
@@ -920,13 +927,13 @@ function App() {
             <span className="nav-label">{t('nav.wallet', 'Cüzdan')}</span>
           </button>
 
-          {/* 2. Takım */}
+          {/* 2. Social */}
           <button
-            className={`nav-item ${activeBottomTab === 'team' ? 'active' : ''}`}
-            onClick={() => { setActiveBottomTab('team'); navigateTo('team'); setIsMenuOpen(false); }}
+            className={`nav-item ${activeBottomTab === 'social' ? 'active' : ''}`}
+            onClick={() => { setActiveBottomTab('social'); navigateTo('social'); setIsMenuOpen(false); }}
           >
-            <span className="nav-icon"><Users size={21} /></span>
-            <span className="nav-label">{t('nav.team', 'Takım')}</span>
+            <span className="nav-icon" style={{ fontSize: 19 }}>📸</span>
+            <span className="nav-label">Social</span>
           </button>
 
           {/* 3. Ana Sayfa — center big button */}
