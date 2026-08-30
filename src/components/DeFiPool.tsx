@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ExternalLink, Droplets, Plus } from 'lucide-react'
 import { LogoGRAM, LogoDOGS, LogoUTYA, LogoUSDT, LogoTON, LogoTAI } from './TokenLogos'
 
@@ -6,30 +6,35 @@ const POOLS = [
   {
     id: 1,
     pair: 'TAI / GRAM',
+    lpName: 'LP Token for GRAM-TAI',
     Logo1: LogoTAI, Logo2: LogoGRAM,
     dex: 'STON.fi V2',
     status: 'active',
     color: '#0284c7',
     apy: '—',
     tvl: '$275.48',
-    address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
-    link: 'https://app.ston.fi/pools?search=TAI',
+    address: 'EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
+    link: 'https://app.ston.fi/pools/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
+    tonviewer: 'https://tonviewer.com/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
   },
   {
     id: 2,
     pair: 'UTYA / TAI',
+    lpName: 'LP Token for UTYA-TAI',
     Logo1: LogoUTYA, Logo2: LogoTAI,
     dex: 'STON.fi V2',
     status: 'active',
     color: '#eab308',
     apy: '—',
     tvl: '$7.95',
-    address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
-    link: 'https://app.ston.fi/pools?search=TAI',
+    address: 'EQCNVeyMxn-APCrwgT9e27SR24c9zYOQhsSxUc4XSaONhmL3',
+    link: 'https://app.ston.fi/pools/EQCNVeyMxn-APCrwgT9e27SR24c9zYOQhsSxUc4XSaONhmL3',
+    tonviewer: 'https://tonviewer.com/EQCNVeyMxn-APCrwgT9e27SR24c9zYOQhsSxUc4XSaONhmL3',
   },
   {
     id: 3,
     pair: 'TAI / DOGS',
+    lpName: 'LP Token for TAI-DOGS',
     Logo1: LogoTAI, Logo2: LogoDOGS,
     dex: 'STON.fi V2',
     status: 'active',
@@ -38,10 +43,12 @@ const POOLS = [
     tvl: '$5.61',
     address: 'EQD1Wg3gqcejslDzdwZbDFbqc2CecRNIKhGHJXU5cG1MNqzu',
     link: 'https://app.ston.fi/pools/EQD1Wg3gqcejslDzdwZbDFbqc2CecRNIKhGHJXU5cG1MNqzu',
+    tonviewer: 'https://tonviewer.com/EQD1Wg3gqcejslDzdwZbDFbqc2CecRNIKhGHJXU5cG1MNqzu',
   },
   {
     id: 4,
     pair: 'USD₮ / TAI',
+    lpName: 'DeDust Pool USD₮ / TAI',
     Logo1: LogoUSDT, Logo2: LogoTAI,
     dex: 'DeDust CPMM V2',
     status: 'active',
@@ -50,18 +57,21 @@ const POOLS = [
     tvl: '$2.42K',
     address: 'EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI',
     link: 'https://dedust.io/pools/EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI',
+    tonviewer: 'https://tonviewer.com/EQAt1l9cGN6bPh8BiaAbqsXXxmR25hLOxcsbb03KGprj3XaI',
   },
   {
     id: 5,
     pair: 'TON / TAI',
+    lpName: 'DeDust & STON.fi TON / TAI',
     Logo1: LogoTON, Logo2: LogoTAI,
-    dex: 'STON.fi & DeDust',
+    dex: 'DeDust & STON.fi',
     status: 'active',
     color: '#3b82f6',
     apy: '—',
     tvl: '$13.75K',
-    address: 'EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
-    link: 'https://app.ston.fi/pools/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
+    address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+    link: 'https://dedust.io/swap/TON/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+    tonviewer: 'https://tonviewer.com/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
   },
 ]
 
@@ -141,8 +151,31 @@ export function DeFiPool() {
               <div style={{ fontSize: 13, fontWeight: 800, color: pool.color }}>{pool.tvl}</div>
             </div>
 
-            <div style={{ fontSize: 10, color: '#334155', fontFamily: 'monospace', marginBottom: 14, wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px 10px', borderRadius: 8 }}>
-              {pool.address.slice(0, 20)}...{pool.address.slice(-8)}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, background: 'rgba(0,0,0,0.2)', padding: '8px 12px', borderRadius: 10 }}>
+              <div style={{ fontSize: 11, color: '#94a3b8', fontFamily: 'monospace' }}>
+                {pool.address.slice(0, 8)}...{pool.address.slice(-6)}
+              </div>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(pool.address)
+                    if (window.Telegram?.WebApp?.HapticFeedback) {
+                      window.Telegram.WebApp.HapticFeedback.notificationOccurred('success')
+                    }
+                    alert('Havuz sözleşme adresi kopyalandı!')
+                  }}
+                  style={{ background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: 6, padding: '4px 8px', color: '#cbd5e1', fontSize: 11, cursor: 'pointer', fontWeight: 600 }}
+                >
+                  Kopyala
+                </button>
+                <button
+                  onClick={() => openLink(pool.tonviewer)}
+                  style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 6, padding: '4px 8px', color: '#60a5fa', fontSize: 11, cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 3 }}
+                >
+                  <ExternalLink size={10} />
+                  Tonviewer
+                </button>
+              </div>
             </div>
 
             <motion.button
@@ -151,7 +184,7 @@ export function DeFiPool() {
               style={{ width: '100%', background: `linear-gradient(135deg,${pool.color},${pool.color}bb)`, border: 'none', borderRadius: 12, padding: '12px', color: '#fff', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: `0 4px 14px ${pool.color}44` }}
             >
               <ExternalLink size={15} />
-              Havuza Katıl
+              Havuza Katıl / Likidite Ekle
             </motion.button>
           </motion.div>
         ))}

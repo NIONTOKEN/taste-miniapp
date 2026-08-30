@@ -244,11 +244,11 @@ export async function insertReview(review: Omit<SupaReview, 'id' | 'created_at'>
     return safePost('reviews', review)
 }
 
-// ─── PROFILES ─────────────────────────────────────────────────────────────
+// ─── PROFILES & PRESENCE ──────────────────────────────────────────────────
 export async function getProfiles(): Promise<SupaProfile[]> {
     try {
         const res = await fetch(
-            `${SUPABASE_URL}/rest/v1/profiles?order=taste_points.desc&limit=50`,
+            `${SUPABASE_URL}/rest/v1/profiles?order=updated_at.desc&limit=60`,
             { headers: H }
         )
         if (!res.ok) return []
@@ -269,6 +269,22 @@ export async function upsertProfile(profile: Partial<SupaProfile> & { user_name:
         }
         return null
     } catch { return null }
+}
+
+export async function sendHeartbeat(userName: string, userEmoji: string, username?: string, bio?: string): Promise<void> {
+    try {
+        await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
+            method: 'POST',
+            headers: { ...H, 'Prefer': 'resolution=merge-duplicates' },
+            body: JSON.stringify({
+                user_name: userName,
+                user_emoji: userEmoji,
+                user_username: username,
+                bio: bio || 'TASTE Topluluk Üyesi 🍽️',
+                updated_at: new Date().toISOString()
+            })
+        })
+    } catch { /* ignore */ }
 }
 
 

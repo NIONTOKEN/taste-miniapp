@@ -1,43 +1,155 @@
-﻿import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getPosts, insertPost, getMessages, sendMessage, updatePostLikes } from '../services/supabase'
+import { 
+  Users, MessageCircle, Flame, Plus, Heart, 
+  Send, Image as ImageIcon, Shield, Award, ExternalLink, CornerDownRight
+} from 'lucide-react'
+import { getPosts, insertPost, getMessages, updatePostLikes, getProfiles, sendHeartbeat } from '../services/supabase'
 import type { SupaPost } from '../services/supabase'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-const tg = () => window.Telegram?.WebApp
+const tg = () => (window as any).Telegram?.WebApp
 const tgUser = () => tg()?.initDataUnsafe?.user
 const getUsername = () => {
   const u = tgUser()
   if (u?.username) return '@' + u.username
   if (u?.first_name) return u.first_name + (u.last_name ? ' ' + u.last_name : '')
-  return 'Misafir'
+  return 'Gourmet_User'
 }
 const getUserEmoji = () => {
-  const emojis = ['😊','🍕','👨‍🍳','🍜','🥗','🍔','🌮','🍣','🥘','🍱']
-  const id = tgUser()?.id || 0
+  const emojis = ['👨‍🍳','👩‍🍳','🍕','🍔','🍜','🍣','🥘','🍱','🥗','🌮','🥩','🍰']
+  const id = tgUser()?.id || 1089
   return emojis[id % emojis.length]
 }
-const timeAgo = (iso: string) => {
+const getTasteId = (name: string, id?: number) => {
+  const base = id ? id : Math.abs(name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0))
+  return `#TAI-${(base % 9000 + 1000)}`
+}
+const timeAgo = (iso?: string) => {
+  if (!iso) return 'Az önce'
   const diff = Date.now() - new Date(iso).getTime()
   const m = Math.floor(diff / 60000)
-  if (m < 1) return 'Az önce'
+  if (m < 1) return 'Şimdi'
   if (m < 60) return `${m}dk önce`
   const h = Math.floor(m / 60)
   if (h < 24) return `${h}sa önce`
   return `${Math.floor(h / 24)}g önce`
 }
 
-// ─── Fake seed posts ──────────────────────────────────────────────────────────
-const SEED_POSTS: SupaPost[] = [
-  { id: 's1', type: 'yemek', author_name: 'Ahmet Usta', author_emoji: '👨‍🍳', author_username: '@ahmetusta', created_at: new Date(Date.now() - 3600000).toISOString(), text: 'Bugün özel bir kuzu tandır hazırladım! 🔥 Saatlerce pişirdim, sonuç inanılmaz oldu.', tags: ['tandır','kuzu','ankara'], city: 'Ankara', likes: 47, photo: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80' },
-  { id: 's2', type: 'tarif', author_name: 'Ayşe Chef', author_emoji: '👩‍🍳', author_username: '@aysechef', created_at: new Date(Date.now() - 7200000).toISOString(), text: 'Ev yapımı mercimek çorbası tarifi 🥣\n\n1 su bardağı kırmızı mercimek\n1 soğan\n2 yemek kaşığı tereyağı\nTuz, karabiber, kekik ile servis edin!', tags: ['tarif','mercimek','çorba'], city: 'İstanbul', likes: 89, photo: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80' },
-  { id: 's3', type: 'menu', author_name: 'Foodie Kemal', author_emoji: '🍕', author_username: '@foodiekemal', created_at: new Date(Date.now() - 10800000).toISOString(), text: 'Beşiktaş\'ta keşfettiğim harika bir balık restoran! Mezeler muhteşem, deniz ürünleri taze. Kesinlikle tavsiye ederim 💯', tags: ['istanbul','balık','restoran'], city: 'İstanbul', venue_name: 'Deniz Restaurant', likes: 124, photo: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80' },
-  { id: 's4', type: 'yemek', author_name: 'Gurme Sara', author_emoji: '🥗', author_username: '@gurmesara', created_at: new Date(Date.now() - 18000000).toISOString(), text: 'Akdeniz mutfağının en güzel tarafı bu renkler! Bugünkü tabağım gerçekten sanatsaldi 🎨', tags: ['akdeniz','sağlıklı','salata'], city: 'İzmir', likes: 62, photo: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80' },
-  { id: 's5', type: 'tarif', author_name: 'Pastacı Ali', author_emoji: '🎂', author_username: '@pastaci_ali', created_at: new Date(Date.now() - 86400000).toISOString(), text: 'Çikolatalı sufle tarifi geldi sonunda! Dışı çıtır içi akışkan 🍫 Bu tarifi denemeden geçmeyin!', tags: ['sufle','çikolata','tatlı'], city: 'Bursa', likes: 203, photo: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800&q=80' },
+const haptic = (type: 'light' | 'medium' | 'heavy' | 'success' = 'light') => {
+  try {
+    if (tg()?.HapticFeedback) {
+      if (type === 'success') tg()?.HapticFeedback.notificationOccurred('success')
+      else tg()?.HapticFeedback.impactOccurred(type)
+    }
+  } catch { /* ignore */ }
+}
+
+interface SocialMember {
+  id: string
+  name: string
+  username?: string
+  emoji: string
+  status: 'online' | 'recent' | 'offline'
+  statusText: string
+  role: string
+  badgeColor: string
+  tastePoints: number
+  tasteId: string
+  avatar?: string
+  lastSeen?: string
+  bio: string
+}
+
+const SEED_MEMBERS: SocialMember[] = [
+  {
+    id: 'm1',
+    name: 'Chef Kerem Usta',
+    username: '@chefkerem',
+    emoji: '👨‍🍳',
+    status: 'online',
+    statusText: 'Kuzu tandır hazırlıyor 🔥',
+    role: '👑 TAI Master Chef',
+    badgeColor: '#f59e0b',
+    tastePoints: 12450,
+    tasteId: '#TAI-0001',
+    bio: 'TASTE AI Danışman Şefi & Gastronomi Tutkunu.',
+  },
+  {
+    id: 'm2',
+    name: 'Selin Akın (Gurme)',
+    username: '@selin_gurme',
+    emoji: '👩‍🍳',
+    status: 'online',
+    statusText: 'İtalyan restoranı keşfinde 🍝',
+    role: '💎 Elmas Gurme',
+    badgeColor: '#06b6d4',
+    tastePoints: 8920,
+    tasteId: '#TAI-1420',
+    bio: 'İstanbul mekan kaşifi ve yemek fotoğrafçısı.',
+  },
+  {
+    id: 'm3',
+    name: 'Mehmet TON Whale',
+    username: '@ton_mehmet',
+    emoji: '🐳',
+    status: 'online',
+    statusText: 'TAI/TON havuzuna likidite ekledi 💧',
+    role: '⚡ DeFi Balinası',
+    badgeColor: '#3b82f6',
+    tastePoints: 18500,
+    tasteId: '#TAI-0777',
+    bio: 'TON Blockchain & TASTE DeFi erken destekçisi.',
+  },
+  {
+    id: 'm4',
+    name: 'Zeynep Kaya',
+    username: '@zeynep_bakes',
+    emoji: '🍰',
+    status: 'online',
+    statusText: 'Sufle tarifini sohbette paylaştı 🍫',
+    role: '🥐 Tatlı Ustası',
+    badgeColor: '#ec4899',
+    tastePoints: 5340,
+    tasteId: '#TAI-3211',
+    bio: 'Fransız pastacılığı ve ev yapımı tatlılar.',
+  },
+  {
+    id: 'm5',
+    name: 'Barış Demir',
+    username: '@baris_chef',
+    emoji: '🥩',
+    status: 'recent',
+    statusText: '10 dk önce aktifti',
+    role: '🔥 Steakhouse Chef',
+    badgeColor: '#ef4444',
+    tastePoints: 4120,
+    tasteId: '#TAI-5092',
+    bio: 'Et pişirme teknikleri & füme ustası.',
+  },
+  {
+    id: 'm6',
+    name: 'Ayşe Yıldız',
+    username: '@ayse_foodie',
+    emoji: '🥗',
+    status: 'recent',
+    statusText: '25 dk önce aktifti',
+    role: '🌱 Sağlıklı Yaşam',
+    badgeColor: '#10b981',
+    tastePoints: 3400,
+    tasteId: '#TAI-6610',
+    bio: 'Vegan & Ege mutfağı meraklısı.',
+  },
 ]
 
-type Tab = 'feed' | 'chat'
-type FeedFilter = 'kesfet' | 'tarif' | 'yemek' | 'restoran'
+const QUICK_PHOTOS = [
+  { url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80', label: '🥩 Et / Kebap' },
+  { url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80', label: '🍕 Pizza' },
+  { url: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80', label: '🍔 Burger' },
+  { url: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800&q=80', label: '🍰 Tatlı' },
+  { url: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80', label: '🥣 Çorba' },
+  { url: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80', label: '🥗 Salata' },
+]
 
 // ─── PostCard ────────────────────────────────────────────────────────────────
 function PostCard({ post, onLike }: { post: SupaPost & { liked?: boolean }; onLike: (id: string) => void }) {
@@ -322,22 +434,28 @@ function PostCreator({ onClose, onPost }: { onClose: () => void; onPost: (p: Sup
 }
 
 // ─── LiveChat ────────────────────────────────────────────────────────────────
-function LiveChat() {
+function LiveChat({ onSelectMember }: { onSelectMember: (m: SocialMember) => void }) {
   const [messages, setMessages] = useState<SupaPost[]>([])
-  const [text, setText] = useState('')
+  const [inputText, setInputText] = useState('')
+  const [attachedPhoto, setAttachedPhoto] = useState<string | null>(null)
+  const [showPhotoPicker, setShowPhotoPicker] = useState(false)
+  const [replyingTo, setReplyingTo] = useState<SupaPost | null>(null)
   const [loading, setLoading] = useState(false)
-  const [fetching, setFetching] = useState(true)
   const bottomRef = useRef<HTMLDivElement>(null)
+
+  const myName = getUsername()
+  const myEmoji = getUserEmoji()
 
   const fetchMsgs = useCallback(async () => {
     const data = await getMessages()
-    setMessages(data)
-    setFetching(false)
+    if (data && data.length > 0) {
+      setMessages(data)
+    }
   }, [])
 
   useEffect(() => {
     fetchMsgs()
-    const id = setInterval(fetchMsgs, 8000)
+    const id = setInterval(fetchMsgs, 5000)
     return () => clearInterval(id)
   }, [fetchMsgs])
 
@@ -346,72 +464,164 @@ function LiveChat() {
   }, [messages.length])
 
   const handleSend = async () => {
-    if (!text.trim() || loading) return
-    const name = getUsername()
-    const emoji = getUserEmoji()
-    const username = tgUser()?.username
-    setText('')
+    if ((!inputText.trim() && !attachedPhoto) || loading) return
+    haptic('medium')
     setLoading(true)
-    // Optimistic add
-    const opt: SupaPost = { id: Date.now().toString(), type: 'chat', author_name: name, author_emoji: emoji, author_username: username ? '@' + username : undefined, text: text.trim(), tags: [], created_at: new Date().toISOString() }
+
+    let finalMsg = inputText.trim()
+    if (replyingTo) {
+      finalMsg = `💬 Replying to @${replyingTo.author_name}:\n"${replyingTo.text.slice(0, 45)}..."\n\n${finalMsg}`
+    }
+
+    const opt: SupaPost = {
+      id: 'local-' + Date.now(),
+      type: 'chat',
+      author_name: myName,
+      author_emoji: myEmoji,
+      author_username: tgUser()?.username ? `@${tgUser()?.username}` : undefined,
+      text: finalMsg,
+      photo: attachedPhoto || undefined,
+      tags: [],
+      created_at: new Date().toISOString()
+    }
+
     setMessages(m => [...m, opt])
-    await sendMessage(name, emoji, text.trim(), username)
+    setInputText('')
+    setAttachedPhoto(null)
+    setReplyingTo(null)
+    setShowPhotoPicker(false)
+
+    try {
+      await insertPost({
+        type: 'chat',
+        author_name: myName,
+        author_emoji: myEmoji,
+        author_username: tgUser()?.username,
+        text: finalMsg,
+        photo: attachedPhoto || undefined,
+        tags: []
+      })
+    } catch { /* ignore */ }
+
     setLoading(false)
   }
 
-  const chatColors = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ef4444', '#06b6d4']
-  const colorFor = (name: string) => chatColors[name.charCodeAt(0) % chatColors.length]
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 280px)', minHeight: 300 }}>
-      {/* Messages */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 4px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-        {fetching ? (
-          <div style={{ textAlign: 'center', padding: 40, color: '#64748b' }}>⏳ Mesajlar yükleniyor...</div>
-        ) : messages.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: 40 }}>
-            <div style={{ fontSize: 40, marginBottom: 12 }}>💬</div>
-            <div style={{ color: '#64748b', fontSize: 14 }}>İlk mesajı gönder!</div>
-          </div>
-        ) : messages.map(msg => {
-          const isMe = msg.author_name === getUsername()
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 290px)', minHeight: 420 }}>
+      {/* Stream */}
+      <div style={{
+        flex: 1,
+        overflowY: 'auto',
+        padding: '10px 6px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        background: 'rgba(0,0,0,0.15)',
+        borderRadius: 18,
+        border: '1px solid rgba(255,255,255,0.04)',
+        marginBottom: 10,
+      }}>
+        {messages.map((msg, idx) => {
+          const isMe = msg.author_name === myName
           return (
             <motion.div
-              key={msg.id}
+              key={msg.id || idx}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               style={{
                 display: 'flex',
                 flexDirection: isMe ? 'row-reverse' : 'row',
-                alignItems: 'flex-end',
+                alignItems: 'flex-start',
                 gap: 8,
-                padding: '2px 0',
               }}
             >
-              {!isMe && (
-                <div style={{ width: 30, height: 30, borderRadius: '50%', background: `${colorFor(msg.author_name)}22`, border: `1px solid ${colorFor(msg.author_name)}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, flexShrink: 0 }}>
-                  {msg.author_emoji}
-                </div>
-              )}
-              <div style={{ maxWidth: '75%' }}>
-                {!isMe && (
-                  <div style={{ fontSize: 10, color: colorFor(msg.author_name), fontWeight: 700, marginBottom: 2, paddingLeft: 4 }}>
-                    {msg.author_name}
-                  </div>
-                )}
+              <div
+                onClick={() => {
+                  haptic('light')
+                  onSelectMember({
+                    id: msg.author_name,
+                    name: msg.author_name,
+                    username: msg.author_username,
+                    emoji: msg.author_emoji || '👤',
+                    status: 'online',
+                    statusText: 'Sohbette mesaj gönderdi 💬',
+                    role: 'Topluluk Üyesi',
+                    badgeColor: '#f59e0b',
+                    tastePoints: 850,
+                    tasteId: getTasteId(msg.author_name),
+                    bio: 'TASTE MiniApp Canlı Sohbet Katılımcısı.'
+                  })
+                }}
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: '50%',
+                  background: isMe ? 'rgba(245,158,11,0.2)' : 'rgba(59,130,246,0.15)',
+                  border: `1px solid ${isMe ? '#f59e0b' : '#3b82f6'}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 16,
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                }}
+              >
+                {msg.author_emoji || '👤'}
+              </div>
+
+              <div style={{ maxWidth: '78%' }}>
                 <div style={{
-                  background: isMe ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'rgba(255,255,255,0.07)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  marginBottom: 2,
+                  flexDirection: isMe ? 'row-reverse' : 'row'
+                }}>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: isMe ? '#f59e0b' : '#93c5fd' }}>
+                    {msg.author_name}
+                  </span>
+                  {msg.author_username && (
+                    <span style={{ fontSize: 10, color: '#64748b' }}>
+                      {msg.author_username}
+                    </span>
+                  )}
+                  <span style={{ fontSize: 9, color: '#475569' }}>
+                    {timeAgo(msg.created_at)}
+                  </span>
+                </div>
+
+                <div style={{
+                  background: isMe 
+                    ? 'linear-gradient(135deg, #f59e0b, #d97706)' 
+                    : 'rgba(255,255,255,0.08)',
                   border: isMe ? 'none' : '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                  padding: '8px 12px',
-                  fontSize: 13, lineHeight: 1.5,
-                  color: isMe ? '#fff' : 'var(--text-main, #e2e8f0)',
+                  color: isMe ? '#fff' : '#f1f5f9',
+                  borderRadius: isMe ? '16px 4px 16px 16px' : '4px 16px 16px 16px',
+                  padding: '10px 14px',
+                  fontSize: 13,
+                  lineHeight: 1.5,
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
                   wordBreak: 'break-word',
                 }}>
-                  {msg.text}
+                  {msg.photo && (
+                    <div style={{ marginBottom: 8, borderRadius: 12, overflow: 'hidden', maxHeight: 180 }}>
+                      <img src={msg.photo} alt="Food" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  )}
+
+                  <div style={{ whiteSpace: 'pre-wrap' }}>{msg.text}</div>
                 </div>
-                <div style={{ fontSize: 10, color: '#475569', marginTop: 2, textAlign: isMe ? 'right' : 'left', paddingLeft: 4, paddingRight: 4 }}>
-                  {timeAgo(msg.created_at)}
+
+                <div style={{ display: 'flex', gap: 6, marginTop: 3, justifyContent: isMe ? 'flex-end' : 'flex-start' }}>
+                  <button
+                    onClick={() => {
+                      haptic('light')
+                      setReplyingTo(msg)
+                    }}
+                    style={{ background: 'transparent', border: 'none', color: '#64748b', fontSize: 10, cursor: 'pointer', padding: 0, fontWeight: 600 }}
+                  >
+                    💬 Yanıtla
+                  </button>
                 </div>
               </div>
             </motion.div>
@@ -420,31 +630,150 @@ function LiveChat() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
-      <div style={{ display: 'flex', gap: 8, padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <input
-          value={text}
-          onChange={e => setText(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
-          placeholder="Bir şeyler yaz... 🍽️"
+      {replyingTo && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: 'rgba(245,158,11,0.12)',
+          border: '1px solid rgba(245,158,11,0.3)',
+          borderRadius: 12,
+          padding: '6px 12px',
+          marginBottom: 6,
+          fontSize: 11,
+          color: '#f59e0b',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <CornerDownRight size={13} />
+            <span><strong>@{replyingTo.author_name}</strong> kullanıcısına yanıt veriyorsunuz</span>
+          </div>
+          <button onClick={() => setReplyingTo(null)} style={{ background: 'none', border: 'none', color: '#f59e0b', cursor: 'pointer', fontWeight: 800 }}>×</button>
+        </div>
+      )}
+
+      {attachedPhoto && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          background: 'rgba(0,0,0,0.3)',
+          padding: '6px 10px',
+          borderRadius: 12,
+          marginBottom: 6,
+          border: '1px solid rgba(255,255,255,0.1)'
+        }}>
+          <img src={attachedPhoto} alt="Attach" style={{ width: 36, height: 36, borderRadius: 8, objectFit: 'cover' }} />
+          <span style={{ fontSize: 11, color: '#10b981', fontWeight: 700 }}>📸 Yemek fotoğrafı eklendi</span>
+          <button onClick={() => setAttachedPhoto(null)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#ef4444', fontSize: 14, cursor: 'pointer' }}>×</button>
+        </div>
+      )}
+
+      {showPhotoPicker && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
           style={{
-            flex: 1, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: 20, padding: '10px 16px', color: 'var(--text-main, #f8fafc)',
-            fontSize: 14, outline: 'none', fontFamily: 'inherit',
-          }}
-        />
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={handleSend}
-          disabled={!text.trim() || loading}
-          style={{
-            width: 42, height: 42, borderRadius: '50%',
-            background: text.trim() ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'rgba(255,255,255,0.05)',
-            border: 'none', cursor: text.trim() ? 'pointer' : 'not-allowed',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0,
+            background: 'rgba(15,23,42,0.95)',
+            border: '1px solid rgba(245,158,11,0.3)',
+            borderRadius: 16,
+            padding: '10px',
+            marginBottom: 8,
           }}
         >
-          ➤
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#f59e0b', marginBottom: 6 }}>
+            📸 Hızlı Yemek Fotoğrafı Seç:
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6 }}>
+            {QUICK_PHOTOS.map(qp => (
+              <button
+                key={qp.label}
+                onClick={() => {
+                  haptic('light')
+                  setAttachedPhoto(qp.url)
+                  setShowPhotoPicker(false)
+                }}
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 10,
+                  padding: 4,
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                }}
+              >
+                <img src={qp.url} alt={qp.label} style={{ width: '100%', height: 44, objectFit: 'cover', borderRadius: 6 }} />
+                <div style={{ fontSize: 9, color: '#cbd5e1', marginTop: 2 }}>{qp.label}</div>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Input */}
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+        <button
+          onClick={() => {
+            haptic('light')
+            setShowPhotoPicker(p => !p)
+          }}
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: 14,
+            background: showPhotoPicker ? '#f59e0b' : 'rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            color: showPhotoPicker ? '#000' : '#f59e0b',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            flexShrink: 0,
+          }}
+        >
+          <ImageIcon size={18} />
+        </button>
+
+        <input
+          value={inputText}
+          onChange={e => setInputText(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
+          placeholder="Yemek, tarif veya DeFi hakkında yaz..."
+          style={{
+            flex: 1,
+            background: 'rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            borderRadius: 16,
+            padding: '12px 14px',
+            color: '#fff',
+            fontSize: 13,
+            outline: 'none',
+            fontFamily: 'inherit',
+          }}
+        />
+
+        <motion.button
+          whileTap={{ scale: 0.92 }}
+          onClick={handleSend}
+          disabled={loading || (!inputText.trim() && !attachedPhoto)}
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: 14,
+            background: (inputText.trim() || attachedPhoto)
+              ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+              : 'rgba(255,255,255,0.05)',
+            border: 'none',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: (inputText.trim() || attachedPhoto) ? 'pointer' : 'not-allowed',
+            flexShrink: 0,
+            boxShadow: (inputText.trim() || attachedPhoto) ? '0 4px 14px rgba(245,158,11,0.4)' : 'none',
+          }}
+        >
+          <Send size={18} />
         </motion.button>
       </div>
     </div>
@@ -453,24 +782,75 @@ function LiveChat() {
 
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 export function TasteSocial() {
-  const [tab, setTab] = useState<Tab>('feed')
-  const [filter, setFilter] = useState<FeedFilter>('kesfet')
+  const [activeTab, setActiveTab] = useState<'chat' | 'members' | 'feed'>('chat')
+  const [filter, setFilter] = useState<'kesfet' | 'tarif' | 'yemek' | 'restoran'>('kesfet')
   const [posts, setPosts] = useState<(SupaPost & { liked?: boolean })[]>([])
+  const [members, setMembers] = useState<SocialMember[]>(SEED_MEMBERS)
+  const [selectedMember, setSelectedMember] = useState<SocialMember | null>(null)
   const [loading, setLoading] = useState(true)
   const [showCreator, setShowCreator] = useState(false)
+  const [onlineCount, setOnlineCount] = useState(19)
+
+  const myName = getUsername()
+  const myEmoji = getUserEmoji()
+  const myTasteId = getTasteId(myName, tgUser()?.id)
+
+  const syncPresence = useCallback(async () => {
+    await sendHeartbeat(myName, myEmoji, tgUser()?.username, 'Sohbette aktif 🍽️')
+    const profiles = await getProfiles()
+    if (profiles && profiles.length > 0) {
+      const liveList: SocialMember[] = profiles.map(p => {
+        const isOnline = Date.now() - new Date(p.updated_at || 0).getTime() < 5 * 60 * 1000
+        return {
+          id: p.id,
+          name: p.user_name || 'Kullanıcı',
+          username: p.user_username,
+          emoji: p.user_emoji || '👤',
+          status: isOnline ? 'online' : 'recent',
+          statusText: p.bio || (isOnline ? 'Çevrimiçi' : 'Yakın zamanda aktifti'),
+          role: p.profession || 'TASTE Üyesi',
+          badgeColor: isOnline ? '#10b981' : '#64748b',
+          tastePoints: p.taste_points || 500,
+          tasteId: getTasteId(p.user_name),
+          lastSeen: p.updated_at,
+          bio: p.bio || 'TASTE topluluk üyesi.'
+        }
+      })
+
+      const merged = [...SEED_MEMBERS]
+      liveList.forEach(lp => {
+        if (!merged.some(m => m.name === lp.name)) {
+          merged.unshift(lp)
+        }
+      })
+      setMembers(merged)
+      const count = merged.filter(m => m.status === 'online').length + 12
+      setOnlineCount(count)
+    }
+  }, [myName, myEmoji])
 
   const fetchPosts = useCallback(async () => {
     setLoading(true)
     const data = await getPosts()
-    // Merge with seeds if DB is empty
-    const merged = data.length > 0 ? data : SEED_POSTS
+    const fallbackList: SupaPost[] = [
+      { id: 's1', type: 'yemek', author_name: 'Chef Kerem Usta', author_emoji: '👨‍🍳', author_username: '@chefkerem', created_at: new Date(Date.now() - 3600000).toISOString(), text: 'Bugün özel bir kuzu tandır hazırladım! 🔥 Saatlerce pişirdim, sonuç inanılmaz oldu.', tags: ['tandır','kuzu','ankara'], city: 'Ankara', likes: 64, photo: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80' },
+      { id: 's2', type: 'tarif', author_name: 'Zeynep Kaya', author_emoji: '🍰', author_username: '@zeynep_bakes', created_at: new Date(Date.now() - 7200000).toISOString(), text: 'Akışkan Belçika Çikolatalı Sufle 🍫\n\n100g bitter çikolata\n50g tereyağı\n2 yumurta\n2 yemek kaşığı un\n\n200°C fırında tam 8 dakika pişirin!', tags: ['sufle','çikolata','tatlı'], city: 'İzmir', likes: 112, photo: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800&q=80' },
+      { id: 's3', type: 'menu', author_name: 'Selin Akın (Gurme)', author_emoji: '👩‍🍳', author_username: '@selin_gurme', created_at: new Date(Date.now() - 10800000).toISOString(), text: 'Beşiktaş\'ta keşfettiğim harika bir balık restoran! Mezeler muhteşem, deniz ürünleri taze 💯 TASTE Pay kabul ediliyor!', tags: ['istanbul','balık','restoran'], city: 'İstanbul', venue_name: 'Marina Balıkçısı', likes: 98, photo: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80' }
+    ]
+    const merged: SupaPost[] = data.length > 0 ? data : fallbackList
     setPosts(merged.map(p => ({ ...p, liked: false })))
     setLoading(false)
   }, [])
 
-  useEffect(() => { fetchPosts() }, [fetchPosts])
+  useEffect(() => { 
+    fetchPosts()
+    syncPresence()
+    const t = setInterval(syncPresence, 7000)
+    return () => clearInterval(t)
+  }, [fetchPosts, syncPresence])
 
   const handleLike = (id: string) => {
+    haptic('success')
     setPosts(prev => prev.map(p => {
       if (p.id !== id) return p
       const nowLiked = !p.liked
@@ -484,7 +864,7 @@ export function TasteSocial() {
     setPosts(prev => [{ ...p, liked: false }, ...prev])
   }
 
-  const filterOptions: { key: FeedFilter; emoji: string; label: string }[] = [
+  const filterOptions: { key: 'kesfet' | 'tarif' | 'yemek' | 'restoran'; emoji: string; label: string }[] = [
     { key: 'kesfet',  emoji: '🔥', label: 'Keşfet' },
     { key: 'yemek',   emoji: '🍽️', label: 'Yemek' },
     { key: 'tarif',   emoji: '📝', label: 'Tarif' },
@@ -496,76 +876,275 @@ export function TasteSocial() {
     : posts.filter(p => p.type === filter)
 
   return (
-    <div style={{ paddingBottom: 20 }}>
-      {/* ── Header ── */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 14, background: 'linear-gradient(135deg,rgba(245,158,11,0.3),rgba(245,158,11,0.1))', border: '1px solid rgba(245,158,11,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
-            🍔
+    <div style={{ paddingBottom: 24 }}>
+      {/* Top Community Live Bar */}
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        style={{
+          background: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(16,185,129,0.08))',
+          border: '1px solid rgba(245,158,11,0.3)',
+          borderRadius: 20,
+          padding: '14px 18px',
+          marginBottom: 16,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ position: 'relative' }}>
+              <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(245,158,11,0.2)', border: '2px solid #f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+                {myEmoji}
+              </div>
+              <div style={{ position: 'absolute', bottom: 0, right: 0, width: 12, height: 12, borderRadius: '50%', background: '#10b981', border: '2px solid #0f172a' }} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 15, fontWeight: 900, color: '#f8fafc' }}>{myName}</span>
+                <span style={{ fontSize: 10, background: 'rgba(245,158,11,0.2)', color: '#f59e0b', padding: '1px 6px', borderRadius: 6, fontWeight: 800 }}>{myTasteId}</span>
+              </div>
+              <div style={{ fontSize: 11, color: '#10b981', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', display: 'inline-block', boxShadow: '0 0 8px #10b981' }} />
+                {onlineCount} Kişi Çevrimiçi · Canlı Topluluk
+              </div>
+            </div>
           </div>
-          <div>
-            <div style={{ fontWeight: 900, fontSize: 19 }}>TASTE Social</div>
-            <div style={{ fontSize: 11, color: '#64748b' }}>Yemek Sosyal Medyası</div>
-          </div>
-        </div>
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setShowCreator(true)}
-          style={{
-            background: 'linear-gradient(135deg,#f59e0b,#d97706)',
-            border: 'none', borderRadius: 14, padding: '10px 16px',
-            color: '#fff', fontWeight: 800, fontSize: 13, cursor: 'pointer',
-            display: 'flex', alignItems: 'center', gap: 6,
-            boxShadow: '0 4px 14px rgba(245,158,11,0.4)',
-          }}
-        >
-          + Paylaş
-        </motion.button>
-      </div>
 
-      {/* ── Tab Bar ── */}
-      <div style={{ display: 'flex', gap: 0, background: 'rgba(255,255,255,0.04)', borderRadius: 14, padding: 4, marginBottom: 20 }}>
-        {([['feed','📸 Feed'],['chat','💬 Sohbet']] as const).map(([key, label]) => (
           <button
-            key={key}
-            onClick={() => setTab(key)}
+            onClick={() => {
+              haptic('light')
+              setSelectedMember({
+                id: 'my-profile',
+                name: myName,
+                username: tgUser()?.username ? `@${tgUser()?.username}` : undefined,
+                emoji: myEmoji,
+                status: 'online',
+                statusText: 'Sohbette aktif 🍽️',
+                role: '👑 TAI Gurme Üye',
+                badgeColor: '#f59e0b',
+                tastePoints: 1250,
+                tasteId: myTasteId,
+                bio: 'TASTE MiniApp Resmi Topluluk Kullanıcısı.'
+              })
+            }}
             style={{
-              flex: 1, padding: '9px', borderRadius: 11,
-              background: tab === key ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'transparent',
-              border: 'none', cursor: 'pointer',
-              color: tab === key ? '#fff' : '#64748b',
-              fontWeight: 700, fontSize: 13, transition: 'all 0.2s',
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: 12,
+              padding: '6px 12px',
+              color: '#f8fafc',
+              fontSize: 12,
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5
             }}
           >
-            {label}
+            <Shield size={13} color="#f59e0b" />
+            Kimliğim
           </button>
-        ))}
+        </div>
+      </motion.div>
+
+      {/* 3 Main Navigation Tabs */}
+      <div style={{ display: 'flex', gap: 6, background: 'rgba(0,0,0,0.3)', padding: 4, borderRadius: 16, marginBottom: 16, border: '1px solid rgba(255,255,255,0.06)' }}>
+        {[
+          { id: 'chat', label: 'Canlı Sohbet', icon: MessageCircle, badge: 'Aktif' },
+          { id: 'members', label: 'Çevrimiçi Üyeler', icon: Users, badge: `${onlineCount}` },
+          { id: 'feed', label: 'Yemek Akışı', icon: Flame, badge: `${posts.length}` },
+        ].map(tab => {
+          const isActive = activeTab === tab.id
+          const Icon = tab.icon
+          return (
+            <button
+              key={tab.id}
+              onClick={() => { haptic('light'); setActiveTab(tab.id as any); }}
+              style={{
+                flex: 1,
+                padding: '10px 4px',
+                borderRadius: 12,
+                background: isActive ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'transparent',
+                border: 'none',
+                color: isActive ? '#fff' : '#94a3b8',
+                fontSize: 12,
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 5,
+                transition: 'all 0.2s',
+                boxShadow: isActive ? '0 4px 12px rgba(245,158,11,0.35)' : 'none',
+              }}
+            >
+              <Icon size={14} />
+              <span>{tab.label}</span>
+              <span style={{
+                fontSize: 10,
+                background: isActive ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.1)',
+                padding: '1px 5px',
+                borderRadius: 8,
+                fontWeight: 900
+              }}>
+                {tab.badge}
+              </span>
+            </button>
+          )
+        })}
       </div>
 
-      {/* ── FEED TAB ── */}
-      {tab === 'feed' && (
-        <>
-          {/* Filter pills */}
-          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, marginBottom: 16 }}>
-            {filterOptions.map(f => (
-              <button
-                key={f.key}
-                onClick={() => setFilter(f.key)}
-                style={{
-                  flexShrink: 0, padding: '7px 14px', borderRadius: 20,
-                  background: filter === f.key ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'rgba(255,255,255,0.05)',
-                  border: filter === f.key ? 'none' : '1px solid rgba(255,255,255,0.08)',
-                  cursor: 'pointer', fontWeight: 700, fontSize: 12,
-                  color: filter === f.key ? '#fff' : '#94a3b8',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {f.emoji} {f.label}
-              </button>
-            ))}
+      {/* TAB 1: CHAT */}
+      {activeTab === 'chat' && (
+        <LiveChat onSelectMember={setSelectedMember} />
+      )}
+
+      {/* TAB 2: MEMBERS & PRESENCE */}
+      {activeTab === 'members' && (
+        <div>
+          <div style={{
+            background: 'rgba(0,0,0,0.2)',
+            padding: '12px 16px',
+            borderRadius: 16,
+            marginBottom: 14,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            border: '1px solid rgba(255,255,255,0.05)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+              <span style={{ fontSize: 13, fontWeight: 800, color: '#f8fafc' }}>
+                🟢 {onlineCount} Çevrimiçi Üye
+              </span>
+            </div>
+            <span style={{ fontSize: 11, color: '#64748b' }}>
+              Toplam {members.length + 120} Gurme
+            </span>
           </div>
 
-          {/* Posts */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {members.map((member, idx) => {
+              const isOnline = member.status === 'online'
+              return (
+                <motion.div
+                  key={member.id || idx}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  onClick={() => {
+                    haptic('light')
+                    setSelectedMember(member)
+                  }}
+                  style={{
+                    background: 'var(--bg-card, rgba(255,255,255,0.04))',
+                    border: isOnline 
+                      ? '1px solid rgba(16,185,129,0.3)' 
+                      : '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: 16,
+                    padding: '12px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ position: 'relative' }}>
+                      <div style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: '50%',
+                        background: `linear-gradient(135deg, ${member.badgeColor}22, rgba(0,0,0,0.3))`,
+                        border: `2px solid ${member.badgeColor}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 20,
+                      }}>
+                        {member.emoji}
+                      </div>
+                      <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        width: 12,
+                        height: 12,
+                        borderRadius: '50%',
+                        background: isOnline ? '#10b981' : '#64748b',
+                        border: '2px solid #0f172a',
+                        boxShadow: isOnline ? '0 0 6px #10b981' : 'none'
+                      }} />
+                    </div>
+
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontSize: 14, fontWeight: 900, color: '#f8fafc' }}>{member.name}</span>
+                        <span style={{ fontSize: 9, background: `${member.badgeColor}22`, color: member.badgeColor, padding: '1px 5px', borderRadius: 4, fontWeight: 800 }}>
+                          {member.role}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 11, color: isOnline ? '#10b981' : '#64748b', marginTop: 2 }}>
+                        {member.statusText}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: 10, color: '#f59e0b', fontWeight: 800 }}>{member.tasteId}</div>
+                    <div style={{ fontSize: 10, color: '#64748b' }}>{member.tastePoints} TAI</div>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: FEED */}
+      {activeTab === 'feed' && (
+        <>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
+              {filterOptions.map(f => (
+                <button
+                  key={f.key}
+                  onClick={() => setFilter(f.key)}
+                  style={{
+                    flexShrink: 0, padding: '7px 14px', borderRadius: 20,
+                    background: filter === f.key ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'rgba(255,255,255,0.05)',
+                    border: filter === f.key ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                    cursor: 'pointer', fontWeight: 700, fontSize: 12,
+                    color: filter === f.key ? '#fff' : '#94a3b8',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {f.emoji} {f.label}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setShowCreator(true)}
+              style={{
+                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                border: 'none',
+                borderRadius: 12,
+                padding: '8px 12px',
+                color: '#fff',
+                fontWeight: 800,
+                fontSize: 12,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                flexShrink: 0
+              }}
+            >
+              <Plus size={14} /> Paylaş
+            </button>
+          </div>
+
           {loading ? (
             <div style={{ textAlign: 'center', padding: 60 }}>
               <div style={{ fontSize: 36, marginBottom: 12 }}>⏳</div>
@@ -584,33 +1163,179 @@ export function TasteSocial() {
               ))}
             </AnimatePresence>
           )}
-
-          {/* Empty state CTA */}
-          {!loading && (
-            <motion.div
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setShowCreator(true)}
-              style={{
-                background: 'linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.03))',
-                border: '1px dashed rgba(245,158,11,0.3)',
-                borderRadius: 20, padding: 20,
-                textAlign: 'center', cursor: 'pointer', marginTop: 8,
-              }}
-            >
-              <div style={{ fontSize: 28, marginBottom: 6 }}>📸</div>
-              <div style={{ fontWeight: 700, color: '#f59e0b', marginBottom: 4 }}>Yemek fotoğrafın var mı?</div>
-              <div style={{ fontSize: 12, color: '#64748b' }}>Paylaş, topluluğunla keşfet!</div>
-            </motion.div>
-          )}
         </>
       )}
 
-      {/* ── CHAT TAB ── */}
-      {tab === 'chat' && (
-        <LiveChat />
-      )}
+      {/* Profile Modal */}
+      <AnimatePresence>
+        {selectedMember && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.85)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 20,
+            }}
+            onClick={() => setSelectedMember(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={e => e.stopPropagation()}
+              style={{
+                width: '100%',
+                maxWidth: 380,
+                background: 'linear-gradient(135deg, #1e293b, #0f172a)',
+                border: '2px solid rgba(245,158,11,0.5)',
+                borderRadius: 24,
+                padding: '24px 20px',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+                position: 'relative',
+              }}
+            >
+              <button
+                onClick={() => setSelectedMember(null)}
+                style={{
+                  position: 'absolute',
+                  top: 14,
+                  right: 14,
+                  background: 'rgba(255,255,255,0.1)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: 30,
+                  height: 30,
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontSize: 16,
+                }}
+              >
+                ×
+              </button>
 
-      {/* ── Post Creator Modal ── */}
+              <div style={{ textAlign: 'center', marginBottom: 16 }}>
+                <div style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  background: 'rgba(245,158,11,0.2)',
+                  border: `3px solid ${selectedMember.badgeColor || '#f59e0b'}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 34,
+                  margin: '0 auto 10px',
+                }}>
+                  {selectedMember.emoji}
+                </div>
+                <h3 style={{ margin: '0 0 4px', fontSize: 18, fontWeight: 900, color: '#f8fafc' }}>
+                  {selectedMember.name}
+                </h3>
+                {selectedMember.username && (
+                  <div style={{ fontSize: 12, color: '#60a5fa', marginBottom: 6 }}>
+                    {selectedMember.username}
+                  </div>
+                )}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: `${selectedMember.badgeColor}22`, border: `1px solid ${selectedMember.badgeColor}55`, borderRadius: 12, padding: '3px 10px' }}>
+                  <Award size={12} color={selectedMember.badgeColor} />
+                  <span style={{ fontSize: 11, fontWeight: 800, color: selectedMember.badgeColor }}>
+                    {selectedMember.role}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: 16, padding: '14px', marginBottom: 16, border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 12 }}>
+                  <span style={{ color: '#64748b' }}>Kullanıcı Kimliği</span>
+                  <span style={{ fontWeight: 800, color: '#f59e0b', fontFamily: 'monospace' }}>{selectedMember.tasteId}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 12 }}>
+                  <span style={{ color: '#64748b' }}>Durum</span>
+                  <span style={{ fontWeight: 700, color: selectedMember.status === 'online' ? '#10b981' : '#94a3b8' }}>
+                    {selectedMember.status === 'online' ? '🟢 Çevrimiçi' : '⚪ İnaktif'}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                  <span style={{ color: '#64748b' }}>TAI Puanı</span>
+                  <span style={{ fontWeight: 800, color: '#10b981' }}>{selectedMember.tastePoints} TAI</span>
+                </div>
+              </div>
+
+              <div style={{ fontSize: 12, color: '#cbd5e1', lineHeight: 1.5, textAlign: 'center', marginBottom: 18 }}>
+                "{selectedMember.bio}"
+              </div>
+
+              <div style={{ display: 'flex', gap: 8 }}>
+                {selectedMember.username && (
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      haptic('light')
+                      const url = `https://t.me/${selectedMember.username?.replace('@', '')}`
+                      if (tg()) tg()?.openTelegramLink(url)
+                      else window.open(url, '_blank')
+                    }}
+                    style={{
+                      flex: 1,
+                      background: 'linear-gradient(135deg, #0284c7, #0369a1)',
+                      border: 'none',
+                      borderRadius: 12,
+                      padding: '10px',
+                      color: '#fff',
+                      fontSize: 12,
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 6
+                    }}
+                  >
+                    <ExternalLink size={13} />
+                    Telegram'da Yaz
+                  </motion.button>
+                )}
+
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    haptic('light')
+                    setActiveTab('chat')
+                    setSelectedMember(null)
+                  }}
+                  style={{
+                    flex: 1,
+                    background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                    border: 'none',
+                    borderRadius: 12,
+                    padding: '10px',
+                    color: '#fff',
+                    fontSize: 12,
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6
+                  }}
+                >
+                  <MessageCircle size={13} />
+                  Sohbete Git
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Post Creator Modal */}
       <AnimatePresence>
         {showCreator && (
           <PostCreator
