@@ -42,6 +42,7 @@ import { SwapScreen } from './components/SwapScreen'
 import { DeFiPool } from './components/DeFiPool'
 import { NotificationPanel } from './components/NotificationPanel'
 import { TasteSocial } from './components/TasteSocial'
+import { TasteFishing } from './components/TasteFishing'
 // @ts-ignore
 // WalletApp removed since TAI Wallet standalone is discontinued
 import {
@@ -89,7 +90,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'jobs' | 'tokenomics' | 'social'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'jobs' | 'tokenomics' | 'social' | 'fishing'>('home');
   const [navHistory, setNavHistory] = useState<string[]>([]);
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
@@ -300,6 +301,51 @@ function App() {
               </div>
             </motion.div>
 
+            {/* 🎣 TASTE Fishing Game Banner (NEW) */}
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigateTo('fishing')}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                background: 'linear-gradient(135deg, rgba(2,132,199,0.2) 0%, rgba(245,158,11,0.15) 100%)',
+                border: '1px solid rgba(56,189,248,0.4)', borderRadius: 20,
+                padding: '14px 16px', marginBottom: 16, cursor: 'pointer',
+                boxShadow: '0 8px 24px rgba(2,132,199,0.2)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: 14,
+                  background: 'linear-gradient(135deg, #0284c7, #0369a1)',
+                  border: '2px solid #38bdf8',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 22, flexShrink: 0,
+                  boxShadow: '0 0 12px rgba(56,189,248,0.4)'
+                }}>
+                  🎣
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ fontSize: 14, fontWeight: 900, color: '#f8fafc' }}>TASTE Balık Avı Oyunu</span>
+                    <span style={{ fontSize: 9, background: '#f59e0b', color: '#000', padding: '1px 5px', borderRadius: 5, fontWeight: 900 }}>YENİ</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#38bdf8', marginTop: 2, fontWeight: 700 }}>
+                    10 TAI ile Oltayı Göle At · TON & NION Kazan! 🐟
+                  </div>
+                </div>
+              </div>
+              <div style={{
+                background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#fff',
+                padding: '8px 12px', borderRadius: 12, fontSize: 12, fontWeight: 900,
+                border: '1px solid rgba(56,189,248,0.5)',
+                display: 'flex', alignItems: 'center', gap: 4
+              }}>
+                OYNA ➤
+              </div>
+            </motion.div>
+
             {/* Quick Stats Bar */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -412,6 +458,11 @@ function App() {
       case 'social': return (
         <motion.div key="social" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <TasteSocial />
+        </motion.div>
+      );
+      case 'fishing': return (
+        <motion.div key="fishing" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <TasteFishing />
         </motion.div>
       );
       case 'jobs': return (
@@ -828,6 +879,7 @@ function App() {
                 {/* Drawer menu items */}
                 <div style={{ padding: '12px 0', flex: 1 }}>
                   {[
+                    { id: 'fishing', icon: '🎣', label: 'Balık Avı (10 TAI Oyun)', isNew: true },
                     { id: 'social', icon: '📸', label: 'TASTE Social', isNew: true },
                     { id: 'ecosystem', icon: '🌐', label: 'TAI Ekosistemi', isNew: true },
                     { id: 'socials', icon: '📱', label: 'Sosyal Kanallar', isNew: true },
