@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTonConnectUI, useTonAddress } from '@tonconnect/ui-react'
+import { Address, beginCell, toNano } from '@ton/core'
 import { 
   playCastSound, 
   playSplashSound, 
@@ -15,9 +16,14 @@ import {
   FishPrize, 
   FishingUserData 
 } from '../services/fishing'
-import { ShoppingBag, Sparkles, CheckCircle, Ticket } from 'lucide-react'
+import { ShoppingBag, Sparkles, CheckCircle, Ticket, ExternalLink, ArrowRightLeft, AlertCircle } from 'lucide-react'
 
 const tg = () => (window as any).Telegram?.WebApp
+
+// ─── Constants ───────────────────────────────────────────────────────────────
+const TASTE_TREASURY_WALLET = 'UQB7zxR3WWsvlUnFVzY6rnTpBeLScnEReaeLQ7gI53mRbvHC'
+const TAI_JETTON_MASTER = 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
+const TASTE_PER_TON = 741 // 1 TON = ~741 TAI
 
 const haptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' = 'light') => {
   try {
@@ -40,15 +46,48 @@ export function TasteFishing() {
   const [userData, setUserData] = useState<FishingUserData>(getFishingData())
   const [currentPrize, setCurrentPrize] = useState<FishPrize | null>(null)
   
-  // Modals
+  // Wallet Balances
+  const [userTaiBalance, setUserTaiBalance] = useState<number>(0)
+  const [userTonBalance, setUserTonBalance] = useState<number>(0)
+  const [payMethod, setPayMethod] = useState<'tai' | 'ton'>('tai')
+
+  // Modals & Status
   const [showBuyModal, setShowBuyModal] = useState(false)
   const [showTackleBox, setShowTackleBox] = useState(false)
   const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
   const [claimStatus, setClaimStatus] = useState<string | null>(null)
+
+  // Fetch User TAI & TON Balances
+  const fetchWalletBalances = useCallback(async () => {
+    if (!walletAddress) return
+    try {
+      const userRaw = Address.parse(walletAddress).toRawString()
+      
+      // 1. TON Balance
+      const accRes = await fetch(`https://tonapi.io/v2/accounts/${userRaw}`)
+      const accData = await accRes.json()
+      if (accData?.balance) {
+        setUserTonBalance(Number(accData.balance) / 1e9)
+      }
+
+      // 2. TAI Jetton Balance
+      const jettonRes = await fetch(`https://tonapi.io/v2/accounts/${userRaw}/jettons/${TAI_JETTON_MASTER}`)
+      const jettonData = await jettonRes.json()
+      if (jettonData?.balance) {
+        setUserTaiBalance(Number(jettonData.balance) / 1e9)
+      } else {
+        setUserTaiBalance(0)
+      }
+    } catch {
+      // Fallback
+    }
+  }, [walletAddress])
 
   useEffect(() => {
     setUserData(getFishingData())
-  }, [])
+    fetchWalletBalances()
+  }, [fetchWalletBalances])
 
   // 🎣 Oltayı Göle At (Cast Fishing Rod)
   const handleCastRod = () => {
@@ -101,36 +140,105 @@ export function TasteFishing() {
     }, 1100)
   }
 
-  // 🎟️ Bilet Paketi Satın Alma
+  // 🎟️ Bilet Paketi Satın Alma (TAI Jetton veya TON Havuz Takası ile Kasa Adresine Transfer)
   const handleBuyTickets = async (count: number, costTaste: number) => {
     haptic('medium')
+    setPaymentError(null)
+
+    if (!walletAddress) {
+      tonConnectUI.openModal()
+      return
+    }
+
     setIsProcessingPayment(true)
 
-    // TonConnect üzerinden ödeme talebi veya bilet aktivasyonu
-    if (tonConnectUI && walletAddress) {
-      try {
-        const nanoAmount = (costTaste * 0.001 * 1e9).toString()
+    try {
+      const userRaw = Address.parse(walletAddress).toRawString()
+
+      if (payMethod === 'tai') {
+        // 🥩 A. Cüzdandan Doğrudan TASTE TAI Jetton Transferi
+        const res = await fetch(`https://tonapi.io/v2/accounts/${userRaw}/jettons/${TAI_JETTON_MASTER}`)
+        const data = await res.json()
+        const userJWallet = data?.wallet_address?.address
+
+        if (!userJWallet) {
+          throw new Error('Cüzdanınızda TASTE TAI Jetton bulunamadı. Lütfen "TON ile Öde" seçeneğini kullanın veya havuzdan TAI alın.')
+        }
+
+        const userJBal = Number(data?.balance || 0) / 1e9
+        if (userJBal < costTaste) {
+          throw new Error(`Yetersiz TAI bakiyesi! (Mevcut: ${userJBal.toFixed(1)} TAI, Gerekli: ${costTaste} TAI). Lütfen TON ile ödemeyi seçin.`)
+        }
+
+        // Standard Jetton Transfer Payload (0xf8a7ea5)
+        const forwardPayload = beginCell()
+          .storeUint(0, 32)
+          .storeStringTail(`FISH_TICKETS_${count}`)
+          .endCell()
+
+        const body = beginCell()
+          .storeUint(0xf8a7ea5, 32) // jetton transfer op
+          .storeUint(0, 64)        // query id
+          .storeCoins(toNano(costTaste.toString())) // TAI amount
+          .storeAddress(Address.parse(TASTE_TREASURY_WALLET)) // Hedef Kasa Adresi
+          .storeAddress(Address.parse(walletAddress))       // Response address
+          .storeBit(false)                                 // Custom payload
+          .storeCoins(toNano('0.05'))                      // Forward TON
+          .storeBit(true)                                  // Has forward payload
+          .storeRef(forwardPayload)
+          .endCell()
+
         await tonConnectUI.sendTransaction({
           validUntil: Math.floor(Date.now() / 1000) + 300,
           messages: [
             {
-              address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
-              amount: nanoAmount,
+              address: Address.parse(userJWallet).toString(),
+              amount: toNano('0.1').toString(), // gas fee
+              payload: body.toBoc().toString('base64')
             }
           ]
         })
-      } catch {
-        // Cüzdan onayı iptal edilirse bile simülasyonda devam edebilir
-      }
-    }
 
-    setTimeout(() => {
+      } else {
+        // 💎 B. Cüzdanda TAI Yoksa TON ile Havuz Kuru Üzerinden Kasa Adresine Ödeme
+        const tonCost = Number((costTaste / TASTE_PER_TON).toFixed(3))
+        if (userTonBalance > 0 && userTonBalance < tonCost) {
+          throw new Error(`Yetersiz TON bakiyesi! (Mevcut: ${userTonBalance.toFixed(3)} TON, Gerekli: ${tonCost} TON)`)
+        }
+
+        const memoPayload = beginCell()
+          .storeUint(0, 32)
+          .storeStringTail(`SWAP_TAI_PLAY_FISH_${count}_TICKETS`)
+          .endCell()
+          .toBoc()
+          .toString('base64')
+
+        await tonConnectUI.sendTransaction({
+          validUntil: Math.floor(Date.now() / 1000) + 300,
+          messages: [
+            {
+              address: Address.parse(TASTE_TREASURY_WALLET).toString(),
+              amount: toNano(tonCost.toString()).toString(),
+              payload: memoPayload
+            }
+          ]
+        })
+      }
+
+      // Başarılı ödeme sonrası biletleri yükle
       const updated = addTickets(count)
       setUserData(updated)
       setIsProcessingPayment(false)
       setShowBuyModal(false)
+      fetchWalletBalances()
       haptic('success')
-    }, 1000)
+
+    } catch (err: any) {
+      setIsProcessingPayment(false)
+      const msg = err?.message || 'İşlem iptal edildi veya başarısız oldu.'
+      setPaymentError(msg)
+      haptic('warning')
+    }
   }
 
   // 💰 Sepetteki Ödülleri Cüzdana Çekme (Claim)
@@ -629,22 +737,106 @@ export function TasteFishing() {
                 ×
               </button>
 
-              <div style={{ textAlign: 'center', marginBottom: 20 }}>
-                <div style={{ fontSize: 40, marginBottom: 6 }}>🎟️</div>
+              <div style={{ textAlign: 'center', marginBottom: 16 }}>
+                <div style={{ fontSize: 36, marginBottom: 4 }}>🎟️</div>
                 <h3 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: '#f8fafc' }}>
                   Olta & Yem Bileti Al
                 </h3>
-                <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>
+                <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 3 }}>
                   Her olta atışı 1 Bilet (10 TASTE) harcar.
                 </div>
               </div>
 
+              {/* Cüzdan Canlı Bakiye Bilgisi */}
+              <div style={{
+                background: 'rgba(0,0,0,0.35)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: 16,
+                padding: '10px 14px',
+                marginBottom: 14,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <div>
+                  <div style={{ fontSize: 9, color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800 }}>CÜZDAN TAI</div>
+                  <div style={{ fontSize: 14, fontWeight: 900, color: '#f59e0b' }}>
+                    {walletAddress ? `${userTaiBalance.toFixed(1)} TAI` : 'Bağlı Değil'}
+                  </div>
+                </div>
+                <div style={{ width: 1, height: 24, background: 'rgba(255,255,255,0.1)' }} />
+                <div>
+                  <div style={{ fontSize: 9, color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800 }}>CÜZDAN TON</div>
+                  <div style={{ fontSize: 14, fontWeight: 900, color: '#38bdf8' }}>
+                    {walletAddress ? `${userTonBalance.toFixed(3)} TON` : 'Bağlı Değil'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Ödeme Yöntemi Seçici Tab Bar */}
+              <div style={{ display: 'flex', gap: 6, background: 'rgba(0,0,0,0.3)', padding: 3, borderRadius: 14, marginBottom: 14 }}>
+                <button
+                  onClick={() => { haptic('light'); setPayMethod('tai'); setPaymentError(null); }}
+                  style={{
+                    flex: 1,
+                    padding: '8px 4px',
+                    borderRadius: 11,
+                    border: 'none',
+                    background: payMethod === 'tai' ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'transparent',
+                    color: payMethod === 'tai' ? '#fff' : '#94a3b8',
+                    fontWeight: 800,
+                    fontSize: 11,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  🥩 TAI Jetton ile Öde
+                </button>
+                <button
+                  onClick={() => { haptic('light'); setPayMethod('ton'); setPaymentError(null); }}
+                  style={{
+                    flex: 1,
+                    padding: '8px 4px',
+                    borderRadius: 11,
+                    border: 'none',
+                    background: payMethod === 'ton' ? 'linear-gradient(135deg, #0284c7, #0369a1)' : 'transparent',
+                    color: payMethod === 'ton' ? '#fff' : '#94a3b8',
+                    fontWeight: 800,
+                    fontSize: 11,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  💎 TON ile Otomatik Öde
+                </button>
+              </div>
+
+              {/* Hata Bildirimi */}
+              {paymentError && (
+                <div style={{
+                  background: 'rgba(239,68,68,0.15)',
+                  border: '1px solid rgba(239,68,68,0.4)',
+                  borderRadius: 14,
+                  padding: '10px 12px',
+                  marginBottom: 14,
+                  fontSize: 11,
+                  color: '#fca5a5',
+                  lineHeight: 1.4,
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 8,
+                }}>
+                  <AlertCircle size={16} color="#ef4444" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>{paymentError}</div>
+                </div>
+              )}
+
               {/* Bilet Paketleri */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
                 {[
-                  { count: 5, taste: 50, label: 'Başlangıç Paketi', badge: 'Standart' },
-                  { count: 10, taste: 100, label: 'Gurme Balıkçı', badge: '🔥 En Popüler', popular: true },
-                  { count: 25, taste: 225, label: 'Usta Reis Paketi', badge: '💎 %10 İndirim' },
+                  { count: 5, taste: 50, ton: 0.068, label: 'Başlangıç Paketi', badge: 'Standart' },
+                  { count: 10, taste: 100, ton: 0.135, label: 'Gurme Balıkçı', badge: '🔥 En Popüler', popular: true },
+                  { count: 25, taste: 225, ton: 0.300, label: 'Usta Reis Paketi', badge: '💎 %10 İndirim' },
                 ].map(pkg => (
                   <motion.div
                     key={pkg.count}
@@ -656,7 +848,7 @@ export function TasteFishing() {
                         : 'rgba(255,255,255,0.05)',
                       border: pkg.popular ? '2px solid #f59e0b' : '1px solid rgba(255,255,255,0.1)',
                       borderRadius: 16,
-                      padding: '14px 16px',
+                      padding: '12px 14px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
@@ -665,24 +857,94 @@ export function TasteFishing() {
                   >
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ fontSize: 16, fontWeight: 900, color: '#fff' }}>{pkg.count} Olta Bileti</span>
-                        <span style={{ fontSize: 9, background: pkg.popular ? '#f59e0b' : 'rgba(255,255,255,0.15)', color: pkg.popular ? '#000' : '#cbd5e1', padding: '1px 6px', borderRadius: 6, fontWeight: 900 }}>
+                        <span style={{ fontSize: 15, fontWeight: 900, color: '#fff' }}>{pkg.count} Olta Bileti</span>
+                        <span style={{ fontSize: 9, background: pkg.popular ? '#f59e0b' : 'rgba(255,255,255,0.15)', color: pkg.popular ? '#000' : '#cbd5e1', padding: '1px 5px', borderRadius: 5, fontWeight: 900 }}>
                           {pkg.badge}
                         </span>
                       </div>
-                      <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>{pkg.label}</div>
+                      <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>{pkg.label}</div>
                     </div>
 
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: 15, fontWeight: 900, color: '#f59e0b' }}>{pkg.taste} TAI</div>
-                      <div style={{ fontSize: 10, color: '#64748b' }}>Hemen Yükle ➤</div>
+                      <div style={{ fontSize: 14, fontWeight: 900, color: payMethod === 'tai' ? '#f59e0b' : '#38bdf8' }}>
+                        {payMethod === 'tai' ? `${pkg.taste} TAI` : `${pkg.ton} TON`}
+                      </div>
+                      <div style={{ fontSize: 9, color: '#64748b' }}>
+                        {payMethod === 'tai' ? 'TAI Transfer Et ➤' : 'TON ile Al ➤'}
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
+              {/* Havuzdan TAI Satın Alma Butonları (DEX Quick Links) */}
+              <div style={{
+                background: 'rgba(0,0,0,0.25)',
+                border: '1px dashed rgba(245,158,11,0.3)',
+                borderRadius: 14,
+                padding: '10px 12px',
+                marginBottom: 12,
+              }}>
+                <div style={{ fontSize: 10, color: '#cbd5e1', fontWeight: 700, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <ArrowRightLeft size={12} color="#f59e0b" />
+                  Cüzdanında TAI yok mu? Havuzdan 1 tıkla al:
+                </div>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <a
+                    href="https://dedust.io/swap/TON/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      flex: 1,
+                      background: 'rgba(56,189,248,0.15)',
+                      border: '1px solid rgba(56,189,248,0.3)',
+                      borderRadius: 10,
+                      padding: '6px',
+                      color: '#38bdf8',
+                      fontSize: 10,
+                      fontWeight: 800,
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 4
+                    }}
+                  >
+                    DeDust CPMM <ExternalLink size={10} />
+                  </a>
+                  <a
+                    href="https://app.ston.fi/swap?ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      flex: 1,
+                      background: 'rgba(245,158,11,0.15)',
+                      border: '1px solid rgba(245,158,11,0.3)',
+                      borderRadius: 10,
+                      padding: '6px',
+                      color: '#f59e0b',
+                      fontSize: 10,
+                      fontWeight: 800,
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 4
+                    }}
+                  >
+                    STON.fi V2 <ExternalLink size={10} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Kasa Adresi Güvencesi */}
+              <div style={{ fontSize: 9, color: '#64748b', textAlign: 'center', wordBreak: 'break-all' }}>
+                🛡️ Ödemeler resmi kasa adresine aktarılır:<br />
+                <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>UQB7zxR3WWsvlUnFVzY6rnTpBeLScnEReaeLQ7gI53mRbvHC</span>
+              </div>
+
               {isProcessingPayment && (
-                <div style={{ textAlign: 'center', color: '#f59e0b', fontSize: 12, fontWeight: 700 }}>
+                <div style={{ textAlign: 'center', color: '#f59e0b', fontSize: 12, fontWeight: 700, marginTop: 10 }}>
                   ⏳ Cüzdan / Bilet İşlemi Onaylanıyor...
                 </div>
               )}
