@@ -784,20 +784,20 @@ function App() {
                 {/* Drawer menu items */}
                 <div style={{ padding: '12px 0', flex: 1 }}>
                   {[
-                    { id: 'ecosystem', icon: '🌐', label: 'TAI Ekosistemi', isNew: true },
-                    { id: 'socials', icon: '📱', label: 'Sosyal Kanallar', isNew: true },
-                    { id: 'team', icon: '👥', label: 'Takım', isNew: true },
+                    { id: 'ecosystem', icon: '🌐', label: t('drawer.ecosystem', 'TAI Ekosistemi'), isNew: true },
+                    { id: 'socials', icon: '📱', label: t('drawer.socials', 'Sosyal Kanallar'), isNew: true },
+                    { id: 'team', icon: '👥', label: t('nav.team', 'Takım'), isNew: true },
                     null,
-                    { id: 'swap', icon: '⚡', label: 'Kullanıcı Satın Alımları' },
+                    { id: 'swap', icon: '⚡', label: t('drawer.swap', 'Kullanıcı Satın Alımları') },
                     null,
-                    { id: 'tokenomics', icon: '🥧', label: 'Token Dağılımı' },
-                    { id: 'whitepaper', icon: '📖', label: 'Whitepaper' },
-                    { id: 'tech', icon: '⛓️', label: 'TAI Blockchain' },
+                    { id: 'tokenomics', icon: '🥧', label: t('drawer.tokenomics', 'Token Dağılımı') },
+                    { id: 'whitepaper', icon: '📖', label: t('nav.whitepaper', 'Whitepaper') },
+                    { id: 'tech', icon: '⛓️', label: t('drawer.tech', 'TAI Blockchain') },
                     null,
-                    { id: 'ai', icon: '🤖', label: 'Taste AI' },
-                    { id: 'install_pwa', icon: '📲', label: 'Uygulamayı Kur (PWA)' },
-                    { id: 'faq', icon: '❓', label: 'Yardım' },
-                    { id: 'vote', icon: '🗳️', label: 'Web Sitesini Ziyaret Et' },
+                    { id: 'ai', icon: '🤖', label: t('drawer.ai', 'Taste AI') },
+                    { id: 'install_pwa', icon: '📲', label: t('drawer.install_pwa', 'Uygulamayı Kur (PWA)') },
+                    { id: 'faq', icon: '❓', label: t('nav.faq', 'Yardım') },
+                    { id: 'vote', icon: '🗳️', label: t('drawer.visit_web', 'Web Sitesini Ziyaret Et') },
                   ].map((item: any, idx: number) => {
                     if (item === null) return <div key={idx} style={{ height: 1, background: 'rgba(255,255,255,0.05)', margin: '6px 20px' }} />;
                     return (

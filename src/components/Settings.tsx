@@ -8,11 +8,8 @@ export function Settings() {
     const { t, i18n } = useTranslation();
     const isTr = i18n.language?.startsWith('tr');
     
-    // Notification toggles (TTCoin style)
+    // Notification toggles
     const [notifs, setNotifs] = useState({
-        spin: JSON.parse(localStorage.getItem('notif_spin') || 'true'),
-        chef: JSON.parse(localStorage.getItem('notif_chef') || 'true'),
-        staking: JSON.parse(localStorage.getItem('notif_staking') || 'true'),
         community: JSON.parse(localStorage.getItem('notif_community') || 'false'),
     });
 
@@ -158,9 +155,6 @@ export function Settings() {
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 18, overflow: 'hidden' }}>
                     {[
-                        { key: 'spin', emoji: '🎡', label: isTr ? 'Çark & Ödüller' : 'Spin & Rewards' },
-                        { key: 'chef', emoji: '👨‍🍳', label: isTr ? 'Taste Chef' : 'Taste Chef' },
-                        { key: 'staking', emoji: '🏆', label: 'Staking' },
                         { key: 'community', emoji: '👥', label: isTr ? 'Topluluk' : 'Community' },
                     ].map((item, i, arr) => (
                         <div
