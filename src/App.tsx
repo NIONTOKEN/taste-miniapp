@@ -18,7 +18,7 @@ import { DisclaimerModal, shouldShowDisclaimer } from './components/DisclaimerMo
 import { LangSelectionModal } from './components/LangSelectionModal'
 import { PoweredBy } from './components/PoweredBy'
 import { Community } from './components/Community'
-import { WalletTransfer } from './components/WalletTransfer'
+import { HybridWallet } from './components/HybridWallet'
 import { PriceTicker } from './components/PriceTicker'
 import { CountdownTimer } from './components/CountdownTimer'
 import { Partners } from './components/Partners'
@@ -500,11 +500,7 @@ function App() {
       );
       case 'wallet': return (
         <motion.div key="wallet" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TAI WALLET</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👛 {t('nav.wallet') || 'Cüzdan & Transfer'}</h3>
-            <WalletTransfer />
-          </div>
+          <HybridWallet />
         </motion.div>
       );
       case 'partners': return (

@@ -26,8 +26,8 @@ class InternalWalletService {
         return !!localStorage.getItem(STORAGE_KEY);
     }
 
-    async createWallet(): Promise<InternalWalletInfo> {
-        const mnemonic = await mnemonicNew();
+    async createWallet(wordCount: 12 | 24 = 24): Promise<InternalWalletInfo> {
+        const mnemonic = await mnemonicNew(wordCount);
         localStorage.setItem(STORAGE_KEY, mnemonic.join(' '));
         const info = await this.getWalletInfo();
         if (!info) throw new Error('Cüzdan oluşturulamadı');
@@ -63,8 +63,8 @@ class InternalWalletService {
 
     async importWallet(mnemonicPhrase: string): Promise<InternalWalletInfo> {
         const words = mnemonicPhrase.trim().toLowerCase().split(/\s+/);
-        if (words.length !== 24) {
-            throw new Error('Mnemonic 24 kelimeden oluşmalıdır.');
+        if (words.length !== 12 && words.length !== 24) {
+            throw new Error('Mnemonic 12 veya 24 kelimeden oluşmalıdır.');
         }
         // Validate by deriving key — throws if invalid
         await mnemonicToWalletKey(words);
