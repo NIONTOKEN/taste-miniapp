@@ -10,17 +10,14 @@ import { Roadmap } from './components/Roadmap'
 import { Whitepaper } from './components/Whitepaper'
 import { Manifesto } from './components/Manifesto'
 import { LiveMarketData } from './components/LiveMarketData'
-import { SpinWheel } from './components/SpinWheel'
 import { Charity } from './components/Charity'
 import { TokenAllocation } from './components/TokenAllocation'
 import { Legal } from './components/Legal'
 import { TasteAI } from './components/TasteAI'
-import { TasteChef } from './components/TasteChef'
 import { DisclaimerModal, shouldShowDisclaimer } from './components/DisclaimerModal'
 import { LangSelectionModal } from './components/LangSelectionModal'
 import { PoweredBy } from './components/PoweredBy'
 import { Community } from './components/Community'
-import { TasteJobs } from './components/TasteJobs'
 import { WalletTransfer } from './components/WalletTransfer'
 import { PriceTicker } from './components/PriceTicker'
 import { CountdownTimer } from './components/CountdownTimer'
@@ -41,8 +38,6 @@ import { KYCModal } from './components/KYCModal'
 import { SwapScreen } from './components/SwapScreen'
 import { DeFiPool } from './components/DeFiPool'
 import { NotificationPanel } from './components/NotificationPanel'
-import { TasteSocial } from './components/TasteSocial'
-import { TasteFishing } from './components/TasteFishing'
 // @ts-ignore
 // WalletApp removed since TAI Wallet standalone is discontinued
 import {
@@ -90,7 +85,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'spin' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'chef' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'jobs' | 'tokenomics' | 'social' | 'fishing'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'tokenomics'>('home');
   const [navHistory, setNavHistory] = useState<string[]>([]);
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
@@ -112,7 +107,7 @@ function App() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSwapScreen, setShowSwapScreen] = useState(false);
   // 5-tab bottom nav active key: 'wallet' | 'team' | 'home' | 'pool' | 'settings'
-  const [activeBottomTab, setActiveBottomTab] = useState<'wallet' | 'social' | 'home' | 'pool' | 'settings'>('home');
+  const [activeBottomTab, setActiveBottomTab] = useState<'wallet' | 'home' | 'pool' | 'settings'>('home');
 
   // Telegram SDK Initialization
   useEffect(() => {
@@ -301,50 +296,6 @@ function App() {
               </div>
             </motion.div>
 
-            {/* 🎣 TASTE Fishing Game Banner (NEW) */}
-            <motion.div
-              initial={{ opacity: 0, y: -5 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => navigateTo('fishing')}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                background: 'linear-gradient(135deg, rgba(2,132,199,0.2) 0%, rgba(245,158,11,0.15) 100%)',
-                border: '1px solid rgba(56,189,248,0.4)', borderRadius: 20,
-                padding: '14px 16px', marginBottom: 16, cursor: 'pointer',
-                boxShadow: '0 8px 24px rgba(2,132,199,0.2)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{
-                  width: 44, height: 44, borderRadius: 14,
-                  background: 'linear-gradient(135deg, #0284c7, #0369a1)',
-                  border: '2px solid #38bdf8',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 22, flexShrink: 0,
-                  boxShadow: '0 0 12px rgba(56,189,248,0.4)'
-                }}>
-                  🎣
-                </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 14, fontWeight: 900, color: '#f8fafc' }}>TASTE Balık Avı Oyunu</span>
-                    <span style={{ fontSize: 9, background: '#f59e0b', color: '#000', padding: '1px 5px', borderRadius: 5, fontWeight: 900 }}>YENİ</span>
-                  </div>
-                  <div style={{ fontSize: 11, color: '#38bdf8', marginTop: 2, fontWeight: 700 }}>
-                    10 TAI ile Oltayı Göle At · TON & NION Kazan! 🐟
-                  </div>
-                </div>
-              </div>
-              <div style={{
-                background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#fff',
-                padding: '8px 12px', borderRadius: 12, fontSize: 12, fontWeight: 900,
-                border: '1px solid rgba(56,189,248,0.5)',
-                display: 'flex', alignItems: 'center', gap: 4
-              }}>
-                OYNA ➤
-              </div>
-            </motion.div>
 
             {/* Quick Stats Bar */}
             <motion.div
@@ -417,8 +368,6 @@ function App() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
                 {[
                   { emoji: '🤖', label: t('drawer.ai', 'AI'), tab: 'ai' },
-                  { emoji: '👨‍🍳', label: 'Chef', tab: 'chef' },
-                  { emoji: '🎡', label: t('nav.spin', 'Çark'), tab: 'spin' },
                   { emoji: '❤️', label: t('nav.charity', 'Bağış'), tab: 'charity' },
                   { emoji: '🌐', label: t('drawer.ecosystem', 'Ekosistem'), tab: 'ecosystem' },
                   { emoji: '👥', label: t('nav.team', 'Takım'), tab: 'team' },
@@ -455,21 +404,6 @@ function App() {
           </motion.div>
         );
 
-      case 'social': return (
-        <motion.div key="social" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <TasteSocial />
-        </motion.div>
-      );
-      case 'fishing': return (
-        <motion.div key="fishing" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <TasteFishing />
-        </motion.div>
-      );
-      case 'jobs': return (
-        <motion.div key="jobs" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <TasteJobs />
-        </motion.div>
-      );
       case 'tokenomics': return (
         <motion.div key="tokenomics" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <TokenAllocation />
@@ -546,15 +480,6 @@ function App() {
         </motion.div>
       );
       case 'whitepaper': return <Whitepaper />;
-      case 'spin': return (
-        <motion.div key="spin" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <SpinWheel />
-          </div>
-          <DailyRewards />
-          <Leaderboard />
-        </motion.div>
-      );
       case 'charity': return (
         <motion.div key="charity" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
@@ -579,26 +504,6 @@ function App() {
             <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TAI WALLET</div>
             <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👛 {t('nav.wallet') || 'Cüzdan & Transfer'}</h3>
             <WalletTransfer />
-          </div>
-        </motion.div>
-      );
-      case 'chef': return (
-        <motion.div key="chef" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>{t('nav.chef')}</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>👨‍🍳 {t('app.chef_status')}</h3>
-            <TasteChef />
-          </div>
-        </motion.div>
-      );
-      case 'community': return (
-        <motion.div key="community" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE JOBS</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>
-              🧑‍🍳 {t('app.gastronomy_career')}
-            </h3>
-            <TasteJobs />
           </div>
         </motion.div>
       );
@@ -879,13 +784,10 @@ function App() {
                 {/* Drawer menu items */}
                 <div style={{ padding: '12px 0', flex: 1 }}>
                   {[
-                    { id: 'fishing', icon: '🎣', label: 'Balık Avı (10 TAI Oyun)', isNew: true },
-                    { id: 'social', icon: '📸', label: 'TASTE Social', isNew: true },
                     { id: 'ecosystem', icon: '🌐', label: 'TAI Ekosistemi', isNew: true },
                     { id: 'socials', icon: '📱', label: 'Sosyal Kanallar', isNew: true },
                     { id: 'team', icon: '👥', label: 'Takım', isNew: true },
                     null,
-                    { id: 'jobs', icon: '💼', label: 'İş ve Kariyer' },
                     { id: 'swap', icon: '⚡', label: 'Kullanıcı Satın Alımları' },
                     null,
                     { id: 'tokenomics', icon: '🥧', label: 'Token Dağılımı' },
@@ -979,16 +881,7 @@ function App() {
             <span className="nav-label">{t('nav.wallet', 'Cüzdan')}</span>
           </button>
 
-          {/* 2. Social */}
-          <button
-            className={`nav-item ${activeBottomTab === 'social' ? 'active' : ''}`}
-            onClick={() => { setActiveBottomTab('social'); navigateTo('social'); setIsMenuOpen(false); }}
-          >
-            <span className="nav-icon" style={{ fontSize: 19 }}>📸</span>
-            <span className="nav-label">Social</span>
-          </button>
-
-          {/* 3. Ana Sayfa — center big button */}
+          {/* 2. Ana Sayfa — center big button */}
           <button
             onClick={() => { setActiveBottomTab('home'); setActiveTab('home'); setIsMenuOpen(false); }}
             style={{ position: 'relative', flex: '1.3', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer', gap: 4 }}

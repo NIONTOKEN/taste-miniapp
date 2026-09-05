@@ -193,7 +193,7 @@ export function SplashScreen({ onFinish }: SplashScreenProps) {
                   lineHeight: 1,
                 }}
               >
-                TASTE TAI
+                TASTE AI
               </div>
 
               {/* Divider line */}
@@ -222,7 +222,7 @@ export function SplashScreen({ onFinish }: SplashScreenProps) {
                   fontWeight: 600,
                 }}
               >
-                AIRSHIP RESTAURANT
+                TAI
               </motion.div>
             </motion.div>
 

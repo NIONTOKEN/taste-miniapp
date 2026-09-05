@@ -1,13 +1,12 @@
-﻿import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { getPosts, insertPost, getMessages, sendMessage, updatePostLikes, type SupaPost } from '../services/supabase'
-import { TasteJobs } from './TasteJobs'
 
 // ─── Types ────────────────────────────────────────────────────────────────
 type PostType = 'yemek' | 'tarif' | 'menu' | 'career' | 'chat'
 type FilterType = 'hepsi' | PostType
-type CommunityView = 'feed' | 'chat' | 'jobs'
+type CommunityView = 'feed' | 'chat'
 
 interface Ingredient { name: string; amount: string }
 
@@ -517,29 +516,19 @@ export function Community() {
                     <button onClick={() => setView('feed')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'feed' ? '#f59e0b' : 'transparent', color: view === 'feed' ? '#000' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
                        <span style={{ fontSize: '14px' }}>🍽️</span> {t('community.tab_feed')}
                     </button>
-                    <button onClick={() => setView('jobs')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'jobs' ? '#f59e0b' : 'transparent', color: view === 'jobs' ? '#000' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', position: 'relative' }}>
-                       <span style={{ fontSize: '14px' }}>💼</span> {t('community.tab_jobs')}
-                       <span style={{ position: 'absolute', top: '4px', right: '4px', width: '6px', height: '6px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 6px #f59e0b' }} />
-                    </button>
                     <button onClick={() => setView('chat')} style={{ padding: '8px 12px', borderRadius: '10px', border: 'none', background: view === 'chat' ? '#3b82f6' : 'transparent', color: view === 'chat' ? '#fff' : '#64748b', fontWeight: 800, fontSize: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
                        <span style={{ fontSize: '14px' }}>💬</span> {t('community.tab_chat')}
                     </button>
                 </div>
-                {view !== 'jobs' && (
                     <motion.button 
                         whileTap={{ scale: 0.93 }} 
                         onClick={() => setShowCreate(true)}
                         style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000', border: 'none', borderRadius: '14px', padding: '11px 16px', fontSize: '12px', fontWeight: 900, cursor: 'pointer', boxShadow: '0 4px 15px rgba(245,158,11,0.4)' }}>
                         🚀 {t('community.share')}
                     </motion.button>
-                )}
             </div>
 
-            {view === 'jobs' ? (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                    <TasteJobs />
-                </motion.div>
-            ) : view === 'feed' ? (
+            {view === 'feed' ? (
                 <>
                 {/* ── Category Icons ── */}
                 <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '8px' }}>
