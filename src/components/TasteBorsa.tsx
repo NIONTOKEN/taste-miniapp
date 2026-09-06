@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, ExternalLink, ArrowDownLeft, ArrowUpRight, MessageSquare, Info, ShieldCheck } from 'lucide-react';
 import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoTAI } from './TokenLogos';
@@ -19,7 +19,7 @@ interface OrderBookRow {
 }
 
 export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateToWallet }) => {
-  const { balances, activeAddress, walletType } = useWallet();
+  const { balances, activeAddress, walletType, setWalletType } = useWallet();
   const [tonConnectUI] = useTonConnectUI();
 
   const [pair, setPair] = useState<MarketPair>(initialPair || {
@@ -123,6 +123,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
 
   const handleOrderSubmit = async () => {
     if (!activeAddress) {
+      setWalletType('external');
       tonConnectUI.openModal();
       return;
     }

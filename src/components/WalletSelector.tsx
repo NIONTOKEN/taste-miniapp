@@ -218,6 +218,7 @@ export const WalletSelector = () => {
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
+                                                            setWalletType('external');
                                                             setIsOpen(false);
                                                             // Give React time to unmount the modal and then open TonConnect
                                                             setTimeout(() => {

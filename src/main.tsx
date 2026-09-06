@@ -7,8 +7,10 @@ import './i18n'
 import { UserProvider } from './context/UserContext'
 import { WalletProvider } from './context/WalletContext'
 
-// Dynamic manifest URL for both dev and production
-const MANIFEST_URL = `${window.location.origin}/tonconnect-manifest.json`
+// Robust manifest URL for both dev and production
+const MANIFEST_URL = (typeof window !== 'undefined' && window.location.origin.startsWith('https://'))
+  ? `${window.location.origin}/tonconnect-manifest.json`
+  : 'https://taste-miniapp.vercel.app/tonconnect-manifest.json';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

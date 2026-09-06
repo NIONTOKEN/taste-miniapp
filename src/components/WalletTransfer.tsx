@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
 import { internalWalletService } from '../services/internalWallet';
-import { useTonConnectUI } from '@tonconnect/ui-react';
+import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
 import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoTAI } from './TokenLogos';
 import { toNano, Address, beginCell } from '@ton/core';
 
@@ -15,7 +15,7 @@ interface WalletTransferProps {
 }
 
 export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBorsa }) => {
-  const { walletType, activeAddress, balances, refreshBalances } = useWallet();
+  const { walletType, setWalletType, activeAddress, balances, refreshBalances } = useWallet();
   const [tonConnectUI] = useTonConnectUI();
 
   const [showBalance, setShowBalance] = useState(true);
@@ -394,39 +394,75 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         padding: '14px 16px',
         marginBottom: '20px',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
+        flexDirection: 'column',
+        gap: '10px'
       }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
-              {walletType === 'internal' ? '🔐 Taste Yerleşik Cüzdan' : '🔗 TonConnect Cüzdanı'}
-            </span>
-            <span style={{ fontSize: '9px', background: '#22c55e', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>AKTİF</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
+                {walletType === 'internal' ? '🔐 Taste Yerleşik Cüzdan' : '🔗 TonConnect Dış Cüzdan'}
+              </span>
+              {activeAddress && (
+                <span style={{ fontSize: '9px', background: '#22c55e', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>AKTİF</span>
+              )}
+            </div>
+            <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>
+              {activeAddress ? `${activeAddress.slice(0, 8)}...${activeAddress.slice(-6)}` : 'Herhangi bir cüzdan bağlı değil'}
+            </div>
           </div>
-          <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>
-            {activeAddress ? `${activeAddress.slice(0, 8)}...${activeAddress.slice(-6)}` : 'Cüzdan bağlı değil'}
-          </div>
+
+          <button
+            onClick={() => {
+              setWalletManageMode('menu');
+              setActiveActionModal('manage');
+            }}
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: '10px',
+              padding: '8px 12px',
+              fontSize: '11px',
+              fontWeight: 800,
+              cursor: 'pointer'
+            }}
+          >
+            Yönet ⚙️
+          </button>
         </div>
 
-        <button
-          onClick={() => {
-            setWalletManageMode('menu');
-            setActiveActionModal('manage');
-          }}
-          style={{
-            background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-            color: '#000',
-            border: 'none',
-            borderRadius: '10px',
-            padding: '8px 12px',
-            fontSize: '11px',
-            fontWeight: 900,
-            cursor: 'pointer'
-          }}
-        >
-          Cüzdan Yönetimi ⚙️
-        </button>
+        {!activeAddress && (
+          <div style={{ display: 'flex', gap: '8px', paddingTop: '4px' }}>
+            <button
+              onClick={() => {
+                setWalletType('external');
+                try {
+                  tonConnectUI.openModal();
+                } catch (e) {
+                  console.error('TonConnect openModal error', e);
+                }
+              }}
+              style={{
+                flex: 1,
+                padding: '10px 12px',
+                borderRadius: '10px',
+                border: 'none',
+                background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                color: '#fff',
+                fontSize: '12px',
+                fontWeight: 900,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+            >
+              <span>🔗 TON Cüzdanı Bağla (Tonkeeper)</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 4. Varlık Arama & Filtreler */}
@@ -861,32 +897,60 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                         </div>
                       </button>
 
-                      <button
-                        onClick={() => {
-                          tonConnectUI.openModal();
-                          setActiveActionModal('none');
-                        }}
+                      <div
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '12px',
                           padding: '14px',
                           borderRadius: '14px',
                           background: 'rgba(255,255,255,0.04)',
                           border: '1px solid rgba(255,255,255,0.1)',
-                          color: '#fff',
-                          cursor: 'pointer',
-                          textAlign: 'left'
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '12px'
                         }}
                       >
-                        <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Link2 size={20} color="#fff" />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <Link2 size={20} color="#fff" />
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>Dış Cüzdana Bağlan (TonConnect)</div>
+                            <div style={{ fontSize: '11px', color: '#94a3b8' }}>Tonkeeper, MyTonWallet veya Telegram Wallet</div>
+                          </div>
                         </div>
-                        <div>
-                          <div style={{ fontSize: '13px', fontWeight: 800 }}>Dış Cüzdana Bağlan (TonConnect)</div>
-                          <div style={{ fontSize: '11px', color: '#94a3b8' }}>Tonkeeper, MyTonWallet veya Telegram Wallet</div>
+
+                        <div style={{ display: 'flex', justifyContent: 'center', width: '100%', paddingTop: '4px' }}>
+                          <button
+                            onClick={() => {
+                              setWalletType('external');
+                              setActiveActionModal('none');
+                              setTimeout(() => {
+                                try {
+                                  tonConnectUI.openModal();
+                                } catch (e) {
+                                  console.error('TonConnect modal open error', e);
+                                }
+                              }, 250);
+                            }}
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              borderRadius: '10px',
+                              border: 'none',
+                              background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                              color: '#fff',
+                              fontWeight: 800,
+                              fontSize: '12px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '6px'
+                            }}
+                          >
+                            <span>🔗 CÜZDANLARI LİSTELE & BAĞLAN</span>
+                          </button>
                         </div>
-                      </button>
+                      </div>
                     </div>
                   )}
 

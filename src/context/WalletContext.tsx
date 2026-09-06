@@ -64,6 +64,12 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     useEffect(() => {
+        if (externalAddress) {
+            setWalletType('external');
+        }
+    }, [externalAddress]);
+
+    useEffect(() => {
         loadInternal();
     }, []);
 
