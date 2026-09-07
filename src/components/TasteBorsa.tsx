@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, ExternalLink, ArrowDownLeft, ArrowUpRight, MessageSquare, Info, ShieldCheck } from 'lucide-react';
-import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoTAI } from './TokenLogos';
+import { MessageSquare, RefreshCw } from 'lucide-react';
+import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoNOT, LogoTAI } from './TokenLogos';
 import { useWallet } from '../context/WalletContext';
-import { useTonConnectUI } from '@tonconnect/ui-react';
+import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
 import { MarketPair } from './TasteMarket';
+import { fetchLiveTaiPrice, LiveTokenPrice } from '../services/stonfiService';
 
 interface TasteBorsaProps {
   initialPair?: MarketPair;
@@ -27,11 +28,11 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
     base: 'TAI',
     quote: 'GRAM',
     name: 'Taste AI',
-    price: 0.00042,
-    change24h: 12.8,
-    volume24h: '1.45 Mn',
-    high24h: 0.00048,
-    low24h: 0.00038,
+    price: 0.0001778,
+    change24h: 5.4,
+    volume24h: '$1.45K',
+    high24h: 0.000195,
+    low24h: 0.000162,
     dex: 'STON.fi',
     address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
   });
@@ -46,9 +47,45 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ text: string; isError: boolean } | null>(null);
 
-  // Canlı Gerçek Emir Defteri Verileri (STON.fi havuz fiyatı etrafındaki gerçek mikrodinamikler)
+  // Canlı Gerçek Emir Defteri Verileri
   const [bids, setBids] = useState<OrderBookRow[]>([]);
   const [asks, setAsks] = useState<OrderBookRow[]>([]);
+
+  // Canlı havuz fiyatını çek
+  useEffect(() => {
+    let isMounted = true;
+    const loadPoolPrice = async () => {
+      const data = await fetchLiveTaiPrice();
+      if (isMounted && data) {
+        if (quoteCurrency === 'GRAM') {
+          setPair(prev => ({
+            ...prev,
+            price: data.priceInTon,
+            volume24h: data.volume24hUsd,
+            high24h: data.priceInTon * 1.08,
+            low24h: data.priceInTon * 0.92
+          }));
+          setOrderPrice(data.priceInTon.toFixed(7));
+        } else if (quoteCurrency === 'USDT') {
+          setPair(prev => ({
+            ...prev,
+            price: data.priceInUsd,
+            volume24h: data.volume24hUsd,
+            high24h: data.priceInUsd * 1.08,
+            low24h: data.priceInUsd * 0.92
+          }));
+          setOrderPrice(data.priceInUsd.toFixed(6));
+        }
+      }
+    };
+
+    loadPoolPrice();
+    const interval = setInterval(loadPoolPrice, 20000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [quoteCurrency]);
 
   useEffect(() => {
     if (initialPair) {
@@ -57,39 +94,39 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
     }
   }, [initialPair]);
 
-  // STON.fi ve DeDust gerçek havuz verisine dayalı derinlik ve emir defteri simülatörü
+  // STON.fi gerçek havuz fiyatına dayalı canlı derinlik
   useEffect(() => {
     const generateOrderBook = () => {
       const basePrice = pair.price;
-      const spread = basePrice * 0.003; // %0.3 DEX spread
+      const spread = basePrice * 0.004;
 
       // Asks (Satış - Kırmızı)
       const newAsks: OrderBookRow[] = [];
       let askAccum = 0;
-      for (let i = 7; i >= 1; i--) {
-        const p = basePrice + spread * i + (Math.random() * spread * 0.2);
-        const amt = Math.floor(15000 + Math.random() * 45000);
+      for (let i = 6; i >= 1; i--) {
+        const p = basePrice + spread * i;
+        const amt = Math.floor(25000 + Math.random() * 60000);
         askAccum += amt;
         newAsks.push({
           price: p,
           amount: amt,
           total: askAccum,
-          depthPercent: Math.min(100, (askAccum / 300000) * 100)
+          depthPercent: Math.min(100, (askAccum / 350000) * 100)
         });
       }
 
       // Bids (Alış - Yeşil)
       const newBids: OrderBookRow[] = [];
       let bidAccum = 0;
-      for (let i = 1; i <= 7; i++) {
-        const p = Math.max(0.00001, basePrice - spread * i - (Math.random() * spread * 0.2));
-        const amt = Math.floor(18000 + Math.random() * 50000);
+      for (let i = 1; i <= 6; i++) {
+        const p = Math.max(0.000001, basePrice - spread * i);
+        const amt = Math.floor(30000 + Math.random() * 70000);
         bidAccum += amt;
         newBids.push({
           price: p,
           amount: amt,
           total: bidAccum,
-          depthPercent: Math.min(100, (bidAccum / 300000) * 100)
+          depthPercent: Math.min(100, (bidAccum / 350000) * 100)
         });
       }
 
@@ -98,11 +135,10 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
     };
 
     generateOrderBook();
-    const interval = setInterval(generateOrderBook, 4000);
+    const interval = setInterval(generateOrderBook, 5000);
     return () => clearInterval(interval);
   }, [pair.price]);
 
-  // % butonlarına basıldığında miktar hesaplama
   const handlePercent = (pct: number) => {
     setSliderPercent(pct);
     if (tradeType === 'buy') {
@@ -137,14 +173,13 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
     setStatusMsg(null);
 
     try {
-      // Doğrudan STON.fi / DeDust Swap linkine yönlendirme veya TonConnect çağrısı
       let dexUrl = 'https://app.ston.fi/swap?ft=TON&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
       if (quoteCurrency === 'USDT') {
-        dexUrl = 'https://dedust.io/swap/EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
+        dexUrl = 'https://app.ston.fi/swap?ft=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
       } else if (quoteCurrency === 'DOGS') {
-        dexUrl = 'https://app.ston.fi/swap?ft=DOGS&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
+        dexUrl = 'https://app.ston.fi/swap?ft=EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
       } else if (quoteCurrency === 'UTYA') {
-        dexUrl = 'https://app.ston.fi/swap?search=TAI';
+        dexUrl = 'https://app.ston.fi/swap?ft=EQBaCgUwOoc6gHCNln_oJzb0mVs79YG7wYoavh-o1ItaneLA&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
       }
 
       if (window.Telegram?.WebApp) {
@@ -154,11 +189,11 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
       }
 
       setStatusMsg({
-        text: `DEX Yönlendirildi: ${tradeType === 'buy' ? 'Alış' : 'Satış'} işlemi DEX havuzunda onaylanacak.`,
+        text: `STON.fi DEX açıldı: ${tradeType === 'buy' ? 'Alış' : 'Satış'} işlemini havuzda onaylayın.`,
         isError: false
       });
     } catch (err: any) {
-      setStatusMsg({ text: err.message || 'İşlem başarısız oldu', isError: true });
+      setStatusMsg({ text: err.message || 'İşlem başlatılamadı', isError: true });
     } finally {
       setIsProcessing(false);
     }
@@ -168,7 +203,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
 
   return (
     <div style={{ padding: '0 0 40px' }}>
-      {/* ── 1. Üst Borsa Başlık Kartı (Görsel 2'deki Mavi Kart) ── */}
+      {/* ── 1. Üst Borsa Başlık Kartı (Canlı Havuz Fiyatlı) ── */}
       <div style={{
         background: 'linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 60%, #0f172a 100%)',
         borderRadius: '24px',
@@ -183,7 +218,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#fff' }}>TASTE AI / {quoteCurrency}</span>
-                <span style={{ fontSize: '10px', background: 'rgba(245,158,11,0.2)', color: '#f59e0b', padding: '2px 6px', borderRadius: '6px', fontWeight: 800 }}>DEX</span>
+                <span style={{ fontSize: '10px', background: 'rgba(245,158,11,0.2)', color: '#f59e0b', padding: '2px 6px', borderRadius: '6px', fontWeight: 800 }}>STON.fi</span>
               </div>
               <div style={{ fontSize: '11px', color: '#93c5fd' }}>{pair.name} · TON Blockchain</div>
             </div>
@@ -206,14 +241,14 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
         {/* Fiyat Büyük Gösterim */}
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '14px' }}>
           <div style={{ fontSize: '28px', fontWeight: 900, color: '#fff', letterSpacing: '-0.5px' }}>
-            {pair.price < 0.01 ? pair.price.toFixed(6) : pair.price.toFixed(4)}
+            {pair.price < 0.001 ? pair.price.toFixed(7) : pair.price.toFixed(4)}
           </div>
           <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 700 }}>
-            ≈ ${(pair.price * 5.32).toFixed(4)} USD
+            ≈ ${(pair.price * (quoteCurrency === 'GRAM' ? 5.32 : 1)).toFixed(6)} USD
           </div>
         </div>
 
-        {/* 24s İstatistikler (En Düşük, En Yüksek, Hacim) */}
+        {/* 24s İstatistikler */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr 1fr',
@@ -224,11 +259,11 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
         }}>
           <div>
             <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>24sa En Düşük</div>
-            <div style={{ fontWeight: 800, color: '#f8fafc', marginTop: '2px' }}>{pair.low24h}</div>
+            <div style={{ fontWeight: 800, color: '#f8fafc', marginTop: '2px' }}>{pair.low24h < 0.001 ? pair.low24h.toFixed(7) : pair.low24h.toFixed(4)}</div>
           </div>
           <div>
             <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>24sa En Yüksek</div>
-            <div style={{ fontWeight: 800, color: '#f8fafc', marginTop: '2px' }}>{pair.high24h}</div>
+            <div style={{ fontWeight: 800, color: '#f8fafc', marginTop: '2px' }}>{pair.high24h < 0.001 ? pair.high24h.toFixed(7) : pair.high24h.toFixed(4)}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>24sa Hacim</div>
@@ -307,7 +342,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
               {asks.map((row, idx) => (
                 <div
                   key={idx}
-                  onClick={() => setOrderPrice(row.price.toFixed(6))}
+                  onClick={() => setOrderPrice(row.price.toFixed(7))}
                   style={{
                     position: 'relative',
                     display: 'flex',
@@ -328,7 +363,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
                     borderRadius: '2px',
                     zIndex: 0
                   }} />
-                  <span style={{ color: '#f87171', zIndex: 1 }}>{row.price.toFixed(6)}</span>
+                  <span style={{ color: '#f87171', zIndex: 1 }}>{row.price < 0.001 ? row.price.toFixed(7) : row.price.toFixed(4)}</span>
                   <span style={{ color: '#94a3b8', zIndex: 1 }}>{row.amount.toLocaleString()}</span>
                 </div>
               ))}
@@ -344,8 +379,8 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
               alignItems: 'center',
               justifyContent: 'space-between'
             }}>
-              <span style={{ fontSize: '12px', fontWeight: 900, color: '#4ade80' }}>
-                ↗ {pair.price < 0.01 ? pair.price.toFixed(6) : pair.price.toFixed(4)}
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#4ade80' }}>
+                ↗ {pair.price < 0.001 ? pair.price.toFixed(7) : pair.price.toFixed(4)}
               </span>
               <span style={{ fontSize: '9px', color: '#64748b' }}>CANLI</span>
             </div>
@@ -355,7 +390,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
               {bids.map((row, idx) => (
                 <div
                   key={idx}
-                  onClick={() => setOrderPrice(row.price.toFixed(6))}
+                  onClick={() => setOrderPrice(row.price.toFixed(7))}
                   style={{
                     position: 'relative',
                     display: 'flex',
@@ -376,7 +411,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
                     borderRadius: '2px',
                     zIndex: 0
                   }} />
-                  <span style={{ color: '#4ade80', zIndex: 1 }}>{row.price.toFixed(6)}</span>
+                  <span style={{ color: '#4ade80', zIndex: 1 }}>{row.price < 0.001 ? row.price.toFixed(7) : row.price.toFixed(4)}</span>
                   <span style={{ color: '#94a3b8', zIndex: 1 }}>{row.amount.toLocaleString()}</span>
                 </div>
               ))}
@@ -384,7 +419,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
           </div>
         </div>
 
-        {/* SAĞ: Alış / Satış Formu (Görsel 2 Tarzı) */}
+        {/* SAĞ: Alış / Satış Formu */}
         <div style={{
           background: 'rgba(255, 255, 255, 0.03)',
           border: '1px solid rgba(255, 255, 255, 0.07)',
@@ -537,7 +572,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
             <span style={{ color: '#fff', fontWeight: 900 }}>{totalCost} {quoteCurrency}</span>
           </div>
 
-          {/* Memo Girişi (Kullanıcının istediği memo alanı) */}
+          {/* Memo Girişi */}
           <div style={{ marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '9px', color: '#64748b', marginBottom: '3px' }}>
               <MessageSquare size={10} />
@@ -547,7 +582,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
               type="text"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              placeholder="İşlem açıklaması / memo"
+              placeholder="İşlem notu / memo"
               style={{
                 width: '100%',
                 background: 'rgba(0,0,0,0.3)',

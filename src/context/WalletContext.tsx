@@ -9,6 +9,8 @@ interface JettonInfo {
     name: string;
     image?: string;
     decimals: number;
+    usdValue?: string;
+    usdPrice?: number;
 }
 
 interface WalletContextType {
@@ -22,7 +24,6 @@ interface WalletContextType {
     };
     refreshBalances: () => Promise<void>;
     isLoading: boolean;
-    // Eksik fonksiyonlar eklendi
     createInternalWallet: () => Promise<InternalWalletInfo>;
     importWallet: (mnemonic: string) => Promise<InternalWalletInfo>;
     logoutInternal: () => void;
@@ -58,7 +59,6 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             if (info) setInternalWallet(info);
         } catch (err) {
             console.error('[WalletContext] Internal wallet load error:', err);
-            // Corrupted mnemonic — clear it so app doesn't crash on every load
             try { localStorage.removeItem('taste_internal_wallet_mnemonic'); } catch {}
         }
     };
@@ -107,24 +107,58 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (!activeAddress) return;
         setIsLoading(true);
         try {
-            const tonBal = await internalWalletService.getBalance(activeAddress);
-            const res = await fetch(`https://tonapi.io/v2/accounts/${activeAddress}/jettons?currencies=usd`);
-            const data = await res.json();
-            
-            const jettonList: JettonInfo[] = (data.balances || []).map((jb: any) => ({
-                symbol: jb.jetton.symbol,
-                name: jb.jetton.name,
-                address: jb.jetton.address,
-                image: jb.jetton.image,
-                decimals: jb.jetton.decimals,
-                balance: (parseFloat(jb.balance) / Math.pow(10, jb.jetton.decimals)).toFixed(2)
-            }));
+            // 1. Fetch live TON balance via TonAPI (with fallback to RPC)
+            let tonBalStr = '0.00';
+            try {
+                const accRes = await fetch(`https://tonapi.io/v2/accounts/${encodeURIComponent(activeAddress)}`);
+                if (accRes.ok) {
+                    const accData = await accRes.json();
+                    if (accData.balance !== undefined) {
+                        tonBalStr = (parseFloat(accData.balance) / 1e9).toFixed(4);
+                    }
+                }
+            } catch {
+                try {
+                    tonBalStr = await internalWalletService.getBalance(activeAddress);
+                } catch {}
+            }
 
-            const tasteJetton = jettonList.find(j => j.symbol === 'TASTE' || j.address === 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-');
+            // 2. Fetch all real Jettons for this account via TonAPI
+            const res = await fetch(`https://tonapi.io/v2/accounts/${encodeURIComponent(activeAddress)}/jettons?currencies=usd`);
+            let jettonList: JettonInfo[] = [];
+            let tasteBal = '0';
+
+            if (res.ok) {
+                const data = await res.json();
+                jettonList = (data.balances || []).map((jb: any) => {
+                    const dec = jb.jetton?.decimals || 9;
+                    const rawBal = parseFloat(jb.balance || '0') / Math.pow(10, dec);
+                    const usdP = jb.price?.prices?.USD ? parseFloat(jb.price.prices.USD) : 0;
+                    return {
+                        symbol: jb.jetton?.symbol || 'TOKEN',
+                        name: jb.jetton?.name || jb.jetton?.symbol || 'Unknown Token',
+                        address: jb.jetton?.address || '',
+                        image: jb.jetton?.image || '',
+                        decimals: dec,
+                        balance: rawBal < 0.01 && rawBal > 0 ? rawBal.toFixed(4) : rawBal.toFixed(2),
+                        usdValue: (rawBal * usdP).toFixed(2),
+                        usdPrice: usdP
+                    };
+                });
+
+                const tasteJetton = jettonList.find(j => 
+                    j.symbol === 'TASTE' || 
+                    j.symbol === 'TAI' || 
+                    j.address === 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
+                );
+                if (tasteJetton) {
+                    tasteBal = tasteJetton.balance;
+                }
+            }
             
             setBalances({
-                ton: parseFloat(tonBal).toFixed(2),
-                taste: tasteJetton ? tasteJetton.balance : '0',
+                ton: tonBalStr,
+                taste: tasteBal,
                 jettons: jettonList
             });
         } catch (error) {

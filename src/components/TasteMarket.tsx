@@ -1,7 +1,8 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Star, ArrowUpDown } from 'lucide-react';
-import { LogoGRAM, LogoDOGS, LogoUTYA, LogoUSDT, LogoTAI } from './TokenLogos';
+import { LogoGRAM, LogoDOGS, LogoUTYA, LogoUSDT, LogoNOT, LogoTAI } from './TokenLogos';
+import { fetchLiveTaiPrice } from '../services/stonfiService';
 
 export interface MarketPair {
   id: string;
@@ -24,11 +25,11 @@ const INITIAL_PAIRS: MarketPair[] = [
     base: 'TAI',
     quote: 'GRAM',
     name: 'Taste AI',
-    price: 0.00042,
-    change24h: 12.8,
-    volume24h: '1.45 Mn',
-    high24h: 0.00048,
-    low24h: 0.00038,
+    price: 0.0001778,
+    change24h: 5.4,
+    volume24h: '$1.45K',
+    high24h: 0.000195,
+    low24h: 0.000162,
     dex: 'STON.fi',
     address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
   },
@@ -37,37 +38,11 @@ const INITIAL_PAIRS: MarketPair[] = [
     base: 'TAI',
     quote: 'USDT',
     name: 'Taste AI',
-    price: 0.00224,
-    change24h: 10.4,
-    volume24h: '980 K',
-    high24h: 0.00251,
-    low24h: 0.00201,
-    dex: 'DeDust',
-    address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
-  },
-  {
-    id: 'TAI_DOGS',
-    base: 'TAI',
-    quote: 'DOGS',
-    name: 'Taste AI',
-    price: 3.45,
-    change24h: 6.7,
-    volume24h: '420 K',
-    high24h: 3.82,
-    low24h: 3.12,
-    dex: 'STON.fi',
-    address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
-  },
-  {
-    id: 'TAI_UTYA',
-    base: 'TAI',
-    quote: 'UTYA',
-    name: 'Taste AI',
-    price: 0.85,
-    change24h: 4.2,
-    volume24h: '210 K',
-    high24h: 0.94,
-    low24h: 0.81,
+    price: 0.000946,
+    change24h: 4.8,
+    volume24h: '$980',
+    high24h: 0.00105,
+    low24h: 0.00086,
     dex: 'STON.fi',
     address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
   },
@@ -75,12 +50,12 @@ const INITIAL_PAIRS: MarketPair[] = [
     id: 'GRAM_USDT',
     base: 'GRAM',
     quote: 'USDT',
-    name: 'Gram / Ton',
+    name: 'Gram / Toncoin',
     price: 5.32,
-    change24h: 3.15,
-    volume24h: '14.2 Mn',
+    change24h: 2.1,
+    volume24h: '$14.2M',
     high24h: 5.48,
-    low24h: 5.12,
+    low24h: 5.18,
     dex: 'STON.fi'
   },
   {
@@ -88,24 +63,39 @@ const INITIAL_PAIRS: MarketPair[] = [
     base: 'DOGS',
     quote: 'GRAM',
     name: 'Dogs Token',
-    price: 0.00012,
-    change24h: -2.4,
-    volume24h: '3.8 Mn',
-    high24h: 0.00013,
-    low24h: 0.00011,
-    dex: 'STON.fi'
+    price: 0.0000086,
+    change24h: -1.8,
+    volume24h: '$3.8M',
+    high24h: 0.0000092,
+    low24h: 0.0000081,
+    dex: 'STON.fi',
+    address: 'EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS'
+  },
+  {
+    id: 'NOT_GRAM',
+    base: 'NOT',
+    quote: 'GRAM',
+    name: 'Notcoin',
+    price: 0.0000862,
+    change24h: 3.6,
+    volume24h: '$8.4M',
+    high24h: 0.000091,
+    low24h: 0.000082,
+    dex: 'STON.fi',
+    address: 'EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT'
   },
   {
     id: 'UTYA_GRAM',
     base: 'UTYA',
     quote: 'GRAM',
     name: 'Utya Duck',
-    price: 0.00055,
-    change24h: 1.8,
-    volume24h: '850 K',
-    high24h: 0.00059,
-    low24h: 0.00052,
-    dex: 'STON.fi'
+    price: 0.00503,
+    change24h: 1.2,
+    volume24h: '$850K',
+    high24h: 0.0054,
+    low24h: 0.0048,
+    dex: 'STON.fi',
+    address: 'EQBaCgUwOoc6gHCNln_oJzb0mVs79YG7wYoavh-o1ItaneLA'
   }
 ];
 
@@ -122,30 +112,38 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
   const [sortField, setSortField] = useState<'price' | 'change' | 'volume'>('change');
   const [sortAsc, setSortAsc] = useState(false);
 
+  // STON.fi canlı havuz rezervinden TAI gerçek fiyatını ve TON ekosistem verilerini çek
   useEffect(() => {
     let isMounted = true;
-    const fetchLivePrices = async () => {
+    const fetchMarketData = async () => {
       try {
-        const res = await fetch('https://api.ston.fi/v1/assets/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-');
-        if (res.ok) {
-          const data = await res.json();
-          const asset = data?.asset;
-          if (asset && isMounted) {
-            const usdPrice = asset.dex_usd_price ? parseFloat(asset.dex_usd_price) : 0.00224;
-            setPairs(prev => prev.map(p => {
-              if (p.id === 'TAI_USDT') return { ...p, price: usdPrice };
-              if (p.id === 'TAI_GRAM') return { ...p, price: usdPrice / 5.32 };
-              return p;
-            }));
-          }
+        const taiData = await fetchLiveTaiPrice();
+        if (isMounted && taiData) {
+          setPairs(prev => prev.map(p => {
+            if (p.id === 'TAI_GRAM') {
+              return {
+                ...p,
+                price: taiData.priceInTon,
+                volume24h: taiData.volume24hUsd
+              };
+            }
+            if (p.id === 'TAI_USDT') {
+              return {
+                ...p,
+                price: taiData.priceInUsd,
+                volume24h: taiData.volume24hUsd
+              };
+            }
+            return p;
+          }));
         }
       } catch (err) {
-        // Fallback to initial
+        console.warn('Market fetch warning:', err);
       }
     };
 
-    fetchLivePrices();
-    const interval = setInterval(fetchLivePrices, 25000);
+    fetchMarketData();
+    const interval = setInterval(fetchMarketData, 20000);
     return () => {
       isMounted = false;
       clearInterval(interval);
@@ -161,13 +159,14 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
 
   const getLogo = (symbol: string) => {
     switch (symbol) {
-      case 'TAI': return <LogoTAI size={30} />;
-      case 'GRAM': return <LogoGRAM size={30} />;
-      case 'USDT': return <LogoUSDT size={30} />;
-      case 'DOGS': return <LogoDOGS size={30} />;
-      case 'UTYA': return <LogoUTYA size={30} />;
+      case 'TAI': return <LogoTAI size={34} />;
+      case 'GRAM': return <LogoGRAM size={34} />;
+      case 'USDT': return <LogoUSDT size={34} />;
+      case 'DOGS': return <LogoDOGS size={34} />;
+      case 'UTYA': return <LogoUTYA size={34} />;
+      case 'NOT': return <LogoNOT size={34} />;
       default: return (
-        <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff', fontSize: 12 }}>
+        <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff', fontSize: 12 }}>
           {symbol.slice(0, 2)}
         </div>
       );
@@ -193,7 +192,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
     let diff = 0;
     if (sortField === 'price') diff = a.price - b.price;
     if (sortField === 'change') diff = a.change24h - b.change24h;
-    if (sortField === 'volume') diff = parseFloat(a.volume24h) - parseFloat(b.volume24h);
+    if (sortField === 'volume') diff = parseFloat(a.volume24h.replace(/[^0-9.]/g, '')) - parseFloat(b.volume24h.replace(/[^0-9.]/g, ''));
     return sortAsc ? diff : -diff;
   });
 
@@ -213,7 +212,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
         <Search size={18} color="#94a3b8" />
         <input
           type="text"
-          placeholder="Coin veya parite ara (TAI, GRAM, USDT...)"
+          placeholder="Coin veya parite ara (TAI, GRAM, USDT, NOT...)"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{
@@ -413,7 +412,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
 
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
-                  {pair.price < 0.01 ? pair.price.toFixed(6) : pair.price.toFixed(4)}
+                  {pair.price < 0.001 ? pair.price.toFixed(7) : pair.price < 0.1 ? pair.price.toFixed(5) : pair.price.toFixed(2)}
                 </div>
                 <div style={{
                   display: 'inline-block',

@@ -2,16 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Eye, EyeOff, ArrowDownCircle, ArrowUpCircle, RefreshCw, History,
-  Copy, Check, Search, Plus, Download, Link2, X
+  Copy, Check, Search, Plus, Download, Link2, X, ExternalLink, ArrowUpRight, ArrowDownLeft
 } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
 import { internalWalletService } from '../services/internalWallet';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
-import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoTAI } from './TokenLogos';
+import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoNOT, LogoTAI } from './TokenLogos';
 import { toNano, Address, beginCell } from '@ton/core';
+import { fetchLiveTaiPrice, LiveTokenPrice } from '../services/stonfiService';
 
 interface WalletTransferProps {
   onNavigateToBorsa?: () => void;
+}
+
+interface TxEvent {
+  id: string;
+  type: 'in' | 'out' | 'swap' | 'call';
+  title: string;
+  amount: string;
+  symbol: string;
+  timestamp: number;
+  dateStr: string;
+  status: string;
+  hash?: string;
 }
 
 export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBorsa }) => {
@@ -37,24 +50,93 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
   const [importInput, setImportInput] = useState('');
   const [importError, setImportError] = useState('');
 
-  const [historyList, setHistoryList] = useState<any[]>([]);
+  // Canlı Fiyatlar ve Gerçek Geçmiş
+  const [taiPriceData, setTaiPriceData] = useState<LiveTokenPrice | null>(null);
+  const [historyList, setHistoryList] = useState<TxEvent[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
 
+  // STON.fi havuzundan canlı TAI fiyatını yükle
+  useEffect(() => {
+    let isMounted = true;
+    const loadPrices = async () => {
+      const data = await fetchLiveTaiPrice();
+      if (isMounted) setTaiPriceData(data);
+    };
+    loadPrices();
+    const interval = setInterval(loadPrices, 20000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Bakiyelerin yaklaşık USD hesaplaması
   const gramBal = parseFloat(balances.ton || '0');
   const taiBal = parseFloat(balances.taste || '0');
-  const gramUsd = gramBal * 5.32;
-  const taiUsd = taiBal * 0.00224;
-  const totalUsd = gramUsd + taiUsd;
+  const tonUsdPrice = 5.32;
+  const taiUsdPrice = taiPriceData ? taiPriceData.priceInUsd : 0.000946;
+  const gramUsd = gramBal * tonUsdPrice;
+  const taiUsd = taiBal * taiUsdPrice;
 
+  // Diğer jettonların USD değerlerini de topla
+  const otherJettonsUsd = (balances.jettons || []).reduce((acc, j) => {
+    if (j.symbol === 'TASTE' || j.symbol === 'TAI') return acc;
+    return acc + parseFloat(j.usdValue || '0');
+  }, 0);
+
+  const totalUsd = gramUsd + taiUsd + otherJettonsUsd;
+
+  // TonAPI v2 üzerinden cüzdanın gerçek işlem geçmişini çekme
   const fetchTxHistory = async () => {
     if (!activeAddress) return;
     setLoadingHistory(true);
     try {
-      const raw = Address.parse(activeAddress).toRawString();
-      const res = await fetch(`https://tonapi.io/v2/accounts/${raw}/events?limit=10`);
+      const res = await fetch(`https://tonapi.io/v2/accounts/${encodeURIComponent(activeAddress)}/events?limit=25`);
       if (res.ok) {
         const data = await res.json();
-        setHistoryList(data.events || []);
+        const parsed: TxEvent[] = (data.events || []).map((ev: any) => {
+          const action = ev.actions?.[0];
+          let type: TxEvent['type'] = 'call';
+          let title = 'İşlem';
+          let amount = '0';
+          let symbol = 'TON';
+
+          if (action?.type === 'TonTransfer') {
+            const isIncoming = action.TonTransfer.recipient?.address?.toLowerCase() === activeAddress.toLowerCase();
+            type = isIncoming ? 'in' : 'out';
+            title = isIncoming ? 'TON Alındı' : 'TON Gönderildi';
+            amount = (parseFloat(action.TonTransfer.amount) / 1e9).toFixed(3);
+            symbol = 'GRAM';
+          } else if (action?.type === 'JettonTransfer') {
+            const isIncoming = action.JettonTransfer.recipient?.address?.toLowerCase() === activeAddress.toLowerCase();
+            type = isIncoming ? 'in' : 'out';
+            const sym = action.JettonTransfer.jetton?.symbol || 'JETTON';
+            title = isIncoming ? `${sym} Alındı` : `${sym} Gönderildi`;
+            const dec = action.JettonTransfer.jetton?.decimals || 9;
+            amount = (parseFloat(action.JettonTransfer.amount) / Math.pow(10, dec)).toFixed(2);
+            symbol = sym;
+          } else if (action?.type === 'JettonSwap' || action?.type === 'SmartContractExec') {
+            type = 'swap';
+            title = 'DEX Swap / Al-Sat';
+            amount = '';
+            symbol = '';
+          }
+
+          const date = new Date(ev.timestamp * 1000);
+          return {
+            id: ev.event_id,
+            type,
+            title,
+            amount,
+            symbol,
+            timestamp: ev.timestamp,
+            dateStr: `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+            status: ev.in_progress ? 'Bekliyor' : 'Başarılı',
+            hash: ev.event_id
+          };
+        });
+
+        setHistoryList(parsed);
       }
     } catch (e) {
       console.warn('History fetch error', e);
@@ -94,6 +176,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
 
   const handleSendTransaction = async () => {
     if (!activeAddress) {
+      setWalletType('external');
       tonConnectUI.openModal();
       return;
     }
@@ -168,14 +251,15 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
     }
   };
 
-  const tokenAssets = [
+  // Varlık Listesi: Hem Cüzdandaki Gerçek Jettonlar Hem Popüler TON Coinleri
+  const baseAssets = [
     {
       id: 'TAI',
       name: 'Taste AI',
       symbol: 'TAI',
       balance: taiBal.toLocaleString(),
       usdValue: taiUsd.toFixed(2),
-      price: '$0.00224',
+      price: `$${taiUsdPrice.toFixed(6)}`,
       Logo: LogoTAI
     },
     {
@@ -184,39 +268,48 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       symbol: 'GRAM',
       balance: gramBal.toFixed(4),
       usdValue: gramUsd.toFixed(2),
-      price: '$5.32',
+      price: `$${tonUsdPrice.toFixed(2)}`,
       Logo: LogoGRAM
-    },
-    {
-      id: 'USDT',
-      name: 'Tether USD',
-      symbol: 'USDT',
-      balance: '0.00',
-      usdValue: '0.00',
-      price: '$1.00',
-      Logo: LogoUSDT
-    },
-    {
-      id: 'DOGS',
-      name: 'Dogs Token',
-      symbol: 'DOGS',
-      balance: '0',
-      usdValue: '0.00',
-      price: '$0.0006',
-      Logo: LogoDOGS
-    },
-    {
-      id: 'UTYA',
-      name: 'Utya Duck',
-      symbol: 'UTYA',
-      balance: '0',
-      usdValue: '0.00',
-      price: '$0.004',
-      Logo: LogoUTYA
     }
   ];
 
-  const filteredAssets = tokenAssets.filter(tok => {
+  // Cüzdandaki diğer gerçek jettonları ekle
+  const dynamicJettons = (balances.jettons || [])
+    .filter(j => j.symbol !== 'TASTE' && j.symbol !== 'TAI')
+    .map(j => ({
+      id: j.address || j.symbol,
+      name: j.name,
+      symbol: j.symbol,
+      balance: j.balance,
+      usdValue: j.usdValue || '0.00',
+      price: j.usdPrice ? `$${j.usdPrice.toFixed(4)}` : '$0.00',
+      Logo: () => (
+        j.image ? (
+          <img src={j.image} alt={j.symbol} width={34} height={34} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+        ) : (
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff', fontSize: 11 }}>
+            {j.symbol.slice(0, 2)}
+          </div>
+        )
+      )
+    }));
+
+  // Popüler TON ekosistem coinleri (cüzdanda henüz yoksa liste için hazır)
+  const popularFallbacks = [
+    { id: 'USDT', name: 'Tether USD', symbol: 'USD₮', balance: '0.00', usdValue: '0.00', price: '$1.00', Logo: LogoUSDT },
+    { id: 'DOGS', name: 'Dogs Token', symbol: 'DOGS', balance: '0', usdValue: '0.00', price: '$0.000045', Logo: LogoDOGS },
+    { id: 'UTYA', name: 'Utya Duck', symbol: 'UTYA', balance: '0', usdValue: '0.00', price: '$0.0268', Logo: LogoUTYA },
+    { id: 'NOT', name: 'Notcoin', symbol: 'NOT', balance: '0', usdValue: '0.00', price: '$0.00045', Logo: LogoNOT }
+  ];
+
+  // Dynamic jettonlarda olmayan popülerleri listeye ekle
+  const missingPopular = popularFallbacks.filter(pop => 
+    !dynamicJettons.some(d => d.symbol.toLowerCase() === pop.symbol.toLowerCase())
+  );
+
+  const allAssets = [...baseAssets, ...dynamicJettons, ...missingPopular];
+
+  const filteredAssets = allAssets.filter(tok => {
     const matchesSearch = tok.name.toLowerCase().includes(searchToken.toLowerCase()) ||
                           tok.symbol.toLowerCase().includes(searchToken.toLowerCase());
     if (!matchesSearch) return false;
@@ -226,7 +319,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
 
   return (
     <div style={{ padding: '0 0 30px' }}>
-      {/* 1. Toplam Varlık Değeri Kartı */}
+      {/* ── 1. Toplam Varlık Değeri Kartı ── */}
       <div style={{
         background: 'linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 60%, #0f172a 100%)',
         borderRadius: '24px',
@@ -282,7 +375,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
             borderRadius: '14px',
             padding: '10px 12px'
           }}>
-            <div style={{ fontSize: '10px', color: '#fcd34d', fontWeight: 700 }}>TASTE AI</div>
+            <div style={{ fontSize: '10px', color: '#fcd34d', fontWeight: 700 }}>TASTE AI (CANLI)</div>
             <div style={{ fontSize: '15px', fontWeight: 900, color: '#fff', marginTop: '2px' }}>
               {showBalance ? `${taiBal.toLocaleString()} TAI` : '••••'}
             </div>
@@ -291,7 +384,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         </div>
       </div>
 
-      {/* 2. Dörtlü Hızlı İşlem Butonları */}
+      {/* ── 2. Dörtlü Hızlı İşlem Butonları ── */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
@@ -386,7 +479,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         </motion.button>
       </div>
 
-      {/* 3. Cüzdan Yönetimi Barı */}
+      {/* ── 3. Cüzdan Yönetimi & Bağlantı Barı (Resmi TonConnect Butonlu) ── */}
       <div style={{
         background: 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(37,99,235,0.08) 100%)',
         border: '1px solid rgba(245,158,11,0.25)',
@@ -401,14 +494,14 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
-                {walletType === 'internal' ? '🔐 Taste Yerleşik Cüzdan' : '🔗 TonConnect Dış Cüzdan'}
+                {walletType === 'internal' ? '🔐 Taste Yerleşik Cüzdan' : '🔗 TonConnect Cüzdanı'}
               </span>
               {activeAddress && (
                 <span style={{ fontSize: '9px', background: '#22c55e', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>AKTİF</span>
               )}
             </div>
             <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>
-              {activeAddress ? `${activeAddress.slice(0, 8)}...${activeAddress.slice(-6)}` : 'Herhangi bir cüzdan bağlı değil'}
+              {activeAddress ? `${activeAddress.slice(0, 8)}...${activeAddress.slice(-6)}` : 'Cüzdan bağlı değil'}
             </div>
           </div>
 
@@ -432,40 +525,34 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
           </button>
         </div>
 
-        {!activeAddress && (
-          <div style={{ display: 'flex', gap: '8px', paddingTop: '4px' }}>
-            <button
-              onClick={() => {
-                setWalletType('external');
-                try {
-                  tonConnectUI.openModal();
-                } catch (e) {
-                  console.error('TonConnect openModal error', e);
-                }
-              }}
-              style={{
-                flex: 1,
-                padding: '10px 12px',
-                borderRadius: '10px',
-                border: 'none',
-                background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                color: '#fff',
-                fontSize: '12px',
-                fontWeight: 900,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px'
-              }}
-            >
-              <span>🔗 TON Cüzdanı Bağla (Tonkeeper)</span>
-            </button>
+        {/* Cüzdan Bağlı Değilse Resmi TonConnect Butonu */}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between', paddingTop: '4px' }}>
+          <div style={{ flex: 1 }}>
+            <TonConnectButton className="taste-tonconnect-btn" />
           </div>
-        )}
+          <button
+            onClick={refreshBalances}
+            style={{
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '10px',
+              padding: '8px 10px',
+              color: '#94a3b8',
+              fontSize: '11px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            <RefreshCw size={12} />
+            <span>Yenile</span>
+          </button>
+        </div>
       </div>
 
-      {/* 4. Varlık Arama & Filtreler */}
+      {/* ── 4. Varlık Arama & Filtreler ── */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -507,7 +594,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
             cursor: 'pointer'
           }}
         >
-          Tümü
+          Tümü ({allAssets.length})
         </button>
         <button
           onClick={() => setTokenFilter('balance')}
@@ -526,7 +613,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         </button>
       </div>
 
-      {/* 5. Coin Listesi */}
+      {/* ── 5. Gerçek Coin Listesi ── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {filteredAssets.map((asset) => (
           <div
@@ -542,7 +629,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <asset.Logo size={32} />
+              <asset.Logo size={34} />
               <div>
                 <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff' }}>{asset.symbol}</div>
                 <div style={{ fontSize: '11px', color: '#94a3b8' }}>{asset.name}</div>
@@ -561,7 +648,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         ))}
       </div>
 
-      {/* MODALLAR */}
+      {/* ── MODALLAR (Yatır, Çek, Cüzdan Yönetimi, Gerçek Geçmiş) ── */}
       <AnimatePresence>
         {activeActionModal !== 'none' && (
           <motion.div
@@ -599,7 +686,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                 <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 900, color: '#fff' }}>
                   {activeActionModal === 'deposit' && '📥 Varlık Yatır (Al)'}
                   {activeActionModal === 'withdraw' && '📤 Varlık Çek (Gönder)'}
-                  {activeActionModal === 'history' && '📜 İşlem Geçmişi'}
+                  {activeActionModal === 'history' && '📜 Canlı İşlem Geçmişi'}
                   {activeActionModal === 'manage' && '🔐 Cüzdan Yönetimi'}
                 </h3>
                 <button
@@ -750,7 +837,6 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                     />
                   </div>
 
-                  {/* Memo Alanı */}
                   <div style={{ marginBottom: '16px' }}>
                     <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '4px' }}>MEMO (AÇIKLAMA - OPSİYONEL)</div>
                     <input
@@ -804,38 +890,89 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                 </div>
               )}
 
-              {/* Geçmiş Modalı */}
+              {/* Gerçek Zincir İçi İşlem Geçmişi */}
               {activeActionModal === 'history' && (
                 <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>Gerçek Blokzincir İşlemleri</span>
+                    <button
+                      onClick={fetchTxHistory}
+                      style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                      <RefreshCw size={12} /> Yenile
+                    </button>
+                  </div>
+
                   {loadingHistory ? (
-                    <div style={{ textAlign: 'center', padding: '20px', color: '#94a3b8' }}>İşlemler yükleniyor...</div>
+                    <div style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>
+                      <RefreshCw className="animate-spin" size={24} style={{ margin: '0 auto 8px', display: 'block' }} />
+                      İşlemler blokzincirden çekiliyor...
+                    </div>
                   ) : historyList.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '20px', color: '#64748b' }}>Henüz bir işlem geçmişi bulunmuyor.</div>
+                    <div style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>
+                      Henüz zincir içi işlem kaydı bulunmuyor.
+                    </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {historyList.map((tx: any, idx: number) => (
+                      {historyList.map((tx) => (
                         <div
-                          key={idx}
+                          key={tx.id}
                           style={{
-                            padding: '10px 12px',
+                            padding: '12px',
                             background: 'rgba(255,255,255,0.03)',
-                            borderRadius: '10px',
-                            border: '1px solid rgba(255,255,255,0.05)',
+                            borderRadius: '12px',
+                            border: '1px solid rgba(255,255,255,0.06)',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center'
                           }}
                         >
-                          <div>
-                            <div style={{ fontSize: '12px', fontWeight: 800, color: '#fff' }}>
-                              {tx.actions?.[0]?.type || 'İşlem'}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div style={{
+                              width: 34,
+                              height: 34,
+                              borderRadius: '50%',
+                              background: tx.type === 'in' ? 'rgba(16,185,129,0.2)' : tx.type === 'out' ? 'rgba(239,68,68,0.2)' : 'rgba(59,130,246,0.2)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}>
+                              {tx.type === 'in' && <ArrowDownLeft size={18} color="#10b981" />}
+                              {tx.type === 'out' && <ArrowUpRight size={18} color="#ef4444" />}
+                              {tx.type === 'swap' && <RefreshCw size={16} color="#3b82f6" />}
+                              {tx.type === 'call' && <History size={16} color="#94a3b8" />}
                             </div>
-                            <div style={{ fontSize: '10px', color: '#64748b' }}>
-                              {new Date(tx.timestamp * 1000).toLocaleDateString()}
+
+                            <div>
+                              <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>{tx.title}</div>
+                              <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>{tx.dateStr}</div>
                             </div>
                           </div>
-                          <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 800 }}>
-                            {tx.in_progress ? 'Bekliyor' : 'Tamamlandı'}
+
+                          <div style={{ textAlign: 'right' }}>
+                            {tx.amount ? (
+                              <div style={{
+                                fontSize: '13px',
+                                fontWeight: 900,
+                                color: tx.type === 'in' ? '#10b981' : tx.type === 'out' ? '#ef4444' : '#fff'
+                              }}>
+                                {tx.type === 'in' ? '+' : tx.type === 'out' ? '-' : ''}{tx.amount} {tx.symbol}
+                              </div>
+                            ) : (
+                              <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 800 }}>DEX İşlemi</div>
+                            )}
+
+                            {tx.hash && (
+                              <a
+                                href={`https://tonviewer.com/transaction/${tx.hash}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ fontSize: '9px', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '2px', textDecoration: 'none', marginTop: '2px' }}
+                              >
+                                <span>Görüntüle</span>
+                                <ExternalLink size={8} />
+                              </a>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -919,36 +1056,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'center', width: '100%', paddingTop: '4px' }}>
-                          <button
-                            onClick={() => {
-                              setWalletType('external');
-                              setActiveActionModal('none');
-                              setTimeout(() => {
-                                try {
-                                  tonConnectUI.openModal();
-                                } catch (e) {
-                                  console.error('TonConnect modal open error', e);
-                                }
-                              }, 250);
-                            }}
-                            style={{
-                              width: '100%',
-                              padding: '12px',
-                              borderRadius: '10px',
-                              border: 'none',
-                              background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                              color: '#fff',
-                              fontWeight: 800,
-                              fontSize: '12px',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: '6px'
-                            }}
-                          >
-                            <span>🔗 CÜZDANLARI LİSTELE & BAĞLAN</span>
-                          </button>
+                          <TonConnectButton className="taste-tonconnect-btn" />
                         </div>
                       </div>
                     </div>
