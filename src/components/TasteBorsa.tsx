@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { MessageSquare, RefreshCw } from 'lucide-react';
 import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoNOT, LogoTAI } from './TokenLogos';
@@ -20,6 +21,7 @@ interface OrderBookRow {
 }
 
 export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateToWallet }) => {
+  const { t } = useTranslation();
   const { balances, activeAddress, walletType, setWalletType } = useWallet();
   const [tonConnectUI] = useTonConnectUI();
 
@@ -37,124 +39,88 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
     address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
   });
 
-  const [tradeType, setTradeType] = useState<'buy' | 'sell'>('buy');
-  const [orderType, setOrderType] = useState<'limit' | 'market'>('limit');
-  const [orderPrice, setOrderPrice] = useState<string>(pair.price.toString());
-  const [orderAmount, setOrderAmount] = useState<string>('');
   const [quoteCurrency, setQuoteCurrency] = useState<'GRAM' | 'USDT' | 'DOGS' | 'UTYA'>('GRAM');
-  const [memo, setMemo] = useState<string>('');
+  const [tradeType, setTradeType] = useState<'buy' | 'sell'>('buy');
+  const [orderType, setOrderType] = useState<'limit' | 'market'>('market');
+  const [orderPrice, setOrderPrice] = useState<string>('0.0001778');
+  const [orderAmount, setOrderAmount] = useState<string>('');
   const [sliderPercent, setSliderPercent] = useState<number>(0);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [memo, setMemo] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [statusMsg, setStatusMsg] = useState<{ text: string; isError: boolean } | null>(null);
 
-  // Canlı Gerçek Emir Defteri Verileri
-  const [bids, setBids] = useState<OrderBookRow[]>([]);
-  const [asks, setAsks] = useState<OrderBookRow[]>([]);
-
-  // Canlı havuz fiyatını çek
-  useEffect(() => {
-    let isMounted = true;
-    const loadPoolPrice = async () => {
-      const data = await fetchLiveTaiPrice();
-      if (isMounted && data) {
-        if (quoteCurrency === 'GRAM') {
-          setPair(prev => ({
-            ...prev,
-            price: data.priceInTon,
-            volume24h: data.volume24hUsd,
-            high24h: data.priceInTon * 1.08,
-            low24h: data.priceInTon * 0.92
-          }));
-          setOrderPrice(data.priceInTon.toFixed(7));
-        } else if (quoteCurrency === 'USDT') {
-          setPair(prev => ({
-            ...prev,
-            price: data.priceInUsd,
-            volume24h: data.volume24hUsd,
-            high24h: data.priceInUsd * 1.08,
-            low24h: data.priceInUsd * 0.92
-          }));
-          setOrderPrice(data.priceInUsd.toFixed(6));
+  // STON.fi canlı havuz fiyatı çekme (TAI / GRAM)
+  const refreshLivePrice = async () => {
+    try {
+      const live: LiveTokenPrice = await fetchLiveTaiPrice();
+      if (live.priceInTon > 0) {
+        setPair(prev => ({
+          ...prev,
+          price: live.priceInTon,
+          high24h: Math.max(prev.high24h, live.priceInTon * 1.05),
+          low24h: Math.min(prev.low24h, live.priceInTon * 0.95),
+        }));
+        if (orderType === 'market') {
+          setOrderPrice(live.priceInTon.toFixed(7));
         }
       }
-    };
-
-    loadPoolPrice();
-    const interval = setInterval(loadPoolPrice, 20000);
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, [quoteCurrency]);
-
-  useEffect(() => {
-    if (initialPair) {
-      setPair(initialPair);
-      setOrderPrice(initialPair.price.toString());
+    } catch {
+      // sessizce devam et
     }
-  }, [initialPair]);
+  };
 
-  // STON.fi gerçek havuz fiyatına dayalı canlı derinlik
   useEffect(() => {
-    const generateOrderBook = () => {
-      const basePrice = pair.price;
-      const spread = basePrice * 0.004;
+    refreshLivePrice();
+    const timer = setInterval(refreshLivePrice, 15000); // 15 sn periyodik canlı çekim
+    return () => clearInterval(timer);
+  }, [orderType]);
 
-      // Asks (Satış - Kırmızı)
-      const newAsks: OrderBookRow[] = [];
-      let askAccum = 0;
-      for (let i = 6; i >= 1; i--) {
-        const p = basePrice + spread * i;
-        const amt = Math.floor(25000 + Math.random() * 60000);
-        askAccum += amt;
-        newAsks.push({
-          price: p,
-          amount: amt,
-          total: askAccum,
-          depthPercent: Math.min(100, (askAccum / 350000) * 100)
-        });
-      }
+  // Canlı Gerçekçi Sipariş Defteri Üretimi
+  const generateOrderBook = (centerPrice: number) => {
+    const asks: OrderBookRow[] = [];
+    const bids: OrderBookRow[] = [];
 
-      // Bids (Alış - Yeşil)
-      const newBids: OrderBookRow[] = [];
-      let bidAccum = 0;
-      for (let i = 1; i <= 6; i++) {
-        const p = Math.max(0.000001, basePrice - spread * i);
-        const amt = Math.floor(30000 + Math.random() * 70000);
-        bidAccum += amt;
-        newBids.push({
-          price: p,
-          amount: amt,
-          total: bidAccum,
-          depthPercent: Math.min(100, (bidAccum / 350000) * 100)
-        });
-      }
+    // Asks (Satış - Kırmızı)
+    for (let i = 5; i >= 1; i--) {
+      const p = centerPrice * (1 + (i * 0.006));
+      const a = Math.round((6000 / (i + 0.5)) + (Math.random() * 800));
+      asks.push({
+        price: p,
+        amount: a,
+        total: p * a,
+        depthPercent: Math.min(100, Math.round((a / 8000) * 100))
+      });
+    }
 
-      setAsks(newAsks);
-      setBids(newBids);
-    };
+    // Bids (Alış - Yeşil)
+    for (let i = 1; i <= 5; i++) {
+      const p = centerPrice * (1 - (i * 0.006));
+      const a = Math.round((7000 / (i + 0.4)) + (Math.random() * 900));
+      bids.push({
+        price: p,
+        amount: a,
+        total: p * a,
+        depthPercent: Math.min(100, Math.round((a / 8000) * 100))
+      });
+    }
 
-    generateOrderBook();
-    const interval = setInterval(generateOrderBook, 5000);
-    return () => clearInterval(interval);
-  }, [pair.price]);
+    return { asks, bids };
+  };
+
+  const { asks, bids } = generateOrderBook(pair.price);
 
   const handlePercent = (pct: number) => {
     setSliderPercent(pct);
+    let maxAvail = 0;
     if (tradeType === 'buy') {
-      const avail = parseFloat(balances.ton || '0');
-      const prc = parseFloat(orderPrice) || pair.price;
-      if (prc > 0 && avail > 0) {
-        const totalCanBuy = (avail * (pct / 100)) / prc;
-        setOrderAmount(Math.floor(totalCanBuy).toString());
-      }
+      const tonBal = parseFloat(balances.ton || '0');
+      const p = parseFloat(orderPrice) || pair.price;
+      maxAvail = p > 0 ? (tonBal * (pct / 100)) / p : 0;
     } else {
-      const avail = parseFloat(balances.taste || '0');
-      if (avail > 0) {
-        const toSell = Math.floor(avail * (pct / 100));
-        setOrderAmount(toSell.toString());
-      }
+      const tasteBal = parseFloat(balances.taste || '0');
+      maxAvail = tasteBal * (pct / 100);
     }
+    setOrderAmount(maxAvail > 0 ? Math.floor(maxAvail).toString() : '0');
   };
 
   const handleOrderSubmit = async () => {
@@ -165,7 +131,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
     }
 
     if (!orderAmount || parseFloat(orderAmount) <= 0) {
-      setStatusMsg({ text: 'Lütfen geçerli bir miktar girin', isError: true });
+      setStatusMsg({ text: t('borsa.invalid_amount', 'Lütfen geçerli bir miktar girin'), isError: true });
       return;
     }
 
@@ -189,11 +155,11 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
       }
 
       setStatusMsg({
-        text: `STON.fi DEX açıldı: ${tradeType === 'buy' ? 'Alış' : 'Satış'} işlemini havuzda onaylayın.`,
+        text: t('borsa.dex_opened', 'STON.fi DEX açıldı: Havuzdaki işlemi onaylayın.'),
         isError: false
       });
     } catch (err: any) {
-      setStatusMsg({ text: err.message || 'İşlem başlatılamadı', isError: true });
+      setStatusMsg({ text: err.message || t('borsa.tx_failed', 'İşlem başarısız'), isError: true });
     } finally {
       setIsProcessing(false);
     }
@@ -258,15 +224,15 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
           fontSize: '11px'
         }}>
           <div>
-            <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>24sa En Düşük</div>
+            <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>{t('borsa.min_24h', '24sa En Düşük')}</div>
             <div style={{ fontWeight: 800, color: '#f8fafc', marginTop: '2px' }}>{pair.low24h < 0.001 ? pair.low24h.toFixed(7) : pair.low24h.toFixed(4)}</div>
           </div>
           <div>
-            <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>24sa En Yüksek</div>
+            <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>{t('borsa.max_24h', '24sa En Yüksek')}</div>
             <div style={{ fontWeight: 800, color: '#f8fafc', marginTop: '2px' }}>{pair.high24h < 0.001 ? pair.high24h.toFixed(7) : pair.high24h.toFixed(4)}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>24sa Hacim</div>
+            <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>{t('borsa.vol_24h', '24sa Hacim')}</div>
             <div style={{ fontWeight: 800, color: '#38bdf8', marginTop: '2px' }}>{pair.volume24h}</div>
           </div>
         </div>
@@ -275,7 +241,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
       {/* ── 2. "Ne İle Alınır / Satılır?" Hızlı Seçim Butonları ── */}
       <div style={{ marginBottom: '14px' }}>
         <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase' }}>
-          Ödeme / Parite Seçin
+          {t('borsa.payment_select', 'Ödeme / Parite Seçin')}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
           {[
@@ -333,8 +299,8 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
               marginBottom: '6px',
               padding: '0 4px'
             }}>
-              <span>Fiyat ({quoteCurrency})</span>
-              <span>Miktar</span>
+              <span>{t('borsa.price_label', 'Fiyat')} ({quoteCurrency})</span>
+              <span>{t('borsa.amount_label', 'Miktar')}</span>
             </div>
 
             {/* Asks (Satışlar - Kırmızı) */}
@@ -382,7 +348,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
               <span style={{ fontSize: '11px', fontWeight: 900, color: '#4ade80' }}>
                 ↗ {pair.price < 0.001 ? pair.price.toFixed(7) : pair.price.toFixed(4)}
               </span>
-              <span style={{ fontSize: '9px', color: '#64748b' }}>CANLI</span>
+              <span style={{ fontSize: '9px', color: '#64748b' }}>{t('borsa.live', 'CANLI')}</span>
             </div>
 
             {/* Bids (Alışlar - Yeşil) */}
@@ -442,7 +408,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
                 cursor: 'pointer'
               }}
             >
-              Alış
+              {t('borsa.buy', 'Alış')}
             </button>
             <button
               onClick={() => setTradeType('sell')}
@@ -458,7 +424,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
                 cursor: 'pointer'
               }}
             >
-              Satış
+              {t('borsa.sell', 'Satış')}
             </button>
           </div>
 
@@ -473,7 +439,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
                 cursor: 'pointer'
               }}
             >
-              Limit
+              {t('borsa.limit', 'Limit')}
             </span>
             <span
               onClick={() => {
@@ -487,13 +453,13 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
                 cursor: 'pointer'
               }}
             >
-              Piyasa (Market)
+              {t('borsa.market_order', 'Piyasa (Market)')}
             </span>
           </div>
 
           {/* Fiyat Input */}
           <div style={{ marginBottom: '8px' }}>
-            <div style={{ fontSize: '9px', color: '#64748b', textTransform: 'uppercase', marginBottom: '3px' }}>Fiyat ({quoteCurrency})</div>
+            <div style={{ fontSize: '9px', color: '#64748b', textTransform: 'uppercase', marginBottom: '3px' }}>{t('borsa.price_label', 'Fiyat')} ({quoteCurrency})</div>
             <input
               type="number"
               disabled={orderType === 'market'}
@@ -516,7 +482,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
 
           {/* Miktar Input (TAI) */}
           <div style={{ marginBottom: '8px' }}>
-            <div style={{ fontSize: '9px', color: '#64748b', textTransform: 'uppercase', marginBottom: '3px' }}>Miktar (TAI)</div>
+            <div style={{ fontSize: '9px', color: '#64748b', textTransform: 'uppercase', marginBottom: '3px' }}>{t('borsa.amount_label', 'Miktar (TAI)')}</div>
             <input
               type="number"
               value={orderAmount}
@@ -568,7 +534,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
             display: 'flex',
             justifyContent: 'space-between'
           }}>
-            <span style={{ color: '#64748b' }}>Toplam:</span>
+            <span style={{ color: '#64748b' }}>{t('borsa.total_label', 'Toplam:')}</span>
             <span style={{ color: '#fff', fontWeight: 900 }}>{totalCost} {quoteCurrency}</span>
           </div>
 
@@ -576,13 +542,13 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
           <div style={{ marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '9px', color: '#64748b', marginBottom: '3px' }}>
               <MessageSquare size={10} />
-              <span>MEMO (OPSİYONEL)</span>
+              <span>{t('borsa.memo_label', 'MEMO (OPSİYONEL)')}</span>
             </div>
             <input
               type="text"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              placeholder="İşlem notu / memo"
+              placeholder={t('borsa.memo_placeholder', 'İşlem notu / memo')}
               style={{
                 width: '100%',
                 background: 'rgba(0,0,0,0.3)',
@@ -598,7 +564,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
 
           {/* Kullanılabilir Bakiye */}
           <div style={{ fontSize: '10px', color: '#94a3b8', marginBottom: '10px' }}>
-            Kullanılabilir:{' '}
+            {t('borsa.available', 'Kullanılabilir:')}{' '}
             <span style={{ color: '#fff', fontWeight: 800 }}>
               {tradeType === 'buy' ? `${balances.ton || 0} GRAM` : `${balances.taste || 0} TAI`}
             </span>
@@ -621,7 +587,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
               boxShadow: tradeType === 'buy' ? '0 4px 15px rgba(16, 185, 129, 0.3)' : '0 4px 15px rgba(239, 68, 68, 0.3)'
             }}
           >
-            {isProcessing ? 'İşleniyor...' : tradeType === 'buy' ? `TASTE AI AL` : `TASTE AI SAT`}
+            {isProcessing ? t('borsa.processing', 'İşleniyor...') : tradeType === 'buy' ? t('borsa.buy_tai', 'TASTE AI AL') : t('borsa.sell_tai', 'TASTE AI SAT')}
           </button>
 
           {statusMsg && (

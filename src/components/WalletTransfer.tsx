@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Eye, EyeOff, ArrowDownCircle, ArrowUpCircle, RefreshCw, History,
@@ -28,6 +29,7 @@ interface TxEvent {
 }
 
 export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBorsa }) => {
+  const { t } = useTranslation();
   const { walletType, setWalletType, activeAddress, balances, refreshBalances } = useWallet();
   const [tonConnectUI] = useTonConnectUI();
 
@@ -158,7 +160,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       setWalletManageMode('backup');
       refreshBalances();
     } catch (e: any) {
-      alert('Hata: ' + e.message);
+      alert(t('wallet_transfer.wallet_error', 'Hata: ') + e.message);
     }
   };
 
@@ -170,7 +172,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       refreshBalances();
       setTimeout(() => setActiveActionModal('none'), 1200);
     } catch (e: any) {
-      setImportError(e.message || 'Geçersiz tohum kelimeleri');
+      setImportError(e.message || t('wallet_transfer.invalid_seed', 'Geçersiz tohum kelimeleri'));
     }
   };
 
@@ -181,7 +183,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       return;
     }
     if (!recipient.trim() || !sendAmount || parseFloat(sendAmount) <= 0) {
-      setSendFeedback({ text: 'Lütfen geçerli adres ve miktar girin', error: true });
+      setSendFeedback({ text: t('wallet_transfer.invalid_address', 'Lütfen geçerli adres ve miktar girin'), error: true });
       return;
     }
 
@@ -239,13 +241,13 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         }
       }
 
-      setSendFeedback({ text: 'Transfer başarıyla gönderildi!', error: false });
+      setSendFeedback({ text: t('wallet_transfer.send_success', 'Transfer başarıyla gönderildi!'), error: false });
       setSendAmount('');
       setRecipient('');
       setSendMemo('');
       setTimeout(refreshBalances, 4000);
     } catch (e: any) {
-      setSendFeedback({ text: e.message || 'Gönderim hatası', error: true });
+      setSendFeedback({ text: e.message || t('wallet_transfer.send_error', 'Gönderim hatası'), error: true });
     } finally {
       setIsSending(false);
     }
@@ -330,7 +332,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#bfdbfe', fontSize: '12px', fontWeight: 700 }}>
-            <span>Toplam Varlık Değeri</span>
+            <span>{t('wallet_transfer.total_value', 'Toplam Varlık Değeri')}</span>
             <button
               onClick={() => setShowBalance(!showBalance)}
               style={{ background: 'none', border: 'none', color: '#bfdbfe', cursor: 'pointer', padding: 0 }}
@@ -375,7 +377,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
             borderRadius: '14px',
             padding: '10px 12px'
           }}>
-            <div style={{ fontSize: '10px', color: '#fcd34d', fontWeight: 700 }}>TASTE AI (CANLI)</div>
+            <div style={{ fontSize: '10px', color: '#fcd34d', fontWeight: 700 }}>{t('wallet_transfer.taste_live', 'TASTE AI (CANLI)')}</div>
             <div style={{ fontSize: '15px', fontWeight: 900, color: '#fff', marginTop: '2px' }}>
               {showBalance ? `${taiBal.toLocaleString()} TAI` : '••••'}
             </div>
@@ -409,7 +411,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
           <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <ArrowDownCircle size={24} color="#fff" />
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 800, color: '#f8fafc' }}>Yatır</span>
+          <span style={{ fontSize: '11px', fontWeight: 800, color: '#f8fafc' }}>{t('wallet_transfer.deposit', 'Yatır')}</span>
         </motion.button>
 
         <motion.button
@@ -430,7 +432,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
           <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <ArrowUpCircle size={24} color="#fff" />
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 800, color: '#f8fafc' }}>Çek</span>
+          <span style={{ fontSize: '11px', fontWeight: 800, color: '#f8fafc' }}>{t('wallet_transfer.withdraw', 'Çek')}</span>
         </motion.button>
 
         <motion.button
@@ -451,7 +453,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
           <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <RefreshCw size={22} color="#fff" />
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 800, color: '#f8fafc' }}>Dönüştür</span>
+          <span style={{ fontSize: '11px', fontWeight: 800, color: '#f8fafc' }}>{t('wallet_transfer.convert', 'Dönüştür')}</span>
         </motion.button>
 
         <motion.button
@@ -475,7 +477,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
           <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <History size={22} color="#fff" />
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 800, color: '#f8fafc' }}>Geçmiş</span>
+          <span style={{ fontSize: '11px', fontWeight: 800, color: '#f8fafc' }}>{t('wallet_transfer.history', 'Geçmiş')}</span>
         </motion.button>
       </div>
 
@@ -494,14 +496,14 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
-                {walletType === 'internal' ? '🔐 Taste Yerleşik Cüzdan' : '🔗 TonConnect Cüzdanı'}
+                {walletType === 'internal' ? t('wallet_transfer.taste_wallet', '🔐 Taste Yerleşik Cüzdan') : t('wallet_transfer.tonconnect_wallet', '🔗 TonConnect Cüzdanı')}
               </span>
               {activeAddress && (
-                <span style={{ fontSize: '9px', background: '#22c55e', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>AKTİF</span>
+                <span style={{ fontSize: '9px', background: '#22c55e', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>{t('wallet_transfer.active_badge', 'AKTİF')}</span>
               )}
             </div>
             <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>
-              {activeAddress ? `${activeAddress.slice(0, 8)}...${activeAddress.slice(-6)}` : 'Cüzdan bağlı değil'}
+              {activeAddress ? `${activeAddress.slice(0, 8)}...${activeAddress.slice(-6)}` : t('wallet_transfer.not_connected', 'Cüzdan bağlı değil')}
             </div>
           </div>
 
@@ -521,7 +523,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
               cursor: 'pointer'
             }}
           >
-            Yönet ⚙️
+            {t('wallet_transfer.manage', 'Yönet ⚙️')}
           </button>
         </div>
 
@@ -547,7 +549,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
             }}
           >
             <RefreshCw size={12} />
-            <span>Yenile</span>
+            <span>{t('wallet_transfer.refresh', 'Yenile')}</span>
           </button>
         </div>
       </div>
@@ -566,7 +568,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         <Search size={16} color="#94a3b8" />
         <input
           type="text"
-          placeholder="Varlık ara..."
+          placeholder={t('wallet_transfer.search_asset', 'Varlık ara...')}
           value={searchToken}
           onChange={(e) => setSearchToken(e.target.value)}
           style={{
@@ -594,7 +596,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
             cursor: 'pointer'
           }}
         >
-          Tümü ({allAssets.length})
+          {t('wallet_transfer.all_assets', 'Tümü', { count: allAssets.length })} ({allAssets.length})
         </button>
         <button
           onClick={() => setTokenFilter('balance')}
@@ -609,7 +611,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
             cursor: 'pointer'
           }}
         >
-          Bakiyesi Olanlar
+          {t('wallet_transfer.with_balance', 'Bakiyesi Olanlar')}
         </button>
       </div>
 
@@ -810,7 +812,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
 
                   <div style={{ marginBottom: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94a3b8', marginBottom: '4px' }}>
-                      <span>MİKTAR</span>
+                      <span>{t('wallet_transfer.amount_label_send', 'MİKTAR')}</span>
                       <span
                         onClick={() => setSendAmount(selectedTokenToSend === 'GRAM' ? balances.ton : balances.taste)}
                         style={{ color: '#38bdf8', cursor: 'pointer' }}
@@ -838,10 +840,10 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                   </div>
 
                   <div style={{ marginBottom: '16px' }}>
-                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '4px' }}>MEMO (AÇIKLAMA - OPSİYONEL)</div>
+                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '4px' }}>{t('wallet_transfer.memo_label_send', 'MEMO (AÇIKLAMA - OPSİYONEL)')}</div>
                     <input
                       type="text"
-                      placeholder="İşlem notu / memo"
+                      placeholder={t('wallet_transfer.memo_placeholder', 'İşlem notu / memo')}
                       value={sendMemo}
                       onChange={(e) => setSendMemo(e.target.value)}
                       style={{
@@ -872,7 +874,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                       cursor: 'pointer'
                     }}
                   >
-                    {isSending ? 'İşleniyor...' : 'GÖNDERİMİ ONAYLA'}
+                    {isSending ? t('borsa.processing', 'İşleniyor...') : t('wallet_transfer.confirm_send', 'GÖNDERİMİ ONAYLA')}
                   </button>
 
                   {sendFeedback && (
@@ -894,23 +896,23 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
               {activeActionModal === 'history' && (
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>Gerçek Blokzincir İşlemleri</span>
+                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>{t('wallet_transfer.blockchain_txs', 'Gerçek Blokzincir İşlemleri')}</span>
                     <button
                       onClick={fetchTxHistory}
                       style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                     >
-                      <RefreshCw size={12} /> Yenile
+                      <RefreshCw size={12} /> {t('wallet_transfer.refresh', 'Yenile')}
                     </button>
                   </div>
 
                   {loadingHistory ? (
                     <div style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>
                       <RefreshCw className="animate-spin" size={24} style={{ margin: '0 auto 8px', display: 'block' }} />
-                      İşlemler blokzincirden çekiliyor...
+                      {t('wallet_transfer.loading_txs', 'İşlemler blokzincirden çekiliyor...')}
                     </div>
                   ) : historyList.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>
-                      Henüz zincir içi işlem kaydı bulunmuyor.
+                      {t('wallet_transfer.no_txs', 'Henüz zincir içi işlem kaydı bulunmuyor.')}
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -1005,8 +1007,8 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                           <Plus size={20} color="#fff" />
                         </div>
                         <div>
-                          <div style={{ fontSize: '13px', fontWeight: 800 }}>Yeni Cüzdan Oluştur</div>
-                          <div style={{ fontSize: '11px', color: '#94a3b8' }}>12 veya 24 kelimelik sıfırdan güvenli cüzdan</div>
+                          <div style={{ fontSize: '13px', fontWeight: 800 }}>{t('wallet_transfer.create_wallet', 'Yeni Cüzdan Oluştur')}</div>
+                          <div style={{ fontSize: '11px', color: '#94a3b8' }}>{t('wallet_transfer.create_wallet_desc', '12 veya 24 kelimelik sıfırdan güvenli cüzdan')}</div>
                         </div>
                       </button>
 
@@ -1029,8 +1031,8 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                           <Download size={20} color="#fff" />
                         </div>
                         <div>
-                          <div style={{ fontSize: '13px', fontWeight: 800 }}>Cüzdanı İçe Aktar (Mnemonic)</div>
-                          <div style={{ fontSize: '11px', color: '#94a3b8' }}>12 veya 24 tohum kelimenizi girerek aktarın</div>
+                          <div style={{ fontSize: '13px', fontWeight: 800 }}>{t('wallet_transfer.import_wallet', 'Cüzdanı İçe Aktar (Mnemonic)')}</div>
+                          <div style={{ fontSize: '11px', color: '#94a3b8' }}>{t('wallet_transfer.import_wallet_desc', '12 veya 24 tohum kelimenizi girerek aktarın')}</div>
                         </div>
                       </button>
 
@@ -1050,8 +1052,8 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                             <Link2 size={20} color="#fff" />
                           </div>
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>Dış Cüzdana Bağlan (TonConnect)</div>
-                            <div style={{ fontSize: '11px', color: '#94a3b8' }}>Tonkeeper, MyTonWallet veya Telegram Wallet</div>
+                            <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>{t('wallet_transfer.connect_external', 'Dış Cüzdana Bağlan (TonConnect)')}</div>
+                            <div style={{ fontSize: '11px', color: '#94a3b8' }}>{t('wallet_transfer.connect_external_desc', 'Tonkeeper, MyTonWallet veya Telegram Wallet')}</div>
                           </div>
                         </div>
 
@@ -1065,7 +1067,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                   {walletManageMode === 'create' && (
                     <div>
                       <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '12px' }}>
-                        Kaç kelimelik tohum cümlesiyle cüzdan oluşturmak istersiniz?
+                        {t('wallet_transfer.seed_question', 'Kaç kelimelik tohum cümlesiyle cüzdan oluşturmak istersiniz?')}
                       </div>
 
                       <div style={{ display: 'flex', gap: '10px', marginBottom: '18px' }}>
@@ -1082,7 +1084,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                             cursor: 'pointer'
                           }}
                         >
-                          12 Kelime
+                          {t('wallet_transfer.words_12', '12 Kelime')}
                         </button>
                         <button
                           onClick={() => setMnemonicCount(24)}
@@ -1097,7 +1099,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                             cursor: 'pointer'
                           }}
                         >
-                          24 Kelime (Önerilen)
+                          {t('wallet_transfer.words_24', '24 Kelime (Önerilen)')}
                         </button>
                       </div>
 
@@ -1115,7 +1117,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                           cursor: 'pointer'
                         }}
                       >
-                        CÜZDANI OLUŞTUR
+                        {t('wallet_transfer.create_btn', 'CÜZDANI OLUŞTUR')}
                       </button>
                     </div>
                   )}
@@ -1131,7 +1133,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                         color: '#fca5a5',
                         marginBottom: '14px'
                       }}>
-                        ⚠️ Bu kelimeler cüzdanınızın tek kurtarma anahtarıdır. Kaybederseniz fonlarınıza erişemezsiniz!
+                        {t('wallet_transfer.warning_seed', '⚠️ Bu kelimeler cüzdanınızın tek kurtarma anahtarıdır. Kaybederseniz fonlarınıza erişemezsiniz!')}
                       </div>
 
                       <div style={{
@@ -1166,7 +1168,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                           marginBottom: '10px'
                         }}
                       >
-                        {copied ? 'Kelimeler Kopyalandı!' : 'Kelimeleri Kopyala'}
+                        {copied ? t('wallet_transfer.copied', 'Kelimeler Kopyalandı!') : t('wallet_transfer.copy_words', 'Kelimeleri Kopyala')}
                       </button>
 
                       <button
@@ -1183,7 +1185,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                           cursor: 'pointer'
                         }}
                       >
-                        KAYDETTİM, TAMAMLA
+                        {t('wallet_transfer.saved_done', 'KAYDETTİM, TAMAMLA')}
                       </button>
                     </div>
                   )}
@@ -1191,7 +1193,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                   {walletManageMode === 'import' && (
                     <div>
                       <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '8px' }}>
-                        12 veya 24 tohum kelimenizi aralarında boşluk bırakarak yapıştırın:
+                        {t('wallet_transfer.paste_seed', '12 veya 24 tohum kelimenizi aralarında boşluk bırakarak yapıştırın:')}
                       </div>
 
                       <textarea
@@ -1232,7 +1234,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                           cursor: 'pointer'
                         }}
                       >
-                        CÜZDANI İÇE AKTAR
+                        {t('wallet_transfer.import_btn', 'CÜZDANI İÇE AKTAR')}
                       </button>
                     </div>
                   )}

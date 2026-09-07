@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShieldCheck, Clock } from 'lucide-react'
 
@@ -9,6 +10,7 @@ interface KYCModalProps {
 type KYCStep = 'intro' | 'pending'
 
 export function KYCModal({ onClose }: KYCModalProps) {
+  const { t } = useTranslation()
   const [step, setStep] = useState<KYCStep>('intro')
 
   const startKYC = () => {
@@ -40,16 +42,16 @@ export function KYCModal({ onClose }: KYCModalProps) {
             <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div style={{ textAlign: 'center', marginBottom: 24 }}>
                 <div style={{ fontSize: 52, marginBottom: 12 }}>🛡️</div>
-                <h2 style={{ margin: '0 0 8px', fontWeight: 900, fontSize: 22 }}>Kimlik Doğrulama (KYC)</h2>
-                <p style={{ color: '#64748b', fontSize: 13, margin: 0 }}>Kimlik doğrulama işlemleri Telegram üzerinden yapılmaktadır.</p>
+                <h2 style={{ margin: '0 0 8px', fontWeight: 900, fontSize: 22 }}>{t('kyc_ext.title', 'Kimlik Doğrulama (KYC)')}</h2>
+                <p style={{ color: '#64748b', fontSize: 13, margin: 0 }}>{t('kyc_ext.subtitle', 'Kimlik doğrulama işlemleri Telegram üzerinden yapılmaktadır.')}</p>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, background: 'rgba(255,255,255,0.04)', borderRadius: 14, padding: '12px 16px' }}>
                   <ShieldCheck size={24} color="#f59e0b" />
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 700 }}>Telegram ile Doğrulama</div>
-                    <div style={{ fontSize: 11, color: '#64748b' }}>Resmi hesabımıza mesaj göndererek süreci başlatın</div>
+                    <div style={{ fontSize: 14, fontWeight: 700 }}>{t('kyc_ext.verify_telegram', 'Telegram ile Doğrulama')}</div>
+                    <div style={{ fontSize: 11, color: '#64748b' }}>{t('kyc_ext.verify_telegram_desc', 'Resmi hesabımıza mesaj göndererek süreci başlatın')}</div>
                   </div>
                 </div>
               </div>
@@ -59,7 +61,7 @@ export function KYCModal({ onClose }: KYCModalProps) {
                 onClick={startKYC}
                 style={{ width: '100%', background: 'linear-gradient(135deg,#f59e0b,#d97706)', border: 'none', borderRadius: 18, padding: '18px', color: '#000', fontWeight: 900, fontSize: 16, cursor: 'pointer' }}
               >
-                Telegram ile Doğrula →
+                {t('kyc_ext.verify_btn', 'Telegram ile Doğrula →')}
               </motion.button>
             </motion.div>
           )}
@@ -71,15 +73,15 @@ export function KYCModal({ onClose }: KYCModalProps) {
                 transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
                 style={{ width: 60, height: 60, borderRadius: '50%', border: '4px solid rgba(245,159,11,0.2)', borderTop: '4px solid #f59e0b', margin: '0 auto 20px' }}
               />
-              <h3 style={{ fontWeight: 900, marginBottom: 8 }}>Doğrulama bekleniyor / Verification pending</h3>
+              <h3 style={{ fontWeight: 900, marginBottom: 8 }}>{t('kyc_ext.pending_title', 'Doğrulama bekleniyor')}</h3>
               
               <div style={{ background: 'rgba(245,159,11,0.12)', border: '1px solid rgba(245,159,11,0.3)', borderRadius: 14, padding: '14px', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center' }}>
                 <Clock size={16} color="#f59e0b" />
-                <span style={{ fontSize: 14, fontWeight: 700, color: '#f59e0b' }}>Telegram üzerinden iletişimde kalın</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#f59e0b' }}>{t('kyc_ext.stay_telegram', 'Telegram üzerinden iletişimde kalın')}</span>
               </div>
 
               <motion.button whileTap={{ scale: 0.97 }} onClick={onClose} style={{ width: '100%', background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: 18, padding: '16px', color: '#fff', fontWeight: 900, fontSize: 16, cursor: 'pointer' }}>
-                Kapat
+                {t('kyc_ext.close', 'Kapat')}
               </motion.button>
             </motion.div>
           )}

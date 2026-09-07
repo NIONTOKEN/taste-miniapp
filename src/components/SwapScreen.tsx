@@ -1,4 +1,5 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ArrowLeftRight, ExternalLink } from 'lucide-react'
 import { LogoGRAM, LogoDOGS, LogoUTYA, LogoUSDT, LogoTON, LogoTAI } from './TokenLogos'
@@ -53,6 +54,7 @@ const PAIRS: { key: PairKey; from: string; to: string; FromLogo: any; color: str
 ]
 
 export function SwapScreen({ onClose }: SwapScreenProps) {
+  const { t } = useTranslation()
   const [selectedPair, setSelectedPair] = useState<PairKey>('TON_TAI')
   const pair = PAIRS.find(p => p.key === selectedPair)!
 
@@ -74,8 +76,8 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900 }}>⚡ TAI Satın Al</h2>
-          <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b' }}>Token değiştirerek TAI kazan</p>
+          <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900 }}>{t('swap_screen.title', '⚡ TAI Satın Al')}</h2>
+          <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b' }}>{t('swap_screen.subtitle', 'Token değiştirerek TAI kazan')}</p>
         </div>
         <motion.button whileTap={{ scale: 0.9 }} onClick={onClose} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '8px 10px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
           <X size={18} />
@@ -84,7 +86,7 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
 
       {/* Pair Selector */}
       <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 11, letterSpacing: 2, color: '#64748b', fontWeight: 700, textTransform: 'uppercase', marginBottom: 12 }}>İşlem Çifti Seç</div>
+        <div style={{ fontSize: 11, letterSpacing: 2, color: '#64748b', fontWeight: 700, textTransform: 'uppercase', marginBottom: 12 }}>{t('swap_screen.select_pair', 'İşlem Çifti Seç')}</div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {PAIRS.map(p => (
             <motion.button
@@ -134,7 +136,7 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
               <pair.FromLogo size={48} />
               <div>
                 <div style={{ fontSize: 18, fontWeight: 900 }}>{pair.from}</div>
-                <div style={{ fontSize: 11, color: '#64748b' }}>Satış token</div>
+                <div style={{ fontSize: 11, color: '#64748b' }}>{t('swap_screen.sell_token', 'Satış token')}</div>
               </div>
             </div>
             <div style={{ background: `${pair.color}22`, borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -143,19 +145,19 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 18, fontWeight: 900 }}>TAI</div>
-                <div style={{ fontSize: 11, color: '#64748b' }}>Alış token</div>
+                <div style={{ fontSize: 11, color: '#64748b' }}>{t('swap_screen.buy_token', 'Alış token')}</div>
               </div>
               <LogoTAI size={48} />
             </div>
           </div>
 
           <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 14, padding: '12px 16px', marginBottom: 16 }}>
-            <div style={{ fontSize: 11, color: '#64748b', marginBottom: 4 }}>İşlem Yeri</div>
+            <div style={{ fontSize: 11, color: '#64748b', marginBottom: 4 }}>{t('swap_screen.trade_on', 'İşlem Yeri')}</div>
             <div style={{ fontSize: 15, fontWeight: 800, color: pair.color }}>{pair.dex}</div>
           </div>
 
           <div style={{ fontSize: 11, color: '#475569', lineHeight: 1.6, background: 'rgba(255,255,255,0.02)', borderRadius: 12, padding: '10px 14px' }}>
-            💡 Swap işlemi harici DEX platformunda gerçekleşir. Cüzdanınızı bağladıktan sonra işlemi onaylayın.
+            {t('swap_screen.swap_info', '💡 Swap işlemi harici DEX platformunda gerçekleşir. Cüzdanınızı bağladıktan sonra işlemi onaylayın.')}
           </div>
         </motion.div>
       </AnimatePresence>
@@ -172,7 +174,7 @@ export function SwapScreen({ onClose }: SwapScreenProps) {
       </motion.button>
 
       <p style={{ textAlign: 'center', fontSize: 11, color: '#334155', marginTop: 12 }}>
-        Bu işlem sizi harici bir platforma yönlendirir
+        {t('swap_screen.external_redirect', 'Bu işlem sizi harici bir platforma yönlendirir')}
       </p>
     </motion.div>
   )

@@ -770,7 +770,7 @@ function App() {
                   <img src="/logo.jpg" alt="TAI" style={{ width: 52, height: 52, borderRadius: '50%', border: '2px solid #f59e0b', boxShadow: '0 0 16px rgba(245,159,11,0.4)' }} />
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 900, color: '#fff' }}>TASTE TAI</div>
-                    <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>Taste AI Tarafından Desteklenmektedir</div>
+                    <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>{t('app_ext.powered_by', 'Taste AI Tarafından Desteklenmektedir')}</div>
                   </div>
                   <button onClick={() => setIsMenuOpen(false)} style={{ marginLeft: 'auto', background: 'transparent', border: 'none', color: '#475569', cursor: 'pointer', padding: 4 }}>
                     <X size={20} />
@@ -825,7 +825,7 @@ function App() {
                         <span style={{ fontSize: 20, width: 28, textAlign: 'center' }}>{item.icon}</span>
                         <span style={{ fontSize: 14, fontWeight: 600 }}>{item.label}</span>
                         {item.isNew && (
-                          <span style={{ marginLeft: 'auto', background: 'linear-gradient(135deg,#f97316,#ea580c)', color: '#fff', fontSize: 8, fontWeight: 900, padding: '2px 6px', borderRadius: 6 }}>YENİ</span>
+                          <span style={{ marginLeft: 'auto', background: 'linear-gradient(135deg,#f97316,#ea580c)', color: '#fff', fontSize: 8, fontWeight: 900, padding: '2px 6px', borderRadius: 6 }}>{t('app_ext.new_badge', 'YENİ')}</span>
                         )}
                       </motion.button>
                     );
@@ -834,7 +834,7 @@ function App() {
 
                 {/* Bottom links */}
                 <div style={{ padding: '0 20px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14 }}>
-                  {[{ id: 'legal', icon: '⚖️', label: t('nav.legal') }, { id: 'settings', icon: '⚙️', label: 'Ayarlar' }].map((item) => (
+                  {[{ id: 'legal', icon: '⚖️', label: t('nav.legal') }, { id: 'settings', icon: '⚙️', label: t('nav.settings', 'Ayarlar') }].map((item) => (
                     <motion.button
                       key={item.id}
                       whileHover={{ background: 'rgba(255,255,255,0.05)', x: 4 }}

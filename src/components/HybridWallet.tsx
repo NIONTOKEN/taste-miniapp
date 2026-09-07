@@ -4,12 +4,14 @@ import { TasteMarket, MarketPair } from './TasteMarket';
 import { TasteBorsa } from './TasteBorsa';
 import { WalletTransfer } from './WalletTransfer';
 import { TrendingUp, ArrowLeftRight, Wallet } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface HybridWalletProps {
   onBackToAppHome?: () => void;
 }
 
 export const HybridWallet: React.FC<HybridWalletProps> = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'market' | 'borsa' | 'wallet'>('wallet');
   const [selectedPair, setSelectedPair] = useState<MarketPair | undefined>(undefined);
 
@@ -60,7 +62,7 @@ export const HybridWallet: React.FC<HybridWalletProps> = () => {
             }}
           >
             <TrendingUp size={16} />
-            <span>Market</span>
+            <span>{t('hybrid_wallet.market', 'Market')}</span>
           </button>
 
           {/* 2. Borsa Sekmesi */}
@@ -83,7 +85,7 @@ export const HybridWallet: React.FC<HybridWalletProps> = () => {
             }}
           >
             <ArrowLeftRight size={16} />
-            <span>Borsa</span>
+            <span>{t('hybrid_wallet.exchange', 'Exchange')}</span>
           </button>
 
           {/* 3. Cüzdan Sekmesi */}
@@ -106,7 +108,7 @@ export const HybridWallet: React.FC<HybridWalletProps> = () => {
             }}
           >
             <Wallet size={16} />
-            <span>Cüzdan</span>
+            <span>{t('hybrid_wallet.wallet', 'Wallet')}</span>
           </button>
         </div>
       </div>

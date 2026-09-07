@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Search, Star, ArrowUpDown } from 'lucide-react';
 import { LogoGRAM, LogoDOGS, LogoUTYA, LogoUSDT, LogoNOT, LogoTAI } from './TokenLogos';
@@ -104,6 +105,7 @@ interface TasteMarketProps {
 }
 
 export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
+  const { t } = useTranslation();
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'TAI' | 'GRAM' | 'USDT'>('TAI');
@@ -212,7 +214,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
         <Search size={18} color="#94a3b8" />
         <input
           type="text"
-          placeholder="Coin veya parite ara (TAI, GRAM, USDT, NOT...)"
+          placeholder={t('taste_market.search_placeholder', 'Search coin or pair...')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{
@@ -251,7 +253,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
             transition: 'all 0.2s ease'
           }}
         >
-          ⚡ TAI PARİTELERİ
+          {t('taste_market.tab_tai', 'TAI PAIRS')}
         </button>
         <button
           onClick={() => setActiveTab('GRAM')}
@@ -323,7 +325,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
           }}
         >
           <Star size={12} fill={filterType === 'fav' ? '#f59e0b' : 'none'} />
-          Favoriler
+          {t('taste_market.tab_fav', 'Favorites')}
         </button>
         <button
           onClick={() => setFilterType('gainers')}
@@ -338,7 +340,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
             cursor: 'pointer'
           }}
         >
-          🔥 En Çok Artanlar
+          {t('taste_market.tab_gainers', 'Top Gainers')}
         </button>
       </div>
 
@@ -355,18 +357,18 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
         borderBottom: '1px solid rgba(255,255,255,0.05)',
         marginBottom: '6px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>Parite</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>{t('taste_market.col_pair', 'Pair')}</div>
         <div 
           onClick={() => { setSortField('volume'); setSortAsc(!sortAsc); }}
           style={{ display: 'flex', alignItems: 'center', gap: '2px', cursor: 'pointer' }}
         >
-          Hacim <ArrowUpDown size={10} />
+          {t('taste_market.col_volume', 'Volume')} <ArrowUpDown size={10} />
         </div>
         <div 
           onClick={() => { setSortField('price'); setSortAsc(!sortAsc); }}
           style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '2px', cursor: 'pointer' }}
         >
-          Fiyat / % <ArrowUpDown size={10} />
+          {t('taste_market.col_price', 'Price / %')} <ArrowUpDown size={10} />
         </div>
         <div></div>
       </div>

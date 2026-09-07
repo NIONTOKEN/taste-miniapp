@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Camera, LogOut, ShieldCheck, Star, Upload, ChevronRight, Edit3, Trophy, Zap } from 'lucide-react'
 
@@ -7,11 +8,11 @@ interface ProfileProps {
 }
 
 const LEVELS = [
-  { name: 'Çırak', emoji: '🥉', min: 0,    max: 1999,  color: '#92400e', bg: 'rgba(146,64,14,0.15)' },
-  { name: 'Kalfa', emoji: '🥈', min: 2000,  max: 3999,  color: '#94a3b8', bg: 'rgba(148,163,184,0.15)' },
-  { name: 'Usta',  emoji: '🥇', min: 4000,  max: 7499,  color: '#f59e0b', bg: 'rgba(245,159,11,0.15)' },
-  { name: 'Şef',   emoji: '👨‍🍳', min: 7500, max: 14999, color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
-  { name: 'Usta Şef', emoji: '⭐', min: 15000, max: Infinity, color: '#a855f7', bg: 'rgba(168,85,247,0.15)' },
+  { key: 'level_apprentice', defaultName: 'Çırak', emoji: '🥉', min: 0,    max: 1999,  color: '#92400e', bg: 'rgba(146,64,14,0.15)' },
+  { key: 'level_journeyman', defaultName: 'Kalfa', emoji: '🥈', min: 2000,  max: 3999,  color: '#94a3b8', bg: 'rgba(148,163,184,0.15)' },
+  { key: 'level_master', defaultName: 'Usta',  emoji: '🥇', min: 4000,  max: 7499,  color: '#f59e0b', bg: 'rgba(245,159,11,0.15)' },
+  { key: 'level_chef', defaultName: 'Şef',   emoji: '👨‍🍳', min: 7500, max: 14999, color: '#10b981', bg: 'rgba(168,85,247,0.15)' },
+  { key: 'level_head_chef', defaultName: 'Baş Şef', emoji: '⭐', min: 15000, max: Infinity, color: '#a855f7', bg: 'rgba(168,85,247,0.15)' },
 ]
 
 function getLevel(balance: number) {
@@ -19,6 +20,7 @@ function getLevel(balance: number) {
 }
 
 export function Profile({ onClose }: ProfileProps) {
+  const { t, i18n } = useTranslation()
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [profileImg, setProfileImg] = useState<string | null>(null)
@@ -59,7 +61,7 @@ export function Profile({ onClose }: ProfileProps) {
         >
           <ArrowLeft size={18} />
         </motion.button>
-        <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900 }}>Profil</h2>
+        <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900 }}>{t('profile_ext.title', 'Profil')}</h2>
       </div>
 
       {/* Avatar + user info */}
@@ -70,7 +72,7 @@ export function Profile({ onClose }: ProfileProps) {
             style={{ width: 96, height: 96, borderRadius: '50%', border: `3px solid ${level.color}`, boxShadow: `0 0 24px ${level.color}66`, overflow: 'hidden', background: '#1e293b', cursor: 'pointer', position: 'relative' }}
           >
             {profileImg ? (
-              <img src={profileImg} alt="profil" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+               <img src={profileImg} alt="profil" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <img src="/logo.jpg" alt="TAI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             )}
@@ -98,7 +100,7 @@ export function Profile({ onClose }: ProfileProps) {
               onBlur={() => setEditingName(false)}
               onKeyDown={e => e.key === 'Enter' && setEditingName(false)}
               placeholder={`@${username}`}
-              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(245,159,11,0.4)', borderRadius: 8, padding: '4px 10px', color: '#fff', fontSize: 16, fontWeight: 800, textAlign: 'center', outline: 'none', width: 180 }}
+              style={{ background: 'rgba(255,255,200,0.08)', border: '1px solid rgba(245,159,11,0.4)', borderRadius: 8, padding: '4px 10px', color: '#fff', fontSize: 16, fontWeight: 800, textAlign: 'center', outline: 'none', width: 180 }}
             />
           </div>
         ) : (
@@ -111,7 +113,7 @@ export function Profile({ onClose }: ProfileProps) {
         )}
         <div style={{ fontSize: 12, color: '#64748b' }}>Telegram ID: {userId}</div>
         <div style={{ fontSize: 11, color: '#475569', marginTop: 2 }}>
-          Üyelik: {new Date().toLocaleDateString('tr-TR', { year: 'numeric', month: 'long' })}
+          {t('profile_ext.member_since', 'Üyelik:')} {new Date().toLocaleDateString(i18n.language || 'en', { year: 'numeric', month: 'long' })}
         </div>
       </div>
 
@@ -125,12 +127,12 @@ export function Profile({ onClose }: ProfileProps) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 28 }}>{level.emoji}</span>
             <div>
-              <div style={{ fontSize: 11, color: '#64748b' }}>Seviyeniz</div>
-              <div style={{ fontSize: 17, fontWeight: 900, color: level.color }}>{level.name}</div>
+              <div style={{ fontSize: 11, color: '#64748b' }}>{t('profile_ext.your_level', 'Seviyeniz')}</div>
+              <div style={{ fontSize: 17, fontWeight: 900, color: level.color }}>{t(`profile_ext.${level.key}`, level.defaultName)}</div>
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 11, color: '#64748b' }}>TAI Bakiye</div>
+            <div style={{ fontSize: 11, color: '#64748b' }}>{t('profile_ext.tai_balance', 'TAI Bakiye')}</div>
             <div style={{ fontSize: 20, fontWeight: 900, color: '#f59e0b' }}>{balance.toLocaleString()}</div>
           </div>
         </div>
@@ -139,7 +141,7 @@ export function Profile({ onClose }: ProfileProps) {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#64748b', marginBottom: 6 }}>
               <span>{level.min.toLocaleString()} TAI</span>
-              <span>Sonraki: {nextLevel.emoji} {nextLevel.name} ({nextLevel.min.toLocaleString()} TAI)</span>
+              <span>{t('profile_ext.next_level', 'Sonraki:')} {nextLevel.emoji} {t(`profile_ext.${nextLevel.key}`, nextLevel.defaultName)} ({nextLevel.min.toLocaleString()} TAI)</span>
             </div>
             <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 6, height: 8, overflow: 'hidden' }}>
               <motion.div
@@ -165,9 +167,9 @@ export function Profile({ onClose }: ProfileProps) {
             <ShieldCheck size={20} color="#10b981" />
           </div>
           <div>
-            <div style={{ fontSize: 11, color: '#64748b', marginBottom: 2 }}>Aboneliğiniz</div>
-            <div style={{ fontSize: 15, fontWeight: 800, color: '#10b981' }}>ÜCRETSİZ</div>
-            <div style={{ fontSize: 10, color: '#475569' }}>TAI token çekebilir & ödüller kazanabilirsiniz</div>
+            <div style={{ fontSize: 11, color: '#64748b', marginBottom: 2 }}>{t('profile_ext.subscription', 'Aboneliğiniz')}</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: '#10b981' }}>{t('profile_ext.free', 'ÜCRETSİZ')}</div>
+            <div style={{ fontSize: 10, color: '#475569' }}>{t('profile_ext.free_desc', 'TAI token çekebilir & ödüller kazanabilirsiniz')}</div>
           </div>
         </div>
         <motion.button
@@ -177,7 +179,7 @@ export function Profile({ onClose }: ProfileProps) {
           style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', border: 'none', borderRadius: 12, padding: '8px 14px', color: '#000', fontWeight: 800, fontSize: 12, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}
         >
           <Star size={12} fill="#000" />
-          Yükselt
+          {t('profile_ext.upgrade', 'Yükselt')}
         </motion.button>
       </motion.div>
 
@@ -189,8 +191,8 @@ export function Profile({ onClose }: ProfileProps) {
         style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 20, overflow: 'hidden', marginBottom: 16 }}
       >
         {[
-          { icon: '💰', label: 'TAI Bakiye', value: `${balance.toLocaleString()} TAI` },
-          { icon: '📤', label: 'Toplam Çekim', value: '—' },
+          { icon: '💰', label: t('profile_ext.tai_balance', 'TAI Bakiye'), value: `${balance.toLocaleString()} TAI` },
+          { icon: '📤', label: t('profile_ext.total_withdrawal', 'Toplam Çekim'), value: '—' },
         ].map((item, i) => (
           <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: i === 0 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -217,7 +219,7 @@ export function Profile({ onClose }: ProfileProps) {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 20 }}>🔒</span>
-          <span style={{ fontSize: 14, fontWeight: 600 }}>Gizlilik Politikası</span>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>{t('profile_ext.privacy', 'Gizlilik Politikası')}</span>
         </div>
         <ChevronRight size={16} />
       </motion.button>
@@ -232,7 +234,7 @@ export function Profile({ onClose }: ProfileProps) {
         style={{ width: '100%', background: 'transparent', border: 'none', color: '#ef4444', fontWeight: 800, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 0', borderRadius: 16 }}
       >
         <LogOut size={18} />
-        Hesaptan Çık
+        {t('profile_ext.logout', 'Hesaptan Çık')}
       </motion.button>
 
       {/* Upgrade Modal */}
