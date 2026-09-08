@@ -37,7 +37,7 @@ import { TasteEcosystem } from './components/TasteEcosystem'
 import { KYCModal } from './components/KYCModal'
 import { SwapScreen } from './components/SwapScreen'
 import { DeFiPool } from './components/DeFiPool'
-import { NotificationPanel } from './components/NotificationPanel'
+import { NotificationPanel, getUnreadNotificationCount } from './components/NotificationPanel'
 // @ts-ignore
 // WalletApp removed since TAI Wallet standalone is discontinued
 import {
@@ -105,6 +105,7 @@ function App() {
   const [showProfile, setShowProfile] = useState(false);
   const [showKYC, setShowKYC] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [unreadNotifCount, setUnreadNotifCount] = useState<number>(() => getUnreadNotificationCount());
   const [showSwapScreen, setShowSwapScreen] = useState(false);
   // 5-tab bottom nav active key: 'wallet' | 'team' | 'home' | 'pool' | 'settings'
   const [activeBottomTab, setActiveBottomTab] = useState<'wallet' | 'home' | 'pool' | 'settings'>('home');
@@ -691,7 +692,9 @@ function App() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '7px', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', position: 'relative' }}
             >
               <Bell size={16} />
-              <span style={{ position: 'absolute', top: 5, right: 5, width: 6, height: 6, borderRadius: '50%', background: '#ef4444', border: '1px solid #0a0f1c' }} />
+              {unreadNotifCount > 0 && (
+                <span style={{ position: 'absolute', top: 5, right: 5, width: 6, height: 6, borderRadius: '50%', background: '#ef4444', border: '1px solid #0a0f1c' }} />
+              )}
             </motion.button>
 
             {/* Lang button */}
@@ -849,6 +852,19 @@ function App() {
                 </div>
               </motion.div>
             </>
+          )}
+        </AnimatePresence>
+
+        {/* ── Notification Panel Overlay ── */}
+        <AnimatePresence>
+          {showNotifications && (
+            <NotificationPanel
+              onClose={() => {
+                setShowNotifications(false);
+                setUnreadNotifCount(getUnreadNotificationCount());
+              }}
+              onCountChange={(cnt) => setUnreadNotifCount(cnt)}
+            />
           )}
         </AnimatePresence>
 

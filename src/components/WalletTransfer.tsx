@@ -45,7 +45,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
   const [recipient, setRecipient] = useState('');
   const [sendAmount, setSendAmount] = useState('');
   const [sendMemo, setSendMemo] = useState('');
-  const [selectedTokenToSend, setSelectedTokenToSend] = useState<'GRAM' | 'TAI'>('GRAM');
+  const [selectedTokenToSend, setSelectedTokenToSend] = useState<string>('GRAM');
   const [isSending, setIsSending] = useState(false);
   const [sendFeedback, setSendFeedback] = useState<{ text: string; error: boolean } | null>(null);
 
@@ -241,19 +241,14 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
     setSendFeedback(null);
 
     try {
-      if (walletType === 'internal') {
-        if (selectedTokenToSend === 'GRAM') {
+      if (selectedTokenToSend === 'GRAM' || selectedTokenToSend === 'TON') {
+        if (walletType === 'internal') {
           await internalWalletService.sendTon(recipient.trim(), sendAmount, sendMemo);
         } else {
-          await internalWalletService.sendTaste(recipient.trim(), sendAmount, 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-', sendMemo);
-        }
-      } else {
-        let payload = undefined;
-        if (sendMemo) {
-          payload = beginCell().storeUint(0, 32).storeStringTail(sendMemo).endCell().toBoc().toString('base64');
-        }
-
-        if (selectedTokenToSend === 'GRAM') {
+          let payload = undefined;
+          if (sendMemo) {
+            payload = beginCell().storeUint(0, 32).storeStringTail(sendMemo).endCell().toBoc().toString('base64');
+          }
           await tonConnectUI.sendTransaction({
             validUntil: Math.floor(Date.now() / 1000) + 300,
             messages: [{
@@ -262,12 +257,32 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
               payload: payload
             }]
           });
+        }
+      } else {
+        // Popüler ve özel Jetton transferleri (TAI, USDT, DOGS, NOT, UTYA vb.)
+        const JETTON_MAP: Record<string, string> = {
+          TAI: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+          TASTE: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+          USDT: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
+          'USD₮': 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
+          DOGS: 'EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS',
+          NOT: 'EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT',
+          UTYA: 'EQBaCgUwOoc6gHCNln_oJzb0mVs79YG7wYoavh-o1ItaneLA',
+        };
+
+        const targetJettonAddress = JETTON_MAP[selectedTokenToSend] || 
+          customTokens.find(c => c.symbol === selectedTokenToSend)?.address || 
+          balances.jettons?.find(j => j.symbol === selectedTokenToSend)?.address ||
+          'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
+
+        if (walletType === 'internal') {
+          await internalWalletService.sendTaste(recipient.trim(), sendAmount, targetJettonAddress, sendMemo);
         } else {
           const userRaw = Address.parse(activeAddress).toRawString();
-          const res = await fetch(`https://tonapi.io/v2/accounts/${userRaw}/jettons/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-`);
+          const res = await fetch(`https://tonapi.io/v2/accounts/${userRaw}/jettons/${targetJettonAddress}`);
           const data = await res.json();
           const userJWallet = data?.wallet_address?.address;
-          if (!userJWallet) throw new Error('Jetton cüzdan adresi alınamadı');
+          if (!userJWallet) throw new Error(`Bu token (${selectedTokenToSend}) için jetton cüzdan adresi alınamadı`);
 
           const body = beginCell()
             .storeUint(0xf8a7ea5, 32)
@@ -627,6 +642,87 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
             <span>{t('wallet_transfer.refresh', 'Yenile')}</span>
           </button>
         </div>
+
+        {/* Cüzdan Bağlıyken Her Cihazda Görünür Adresi Kopyala ve Bağlantıyı Kes Butonları */}
+        {activeAddress && (
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            paddingTop: '8px',
+            borderTop: '1px solid rgba(255,255,255,0.08)'
+          }}>
+            <button
+              onClick={() => copyToClipboard(activeAddress)}
+              style={{
+                flex: 1,
+                padding: '9px 12px',
+                borderRadius: '10px',
+                border: '1px solid rgba(255,255,255,0.12)',
+                background: 'rgba(255,255,255,0.05)',
+                color: copied ? '#10b981' : '#cbd5e1',
+                fontSize: '11px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+            >
+              {copied ? <Check size={14} /> : <Copy size={14} />}
+              <span>{copied ? t('wallet_transfer.copied', 'Kopyalandı!') : t('wallet_transfer.copy_address', 'Adresi Kopyala')}</span>
+            </button>
+
+            {walletType === 'external' ? (
+              <button
+                onClick={() => tonConnectUI.disconnect()}
+                style={{
+                  flex: 1,
+                  padding: '9px 12px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  background: 'rgba(239, 68, 68, 0.08)',
+                  color: '#f87171',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
+                }}
+              >
+                <Link2 size={14} style={{ transform: 'rotate(45deg)' }} />
+                <span>{t('wallet_transfer.disconnect', 'Bağlantıyı Kes')}</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  internalWalletService.logout();
+                  refreshBalances();
+                }}
+                style={{
+                  flex: 1,
+                  padding: '9px 12px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  background: 'rgba(239, 68, 68, 0.08)',
+                  color: '#f87171',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
+                }}
+              >
+                <Link2 size={14} style={{ transform: 'rotate(45deg)' }} />
+                <span>{t('wallet_transfer.disconnect', 'Cüzdandan Çık')}</span>
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ── 4. Varlık Arama & Filtreler ── */}
@@ -861,39 +957,46 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
               {/* Çek Modalı */}
               {activeActionModal === 'withdraw' && (
                 <div>
-                  <div style={{ display: 'flex', gap: '8px', marginBottom: '14px' }}>
-                    <button
-                      onClick={() => setSelectedTokenToSend('GRAM')}
-                      style={{
-                        flex: 1,
-                        padding: '10px 0',
-                        borderRadius: '10px',
-                        border: selectedTokenToSend === 'GRAM' ? '2px solid #3b82f6' : '1px solid rgba(255,255,255,0.1)',
-                        background: 'rgba(255,255,255,0.03)',
-                        color: '#fff',
-                        fontWeight: 800,
-                        fontSize: '12px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      GRAM (TON)
-                    </button>
-                    <button
-                      onClick={() => setSelectedTokenToSend('TAI')}
-                      style={{
-                        flex: 1,
-                        padding: '10px 0',
-                        borderRadius: '10px',
-                        border: selectedTokenToSend === 'TAI' ? '2px solid #f59e0b' : '1px solid rgba(255,255,255,0.1)',
-                        background: 'rgba(255,255,255,0.03)',
-                        color: '#fff',
-                        fontWeight: 800,
-                        fontSize: '12px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      TASTE AI
-                    </button>
+                  <div style={{ marginBottom: '14px' }}>
+                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px' }}>
+                      {t('wallet_transfer.select_token_to_send', 'GÖNDERİLECEK COIN / TOKEN SEÇİN')}
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      gap: '8px',
+                      overflowX: 'auto',
+                      paddingBottom: '6px'
+                    }}>
+                      {allAssets.map((asset) => {
+                        const isSelected = selectedTokenToSend === asset.symbol || (selectedTokenToSend === 'GRAM' && asset.symbol === 'GRAM');
+                        return (
+                          <button
+                            key={asset.id}
+                            onClick={() => setSelectedTokenToSend(asset.symbol)}
+                            style={{
+                              flexShrink: 0,
+                              padding: '8px 12px',
+                              borderRadius: '12px',
+                              border: isSelected ? '2px solid #f59e0b' : '1px solid rgba(255,255,255,0.1)',
+                              background: isSelected ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.03)',
+                              color: isSelected ? '#fbbf24' : '#cbd5e1',
+                              fontWeight: 800,
+                              fontSize: '12px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px'
+                            }}
+                          >
+                            <asset.Logo size={16} />
+                            <span>{asset.symbol}</span>
+                            <span style={{ fontSize: '10px', color: isSelected ? '#f59e0b' : '#64748b', fontWeight: 600 }}>
+                              ({asset.balance})
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div style={{ marginBottom: '12px' }}>
@@ -920,10 +1023,13 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94a3b8', marginBottom: '4px' }}>
                       <span>{t('wallet_transfer.amount_label_send', 'MİKTAR')}</span>
                       <span
-                        onClick={() => setSendAmount(selectedTokenToSend === 'GRAM' ? balances.ton : balances.taste)}
-                        style={{ color: '#38bdf8', cursor: 'pointer' }}
+                        onClick={() => {
+                          const activeAsset = allAssets.find(a => a.symbol === selectedTokenToSend);
+                          setSendAmount(activeAsset ? String(activeAsset.balance).replace(/,/g, '') : '0');
+                        }}
+                        style={{ color: '#38bdf8', cursor: 'pointer', fontWeight: 700 }}
                       >
-                        MAX: {selectedTokenToSend === 'GRAM' ? balances.ton : balances.taste}
+                        MAX: {allAssets.find(a => a.symbol === selectedTokenToSend)?.balance || '0'}
                       </span>
                     </div>
                     <input

@@ -25,7 +25,7 @@ const INITIAL_PAIRS: MarketPair[] = [
   {
     id: 'TAI_GRAM',
     base: 'TAI',
-    quote: 'GRAM',
+    quote: 'TON',
     name: 'Taste AI',
     price: 0.0001778,
     change24h: 5.4,
@@ -50,9 +50,9 @@ const INITIAL_PAIRS: MarketPair[] = [
   },
   {
     id: 'GRAM_USDT',
-    base: 'GRAM',
+    base: 'TON',
     quote: 'USDT',
-    name: 'Gram / Toncoin',
+    name: 'Toncoin',
     price: 5.32,
     change24h: 2.1,
     volume24h: '$14.2M',
@@ -61,22 +61,9 @@ const INITIAL_PAIRS: MarketPair[] = [
     dex: 'STON.fi'
   },
   {
-    id: 'DOGS_GRAM',
-    base: 'DOGS',
-    quote: 'GRAM',
-    name: 'Dogs Token',
-    price: 0.0000086,
-    change24h: -1.8,
-    volume24h: '$3.8M',
-    high24h: 0.0000092,
-    low24h: 0.0000081,
-    dex: 'STON.fi',
-    address: 'EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS'
-  },
-  {
-    id: 'NOT_GRAM',
+    id: 'NOT_TON',
     base: 'NOT',
-    quote: 'GRAM',
+    quote: 'TON',
     name: 'Notcoin',
     price: 0.0000862,
     change24h: 3.6,
@@ -87,9 +74,22 @@ const INITIAL_PAIRS: MarketPair[] = [
     address: 'EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT'
   },
   {
-    id: 'UTYA_GRAM',
+    id: 'DOGS_TON',
+    base: 'DOGS',
+    quote: 'TON',
+    name: 'Dogs Token',
+    price: 0.0000086,
+    change24h: -1.8,
+    volume24h: '$3.8M',
+    high24h: 0.0000092,
+    low24h: 0.0000081,
+    dex: 'STON.fi',
+    address: 'EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS'
+  },
+  {
+    id: 'UTYA_TON',
     base: 'UTYA',
-    quote: 'GRAM',
+    quote: 'TON',
     name: 'Utya Duck',
     price: 0.00503,
     change24h: 1.2,
@@ -98,6 +98,45 @@ const INITIAL_PAIRS: MarketPair[] = [
     low24h: 0.0048,
     dex: 'STON.fi',
     address: 'EQBaCgUwOoc6gHCNln_oJzb0mVs79YG7wYoavh-o1ItaneLA'
+  },
+  {
+    id: 'CATS_TON',
+    base: 'CATS',
+    quote: 'TON',
+    name: 'Cats Community',
+    price: 0.000038,
+    change24h: 6.8,
+    volume24h: '$1.9M',
+    high24h: 0.000042,
+    low24h: 0.000035,
+    dex: 'STON.fi',
+    address: 'EQA-X_yo3fzzbPtTyMm9KhgKlAyDUgxmgEmGam8tBlqmCATS'
+  },
+  {
+    id: 'HMSTR_TON',
+    base: 'HMSTR',
+    quote: 'TON',
+    name: 'Hamster Kombat',
+    price: 0.00285,
+    change24h: -3.2,
+    volume24h: '$4.1M',
+    high24h: 0.00310,
+    low24h: 0.00270,
+    dex: 'STON.fi',
+    address: 'EQA4hA8cOx7ElVKO5PWqI2B7jP8e9iP_cWqR-HMSTR_TON'
+  },
+  {
+    id: 'MAJOR_TON',
+    base: 'MAJOR',
+    quote: 'TON',
+    name: 'Major Token',
+    price: 0.78,
+    change24h: 8.4,
+    volume24h: '$2.3M',
+    high24h: 0.84,
+    low24h: 0.71,
+    dex: 'STON.fi',
+    address: 'EQBf2_Major_Ton_Token_Jetton_Master_Address_000'
   }
 ];
 
@@ -109,14 +148,14 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
   const { t } = useTranslation();
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'TAI' | 'GRAM' | 'USDT'>('TAI');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'TAI' | 'TON' | 'USDT'>('ALL');
   const [filterType, setFilterType] = useState<'all' | 'fav' | 'gainers'>('all');
   const [favorites, setFavorites] = useState<string[]>(['TAI_GRAM', 'TAI_USDT']);
   const [sortField, setSortField] = useState<'price' | 'change' | 'volume'>('change');
   const [sortAsc, setSortAsc] = useState(false);
   const [selectedPairForDetail, setSelectedPairForDetail] = useState<CoinDetailData | null>(null);
 
-  // STON.fi canlı havuz rezervinden TAI gerçek fiyatını ve TON ekosistem verilerini çek
+  // STON.fi havuzundan canli TAI fiyatini al
   useEffect(() => {
     let isMounted = true;
     const fetchMarketData = async () => {
@@ -162,15 +201,37 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
   };
 
   const getLogo = (symbol: string) => {
-    switch (symbol) {
-      case 'TAI': return <LogoTAI size={34} />;
+    const sym = symbol.toUpperCase();
+    switch (sym) {
+      case 'TAI':
+      case 'TASTE': return <LogoTAI size={34} />;
+      case 'TON':
       case 'GRAM': return <LogoGRAM size={34} />;
-      case 'USDT': return <LogoUSDT size={34} />;
+      case 'USDT':
+      case 'USD₮': return <LogoUSDT size={34} />;
       case 'DOGS': return <LogoDOGS size={34} />;
       case 'UTYA': return <LogoUTYA size={34} />;
       case 'NOT': return <LogoNOT size={34} />;
+      case 'CATS':
+        return (
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#1e293b', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>
+            🐱
+          </div>
+        );
+      case 'HMSTR':
+        return (
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#b45309', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>
+            🐹
+          </div>
+        );
+      case 'MAJOR':
+        return (
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>
+            ⭐
+          </div>
+        );
       default: return (
-        <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff', fontSize: 12 }}>
+        <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff', fontSize: 11 }}>
           {symbol.slice(0, 2)}
         </div>
       );
@@ -187,8 +248,9 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
     if (filterType === 'fav') return favorites.includes(pair.id);
     if (filterType === 'gainers') return pair.change24h > 0;
 
+    if (activeTab === 'ALL') return true;
     if (activeTab === 'TAI') return pair.base === 'TAI' || pair.quote === 'TAI';
-    if (activeTab === 'GRAM') return pair.quote === 'GRAM' || pair.base === 'GRAM';
+    if (activeTab === 'TON') return pair.quote === 'TON' || pair.base === 'TON' || pair.quote === 'GRAM' || pair.base === 'GRAM';
     if (activeTab === 'USDT') return pair.quote === 'USDT' || pair.base === 'USDT';
 
     return true;
@@ -202,7 +264,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
 
   return (
     <div style={{ padding: '4px 0 20px' }}>
-      {/* Search Bar */}
+      {/* Arama Kutusu */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -216,7 +278,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
         <Search size={18} color="#94a3b8" />
         <input
           type="text"
-          placeholder={t('taste_market.search_placeholder', 'Search coin or pair...')}
+          placeholder={t('taste_market.search_placeholder', 'Coin veya parite ara...')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{
@@ -231,7 +293,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
         />
       </div>
 
-      {/* Parite Tab Butonları */}
+      {/* Parite Tab Butonlari (Tumu Varsayilan) */}
       <div style={{
         display: 'flex',
         background: 'rgba(255, 255, 255, 0.04)',
@@ -240,6 +302,23 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
         marginBottom: '12px',
         gap: '4px'
       }}>
+        <button
+          onClick={() => setActiveTab('ALL')}
+          style={{
+            flex: 1,
+            padding: '10px 0',
+            borderRadius: '10px',
+            border: 'none',
+            background: activeTab === 'ALL' ? 'linear-gradient(135deg, #2563eb, #1d4ed8)' : 'transparent',
+            color: activeTab === 'ALL' ? '#fff' : '#94a3b8',
+            fontWeight: 900,
+            fontSize: '12px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          {t('taste_market.tab_all', 'Tümü (ALL)')}
+        </button>
         <button
           onClick={() => setActiveTab('TAI')}
           style={{
@@ -255,24 +334,24 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
             transition: 'all 0.2s ease'
           }}
         >
-          {t('taste_market.tab_tai', 'TAI PAIRS')}
+          TAI
         </button>
         <button
-          onClick={() => setActiveTab('GRAM')}
+          onClick={() => setActiveTab('TON')}
           style={{
             flex: 1,
             padding: '10px 0',
             borderRadius: '10px',
             border: 'none',
-            background: activeTab === 'GRAM' ? '#2563eb' : 'transparent',
-            color: activeTab === 'GRAM' ? '#fff' : '#94a3b8',
+            background: activeTab === 'TON' ? '#0284c7' : 'transparent',
+            color: activeTab === 'TON' ? '#fff' : '#94a3b8',
             fontWeight: 800,
             fontSize: '12px',
             cursor: 'pointer',
             transition: 'all 0.2s ease'
           }}
         >
-          GRAM (TON)
+          TON
         </button>
         <button
           onClick={() => setActiveTab('USDT')}
@@ -293,90 +372,91 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
         </button>
       </div>
 
-      {/* Filtre Çipleri */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '4px' }}>
-        <button
-          onClick={() => setFilterType('all')}
-          style={{
-            padding: '6px 14px',
-            borderRadius: '20px',
-            border: filterType === 'all' ? '1px solid #f59e0b' : '1px solid rgba(255,255,255,0.08)',
-            background: filterType === 'all' ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.02)',
-            color: filterType === 'all' ? '#f59e0b' : '#94a3b8',
-            fontSize: '11px',
-            fontWeight: 700,
-            cursor: 'pointer'
-          }}
-        >
-          Tümü
-        </button>
-        <button
-          onClick={() => setFilterType('fav')}
-          style={{
-            padding: '6px 14px',
-            borderRadius: '20px',
-            border: filterType === 'fav' ? '1px solid #f59e0b' : '1px solid rgba(255,255,255,0.08)',
-            background: filterType === 'fav' ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.02)',
-            color: filterType === 'fav' ? '#f59e0b' : '#94a3b8',
-            fontSize: '11px',
-            fontWeight: 700,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px'
-          }}
-        >
-          <Star size={12} fill={filterType === 'fav' ? '#f59e0b' : 'none'} />
-          {t('taste_market.tab_fav', 'Favorites')}
-        </button>
-        <button
-          onClick={() => setFilterType('gainers')}
-          style={{
-            padding: '6px 14px',
-            borderRadius: '20px',
-            border: filterType === 'gainers' ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.08)',
-            background: filterType === 'gainers' ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.02)',
-            color: filterType === 'gainers' ? '#10b981' : '#94a3b8',
-            fontSize: '11px',
-            fontWeight: 700,
-            cursor: 'pointer'
-          }}
-        >
-          {t('taste_market.tab_gainers', 'Top Gainers')}
-        </button>
+      {/* Hizli Filtreler & Sıralama Barı */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '10px',
+        padding: '0 4px'
+      }}>
+        <div style={{ display: 'flex', gap: '6px' }}>
+          <button
+            onClick={() => setFilterType('all')}
+            style={{
+              padding: '4px 10px',
+              borderRadius: '12px',
+              border: filterType === 'all' ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.08)',
+              background: filterType === 'all' ? 'rgba(59,130,246,0.15)' : 'transparent',
+              color: filterType === 'all' ? '#60a5fa' : '#94a3b8',
+              fontSize: '11px',
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}
+          >
+            {t('taste_market.filter_all', 'Tümü')} ({filteredPairs.length})
+          </button>
+          <button
+            onClick={() => setFilterType('fav')}
+            style={{
+              padding: '4px 10px',
+              borderRadius: '12px',
+              border: filterType === 'fav' ? '1px solid #f59e0b' : '1px solid rgba(255,255,255,0.08)',
+              background: filterType === 'fav' ? 'rgba(245,158,11,0.15)' : 'transparent',
+              color: filterType === 'fav' ? '#fbbf24' : '#94a3b8',
+              fontSize: '11px',
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}
+          >
+            ★ {t('taste_market.filter_fav', 'Favoriler')}
+          </button>
+          <button
+            onClick={() => setFilterType('gainers')}
+            style={{
+              padding: '4px 10px',
+              borderRadius: '12px',
+              border: filterType === 'gainers' ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.08)',
+              background: filterType === 'gainers' ? 'rgba(16,185,129,0.15)' : 'transparent',
+              color: filterType === 'gainers' ? '#34d399' : '#94a3b8',
+              fontSize: '11px',
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}
+          >
+            🔥 {t('taste_market.filter_gainers', 'Yükselenler')}
+          </button>
+        </div>
       </div>
 
-      {/* Sütun Başlıkları */}
+      {/* Tablo Basliklari */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1.4fr 1fr 1fr 28px',
         padding: '8px 10px',
-        fontSize: '10px',
-        color: '#64748b',
+        fontSize: '11px',
         fontWeight: 800,
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
-        marginBottom: '6px'
+        color: '#64748b',
+        textTransform: 'uppercase'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>{t('taste_market.col_pair', 'Pair')}</div>
+        <div>{t('taste_market.col_pair', 'Parite')}</div>
         <div 
           onClick={() => { setSortField('volume'); setSortAsc(!sortAsc); }}
           style={{ display: 'flex', alignItems: 'center', gap: '2px', cursor: 'pointer' }}
         >
-          {t('taste_market.col_volume', 'Volume')} <ArrowUpDown size={10} />
+          {t('taste_market.col_volume', '24s Hacim')} <ArrowUpDown size={10} />
         </div>
         <div 
           onClick={() => { setSortField('price'); setSortAsc(!sortAsc); }}
           style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '2px', cursor: 'pointer' }}
         >
-          {t('taste_market.col_price', 'Price / %')} <ArrowUpDown size={10} />
+          {t('taste_market.col_price', 'Fiyat / %')} <ArrowUpDown size={10} />
         </div>
         <div></div>
       </div>
 
-      {/* Parite Satırları */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      {/* Parite Satirlari */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {filteredPairs.map((pair) => {
           const isFav = favorites.includes(pair.id);
           const isPositive = pair.change24h >= 0;
@@ -385,19 +465,22 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
             <motion.div
               key={pair.id}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedPairForDetail({
-                id: pair.id,
-                symbol: `${pair.base}/${pair.quote}`,
-                name: pair.name,
-                price: pair.price,
-                change24h: pair.change24h,
-                volume24h: pair.volume24h,
-                high24h: pair.high24h,
-                low24h: pair.low24h,
-                dex: pair.dex,
-                address: pair.address,
-                Logo: () => getLogo(pair.base)
-              })}
+              onClick={() => {
+                setSelectedPairForDetail({
+                  id: pair.id,
+                  symbol: pair.base,
+                  name: pair.name,
+                  price: pair.price,
+                  change24h: pair.change24h,
+                  volume24h: pair.volume24h,
+                  high24h: pair.high24h,
+                  low24h: pair.low24h,
+                  dex: pair.dex,
+                  address: pair.address,
+                  pairQuote: pair.quote,
+                  Logo: () => getLogo(pair.base)
+                });
+              }}
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1.4fr 1fr 1fr 28px',
@@ -405,7 +488,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
                 padding: '12px 10px',
                 borderRadius: '14px',
                 background: pair.base === 'TAI' ? 'rgba(245, 158, 11, 0.04)' : 'rgba(255,255,255,0.02)',
-                border: pair.base === 'TAI' ? '1px solid rgba(245, 158, 11, 0.18)' : '1px solid transparent',
+                border: pair.base === 'TAI' ? '1px solid rgba(245, 158, 11, 0.18)' : '1px solid rgba(255,255,255,0.05)',
                 cursor: 'pointer',
                 transition: 'background 0.2s ease'
               }}
@@ -416,6 +499,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>{pair.base}</span>
                     <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 700 }}>/{pair.quote}</span>
+                    <span style={{ fontSize: '9px', color: '#38bdf8', background: 'rgba(56,189,248,0.1)', padding: '1px 4px', borderRadius: '4px', marginLeft: '2px' }}>↗</span>
                   </div>
                   <div style={{ fontSize: '10px', color: '#94a3b8' }}>{pair.name}</div>
                 </div>
@@ -463,7 +547,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
         })}
       </div>
 
-      {/* ── Parite Detay & Fiyat Grafiği Modalı ── */}
+      {/* Parite Detay & Fiyat Grafigi Modali */}
       <CoinDetailModal
         isOpen={!!selectedPairForDetail}
         coin={selectedPairForDetail}

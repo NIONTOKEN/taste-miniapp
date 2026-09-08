@@ -226,14 +226,21 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
           </div>
         </div>
 
-        {/* Fiyat Büyük Gösterim */}
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '14px' }}>
+        {/* Fiyat Büyük Gösterim (Tıklayınca Grafik Açar) */}
+        <div 
+          onClick={() => setShowChartModal(true)}
+          style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '14px', cursor: 'pointer' }}
+          title={t('coin_details.view_chart', 'Grafiği Görüntüle')}
+        >
           <div style={{ fontSize: '28px', fontWeight: 900, color: '#fff', letterSpacing: '-0.5px' }}>
             {pair.price < 0.001 ? pair.price.toFixed(7) : pair.price.toFixed(4)}
           </div>
           <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 700 }}>
             ≈ ${(pair.price * (quoteCurrency === 'GRAM' ? 5.32 : 1)).toFixed(6)} USD
           </div>
+          <span style={{ fontSize: '10px', color: '#38bdf8', marginLeft: 'auto', background: 'rgba(56,189,248,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+            Grafik ↗
+          </span>
         </div>
 
         {/* 24s İstatistikler */}
