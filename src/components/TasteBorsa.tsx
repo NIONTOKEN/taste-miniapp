@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { MessageSquare, RefreshCw } from 'lucide-react';
+import { MessageSquare, RefreshCw, BarChart2 } from 'lucide-react';
 import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoNOT, LogoTAI } from './TokenLogos';
 import { useWallet } from '../context/WalletContext';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
 import { MarketPair } from './TasteMarket';
 import { fetchLiveTaiPrice, LiveTokenPrice } from '../services/stonfiService';
+import { CoinDetailModal } from './CoinDetailModal';
 
 interface TasteBorsaProps {
   initialPair?: MarketPair;
@@ -48,6 +49,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
   const [memo, setMemo] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [statusMsg, setStatusMsg] = useState<{ text: string; isError: boolean } | null>(null);
+  const [showChartModal, setShowChartModal] = useState<boolean>(false);
 
   // STON.fi canlı havuz fiyatı çekme (TAI / GRAM)
   const refreshLivePrice = async () => {
@@ -190,7 +192,7 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
             </div>
           </div>
 
-          <div style={{ textAlign: 'right' }}>
+          <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{
               fontSize: '11px',
               fontWeight: 800,
@@ -201,6 +203,26 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
             }}>
               {pair.change24h >= 0 ? `↗ +${pair.change24h}%` : `↘ ${pair.change24h}%`}
             </span>
+
+            <button
+              onClick={() => setShowChartModal(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: 'rgba(56, 189, 248, 0.15)',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                borderRadius: '8px',
+                padding: '4px 8px',
+                color: '#38bdf8',
+                fontSize: '11px',
+                fontWeight: 800,
+                cursor: 'pointer'
+              }}
+            >
+              <BarChart2 size={13} />
+              <span>{t('coin_details.view_chart', 'Grafik')}</span>
+            </button>
           </div>
         </div>
 
@@ -604,6 +626,35 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
           )}
         </div>
       </div>
+
+      {/* ── Canlı Grafik & Detay Modalı ── */}
+      <CoinDetailModal
+        isOpen={showChartModal}
+        onClose={() => setShowChartModal(false)}
+        coin={{
+          id: pair.id,
+          symbol: `TAI/${quoteCurrency}`,
+          name: pair.name,
+          price: pair.price,
+          change24h: pair.change24h,
+          volume24h: pair.volume24h,
+          high24h: pair.high24h,
+          low24h: pair.low24h,
+          dex: pair.dex,
+          address: pair.address,
+          Logo: () => (
+            <div style={{ position: 'relative', width: 38, height: 38 }}>
+              <LogoTAI size={28} />
+              <div style={{ position: 'absolute', bottom: -2, right: -2 }}>
+                {quoteCurrency === 'GRAM' && <LogoGRAM size={18} />}
+                {quoteCurrency === 'USDT' && <LogoUSDT size={18} />}
+                {quoteCurrency === 'DOGS' && <LogoDOGS size={18} />}
+                {quoteCurrency === 'UTYA' && <LogoUTYA size={18} />}
+              </div>
+            </div>
+          )
+        }}
+      />
     </div>
   );
 };

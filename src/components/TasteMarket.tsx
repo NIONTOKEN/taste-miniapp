@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Search, Star, ArrowUpDown } from 'lucide-react';
 import { LogoGRAM, LogoDOGS, LogoUTYA, LogoUSDT, LogoNOT, LogoTAI } from './TokenLogos';
 import { fetchLiveTaiPrice } from '../services/stonfiService';
+import { CoinDetailModal, CoinDetailData } from './CoinDetailModal';
 
 export interface MarketPair {
   id: string;
@@ -113,6 +114,7 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
   const [favorites, setFavorites] = useState<string[]>(['TAI_GRAM', 'TAI_USDT']);
   const [sortField, setSortField] = useState<'price' | 'change' | 'volume'>('change');
   const [sortAsc, setSortAsc] = useState(false);
+  const [selectedPairForDetail, setSelectedPairForDetail] = useState<CoinDetailData | null>(null);
 
   // STON.fi canlı havuz rezervinden TAI gerçek fiyatını ve TON ekosistem verilerini çek
   useEffect(() => {
@@ -383,7 +385,19 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
             <motion.div
               key={pair.id}
               whileTap={{ scale: 0.98 }}
-              onClick={() => onSelectPair && onSelectPair(pair)}
+              onClick={() => setSelectedPairForDetail({
+                id: pair.id,
+                symbol: `${pair.base}/${pair.quote}`,
+                name: pair.name,
+                price: pair.price,
+                change24h: pair.change24h,
+                volume24h: pair.volume24h,
+                high24h: pair.high24h,
+                low24h: pair.low24h,
+                dex: pair.dex,
+                address: pair.address,
+                Logo: () => getLogo(pair.base)
+              })}
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1.4fr 1fr 1fr 28px',
@@ -448,6 +462,20 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
           );
         })}
       </div>
+
+      {/* ── Parite Detay & Fiyat Grafiği Modalı ── */}
+      <CoinDetailModal
+        isOpen={!!selectedPairForDetail}
+        coin={selectedPairForDetail}
+        onClose={() => setSelectedPairForDetail(null)}
+        onTrade={(c) => {
+          if (onSelectPair && selectedPairForDetail) {
+            const matched = pairs.find(p => p.id === selectedPairForDetail.id);
+            if (matched) onSelectPair(matched);
+          }
+          setSelectedPairForDetail(null);
+        }}
+      />
     </div>
   );
 };

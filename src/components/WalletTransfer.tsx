@@ -11,6 +11,9 @@ import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
 import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoNOT, LogoTAI } from './TokenLogos';
 import { toNano, Address, beginCell } from '@ton/core';
 import { fetchLiveTaiPrice, LiveTokenPrice } from '../services/stonfiService';
+import { CoinDetailModal, CoinDetailData } from './CoinDetailModal';
+import { TokenManageModal, CustomToken } from './TokenManageModal';
+import { SlidersHorizontal } from 'lucide-react';
 
 interface WalletTransferProps {
   onNavigateToBorsa?: () => void;
@@ -47,6 +50,53 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
   const [sendFeedback, setSendFeedback] = useState<{ text: string; error: boolean } | null>(null);
 
   const [walletManageMode, setWalletManageMode] = useState<'menu' | 'create' | 'import' | 'backup'>('menu');
+  
+  // Özel Coin Ekleme & Gizleme State'leri
+  const [isManageTokensOpen, setIsManageTokensOpen] = useState(false);
+  const [selectedCoinForDetail, setSelectedCoinForDetail] = useState<CoinDetailData | null>(null);
+
+  const [customTokens, setCustomTokens] = useState<CustomToken[]>(() => {
+    try {
+      const saved = localStorage.getItem('taste_wallet_custom_tokens');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [hiddenTokenIds, setHiddenTokenIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('taste_wallet_hidden_tokens');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const handleToggleHide = (tokenId: string) => {
+    setHiddenTokenIds(prev => {
+      const next = prev.includes(tokenId) ? prev.filter(id => id !== tokenId) : [...prev, tokenId];
+      localStorage.setItem('taste_wallet_hidden_tokens', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleAddCustomToken = (token: CustomToken) => {
+    setCustomTokens(prev => {
+      if (prev.some(t => t.id === token.id || t.address.toLowerCase() === token.address.toLowerCase())) return prev;
+      const next = [...prev, token];
+      localStorage.setItem('taste_wallet_custom_tokens', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleDeleteCustomToken = (tokenId: string) => {
+    setCustomTokens(prev => {
+      const next = prev.filter(t => t.id !== tokenId && t.address !== tokenId);
+      localStorage.setItem('taste_wallet_custom_tokens', JSON.stringify(next));
+      return next;
+    });
+  };
   const [mnemonicCount, setMnemonicCount] = useState<12 | 24>(24);
   const [generatedWords, setGeneratedWords] = useState<string[]>([]);
   const [importInput, setImportInput] = useState('');
@@ -304,14 +354,39 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
     { id: 'NOT', name: 'Notcoin', symbol: 'NOT', balance: '0', usdValue: '0.00', price: '$0.00045', Logo: LogoNOT }
   ];
 
+  // Kullanıcı tarafından eklenen özel tokenlar
+  const formattedCustomTokens = customTokens.map(ct => ({
+    id: ct.id,
+    name: ct.name,
+    symbol: ct.symbol,
+    balance: ct.balance || '0.00',
+    usdValue: ct.usdValue || '0.00',
+    price: ct.price || '$0.00',
+    address: ct.address,
+    isCustom: true,
+    Logo: () => (
+      ct.image ? (
+        <img src={ct.image} alt={ct.symbol} width={34} height={34} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+      ) : (
+        <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff', fontSize: 11 }}>
+          {ct.symbol.slice(0, 2)}
+        </div>
+      )
+    )
+  }));
+
   // Dynamic jettonlarda olmayan popülerleri listeye ekle
   const missingPopular = popularFallbacks.filter(pop => 
-    !dynamicJettons.some(d => d.symbol.toLowerCase() === pop.symbol.toLowerCase())
+    !dynamicJettons.some(d => d.symbol.toLowerCase() === pop.symbol.toLowerCase()) &&
+    !formattedCustomTokens.some(ct => ct.symbol.toLowerCase() === pop.symbol.toLowerCase())
   );
 
-  const allAssets = [...baseAssets, ...dynamicJettons, ...missingPopular];
+  const allAssets = [...baseAssets, ...dynamicJettons, ...formattedCustomTokens, ...missingPopular];
 
-  const filteredAssets = allAssets.filter(tok => {
+  // Gizlenmemiş varlıklar listesi
+  const visibleAssets = allAssets.filter(tok => !hiddenTokenIds.includes(tok.id));
+
+  const filteredAssets = visibleAssets.filter(tok => {
     const matchesSearch = tok.name.toLowerCase().includes(searchToken.toLowerCase()) ||
                           tok.symbol.toLowerCase().includes(searchToken.toLowerCase());
     if (!matchesSearch) return false;
@@ -582,44 +657,70 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         />
       </div>
 
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '14px' }}>
-        <button
-          onClick={() => setTokenFilter('all')}
+      <div style={{ display: 'flex', gap: '6px', marginBottom: '14px', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: '6px' }}>
+          <button
+            onClick={() => setTokenFilter('all')}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '16px',
+              border: tokenFilter === 'all' ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.08)',
+              background: tokenFilter === 'all' ? 'rgba(59,130,246,0.15)' : 'transparent',
+              color: tokenFilter === 'all' ? '#60a5fa' : '#94a3b8',
+              fontSize: '11px',
+              fontWeight: 800,
+              cursor: 'pointer'
+            }}
+          >
+            {t('wallet_transfer.all_assets', 'Tümü', { count: visibleAssets.length })} ({visibleAssets.length})
+          </button>
+          <button
+            onClick={() => setTokenFilter('balance')}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '16px',
+              border: tokenFilter === 'balance' ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.08)',
+              background: tokenFilter === 'balance' ? 'rgba(59,130,246,0.15)' : 'transparent',
+              color: tokenFilter === 'balance' ? '#60a5fa' : '#94a3b8',
+              fontSize: '11px',
+              fontWeight: 800,
+              cursor: 'pointer'
+            }}
+          >
+            {t('wallet_transfer.with_balance', 'Bakiyesi Olanlar')}
+          </button>
+        </div>
+
+        {/* Coin Ekle / Yönet Butonu */}
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsManageTokensOpen(true)}
           style={{
-            padding: '6px 14px',
+            padding: '6px 12px',
             borderRadius: '16px',
-            border: tokenFilter === 'all' ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.08)',
-            background: tokenFilter === 'all' ? 'rgba(59,130,246,0.15)' : 'transparent',
-            color: tokenFilter === 'all' ? '#60a5fa' : '#94a3b8',
+            border: '1px solid rgba(245,158,11,0.3)',
+            background: 'rgba(245,158,11,0.1)',
+            color: '#f59e0b',
             fontSize: '11px',
             fontWeight: 800,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px'
           }}
         >
-          {t('wallet_transfer.all_assets', 'Tümü', { count: allAssets.length })} ({allAssets.length})
-        </button>
-        <button
-          onClick={() => setTokenFilter('balance')}
-          style={{
-            padding: '6px 14px',
-            borderRadius: '16px',
-            border: tokenFilter === 'balance' ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.08)',
-            background: tokenFilter === 'balance' ? 'rgba(59,130,246,0.15)' : 'transparent',
-            color: tokenFilter === 'balance' ? '#60a5fa' : '#94a3b8',
-            fontSize: '11px',
-            fontWeight: 800,
-            cursor: 'pointer'
-          }}
-        >
-          {t('wallet_transfer.with_balance', 'Bakiyesi Olanlar')}
-        </button>
+          <Plus size={14} />
+          <span>{t('manage_coins.add_btn', 'Coin Ekle / Yönet')}</span>
+        </motion.button>
       </div>
 
-      {/* ── 5. Gerçek Coin Listesi ── */}
+      {/* ── 5. Gerçek Coin Listesi (Tıklayınca Detay ve Grafik Açılır) ── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {filteredAssets.map((asset) => (
-          <div
+          <motion.div
             key={asset.id}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setSelectedCoinForDetail(asset as any)}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -627,13 +728,18 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
               padding: '12px 14px',
               borderRadius: '16px',
               background: 'rgba(255, 255, 255, 0.02)',
-              border: '1px solid rgba(255, 255, 255, 0.05)'
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              cursor: 'pointer',
+              transition: 'background 0.2s ease'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <asset.Logo size={34} />
               <div>
-                <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff' }}>{asset.symbol}</div>
+                <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>{asset.symbol}</span>
+                  <span style={{ fontSize: '9px', color: '#38bdf8', background: 'rgba(56,189,248,0.1)', padding: '1px 5px', borderRadius: '4px' }}>Grafik ↗</span>
+                </div>
                 <div style={{ fontSize: '11px', color: '#94a3b8' }}>{asset.name}</div>
               </div>
             </div>
@@ -646,7 +752,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
                 {showBalance ? `≈ $${asset.usdValue}` : '••••'}
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -1244,6 +1350,36 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
           </motion.div>
         )}
       </AnimatePresence>
+      {/* ── Coin Detay & İnteraktif Grafik Modalı ── */}
+      <CoinDetailModal
+        isOpen={!!selectedCoinForDetail}
+        coin={selectedCoinForDetail}
+        onClose={() => setSelectedCoinForDetail(null)}
+        onTrade={(coin) => {
+          setSelectedCoinForDetail(null);
+          if (onNavigateToBorsa) onNavigateToBorsa();
+        }}
+        onSend={(coin) => {
+          setSelectedCoinForDetail(null);
+          setSelectedTokenToSend(coin.symbol === 'TAI' ? 'TAI' : 'GRAM');
+          setActiveActionModal('withdraw');
+        }}
+        onReceive={(coin) => {
+          setSelectedCoinForDetail(null);
+          setActiveActionModal('deposit');
+        }}
+      />
+
+      {/* ── Coin Ekleme & Gizleme / Çıkarma Modalı ── */}
+      <TokenManageModal
+        isOpen={isManageTokensOpen}
+        onClose={() => setIsManageTokensOpen(false)}
+        allAssets={allAssets}
+        hiddenTokens={hiddenTokenIds}
+        onToggleHide={handleToggleHide}
+        onAddCustomToken={handleAddCustomToken}
+        onDeleteCustomToken={handleDeleteCustomToken}
+      />
     </div>
   );
 };
