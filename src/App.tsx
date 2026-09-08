@@ -122,7 +122,10 @@ function App() {
         tg.setBackgroundColor('#0a0f1c');
       } catch (e) { }
     }
+    const handleNotifAdded = () => setUnreadNotifCount(getUnreadNotificationCount());
+    window.addEventListener('taste_notification_added', handleNotifAdded);
     return () => {
+      window.removeEventListener('taste_notification_added', handleNotifAdded);
       delete (window as any).openPWAInstall;
     };
   }, []);

@@ -2,65 +2,101 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Bell, CheckCheck } from 'lucide-react'
 
-export const INITIAL_NOTIFICATIONS = [
+export interface AppNotification {
+  id: number | string;
+  emoji: string;
+  title: string;
+  body: string;
+  time: string;
+}
+
+export const INITIAL_NOTIFICATIONS: AppNotification[] = [
   { id: 1, emoji: '🎉', title: 'UTYA/TAI Havuzu Açıldı!', body: '4. likidite havuzumuz STON.fi\'de aktif.', time: '2 sa' },
   { id: 2, emoji: '🔔', title: 'TAI Günlük Ödülü', body: 'Bugünkü çark spin ödülünüzü almayı unutmayın!', time: '5 sa' },
   { id: 3, emoji: '📈', title: 'Piyasa Güncellemesi', body: 'TAI/TON çiftinde işlem hacmi arttı.', time: '1 g' },
   { id: 4, emoji: '🤝', title: 'Yeni Ortaklık', body: 'Panoda Şehir ile resmi ortaklık duyuruldu!', time: '2 g' },
   { id: 5, emoji: '⛓️', title: 'Blockchain Güncelleme', body: 'TON ağı güncellemesi tamamlandı.', time: '3 g' },
-]
+];
+
+export function getAllNotifications(): AppNotification[] {
+  try {
+    const custom = localStorage.getItem('taste_app_custom_notifications');
+    const customList: AppNotification[] = custom ? JSON.parse(custom) : [];
+    return [...customList, ...INITIAL_NOTIFICATIONS];
+  } catch {
+    return INITIAL_NOTIFICATIONS;
+  }
+}
+
+export function addAppNotification(notif: Omit<AppNotification, 'id'>) {
+  try {
+    const custom = localStorage.getItem('taste_app_custom_notifications');
+    const list: AppNotification[] = custom ? JSON.parse(custom) : [];
+    const newEntry: AppNotification = {
+      ...notif,
+      id: Date.now()
+    };
+    const updated = [newEntry, ...list].slice(0, 30);
+    localStorage.setItem('taste_app_custom_notifications', JSON.stringify(updated));
+    window.dispatchEvent(new Event('taste_notification_added'));
+  } catch (e) {
+    console.error('Failed to add notification:', e);
+  }
+}
 
 export function getUnreadNotificationCount(): number {
   try {
-    const saved = localStorage.getItem('taste_read_notifications')
-    const readIds: number[] = saved ? JSON.parse(saved) : []
-    return INITIAL_NOTIFICATIONS.filter(n => !readIds.includes(n.id)).length
+    const all = getAllNotifications();
+    const saved = localStorage.getItem('taste_read_notifications');
+    const readIds: (number | string)[] = saved ? JSON.parse(saved) : [];
+    return all.filter(n => !readIds.includes(n.id)).length;
   } catch {
-    return 0
+    return 0;
   }
 }
 
 interface NotificationPanelProps {
-  onClose: () => void
-  onCountChange?: (count: number) => void
+  onClose: () => void;
+  onCountChange?: (count: number) => void;
 }
 
 export function NotificationPanel({ onClose, onCountChange }: NotificationPanelProps) {
-  const [readIds, setReadIds] = useState<number[]>(() => {
+  const [allNotifs, setAllNotifs] = useState<AppNotification[]>(() => getAllNotifications());
+  const [readIds, setReadIds] = useState<(number | string)[]>(() => {
     try {
-      const saved = localStorage.getItem('taste_read_notifications')
-      return saved ? JSON.parse(saved) : []
+      const saved = localStorage.getItem('taste_read_notifications');
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return []
+      return [];
     }
-  })
+  });
 
   const markAllRead = () => {
-    const allIds = INITIAL_NOTIFICATIONS.map(n => n.id)
-    setReadIds(allIds)
+    const allIds = allNotifs.map(n => n.id);
+    setReadIds(allIds);
     try {
-      localStorage.setItem('taste_read_notifications', JSON.stringify(allIds))
-      if (onCountChange) onCountChange(0)
+      localStorage.setItem('taste_read_notifications', JSON.stringify(allIds));
+      if (onCountChange) onCountChange(0);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-  }
+  };
 
-  const markSingleRead = (id: number) => {
+  const markSingleRead = (id: number | string) => {
     if (!readIds.includes(id)) {
-      const updated = [...readIds, id]
-      setReadIds(updated)
+      const updated = [...readIds, id];
+      setReadIds(updated);
       try {
-        localStorage.setItem('taste_read_notifications', JSON.stringify(updated))
-        const remaining = INITIAL_NOTIFICATIONS.filter(n => !updated.includes(n.id)).length
-        if (onCountChange) onCountChange(remaining)
+        localStorage.setItem('taste_read_notifications', JSON.stringify(updated));
+        const remaining = allNotifs.filter(n => !updated.includes(n.id)).length;
+        if (onCountChange) onCountChange(remaining);
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
     }
-  }
+  };
 
-  const unreadCount = INITIAL_NOTIFICATIONS.filter(n => !readIds.includes(n.id)).length
+  const unreadCount = allNotifs.filter(n => !readIds.includes(n.id)).length;
 
   return (
     <>
@@ -150,7 +186,7 @@ export function NotificationPanel({ onClose, onCountChange }: NotificationPanelP
         {/* Notification List */}
         <div style={{ overflowY: 'auto', maxHeight: 'calc(75vh - 70px)' }}>
           <AnimatePresence>
-            {INITIAL_NOTIFICATIONS.map((notif, i) => {
+            {allNotifs.map((notif, i) => {
               const isRead = readIds.includes(notif.id)
               return (
                 <motion.div
@@ -164,7 +200,7 @@ export function NotificationPanel({ onClose, onCountChange }: NotificationPanelP
                     alignItems: 'flex-start',
                     gap: 14,
                     padding: '16px 20px',
-                    borderBottom: i < INITIAL_NOTIFICATIONS.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                    borderBottom: i < allNotifs.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
                     background: isRead ? 'transparent' : 'rgba(245,159,11,0.05)',
                     cursor: 'pointer',
                     transition: 'background 0.2s',

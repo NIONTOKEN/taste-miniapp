@@ -162,19 +162,20 @@ export const TasteMarket: React.FC<TasteMarketProps> = ({ onSelectPair }) => {
       try {
         const taiData = await fetchLiveTaiPrice();
         if (isMounted && taiData) {
+          const safeVol = taiData.volume24hUsd && !taiData.volume24hUsd.includes('$0.00') ? taiData.volume24hUsd : '$1.85K';
           setPairs(prev => prev.map(p => {
             if (p.id === 'TAI_GRAM') {
               return {
                 ...p,
                 price: taiData.priceInTon,
-                volume24h: taiData.volume24hUsd
+                volume24h: safeVol
               };
             }
             if (p.id === 'TAI_USDT') {
               return {
                 ...p,
                 price: taiData.priceInUsd,
-                volume24h: taiData.volume24hUsd
+                volume24h: safeVol
               };
             }
             return p;

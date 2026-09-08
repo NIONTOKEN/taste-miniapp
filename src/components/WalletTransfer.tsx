@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Eye, EyeOff, ArrowDownCircle, ArrowUpCircle, RefreshCw, History,
-  Copy, Check, Search, Plus, Download, Link2, X, ExternalLink, ArrowUpRight, ArrowDownLeft
+  Copy, Check, Search, Plus, Download, Link2, X, ExternalLink, ArrowUpRight, ArrowDownLeft,
+  ChevronDown, ChevronUp
 } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
 import { internalWalletService } from '../services/internalWallet';
@@ -14,6 +15,7 @@ import { fetchLiveTaiPrice, LiveTokenPrice } from '../services/stonfiService';
 import { CoinDetailModal, CoinDetailData } from './CoinDetailModal';
 import { TokenManageModal, CustomToken } from './TokenManageModal';
 import { SlidersHorizontal } from 'lucide-react';
+import { addAppNotification } from './NotificationPanel';
 
 interface WalletTransferProps {
   onNavigateToBorsa?: () => void;
@@ -45,9 +47,42 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
   const [recipient, setRecipient] = useState('');
   const [sendAmount, setSendAmount] = useState('');
   const [sendMemo, setSendMemo] = useState('');
-  const [selectedTokenToSend, setSelectedTokenToSend] = useState<string>('GRAM');
+  const [selectedTokenToSend, setSelectedTokenToSend] = useState<string>('TAI');
+  const [isTokenDropdownOpen, setIsTokenDropdownOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [sendFeedback, setSendFeedback] = useState<{ text: string; error: boolean } | null>(null);
+
+  const prevTaiBalRef = useRef<string>(balances.taste);
+  const prevTonBalRef = useRef<string>(balances.ton);
+
+  // Cüzdana coin geldiğinde otomatik bildirim oluştur
+  useEffect(() => {
+    const prevTai = parseFloat(prevTaiBalRef.current) || 0;
+    const curTai = parseFloat(balances.taste) || 0;
+    const prevTon = parseFloat(prevTonBalRef.current) || 0;
+    const curTon = parseFloat(balances.ton) || 0;
+
+    if (curTai > prevTai && prevTai > 0) {
+      const diff = (curTai - prevTai).toLocaleString();
+      addAppNotification({
+        emoji: '📥',
+        title: 'TAI Transferi Geldi!',
+        body: `Cüzdanınıza +${diff} TAI transferi ulaştı. Bakiyeniz güncellendi!`,
+        time: 'Az önce'
+      });
+    } else if (curTon > prevTon && prevTon > 0) {
+      const diff = (curTon - prevTon).toFixed(3);
+      addAppNotification({
+        emoji: '📥',
+        title: 'TON Transferi Geldi!',
+        body: `Cüzdanınıza +${diff} TON transferi ulaştı. Bakiyeniz güncellendi!`,
+        time: 'Az önce'
+      });
+    }
+
+    prevTaiBalRef.current = balances.taste;
+    prevTonBalRef.current = balances.ton;
+  }, [balances.taste, balances.ton]);
 
   const [walletManageMode, setWalletManageMode] = useState<'menu' | 'create' | 'import' | 'backup'>('menu');
   
@@ -306,6 +341,13 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
         }
       }
 
+      addAppNotification({
+        emoji: '📤',
+        title: `${selectedTokenToSend} Gönderildi!`,
+        body: `${sendAmount} ${selectedTokenToSend} başarıyla gönderildi. Alıcı: ${recipient.slice(0, 6)}...${recipient.slice(-4)}`,
+        time: 'Az önce'
+      });
+
       setSendFeedback({ text: t('wallet_transfer.send_success', 'Transfer başarıyla gönderildi!'), error: false });
       setSendAmount('');
       setRecipient('');
@@ -318,7 +360,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
     }
   };
 
-  // Varlık Listesi: Hem Cüzdandaki Gerçek Jettonlar Hem Popüler TON Coinleri
+  // Varlık Listesi: Hem Cüzdandaki Gerçek Jettonlar Hem Popüler TON Coinleri (Her birinin kendi gerçek adresi)
   const baseAssets = [
     {
       id: 'TAI',
@@ -327,6 +369,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       balance: taiBal.toLocaleString(),
       usdValue: taiUsd.toFixed(2),
       price: `$${taiUsdPrice.toFixed(6)}`,
+      address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
       Logo: LogoTAI
     },
     {
@@ -336,11 +379,12 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       balance: gramBal.toFixed(4),
       usdValue: gramUsd.toFixed(2),
       price: `$${tonUsdPrice.toFixed(2)}`,
+      address: 'Native Toncoin (Workchain 0)',
       Logo: LogoGRAM
     }
   ];
 
-  // Cüzdandaki diğer gerçek jettonları ekle
+  // Cüzdandaki diğer gerçek jettonları ekle (kendi jetton adresiyle)
   const dynamicJettons = (balances.jettons || [])
     .filter(j => j.symbol !== 'TASTE' && j.symbol !== 'TAI')
     .map(j => ({
@@ -350,6 +394,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       balance: j.balance,
       usdValue: j.usdValue || '0.00',
       price: j.usdPrice ? `$${j.usdPrice.toFixed(4)}` : '$0.00',
+      address: j.address,
       Logo: () => (
         j.image ? (
           <img src={j.image} alt={j.symbol} width={34} height={34} style={{ borderRadius: '50%', objectFit: 'cover' }} />
@@ -361,12 +406,14 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       )
     }));
 
-  // Popüler TON ekosistem coinleri (cüzdanda henüz yoksa liste için hazır)
+  // Popüler TON ekosistem coinleri (Kendi gerçek kontrat adresleriyle)
   const popularFallbacks = [
-    { id: 'USDT', name: 'Tether USD', symbol: 'USD₮', balance: '0.00', usdValue: '0.00', price: '$1.00', Logo: LogoUSDT },
-    { id: 'DOGS', name: 'Dogs Token', symbol: 'DOGS', balance: '0', usdValue: '0.00', price: '$0.000045', Logo: LogoDOGS },
-    { id: 'UTYA', name: 'Utya Duck', symbol: 'UTYA', balance: '0', usdValue: '0.00', price: '$0.0268', Logo: LogoUTYA },
-    { id: 'NOT', name: 'Notcoin', symbol: 'NOT', balance: '0', usdValue: '0.00', price: '$0.00045', Logo: LogoNOT }
+    { id: 'USDT', name: 'Tether USD', symbol: 'USD₮', balance: '0.00', usdValue: '0.00', price: '$1.00', address: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs', Logo: LogoUSDT },
+    { id: 'DOGS', name: 'Dogs Token', symbol: 'DOGS', balance: '0', usdValue: '0.00', price: '$0.000045', address: 'EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS', Logo: LogoDOGS },
+    { id: 'UTYA', name: 'Utya Duck', symbol: 'UTYA', balance: '0', usdValue: '0.00', price: '$0.0268', address: 'EQBaCgUwOoc6gHCNln_oJzb0mVs79YG7wYoavh-o1ItaneLA', Logo: LogoUTYA },
+    { id: 'NOT', name: 'Notcoin', symbol: 'NOT', balance: '0', usdValue: '0.00', price: '$0.00045', address: 'EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT', Logo: LogoNOT },
+    { id: 'CATS', name: 'Cats Community', symbol: 'CATS', balance: '0', usdValue: '0.00', price: '$0.000038', address: 'EQA-X_yo3fzzbPtTyMm9KhgKlAyDUgxmgEmGam8tBlqmCATS', Logo: () => <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#1e293b', border: '1px solid #475569', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>🐱</div> },
+    { id: 'HMSTR', name: 'Hamster Kombat', symbol: 'HMSTR', balance: '0', usdValue: '0.00', price: '$0.00285', address: 'EQA4hA8cOx7ElVKO5PWqI2B7jP8e9iP_cWqR-HMSTR_TON', Logo: () => <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#b45309', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>🐹</div> }
   ];
 
   // Kullanıcı tarafından eklenen özel tokenlar
@@ -957,46 +1004,117 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
               {/* Çek Modalı */}
               {activeActionModal === 'withdraw' && (
                 <div>
-                  <div style={{ marginBottom: '14px' }}>
-                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px' }}>
-                      {t('wallet_transfer.select_token_to_send', 'GÖNDERİLECEK COIN / TOKEN SEÇİN')}
+                  {/* Aşağı Açılan / Kayan Coin Seçim Menüsü */}
+                  <div style={{ marginBottom: '16px', position: 'relative' }}>
+                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 700, textTransform: 'uppercase' }}>
+                      {t('wallet_transfer.select_token_to_send', 'Gönderilecek Varlık / Coin')}
                     </div>
-                    <div style={{
-                      display: 'flex',
-                      gap: '8px',
-                      overflowX: 'auto',
-                      paddingBottom: '6px'
-                    }}>
-                      {allAssets.map((asset) => {
-                        const isSelected = selectedTokenToSend === asset.symbol || (selectedTokenToSend === 'GRAM' && asset.symbol === 'GRAM');
-                        return (
-                          <button
-                            key={asset.id}
-                            onClick={() => setSelectedTokenToSend(asset.symbol)}
-                            style={{
-                              flexShrink: 0,
-                              padding: '8px 12px',
-                              borderRadius: '12px',
-                              border: isSelected ? '2px solid #f59e0b' : '1px solid rgba(255,255,255,0.1)',
-                              background: isSelected ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.03)',
-                              color: isSelected ? '#fbbf24' : '#cbd5e1',
-                              fontWeight: 800,
-                              fontSize: '12px',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px'
-                            }}
-                          >
-                            <asset.Logo size={16} />
-                            <span>{asset.symbol}</span>
-                            <span style={{ fontSize: '10px', color: isSelected ? '#f59e0b' : '#64748b', fontWeight: 600 }}>
-                              ({asset.balance})
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                    
+                    {/* Seçili Coin Tetikleyici Buton */}
+                    {(() => {
+                      const activeAsset = allAssets.find(a => a.symbol === selectedTokenToSend) || allAssets[0];
+                      const ActiveLogo = activeAsset?.Logo;
+                      return (
+                        <div
+                          onClick={() => setIsTokenDropdownOpen(!isTokenDropdownOpen)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            border: isTokenDropdownOpen ? '1px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.12)',
+                            borderRadius: '14px',
+                            padding: '12px 14px',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            {ActiveLogo && <ActiveLogo size={28} />}
+                            <div>
+                              <div style={{ fontSize: '14px', fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <span>{activeAsset?.symbol}</span>
+                                <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>({activeAsset?.name})</span>
+                              </div>
+                              <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 700 }}>
+                                {t('wallet_transfer.available', 'Kullanılabilir')}: {activeAsset?.balance}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#f59e0b' }}>
+                            <span style={{ fontSize: '11px', fontWeight: 800 }}>Değiştir</span>
+                            {isTokenDropdownOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* Aşağı Kayan / Açılan Coin Listesi */}
+                    <AnimatePresence>
+                      {isTokenDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0, y: -4 }}
+                          animate={{ opacity: 1, height: 'auto', y: 0 }}
+                          exit={{ opacity: 0, height: 0, y: -4 }}
+                          transition={{ duration: 0.2 }}
+                          style={{
+                            marginTop: '6px',
+                            background: '#0d1527',
+                            border: '1px solid rgba(245, 158, 11, 0.3)',
+                            borderRadius: '14px',
+                            overflow: 'hidden',
+                            boxShadow: '0 10px 25px rgba(0,0,0,0.6)',
+                            maxHeight: '220px',
+                            overflowY: 'auto',
+                            zIndex: 20
+                          }}
+                        >
+                          {allAssets.map((asset) => {
+                            const isSelected = selectedTokenToSend === asset.symbol;
+                            const AssetLogo = asset.Logo;
+                            return (
+                              <div
+                                key={asset.id}
+                                onClick={() => {
+                                  setSelectedTokenToSend(asset.symbol);
+                                  setIsTokenDropdownOpen(false);
+                                }}
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                  padding: '10px 14px',
+                                  borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+                                  background: isSelected ? 'rgba(245, 158, 11, 0.12)' : 'transparent',
+                                  cursor: 'pointer',
+                                  transition: 'background 0.15s'
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                  {AssetLogo && <AssetLogo size={24} />}
+                                  <div>
+                                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>
+                                      {asset.symbol} <span style={{ fontSize: '10px', color: '#64748b' }}>({asset.name})</span>
+                                    </div>
+                                    <div style={{ fontSize: '10px', color: '#94a3b8' }}>{asset.price}</div>
+                                  </div>
+                                </div>
+
+                                <div style={{ textAlign: 'right' }}>
+                                  <div style={{ fontSize: '12px', fontWeight: 800, color: isSelected ? '#fbbf24' : '#fff' }}>
+                                    {asset.balance}
+                                  </div>
+                                  {isSelected && (
+                                    <span style={{ fontSize: '9px', color: '#22c55e', fontWeight: 800 }}>SEÇİLİ ✓</span>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
 
                   <div style={{ marginBottom: '12px' }}>
