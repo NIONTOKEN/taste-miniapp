@@ -896,19 +896,19 @@ const resources = {
                 }
             },
             "hybrid_wallet": {
-                "market": "市场",
-                "exchange": "交易所",
-                "wallet": "钱包",
-                "staking": "质押",
-                "staking_soon_badge_short": "即将推出",
-                "staking_soon_badge": "即将开始 — 尚未启动",
-                "staking_title": "TASTE AI & TON 质押",
-                "staking_desc": "在智能合约中质押您的 TAI 代币，获得每日被动收益和高额 APY 奖励。安全审计完成后将正式启用。",
-                "staking_flexible_pool": "活期池",
-                "staking_flexible_desc": "随时提现",
-                "staking_locked_pool": "90天定期",
-                "staking_locked_desc": "最高收益",
-                "staking_btn_disabled": "开发中（敬请期待）"
+                "market": "Market",
+                "exchange": "Exchange",
+                "wallet": "Wallet",
+                "staking": "Staking",
+                "staking_soon_badge_short": "SOON",
+                "staking_soon_badge": "COMING VERY SOON — NOT STARTED YET",
+                "staking_title": "TASTE AI & TON Staking",
+                "staking_desc": "Lock your TAI tokens in smart contracts to earn daily passive income and high APY rewards. Will be activated once security audits are completed.",
+                "staking_flexible_pool": "Flexible Pool",
+                "staking_flexible_desc": "Withdraw anytime",
+                "staking_locked_pool": "90 Days Locked",
+                "staking_locked_desc": "Maximum Yield",
+                "staking_btn_disabled": "Under Development (Coming Soon)"
             },
             "taste_market": { "search_placeholder": "Search coin or pair...", "tab_tai": "⚡ TAI PAIRS", "tab_all": "All", "tab_fav": "Favorites", "tab_gainers": "🔥 Top Gainers", "col_pair": "Pair", "col_volume": "Volume", "col_price": "Price / %" },
             "borsa": { "min_24h": "24H Low", "max_24h": "24H High", "vol_24h": "24H Volume", "payment_select": "Select Payment / Pair", "live": "LIVE", "buy": "Buy", "sell": "Sell", "limit": "Limit", "market_order": "Market (Price)", "price_label": "Price (GRAM)", "amount_label": "Amount (TAI)", "total_label": "Total:", "memo_label": "MEMO (OPTIONAL)", "available": "Available:", "processing": "Processing...", "buy_tai": "BUY TASTE AI", "sell_tai": "SELL TASTE AI", "invalid_amount": "Please enter a valid amount", "dex_opened": "STON.fi DEX opened: Confirm the {type} in the pool.", "tx_failed": "Transaction failed", "memo_placeholder": "Transaction memo / note" },
@@ -1813,7 +1813,21 @@ const resources = {
                     "fatih_kaya": "Kurucu, planlayıcı, yol gösterici. TASTE projesini sahiplenen, üstlenen ve yürütmeye çalışan kişi. Mutfak ekiplerince finanse edilebilmekten sorumlu."
                 }
             },
-            "hybrid_wallet": { "market": "Market", "exchange": "Borsa", "wallet": "Cüzdan" },
+            "hybrid_wallet": {
+                "market": "Pazar",
+                "exchange": "Borsa",
+                "wallet": "Cüzdan",
+                "staking": "Staking",
+                "staking_soon_badge_short": "YAKINDA",
+                "staking_soon_badge": "ÇOK YAKINDA BAŞLIYOR — DAHA BAŞLAMADIK",
+                "staking_title": "TASTE AI & TON Staking",
+                "staking_desc": "TAI tokenlarınızı akıllı sözleşmelerde kilitleyerek günlük pasif getiri ve yüksek APY ödülleri kazanın. Akıllı kontrat güvenlik denetimleri tamamlandıktan sonra aktif edilecektir.",
+                "staking_flexible_pool": "Esnek Havuz",
+                "staking_flexible_desc": "İstediğin an çek",
+                "staking_locked_pool": "90 Gün Kilitli",
+                "staking_locked_desc": "Maksimum Getiri",
+                "staking_btn_disabled": "Geliştirme Aşamasında (Yakında)"
+            },
             "taste_market": { "search_placeholder": "Coin veya parite ara...", "tab_tai": "⚡ TAI PARİTELERİ", "tab_all": "Tümü", "tab_fav": "Favoriler", "tab_gainers": "🔥 En Çok Artanlar", "col_pair": "Parite", "col_volume": "Hacim", "col_price": "Fiyat / %" },
             "borsa": { "min_24h": "24sa En Düşük", "max_24h": "24sa En Yüksek", "vol_24h": "24sa Hacim", "payment_select": "Ödeme / Parite Seçin", "live": "CANLI", "buy": "Alış", "sell": "Satış", "limit": "Limit", "market_order": "Piyasa (Market)", "price_label": "Fiyat (GRAM)", "amount_label": "Miktar (TAI)", "total_label": "Toplam:", "memo_label": "MEMO (OPSİYONEL)", "available": "Kullanılabilir:", "processing": "İşleniyor...", "buy_tai": "TASTE AI AL", "sell_tai": "TASTE AI SAT", "invalid_amount": "Lütfen geçerli bir miktar girin", "dex_opened": "STON.fi DEX açıldı: Havuzdaki {type} işlemini onaylayın.", "tx_failed": "İşlem başarısız", "memo_placeholder": "İşlem notu / açıklaması" },
             "wallet_transfer": { "total_value": "Toplam Varlık Değeri", "taste_live": "TASTE AI (CANLI)", "deposit": "Yatır", "withdraw": "Çek", "convert": "Dönüştür", "history": "Geçmiş", "taste_wallet": "Taste Yerleşik Cüzdan", "tonconnect_wallet": "TonConnect Cüzdanı", "active_badge": "AKTİF", "not_connected": "Cüzdan bağlı değil", "manage": "Yönet ⚙️", "refresh": "Yenile", "search_asset": "Varlık ara...", "all_assets": "Tümü ({count})", "with_balance": "Bakiyesi Olanlar", "internal_wallet": "🔐 Taste Yerleşik Cüzdan", "confirm_send": "GÖNDERİMİ ONAYLA", "blockchain_txs": "Gerçek Blokzincir İşlemleri", "loading_txs": "İşlemler blokzincirden çekiliyor...", "no_txs": "Henüz zincir içi işlem kaydı bulunmuyor.", "dex_tx": "DEX İşlemi", "view": "Görüntüle", "create_wallet": "Yeni Cüzdan Oluştur", "create_wallet_desc": "12 veya 24 kelimelik sıfırdan güvenli cüzdan", "import_wallet": "Cüzdanı İçe Aktar (Mnemonic)", "import_wallet_desc": "12 veya 24 tohum kelimenizi girerek aktarın", "connect_external": "Dış Cüzdana Bağlan (TonConnect)", "connect_external_desc": "Tonkeeper, MyTonWallet veya Telegram Wallet", "seed_question": "Kaç kelimelik tohum cümlesiyle cüzdan oluşturmak istiyorsunuz?", "words_12": "12 Kelime", "words_24": "24 Kelime (Önerilen)", "create_btn": "CÜZDANI OLUŞTUR", "warning_seed": "⚠️ Bu kelimeler cüzdanınızın tek kurtarma anahtarıdır. Kaybederseniz fonlarınıza erişimi kaybedersiniz!", "copied": "Kelimeler Kopyalandı!", "copy_words": "Kelimeleri Kopyala", "saved_done": "KAYDETTİM, TAMAMLA", "paste_seed": "12 veya 24 tohum kelimenizi boşluklarla ayrılmış şekilde yapıştırın:", "import_btn": "CÜZDANI İÇE AKTAR", "invalid_seed": "Geçersiz tohum kelimeleri", "send_success": "Transfer başarıyla gönderildi!", "send_error": "Gönderim hatası", "invalid_address": "Lütfen geçerli adres ve miktar girin", "recipient_label": "ALICI TON ADRESİ", "amount_label_send": "MİKTAR", "memo_label_send": "MEMO (NOT - OPSİYONEL)", "memo_placeholder": "İşlem notu / açıklaması", "wallet_error": "Hata: " },
@@ -2717,7 +2731,21 @@ const resources = {
                     "fatih_kaya": "Основатель, планировщик, гид. Тот, кто принимает, берется и пытается реализовать проект ВКУС. Обеспечивает финансовую поддержку кухонных бригад."
                 }
             },
-            "hybrid_wallet": { "market": "Рынок", "exchange": "Биржа", "wallet": "Кошелёк" },
+            "hybrid_wallet": {
+                "market": "Рынок",
+                "exchange": "Биржа",
+                "wallet": "Кошелёк",
+                "staking": "Стейкинг",
+                "staking_soon_badge_short": "СКОРО",
+                "staking_soon_badge": "СКОРО ЗАПУСК — ЕЩЕ НЕ НАЧАЛОСЬ",
+                "staking_title": "TASTE AI & TON Стейкинг",
+                "staking_desc": "Блокируйте токены TAI в смарт-контрактах, чтобы получать ежедневный пассивный доход и высокие награды APY. Будет активировано после завершения аудита безопасности.",
+                "staking_flexible_pool": "Гибкий пул",
+                "staking_flexible_desc": "Вывод в любое время",
+                "staking_locked_pool": "90 дней блокировки",
+                "staking_locked_desc": "Максимальная доходность",
+                "staking_btn_disabled": "В разработке (Скоро)"
+            },
             "taste_market": { "search_placeholder": "Поиск монеты или пары...", "tab_tai": "⚡ ПАРЫ TAI", "tab_all": "Все", "tab_fav": "Избранное", "tab_gainers": "🔥 Топ роста", "col_pair": "Пара", "col_volume": "Объём", "col_price": "Цена / %" },
             "borsa": { "min_24h": "Мин 24ч", "max_24h": "Макс 24ч", "vol_24h": "Объём 24ч", "payment_select": "Выберите оплату / пару", "live": "ПРЯМОЙ ЭФИР", "buy": "Купить", "sell": "Продать", "limit": "Лимит", "market_order": "Рынок (цена)", "price_label": "Цена (GRAM)", "amount_label": "Количество (TAI)", "total_label": "Итого:", "memo_label": "MEMO (НЕОБЯЗАТЕЛЬНО)", "available": "Доступно:", "processing": "Обработка...", "buy_tai": "КУПИТЬ TASTE AI", "sell_tai": "ПРОДАТЬ TASTE AI", "invalid_amount": "Введите корректную сумму", "dex_opened": "STON.fi DEX открыт: подтвердите {type} в пуле.", "tx_failed": "Транзакция не удалась", "memo_placeholder": "Заметка к транзакции" },
             "wallet_transfer": { "total_value": "Общая стоимость активов", "taste_live": "TASTE AI (ПРЯМОЙ ЭФИР)", "deposit": "Пополнить", "withdraw": "Вывести", "convert": "Конвертировать", "history": "История", "taste_wallet": "Встроенный кошелёк Taste", "tonconnect_wallet": "Кошелёк TonConnect", "active_badge": "АКТИВНЫЙ", "not_connected": "Кошелёк не подключён", "manage": "Управление ⚙️", "refresh": "Обновить", "search_asset": "Поиск актива...", "all_assets": "Все ({count})", "with_balance": "С балансом", "internal_wallet": "🔐 Встроенный кошелёк Taste", "confirm_send": "ПОДТВЕРДИТЬ ПЕРЕВОД", "blockchain_txs": "Реальные блокчейн-транзакции", "loading_txs": "Загрузка транзакций из блокчейна...", "no_txs": "Транзакций ещё нет.", "dex_tx": "DEX транзакция", "view": "Просмотр", "create_wallet": "Создать новый кошелёк", "create_wallet_desc": "Создайте безопасный кошелёк с 12 или 24 словами", "import_wallet": "Импортировать кошелёк (мнемоника)", "import_wallet_desc": "Введите ваши 12 или 24 seed-слова", "connect_external": "Подключить внешний кошелёк (TonConnect)", "connect_external_desc": "Tonkeeper, MyTonWallet или Telegram Wallet", "seed_question": "Сколько слов в seed-фразе?", "words_12": "12 слов", "words_24": "24 слова (рекомендуется)", "create_btn": "СОЗДАТЬ КОШЕЛЁК", "warning_seed": "⚠️ Эти слова — единственный ключ восстановления. Потеряете их — потеряете доступ!", "copied": "Слова скопированы!", "copy_words": "Скопировать слова", "saved_done": "Я СОХРАНИЛ, ГОТОВО", "paste_seed": "Вставьте ваши 12 или 24 seed-слова через пробел:", "import_btn": "ИМПОРТИРОВАТЬ КОШЕЛЁК", "invalid_seed": "Неверные seed-слова", "send_success": "Перевод успешно отправлен!", "send_error": "Ошибка отправки", "invalid_address": "Введите корректный адрес и сумму", "recipient_label": "АДРЕС ПОЛУЧАТЕЛЯ TON", "amount_label_send": "СУММА", "memo_label_send": "MEMO (ПРИМЕЧАНИЕ - НЕОБЯЗАТЕЛЬНО)", "memo_placeholder": "Заметка к транзакции", "wallet_error": "Ошибка: " },
@@ -3621,7 +3649,21 @@ const resources = {
                     "fatih_kaya": "مؤسس، مخطط، دليل. من يحتضن ويتولى ويحاول تنفيذ مشروع TASTE. يضمن دعم فرق المطبخ مالياً."
                 }
             },
-            "hybrid_wallet": { "market": "السوق", "exchange": "البورصة", "wallet": "المحفظة" },
+            "hybrid_wallet": {
+                "market": "السوق",
+                "exchange": "البورصة",
+                "wallet": "المحفظة",
+                "staking": "الستاكينغ",
+                "staking_soon_badge_short": "قريباً",
+                "staking_soon_badge": "يبدأ قريباً جداً — لم نبدأ بعد",
+                "staking_title": "TASTE AI & TON ستاكينغ",
+                "staking_desc": "قم بقفل رموز TAI في العقود الذكية لكسب عائد يومي ومكافآت APY عالية. سيتم تفعيله بعد اكتمال تدقيق الأمان.",
+                "staking_flexible_pool": "مجمع مرن",
+                "staking_flexible_desc": "سحب في أي وقت",
+                "staking_locked_pool": "مقفل لمدة 90 يوماً",
+                "staking_locked_desc": "أقصى عائد",
+                "staking_btn_disabled": "قيد التطوير (قريباً)"
+            },
             "taste_market": { "search_placeholder": "ابحث عن عملة أو زوج...", "tab_tai": "⚡ أزواج TAI", "tab_all": "الكل", "tab_fav": "المفضلة", "tab_gainers": "🔥 الأكثر ارتفاعاً", "col_pair": "الزوج", "col_volume": "الحجم", "col_price": "السعر / %" },
             "borsa": { "min_24h": "أدنى 24 ساعة", "max_24h": "أعلى 24 ساعة", "vol_24h": "حجم 24 ساعة", "payment_select": "اختر الدفع / الزوج", "live": "مباشر", "buy": "شراء", "sell": "بيع", "limit": "محدد", "market_order": "سوق (سعر)", "price_label": "السعر (GRAM)", "amount_label": "الكمية (TAI)", "total_label": "الإجمالي:", "memo_label": "MEMO (اختياري)", "available": "متاح:", "processing": "جارٍ المعالجة...", "buy_tai": "شراء TASTE AI", "sell_tai": "بيع TASTE AI", "invalid_amount": "أدخل كمية صحيحة", "dex_opened": "تم فتح STON.fi DEX: أكد {type} في المجمع.", "tx_failed": "فشلت المعاملة", "memo_placeholder": "ملاحظة المعاملة" },
             "wallet_transfer": { "total_value": "إجمالي قيمة الأصول", "taste_live": "TASTE AI (مباشر)", "deposit": "إيداع", "withdraw": "سحب", "convert": "تحويل", "history": "السجل", "taste_wallet": "محفظة Taste المدمجة", "tonconnect_wallet": "محفظة TonConnect", "active_badge": "نشط", "not_connected": "المحفظة غير متصلة", "manage": "إدارة ⚙️", "refresh": "تحديث", "search_asset": "ابحث عن أصل...", "all_assets": "الكل ({count})", "with_balance": "برصيد", "internal_wallet": "🔐 محفظة Taste المدمجة", "confirm_send": "تأكيد الإرسال", "blockchain_txs": "معاملات البلوكشين الحقيقية", "loading_txs": "جارٍ تحميل المعاملات من البلوكشين...", "no_txs": "لا توجد معاملات بعد.", "dex_tx": "معاملة DEX", "view": "عرض", "create_wallet": "إنشاء محفظة جديدة", "create_wallet_desc": "أنشئ محفظة آمنة بـ 12 أو 24 كلمة", "import_wallet": "استيراد محفظة (Mnemonic)", "import_wallet_desc": "استورد بـ 12 أو 24 كلمة seed", "connect_external": "توصيل محفظة خارجية (TonConnect)", "connect_external_desc": "Tonkeeper أو MyTonWallet أو Telegram Wallet", "seed_question": "كم عدد كلمات العبارة الأولية؟", "words_12": "12 كلمة", "words_24": "24 كلمة (موصى به)", "create_btn": "إنشاء المحفظة", "warning_seed": "⚠️ هذه الكلمات هي مفتاح الاسترداد الوحيد. فقدانها يعني فقدان الوصول!", "copied": "تم نسخ الكلمات!", "copy_words": "نسخ الكلمات", "saved_done": "حفظت، تم", "paste_seed": "الصق كلمات الـ seed الـ 12 أو 24 مفصولة بمسافات:", "import_btn": "استيراد المحفظة", "invalid_seed": "كلمات seed غير صحيحة", "send_success": "تم إرسال التحويل بنجاح!", "send_error": "خطأ في الإرسال", "invalid_address": "أدخل عنواناً وكمية صحيحين", "recipient_label": "عنوان TON للمستلم", "amount_label_send": "المبلغ", "memo_label_send": "MEMO (ملاحظة - اختياري)", "memo_placeholder": "ملاحظة المعاملة", "wallet_error": "خطأ: " },
@@ -4526,7 +4568,9 @@ const resources = {
                 }
             },
             "hybrid_wallet": { 
-                "market": "市场", "exchange": "交易所", "wallet": "钱包",
+                "market": "市场",
+                "exchange": "交易所",
+                "wallet": "钱包",
                 "staking": "质押",
                 "staking_soon_badge_short": "即将推出",
                 "staking_soon_badge": "即将开始 — 尚未启动",

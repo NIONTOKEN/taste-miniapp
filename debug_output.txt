@@ -1,0 +1,86 @@
+Total matches: 5
+
+--- Match 1 in [en] at index 51686 ---
+"hybrid_wallet": {
+                "market": "Market",
+                "exchange": "Exchange",
+                "wallet": "Wallet",
+                "staking": "Staking",
+                "staking_soon_badge_short": "SOON",
+                "staking_soon_badge": "COMING VERY SOON — NOT STARTED YET",
+                "staking_title": "TASTE AI & TON Staking",
+                "staking_desc": "Lock your TAI tokens in smart contracts to earn daily passive income and high APY rewards. Will be activated once security audits are completed.",
+                "staking_flexible_pool": "Flexible Pool",
+                "staking_flexible_desc": "Withdraw anytime",
+                "staking_locked_pool": "90 Days Locked",
+                "staking_locked_desc": "Maximum Yield",
+                "staking_btn_disabled": "Under Development (Coming Soon)"
+            }
+
+--- Match 2 in [tr] at index 109571 ---
+"hybrid_wallet": {
+                "market": "Pazar",
+                "exchange": "Borsa",
+                "wallet": "Cüzdan",
+                "staking": "Staking",
+                "staking_soon_badge_short": "YAKINDA",
+                "staking_soon_badge": "ÇOK YAKINDA BAŞLIYOR — DAHA BAŞLAMADIK",
+                "staking_title": "TASTE AI & TON Staking",
+                "staking_desc": "TAI tokenlarınızı akıllı sözleşmelerde kilitleyerek günlük pasif getiri ve yüksek APY ödülleri kazanın. Akıllı kontrat güvenlik denetimleri tamamlandıktan sonra aktif edilecektir.",
+                "staking_flexible_pool": "Esnek Havuz",
+                "staking_flexible_desc": "İstediğin an çek",
+                "staking_locked_pool": "90 Gün Kilitli",
+                "staking_locked_desc": "Maksimum Getiri",
+                "staking_btn_disabled": "Geliştirme Aşamasında (Yakında)"
+            }
+
+--- Match 3 in [ru] at index 170535 ---
+"hybrid_wallet": {
+                "market": "Рынок",
+                "exchange": "Биржа",
+                "wallet": "Кошелёк",
+                "staking": "Стейкинг",
+                "staking_soon_badge_short": "СКОРО",
+                "staking_soon_badge": "СКОРО ЗАПУСК — ЕЩЕ НЕ НАЧАЛОСЬ",
+                "staking_title": "TASTE AI & TON Стейкинг",
+                "staking_desc": "Блокируйте токены TAI в смарт-контрактах, чтобы получать ежедневный пассивный доход и высокие награды APY. Будет активировано после завершения аудита безопасности.",
+                "staking_flexible_pool": "Гибкий пул",
+                "staking_flexible_desc": "Вывод в любое время",
+                "staking_locked_pool": "90 дней блокировки",
+                "staking_locked_desc": "Максимальная доходность",
+                "staking_btn_disabled": "В разработке (Скоро)"
+            }
+
+--- Match 4 in [ru] at index 226322 ---
+"hybrid_wallet": {
+                "market": "السوق",
+                "exchange": "البورصة",
+                "wallet": "المحفظة",
+                "staking": "الستاكينغ",
+                "staking_soon_badge_short": "قريباً",
+                "staking_soon_badge": "يبدأ قريباً جداً — لم نبدأ بعد",
+                "staking_title": "TASTE AI & TON ستاكينغ",
+                "staking_desc": "قم بقفل رموز TAI في العقود الذكية لكسب عائد يومي ومكافآت APY عالية. سيتم تفعيله بعد اكتمال تدقيق الأمان.",
+                "staking_flexible_pool": "مجمع مرن",
+                "staking_flexible_desc": "سحب في أي وقت",
+                "staking_locked_pool": "مقفل لمدة 90 يوماً",
+                "staking_locked_desc": "أقصى عائد",
+                "staking_btn_disabled": "قيد التطوير (قريباً)"
+            }
+
+--- Match 5 in [zh] at index 269792 ---
+"hybrid_wallet": { 
+                "market": "市场",
+                "exchange": "交易所",
+                "wallet": "钱包",
+                "staking": "质押",
+                "staking_soon_badge_short": "即将推出",
+                "staking_soon_badge": "即将开始 — 尚未启动",
+                "staking_title": "TASTE AI & TON 质押",
+                "staking_desc": "在智能合约中质押您的 TAI 代币，获得每日被动收益和高额 APY 奖励。安全审计完成后将正式启用。",
+                "staking_flexible_pool": "活期池",
+                "staking_flexible_desc": "随时提现",
+                "staking_locked_pool": "90天定期",
+                "staking_locked_desc": "最高收益",
+                "staking_btn_disabled": "开发中（敬请期待）"
+            }
