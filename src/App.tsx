@@ -366,6 +366,79 @@ function App() {
               </motion.button>
             </div>
 
+            
+            {/* Staking Banner / Kartı (Yakında) */}
+            <motion.div
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setActiveBottomTab('wallet');
+                navigateTo('wallet');
+              }}
+              style={{
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(30, 27, 75, 0.4) 100%)',
+                border: '1px solid rgba(139, 92, 246, 0.35)',
+                borderRadius: 20,
+                padding: '14px 16px',
+                marginBottom: 16,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                boxShadow: '0 4px 20px rgba(139, 92, 246, 0.15)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 14,
+                  background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 22,
+                  boxShadow: '0 0 12px rgba(139, 92, 246, 0.5)'
+                }}>
+                  💎
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ fontSize: 13, fontWeight: 900, color: '#fff' }}>
+                      {t('hybrid_wallet.staking_title', 'TASTE AI & TON Staking')}
+                    </div>
+                    <span style={{
+                      fontSize: 8,
+                      background: '#f59e0b',
+                      color: '#000',
+                      padding: '2px 5px',
+                      borderRadius: 6,
+                      fontWeight: 900
+                    }}>
+                      {t('hybrid_wallet.staking_soon_badge_short', 'YAKINDA')}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 10, color: '#a78bfa', marginTop: 3 }}>
+                    {t('hybrid_wallet.staking_soon_badge', 'ÇOK YAKINDA BAŞLIYOR — DAHA BAŞLAMADIK')} • %42 APY
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                background: 'rgba(139, 92, 246, 0.25)',
+                color: '#c4b5fd',
+                padding: '6px 12px',
+                borderRadius: 10,
+                fontSize: 11,
+                fontWeight: 900,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4
+              }}>
+                <span>GÖZ AT</span>
+                <span>→</span>
+              </div>
+            </motion.div>
+
             {/* Quick Access Grid */}
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: 10, letterSpacing: 2, color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: 10 }}>{t('app.quick_links', 'Hızlı Erişim')}</div>

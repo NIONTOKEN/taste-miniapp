@@ -137,9 +137,9 @@ export const HybridWallet: React.FC<HybridWalletProps> = () => {
           >
             <Coins size={15} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-              <span>Staking</span>
+              <span>{t('hybrid_wallet.staking', 'Staking')}</span>
               <span style={{ fontSize: '8px', background: '#f59e0b', color: '#000', padding: '1px 3px', borderRadius: '4px', fontWeight: 900 }}>
-                YAKINDA
+                {t('hybrid_wallet.staking_soon_badge_short', 'YAKINDA')}
               </span>
             </div>
           </button>
@@ -236,29 +236,29 @@ export const HybridWallet: React.FC<HybridWalletProps> = () => {
                 marginBottom: '12px'
               }}>
                 <Clock size={13} />
-                <span>ÇOK YAKINDA BAŞLIYOR — DAHA BAŞLAMADIK</span>
+                <span>{t('hybrid_wallet.staking_soon_badge', 'ÇOK YAKINDA BAŞLIYOR — DAHA BAŞLAMADIK')}</span>
               </div>
 
               <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#fff', margin: '0 0 8px' }}>
-                TASTE AI & TON Staking
+                {t('hybrid_wallet.staking_title', 'TASTE AI & TON Staking')}
               </h2>
 
               <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.6, maxWidth: '380px', margin: '0 auto 24px' }}>
-                TAI tokenlarınızı akıllı sözleşmelerde kilitleyerek günlük pasif getiri ve yüksek APY ödülleri kazanın. Akıllı kontrat güvenlik denetimleri tamamlandıktan sonra aktif edilecektir.
+                {t('hybrid_wallet.staking_desc', 'TAI tokenlarınızı akıllı sözleşmelerde kilitleyerek günlük pasif getiri ve yüksek APY ödülleri kazanın. Akıllı kontrat güvenlik denetimleri tamamlandıktan sonra aktif edilecektir.')}
               </p>
 
               {/* Tahmini Getiri Kartları */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
                 <div style={{ background: 'rgba(255,255,255,0.03)', padding: '14px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700 }}>Esnek Havuz</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700 }}>{t('hybrid_wallet.staking_flexible_pool', 'Esnek Havuz')}</div>
                   <div style={{ fontSize: '18px', fontWeight: 900, color: '#10b981', marginTop: '4px' }}>%18 APY</div>
-                  <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>İstediğin an çek</div>
+                  <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>{t('hybrid_wallet.staking_flexible_desc', 'İstediğin an çek')}</div>
                 </div>
 
                 <div style={{ background: 'rgba(255,255,255,0.03)', padding: '14px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700 }}>90 Gün Kilitli</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700 }}>{t('hybrid_wallet.staking_locked_pool', '90 Gün Kilitli')}</div>
                   <div style={{ fontSize: '18px', fontWeight: 900, color: '#f59e0b', marginTop: '4px' }}>%42 APY</div>
-                  <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>Maksimum Getiri</div>
+                  <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>{t('hybrid_wallet.staking_locked_desc', 'Maksimum Getiri')}</div>
                 </div>
               </div>
 
@@ -281,7 +281,7 @@ export const HybridWallet: React.FC<HybridWalletProps> = () => {
                 }}
               >
                 <Lock size={15} />
-                <span>Geliştirme Aşamasında (Yakında)</span>
+                <span>{t('hybrid_wallet.staking_btn_disabled', 'Geliştirme Aşamasında (Yakında)')}</span>
               </button>
             </div>
           </motion.div>

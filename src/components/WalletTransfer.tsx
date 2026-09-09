@@ -165,10 +165,17 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
   const gramUsd = gramBal * tonUsdPrice;
   const taiUsd = taiBal * taiUsdPrice;
 
-  // Diğer jettonların USD değerlerini de topla
+  // Diğer jettonların USD değerlerini topla (TAI hariç, TAI taiUsd olarak tek ve doğru hesaplanır)
   const otherJettonsUsd = (balances.jettons || []).reduce((acc, j) => {
-    if (j.symbol === 'TASTE' || j.symbol === 'TAI') return acc;
-    return acc + parseFloat(j.usdValue || '0');
+    const sym = (j.symbol || '').toUpperCase();
+    const addr = (j.address || '').toLowerCase();
+    const isTai = sym === 'TASTE' || sym === 'TAI' || 
+                  addr.includes('eqb0betxstmdhvri4s-cylwyjag_zir5lplufcnc2vwuxzc-') ||
+                  addr.includes('0:746de4f14ad99d855ae2e2cf9c625c1825a1bf6624799692ee7c2342d95594c5');
+    if (isTai) return acc;
+    // Bazen API aşırı yüksek sahte usdValue dönebilir, güvenli sınır koy
+    const val = parseFloat(j.usdValue || '0');
+    return acc + (isNaN(val) ? 0 : Math.min(val, 50000));
   }, 0);
 
   const totalUsd = gramUsd + taiUsd + otherJettonsUsd;

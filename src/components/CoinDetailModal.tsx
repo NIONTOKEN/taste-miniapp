@@ -5,6 +5,17 @@ import {
   ArrowUpRight, ArrowDownLeft, RefreshCw, BarChart2, ShieldCheck, Info
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Address } from '@ton/core';
+
+function toFriendlyTonAddress(addr?: string): string {
+  if (!addr) return '';
+  if (addr.startsWith('EQ') || addr.startsWith('UQ')) return addr;
+  try {
+    return Address.parse(addr).toString({ bounceable: true });
+  } catch {
+    return addr;
+  }
+}
 import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoNOT, LogoTAI } from './TokenLogos';
 
 export interface CoinDetailData {
@@ -131,9 +142,10 @@ const CoinDetailModalContent: React.FC<{
   };
 
   const isNativeTon = coin.symbol === 'TON' || coin.symbol === 'GRAM' || coin.id === 'GRAM';
+  const rawAddr = KNOWN_ADDRESSES[coin.symbol] || KNOWN_ADDRESSES[coin.id] || coin.address || 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
   const resolvedContractAddress = isNativeTon 
     ? 'Native Toncoin (Workchain 0)' 
-    : (coin.address || KNOWN_ADDRESSES[coin.symbol] || KNOWN_ADDRESSES[coin.id] || 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-');
+    : toFriendlyTonAddress(rawAddr);
 
   // Gerçekçi 24s Hacim & Market Cap
   const resolvedVolume = useMemo(() => {

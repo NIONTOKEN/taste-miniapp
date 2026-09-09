@@ -895,7 +895,19 @@ const resources = {
                     "fatih_kaya": "Founder, planner, guide. The one who embraces, undertakes, and tries to execute the TASTE project. Ensures kitchen teams are financially supported."
                 }
             },
-            "hybrid_wallet": { "market": "Market", "exchange": "Exchange", "wallet": "Wallet" },
+            "hybrid_wallet": { 
+                "market": "Market", "exchange": "Exchange", "wallet": "Wallet",
+                "staking": "Staking",
+                "staking_soon_badge_short": "SOON",
+                "staking_soon_badge": "COMING VERY SOON — NOT STARTED YET",
+                "staking_title": "TASTE AI & TON Staking",
+                "staking_desc": "Lock your TAI tokens in smart contracts to earn daily passive income and high APY rewards. Will be activated once security audits are completed.",
+                "staking_flexible_pool": "Flexible Pool",
+                "staking_flexible_desc": "Withdraw anytime",
+                "staking_locked_pool": "90 Days Locked",
+                "staking_locked_desc": "Maximum Yield",
+                "staking_btn_disabled": "Under Development (Coming Soon)"
+            },
             "taste_market": { "search_placeholder": "Search coin or pair...", "tab_tai": "⚡ TAI PAIRS", "tab_all": "All", "tab_fav": "Favorites", "tab_gainers": "🔥 Top Gainers", "col_pair": "Pair", "col_volume": "Volume", "col_price": "Price / %" },
             "borsa": { "min_24h": "24H Low", "max_24h": "24H High", "vol_24h": "24H Volume", "payment_select": "Select Payment / Pair", "live": "LIVE", "buy": "Buy", "sell": "Sell", "limit": "Limit", "market_order": "Market (Price)", "price_label": "Price (GRAM)", "amount_label": "Amount (TAI)", "total_label": "Total:", "memo_label": "MEMO (OPTIONAL)", "available": "Available:", "processing": "Processing...", "buy_tai": "BUY TASTE AI", "sell_tai": "SELL TASTE AI", "invalid_amount": "Please enter a valid amount", "dex_opened": "STON.fi DEX opened: Confirm the {type} in the pool.", "tx_failed": "Transaction failed", "memo_placeholder": "Transaction memo / note" },
             "wallet_transfer": { "total_value": "Total Asset Value", "taste_live": "TASTE AI (LIVE)", "deposit": "Deposit", "withdraw": "Withdraw", "convert": "Convert", "history": "History", "taste_wallet": "Taste Built-in Wallet", "tonconnect_wallet": "TonConnect Wallet", "active_badge": "ACTIVE", "not_connected": "Wallet not connected", "manage": "Manage ⚙️", "refresh": "Refresh", "search_asset": "Search asset...", "all_assets": "All ({count})", "with_balance": "With Balance", "internal_wallet": "🔐 Taste Built-in Wallet", "confirm_send": "CONFIRM SEND", "blockchain_txs": "Real Blockchain Transactions", "loading_txs": "Loading transactions from blockchain...", "no_txs": "No on-chain transactions yet.", "dex_tx": "DEX Transaction", "view": "View", "create_wallet": "Create New Wallet", "create_wallet_desc": "Create a fresh secure wallet with 12 or 24 words", "import_wallet": "Import Wallet (Mnemonic)", "import_wallet_desc": "Import with your 12 or 24 seed words", "connect_external": "Connect External Wallet (TonConnect)", "connect_external_desc": "Tonkeeper, MyTonWallet or Telegram Wallet", "seed_question": "How many words for seed phrase?", "words_12": "12 Words", "words_24": "24 Words (Recommended)", "create_btn": "CREATE WALLET", "warning_seed": "⚠️ These words are your only wallet recovery key. If you lose them you lose access to your funds!", "copied": "Words Copied!", "copy_words": "Copy Words", "saved_done": "I SAVED THEM, DONE", "paste_seed": "Paste your 12 or 24 seed words separated by spaces:", "import_btn": "IMPORT WALLET", "invalid_seed": "Invalid seed words", "send_success": "Transfer sent successfully!", "send_error": "Send error", "invalid_address": "Please enter a valid address and amount", "recipient_label": "RECIPIENT TON ADDRESS", "amount_label_send": "AMOUNT", "memo_label_send": "MEMO (NOTE - OPTIONAL)", "memo_placeholder": "Transaction memo / note", "wallet_error": "Error: " },
@@ -4511,7 +4523,19 @@ const resources = {
                     "fatih_kaya": "创始人、策划者、指导者。拥抱、承担并尝试执行 TASTE 项目的人。确保厨房团队得到财政支持。"
                 }
             },
-            "hybrid_wallet": { "market": "市场", "exchange": "交易所", "wallet": "钱包" },
+            "hybrid_wallet": { 
+                "market": "市场", "exchange": "交易所", "wallet": "钱包",
+                "staking": "质押",
+                "staking_soon_badge_short": "即将推出",
+                "staking_soon_badge": "即将开始 — 尚未启动",
+                "staking_title": "TASTE AI & TON 质押",
+                "staking_desc": "在智能合约中质押您的 TAI 代币，获得每日被动收益和高额 APY 奖励。安全审计完成后将正式启用。",
+                "staking_flexible_pool": "活期池",
+                "staking_flexible_desc": "随时提现",
+                "staking_locked_pool": "90天定期",
+                "staking_locked_desc": "最高收益",
+                "staking_btn_disabled": "开发中（敬请期待）"
+            },
             "taste_market": { "search_placeholder": "搜索币种或交易对...", "tab_tai": "TAI 交易对", "tab_all": "全部", "tab_fav": "收藏", "tab_gainers": "涨幅榜", "col_pair": "交易对", "col_volume": "成交量", "col_price": "价格 / %" },
             "borsa": { "min_24h": "24小时最低", "max_24h": "24小时最高", "vol_24h": "24小时成交量", "payment_select": "选择支付 / 交易对", "live": "实时", "buy": "买入", "sell": "卖出", "limit": "限价", "market_order": "市价", "price_label": "价格 (GRAM)", "amount_label": "数量 (TAI)", "total_label": "总计:", "memo_label": "MEMO (可选)", "available": "可用:", "processing": "处理中...", "buy_tai": "买入 TASTE AI", "sell_tai": "卖出 TASTE AI", "invalid_amount": "请输入有效金额", "dex_opened": "STON.fi DEX 已打开", "tx_failed": "交易失败", "memo_placeholder": "交易备注" },
             "wallet_transfer": { "total_value": "总资产价值", "taste_live": "TASTE AI (实时)", "deposit": "充值", "withdraw": "提现", "convert": "转换", "history": "历史", "taste_wallet": "Taste 内置钱包", "tonconnect_wallet": "TonConnect 钱包", "active_badge": "活跃", "not_connected": "钱包未连接", "manage": "管理", "refresh": "刷新", "search_asset": "搜索资产...", "all_assets": "全部 ({count})", "with_balance": "有余额", "internal_wallet": "Taste 内置钱包", "confirm_send": "确认发送", "blockchain_txs": "真实区块链交易", "loading_txs": "正在从区块链加载交易...", "no_txs": "暂无链上交易记录。", "dex_tx": "DEX 交易", "view": "查看", "create_wallet": "创建新钱包", "create_wallet_desc": "用 12 或 24 个词创建全新安全钱包", "import_wallet": "导入钱包 (助记词)", "import_wallet_desc": "使用您的 12 或 24 个种子词导入", "connect_external": "连接外部钱包 (TonConnect)", "connect_external_desc": "Tonkeeper、MyTonWallet 或 Telegram Wallet", "seed_question": "种子短语有多少个词？", "words_12": "12 个词", "words_24": "24 个词（推荐）", "create_btn": "创建钱包", "warning_seed": "这些词是您钱包的唯一恢复密钥。丢失后将无法访问资金！", "copied": "词语已复制！", "copy_words": "复制词语", "saved_done": "我已保存，完成", "paste_seed": "粘贴您的 12 或 24 个种子词，用空格分隔：", "import_btn": "导入钱包", "invalid_seed": "无效的种子词", "send_success": "转账发送成功！", "send_error": "发送错误", "invalid_address": "请输入有效地址和金额", "recipient_label": "收款 TON 地址", "amount_label_send": "金额", "memo_label_send": "MEMO (备注 - 可选)", "memo_placeholder": "交易备注", "wallet_error": "错误：" },
