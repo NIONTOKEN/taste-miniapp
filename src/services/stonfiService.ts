@@ -21,7 +21,7 @@ export async function fetchLiveTaiPrice(): Promise<LiveTokenPrice> {
 
   try {
     // 1. Get TON/USD live price
-    let tonUsdPrice = 5.32;
+    let tonUsdPrice = 1.40;
     try {
       const tonRes = await fetch('https://api.ston.fi/v1/assets/EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c');
       if (tonRes.ok) {
@@ -69,7 +69,7 @@ export async function fetchLiveTaiPrice(): Promise<LiveTokenPrice> {
   // Fallback if network drops (computed from known pool reserves)
   return {
     priceInTon: 0.00017787,
-    priceInUsd: 0.000946,
+    priceInUsd: 0.000249,
     volume24hUsd: '$1.45K',
     reserveTon: 97.44,
     reserveTai: 547826.92,

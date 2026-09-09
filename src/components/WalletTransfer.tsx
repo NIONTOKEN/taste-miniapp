@@ -160,7 +160,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
   // Bakiyelerin yaklaşık USD hesaplaması
   const gramBal = parseFloat(balances.ton || '0');
   const taiBal = parseFloat(balances.taste || '0');
-  const tonUsdPrice = 5.32;
+  const tonUsdPrice = taiPriceData && (taiPriceData as any).tonUsdPrice ? (taiPriceData as any).tonUsdPrice : 1.40;
   const taiUsdPrice = taiPriceData ? taiPriceData.priceInUsd : 0.000946;
   const gramUsd = gramBal * tonUsdPrice;
   const taiUsd = taiBal * taiUsdPrice;

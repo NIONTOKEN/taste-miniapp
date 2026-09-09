@@ -502,30 +502,38 @@ const CoinDetailModalContent: React.FC<{
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '10px 12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ fontSize: '10px', color: '#64748b' }}>24sa Hacim</div>
+              <div style={{ fontSize: '10px', color: '#64748b' }}>{t('borsa.vol_24h', '24sa Hacim')}</div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff', marginTop: '2px' }}>
                 {resolvedVolume}
               </div>
             </div>
 
             <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '10px 12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ fontSize: '10px', color: '#64748b' }}>Piyasa Değeri (Est.)</div>
+              <div style={{ fontSize: '10px', color: '#64748b' }}>{t('coin_details.market_cap', 'Piyasa Değeri (Est.)')}</div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff', marginTop: '2px' }}>
                 {resolvedMarketCap}
               </div>
             </div>
 
             <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '10px 12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ fontSize: '10px', color: '#64748b' }}>24sa En Yüksek</div>
+              <div style={{ fontSize: '10px', color: '#64748b' }}>{t('borsa.max_24h', '24sa En Yüksek')}</div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#4ade80', marginTop: '2px' }}>
-                {formatPrice(coin.high24h || currentPriceNum * 1.06)}
+                {formatPrice(
+                  (coin.high24h && coin.high24h >= currentPriceNum && coin.high24h <= currentPriceNum * 1.25)
+                    ? coin.high24h
+                    : currentPriceNum * 1.048
+                )}
               </div>
             </div>
 
             <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '10px 12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ fontSize: '10px', color: '#64748b' }}>24sa En Düşük</div>
+              <div style={{ fontSize: '10px', color: '#64748b' }}>{t('borsa.min_24h', '24sa En Düşük')}</div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#f87171', marginTop: '2px' }}>
-                {formatPrice(coin.low24h || currentPriceNum * 0.94)}
+                {formatPrice(
+                  (coin.low24h && coin.low24h <= currentPriceNum && coin.low24h >= currentPriceNum * 0.75)
+                    ? coin.low24h
+                    : currentPriceNum * 0.952
+                )}
               </div>
             </div>
           </div>

@@ -895,18 +895,20 @@ const resources = {
                     "fatih_kaya": "Founder, planner, guide. The one who embraces, undertakes, and tries to execute the TASTE project. Ensures kitchen teams are financially supported."
                 }
             },
-            "hybrid_wallet": { 
-                "market": "Market", "exchange": "Exchange", "wallet": "Wallet",
-                "staking": "Staking",
-                "staking_soon_badge_short": "SOON",
-                "staking_soon_badge": "COMING VERY SOON — NOT STARTED YET",
-                "staking_title": "TASTE AI & TON Staking",
-                "staking_desc": "Lock your TAI tokens in smart contracts to earn daily passive income and high APY rewards. Will be activated once security audits are completed.",
-                "staking_flexible_pool": "Flexible Pool",
-                "staking_flexible_desc": "Withdraw anytime",
-                "staking_locked_pool": "90 Days Locked",
-                "staking_locked_desc": "Maximum Yield",
-                "staking_btn_disabled": "Under Development (Coming Soon)"
+            "hybrid_wallet": {
+                "market": "市场",
+                "exchange": "交易所",
+                "wallet": "钱包",
+                "staking": "质押",
+                "staking_soon_badge_short": "即将推出",
+                "staking_soon_badge": "即将开始 — 尚未启动",
+                "staking_title": "TASTE AI & TON 质押",
+                "staking_desc": "在智能合约中质押您的 TAI 代币，获得每日被动收益和高额 APY 奖励。安全审计完成后将正式启用。",
+                "staking_flexible_pool": "活期池",
+                "staking_flexible_desc": "随时提现",
+                "staking_locked_pool": "90天定期",
+                "staking_locked_desc": "最高收益",
+                "staking_btn_disabled": "开发中（敬请期待）"
             },
             "taste_market": { "search_placeholder": "Search coin or pair...", "tab_tai": "⚡ TAI PAIRS", "tab_all": "All", "tab_fav": "Favorites", "tab_gainers": "🔥 Top Gainers", "col_pair": "Pair", "col_volume": "Volume", "col_price": "Price / %" },
             "borsa": { "min_24h": "24H Low", "max_24h": "24H High", "vol_24h": "24H Volume", "payment_select": "Select Payment / Pair", "live": "LIVE", "buy": "Buy", "sell": "Sell", "limit": "Limit", "market_order": "Market (Price)", "price_label": "Price (GRAM)", "amount_label": "Amount (TAI)", "total_label": "Total:", "memo_label": "MEMO (OPTIONAL)", "available": "Available:", "processing": "Processing...", "buy_tai": "BUY TASTE AI", "sell_tai": "SELL TASTE AI", "invalid_amount": "Please enter a valid amount", "dex_opened": "STON.fi DEX opened: Confirm the {type} in the pool.", "tx_failed": "Transaction failed", "memo_placeholder": "Transaction memo / note" },
