@@ -3,90 +3,119 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles, ChefHat, Plus, X, Flame, AlertTriangle, Clock,
   CheckCircle2, Share2, Copy, Bookmark, BookmarkCheck, ArrowRight,
-  RotateCcw, Utensils, Award
+  RotateCcw, Utensils, Globe
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-// ─── Preset Ingredient Categories ──────────────────────────────────────────
+// ─── Preset Ingredient Categories (TR, EN, RU, AR, ZH) ──────────────────────
+interface IngredientItem {
+  id: string;
+  names: Record<string, string>;
+}
+
 interface PresetCategory {
   id: string;
-  nameTr: string;
-  nameEn: string;
   emoji: string;
-  items: { id: string; nameTr: string; nameEn: string }[];
+  names: Record<string, string>;
+  items: IngredientItem[];
 }
 
 const INGREDIENT_CATEGORIES: PresetCategory[] = [
   {
     id: 'protein',
-    nameTr: 'Et & Protein',
-    nameEn: 'Meat & Protein',
     emoji: '🥩',
+    names: {
+      tr: 'Et & Protein',
+      en: 'Meat & Protein',
+      ru: 'Мясо и белок',
+      ar: 'لحوم وبروتين',
+      zh: '肉类与蛋白质'
+    },
     items: [
-      { id: 'chicken', nameTr: 'Tavuk Göğsü', nameEn: 'Chicken Breast' },
-      { id: 'mince', nameTr: 'Kıyma', nameEn: 'Ground Beef' },
-      { id: 'egg', nameTr: 'Yumurta', nameEn: 'Egg' },
-      { id: 'salmon', nameTr: 'Somon / Balık', nameEn: 'Salmon / Fish' },
-      { id: 'tuna', nameTr: 'Ton Balığı', nameEn: 'Tuna' },
-      { id: 'tofu', nameTr: 'Tofu', nameEn: 'Tofu' }
+      { id: 'chicken', names: { tr: 'Tavuk Göğsü', en: 'Chicken Breast', ru: 'Куриная грудка', ar: 'صدر دجاج', zh: '鸡胸肉' } },
+      { id: 'mince', names: { tr: 'Kıyma', en: 'Ground Beef', ru: 'Говяжий фарш', ar: 'لحم مفروم', zh: '牛肉碎' } },
+      { id: 'egg', names: { tr: 'Yumurta', en: 'Egg', ru: 'Яйцо', ar: 'بيض', zh: '鸡蛋' } },
+      { id: 'salmon', names: { tr: 'Somon / Balık', en: 'Salmon / Fish', ru: 'Лосось / Рыба', ar: 'سلمون / سمك', zh: '三文鱼 / 鱼类' } },
+      { id: 'tuna', names: { tr: 'Ton Balığı', en: 'Tuna', ru: 'Тунец', ar: 'تونة', zh: '金枪鱼' } },
+      { id: 'tofu', names: { tr: 'Tofu', en: 'Tofu', ru: 'Тофу', ar: 'توفو', zh: '豆腐' } }
     ]
   },
   {
     id: 'veggie',
-    nameTr: 'Sebzeler',
-    nameEn: 'Vegetables',
     emoji: '🥦',
+    names: {
+      tr: 'Sebzeler',
+      en: 'Vegetables',
+      ru: 'Овощи',
+      ar: 'خضروات',
+      zh: '新鲜蔬菜'
+    },
     items: [
-      { id: 'tomato', nameTr: 'Domates', nameEn: 'Tomato' },
-      { id: 'onion', nameTr: 'Soğan', nameEn: 'Onion' },
-      { id: 'garlic', nameTr: 'Sarımsak', nameEn: 'Garlic' },
-      { id: 'mushroom', nameTr: 'Mantar', nameEn: 'Mushroom' },
-      { id: 'pepper', nameTr: 'Biber', nameEn: 'Bell Pepper' },
-      { id: 'spinach', nameTr: 'Ispanak', nameEn: 'Spinach' },
-      { id: 'potato', nameTr: 'Patates', nameEn: 'Potato' },
-      { id: 'zucchini', nameTr: 'Kabak', nameEn: 'Zucchini' }
+      { id: 'tomato', names: { tr: 'Domates', en: 'Tomato', ru: 'Помидор', ar: 'طماطم', zh: '番茄' } },
+      { id: 'onion', names: { tr: 'Soğan', en: 'Onion', ru: 'Лук', ar: 'بصل', zh: '洋葱' } },
+      { id: 'garlic', names: { tr: 'Sarımsak', en: 'Garlic', ru: 'Чеснок', ar: 'ثوم', zh: '大蒜' } },
+      { id: 'mushroom', names: { tr: 'Mantar', en: 'Mushroom', ru: 'Грибы', ar: 'فطر', zh: '蘑菇' } },
+      { id: 'pepper', names: { tr: 'Biber', en: 'Bell Pepper', ru: 'Болгарский перец', ar: 'فلفل رومي', zh: '彩椒' } },
+      { id: 'spinach', names: { tr: 'Ispanak', en: 'Spinach', ru: 'Шпинат', ar: 'سبانخ', zh: '菠菜' } },
+      { id: 'potato', names: { tr: 'Patates', en: 'Potato', ru: 'Картофель', ar: 'بطاطس', zh: '土豆' } },
+      { id: 'zucchini', names: { tr: 'Kabak', en: 'Zucchini', ru: 'Кабачок', ar: 'كوسة', zh: '西葫芦' } }
     ]
   },
   {
     id: 'dairy',
-    nameTr: 'Süt & Peynir',
-    nameEn: 'Dairy & Cheese',
     emoji: '🧀',
+    names: {
+      tr: 'Süt & Peynir',
+      en: 'Dairy & Cheese',
+      ru: 'Молочные продукты',
+      ar: 'ألبان وأجبان',
+      zh: '乳品与奶酪'
+    },
     items: [
-      { id: 'milk', nameTr: 'Süt', nameEn: 'Milk' },
-      { id: 'cheese', nameTr: 'Kaşar / Peynir', nameEn: 'Cheese' },
-      { id: 'cream', nameTr: 'Krema', nameEn: 'Heavy Cream' },
-      { id: 'butter', nameTr: 'Tereyağı', nameEn: 'Butter' },
-      { id: 'yogurt', nameTr: 'Yoğurt', nameEn: 'Yogurt' },
-      { id: 'parmesan', nameTr: 'Parmesan', nameEn: 'Parmesan' }
+      { id: 'milk', names: { tr: 'Süt', en: 'Milk', ru: 'Молоко', ar: 'حليب', zh: '牛奶' } },
+      { id: 'cheese', names: { tr: 'Kaşar / Peynir', en: 'Cheese', ru: 'Сыр', ar: 'جبن', zh: '干酪' } },
+      { id: 'cream', names: { tr: 'Krema', en: 'Heavy Cream', ru: 'Сливки', ar: 'قشطة', zh: '淡奶油' } },
+      { id: 'butter', names: { tr: 'Tereyağı', en: 'Butter', ru: 'Сливочное масло', ar: 'زبدة', zh: '黄油' } },
+      { id: 'yogurt', names: { tr: 'Yoğurt', en: 'Yogurt', ru: 'Йогурт', ar: 'زبادي', zh: '酸奶' } },
+      { id: 'parmesan', names: { tr: 'Parmesan', en: 'Parmesan', ru: 'Пармезан', ar: 'بارميزان', zh: '帕玛森' } }
     ]
   },
   {
     id: 'grains',
-    nameTr: 'Tahıl & Bakliyat',
-    nameEn: 'Grains & Pasta',
     emoji: '🌾',
+    names: {
+      tr: 'Tahıl & Bakliyat',
+      en: 'Grains & Pasta',
+      ru: 'Злаки и бобовые',
+      ar: 'حبوب وبقوليات',
+      zh: '主食与谷物'
+    },
     items: [
-      { id: 'pasta', nameTr: 'Makarna', nameEn: 'Pasta' },
-      { id: 'rice', nameTr: 'Pirinç', nameEn: 'Rice' },
-      { id: 'bread', nameTr: 'Ekmek', nameEn: 'Bread' },
-      { id: 'oats', nameTr: 'Yulaf', nameEn: 'Oats' },
-      { id: 'lentils', nameTr: 'Mercimek', nameEn: 'Lentils' },
-      { id: 'chickpeas', nameTr: 'Nohut', nameEn: 'Chickpeas' }
+      { id: 'pasta', names: { tr: 'Makarna', en: 'Pasta', ru: 'Паста (макароны)', ar: 'معكرونة', zh: '意面' } },
+      { id: 'rice', names: { tr: 'Pirinç', en: 'Rice', ru: 'Рис', ar: 'أرز', zh: '大米' } },
+      { id: 'bread', names: { tr: 'Ekmek', en: 'Bread', ru: 'Хлеб', ar: 'خبز', zh: '面包' } },
+      { id: 'oats', names: { tr: 'Yulaf', en: 'Oats', ru: 'Овсянка', ar: 'شوفان', zh: '燕麦' } },
+      { id: 'lentils', names: { tr: 'Mercimek', en: 'Lentils', ru: 'Чечевица', ar: 'عدس', zh: '扁豆' } },
+      { id: 'chickpeas', names: { tr: 'Nohut', en: 'Chickpeas', ru: 'Нут', ar: 'حمص', zh: '鹰嘴豆' } }
     ]
   },
   {
     id: 'sauces',
-    nameTr: 'Sos & Baharat',
-    nameEn: 'Sauces & Spices',
     emoji: '🧄',
+    names: {
+      tr: 'Sos & Baharat',
+      en: 'Sauces & Spices',
+      ru: 'Соусы и специи',
+      ar: 'صلصات وتوابل',
+      zh: '酱汁与香料'
+    },
     items: [
-      { id: 'olive_oil', nameTr: 'Zeytinyağı', nameEn: 'Olive Oil' },
-      { id: 'tomato_paste', nameTr: 'Salça', nameEn: 'Tomato Paste' },
-      { id: 'soy_sauce', nameTr: 'Soya Sosu', nameEn: 'Soy Sauce' },
-      { id: 'thyme', nameTr: 'Kekik', nameEn: 'Thyme' },
-      { id: 'basil', nameTr: 'Fesleğen', nameEn: 'Basil' },
-      { id: 'black_pepper', nameTr: 'Karabiber', nameEn: 'Black Pepper' }
+      { id: 'olive_oil', names: { tr: 'Zeytinyağı', en: 'Olive Oil', ru: 'Оливковое масло', ar: 'زيت زيتون', zh: '橄榄油' } },
+      { id: 'tomato_paste', names: { tr: 'Salça', en: 'Tomato Paste', ru: 'Томатная паста', ar: 'معجون طماطم', zh: '番茄膏' } },
+      { id: 'soy_sauce', names: { tr: 'Soya Sosu', en: 'Soy Sauce', ru: 'Соевый соус', ar: 'صلصة صويا', zh: '酱油' } },
+      { id: 'thyme', names: { tr: 'Kekik', en: 'Thyme', ru: 'Тимьян', ar: 'زعتر', zh: '百里香' } },
+      { id: 'basil', names: { tr: 'Fesleğen', en: 'Basil', ru: 'Базилик', ar: 'ريحان', zh: '罗勒' } },
+      { id: 'black_pepper', names: { tr: 'Karabiber', en: 'Black Pepper', ru: 'Черный перец', ar: 'فلفل أسود', zh: '黑胡椒' } }
     ]
   }
 ];
@@ -110,13 +139,30 @@ export interface GeneratedRecipe {
 
 export function TasteAIChef() {
   const { t, i18n } = useTranslation();
-  const isTr = i18n.language?.startsWith('tr');
+  const lang = (i18n.language?.split('-')[0] || 'tr') as 'tr' | 'en' | 'ru' | 'ar' | 'zh';
+
+  const languagesList = [
+    { code: 'tr', label: 'TR', flag: '🇹🇷' },
+    { code: 'en', label: 'EN', flag: '🇬🇧' },
+    { code: 'ru', label: 'RU', flag: '🇷🇺' },
+    { code: 'zh', label: 'ZH', flag: '🇨🇳' },
+    { code: 'ar', label: 'AR', flag: '🇸🇦' }
+  ];
+
+  const handleSwitchLanguage = (code: string) => {
+    i18n.changeLanguage(code);
+    localStorage.setItem('i18nextLng', code);
+  };
+
+  const getLocalizedText = (names: Record<string, string>) => {
+    return names[lang] || names['en'] || names['tr'] || Object.values(names)[0];
+  };
 
   // State
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([
-    isTr ? 'Tavuk Göğsü' : 'Chicken Breast',
-    isTr ? 'Mantar' : 'Mushroom',
-    isTr ? 'Sarımsak' : 'Garlic'
+    lang === 'tr' ? 'Tavuk Göğsü' : lang === 'ru' ? 'Куриная грудка' : lang === 'zh' ? '鸡胸肉' : lang === 'ar' ? 'صدر دجاج' : 'Chicken Breast',
+    lang === 'tr' ? 'Mantar' : lang === 'ru' ? 'Грибы' : lang === 'zh' ? '蘑菇' : lang === 'ar' ? 'فطر' : 'Mushroom',
+    lang === 'tr' ? 'Sarımsak' : lang === 'ru' ? 'Чеснок' : lang === 'zh' ? '大蒜' : lang === 'ar' ? 'ثوم' : 'Garlic'
   ]);
   const [customInput, setCustomInput] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('protein');
@@ -161,7 +207,16 @@ export function TasteAIChef() {
 
     const timeLabel = cookingTime === 'quick' ? '15-20 Min' : cookingTime === 'medium' ? '30 Min' : '45+ Min Gourmet';
     const dietLabel = dietType === 'high_protein' ? 'High Protein' : dietType === 'low_calorie' ? 'Low Calorie / Fit' : dietType === 'keto' ? 'Keto' : dietType === 'vegan' ? 'Vegan' : 'Standard';
-    const cuisineLabel = cuisine === 'mediterranean' ? 'Akdeniz / Mediterranean' : cuisine === 'turkish' ? 'Türk Mutfağı' : cuisine === 'italian' ? 'İtalyan / Italian' : cuisine === 'asian' ? 'Asya / Asian' : 'Dünya Mutfağı';
+    const cuisineLabel = cuisine === 'mediterranean' ? 'Mediterranean' : cuisine === 'turkish' ? 'Turkish Cuisine' : cuisine === 'italian' ? 'Italian' : cuisine === 'asian' ? 'Asian' : 'World Cuisine';
+
+    const langFullNames: Record<string, string> = {
+      tr: 'Turkish (Türkçe)',
+      en: 'English',
+      ru: 'Russian (Русский)',
+      zh: 'Chinese Simplified (简体中文)',
+      ar: 'Arabic (العربية)'
+    };
+    const targetLanguageName = langFullNames[lang] || 'English';
 
     const prompt = `
 You are TASTE AI — an elite Michelin-star gourmet Web3 Chef.
@@ -170,26 +225,24 @@ Preferences:
 - Time limit: ${timeLabel}
 - Diet style: ${dietLabel}
 - Cuisine: ${cuisineLabel}
-- Language: ${isTr ? 'Turkish' : 'English'}
+- Target Output Language: ${targetLanguageName} (CRITICAL: All generated recipe text, title, description, ingredients, step-by-step instructions, and chefTip MUST be written in ${targetLanguageName})
 
 CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, without preamble) matching this schema:
 {
-  "title": "Gourmet recipe title",
-  "description": "Appetizing 1-2 sentence description",
+  "title": "Gourmet recipe title in ${targetLanguageName}",
+  "description": "Appetizing 1-2 sentence description in ${targetLanguageName}",
   "cookingTime": "${timeLabel}",
-  "difficulty": "Kolay / Easy / Orta / Medium",
+  "difficulty": "Easy / Medium / Chef",
   "cuisine": "${cuisineLabel}",
   "diet": "${dietLabel}",
   "calories": 420,
   "protein": 38,
   "carbs": 18,
   "fat": 12,
-  "allergens": ["Gluten", "Laktoz / Dairy"],
+  "allergens": ["Gluten", "Dairy"],
   "ingredients": [
-    "300g Chicken breast (cubed)",
-    "200g Mushrooms (sliced)",
-    "2 cloves Garlic (minced)",
-    "Salt, pepper, olive oil"
+    "Quantity and ingredient 1",
+    "Quantity and ingredient 2"
   ],
   "instructions": [
     "Step 1...",
@@ -197,7 +250,7 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
     "Step 3...",
     "Step 4..."
   ],
-  "chefTip": "Pro-level secret to enhance flavor",
+  "chefTip": "Pro-level secret to enhance flavor in ${targetLanguageName}"
 }
 `;
 
@@ -221,82 +274,158 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
           return;
         }
       }
+      throw new Error('Fallback needed');
     } catch (e) {
       console.warn('[TasteAIChef] API request fallback triggered:', e);
-    }
-
-    // Smart Gastronomy Fallback Generator
-    setTimeout(() => {
-      const primary = selectedIngredients[0] || (isTr ? 'Tavuk' : 'Chicken');
-      const secondary = selectedIngredients[1] || (isTr ? 'Sebze' : 'Vegetable');
-      
+      // Smart localized fallback
       const fallbackRecipe: GeneratedRecipe = {
-        title: isTr 
-          ? `Kekikli & Sarımsaklı Gurme ${primary}` 
-          : `Gourmet Herb & Garlic ${primary}`,
-        description: isTr
-          ? `${primary} ve taze ${secondary} aromalarının zeytinyağı ile mükemmel birleştiği, yüksek proteinli ve hafif bir şef tabağı.`
-          : `A tender, pan-seared ${primary} dish infused with aromatic herbs, ${secondary}, and rich savory notes.`,
+        title: lang === 'tr'
+          ? `Gurme ${selectedIngredients.slice(0, 2).join(' & ')} Tavlama`
+          : lang === 'ru'
+          ? `Гурме ${selectedIngredients.slice(0, 2).join(' и ')} по-шефски`
+          : lang === 'zh'
+          ? `米其林主厨风味：${selectedIngredients.slice(0, 2).join('配')}`
+          : lang === 'ar'
+          ? `طبق الذواقة المميز: ${selectedIngredients.slice(0, 2).join(' مع ')}`
+          : `Gourmet Seared ${selectedIngredients.slice(0, 2).join(' & ')} Medley`,
+        description: lang === 'tr'
+          ? 'Taze malzemelerin yüksek ateşte karamelize edilerek zengin baharatlar ve sızma zeytinyağı ile buluştuğu yüksek proteinli bir lezzet şöleni.'
+          : lang === 'ru'
+          ? 'Сочное блюдо с аппетитной карамелизацией, свежими травами и оливковым маслом первого отжима.'
+          : lang === 'zh'
+          ? '甄选优质新鲜食材，配合极速温火锁汁技艺与初榨橄榄油，呈现极致层次与营养。'
+          : lang === 'ar'
+          ? 'وجبة غنية بالبروتين ومحضرة بمكونات طازجة مع زيت زيتون وتوابل عطرية تعطي نكهة استثنائية.'
+          : 'A vibrant pan-seared delicacy infused with aromatic herbs, extra virgin olive oil, and tender textures designed for optimal energy.',
         cookingTime: timeLabel,
-        difficulty: isTr ? 'Orta Düzey' : 'Medium',
+        difficulty: lang === 'tr' ? 'Orta Düzey' : lang === 'ru' ? 'Средний' : lang === 'zh' ? '中等' : lang === 'ar' ? 'متوسط' : 'Medium',
         cuisine: cuisineLabel,
         diet: dietLabel,
-        calories: 385,
-        protein: 36,
-        carbs: 14,
-        fat: 11,
-        allergens: isTr ? ['Laktoz (Eser Miktarda)'] : ['Dairy (Trace)'],
+        calories: 435,
+        protein: 41,
+        carbs: 16,
+        fat: 13,
+        allergens: [lang === 'tr' ? 'Sarımsak' : 'Garlic', lang === 'tr' ? 'Baharat' : 'Spices'],
         ingredients: [
-          ...selectedIngredients.map(i => `• ${i} (Porsiyona göre ayarlanmış)`),
-          isTr ? '• 2 yemek kaşığı sızma zeytinyağı' : '• 2 tbsp extra virgin olive oil',
-          isTr ? '• Taze çekilmiş deniz tuzu & karabiber' : '• Sea salt & freshly cracked black pepper',
-          isTr ? '• 1 tatlı kaşığı dağ kekiği' : '• 1 tsp dried mountain thyme'
+          ...selectedIngredients.map(item => `• 150g - 250g ${item}`),
+          lang === 'tr' ? '• 2 yemek kaşığı sızma zeytinyağı' : lang === 'ru' ? '• 2 ст. л. оливкового масла' : lang === 'zh' ? '• 2勺特级初榨橄榄油' : lang === 'ar' ? '• 2 ملعقة كبيرة زيت زيتون' : '• 2 tbsp extra virgin olive oil',
+          lang === 'tr' ? '• Taze çekilmiş deniz tuzu & karabiber' : lang === 'ru' ? '• Морская соль и свежемолотый перец' : lang === 'zh' ? '• 现磨海盐与黑胡椒' : lang === 'ar' ? '• ملح بحري وفلفل أسود' : '• Sea salt & freshly cracked black pepper',
+          lang === 'tr' ? '• 1 tatlı kaşığı dağ kekiği' : lang === 'ru' ? '• 1 ч. л. тимьяна' : lang === 'zh' ? '• 1茶匙百里香碎' : lang === 'ar' ? '• ملعقة زعتر بري' : '• 1 tsp dried mountain thyme'
         ],
-        instructions: isTr ? [
-          '1. Tavayı orta-yüksek ateşte 2 dakika ısıtın ve zeytinyağını ekleyin.',
-          `2. ${primary} parçalarını altın sarısı renk alana kadar 5-6 dakika soteleyin.`,
-          `3. Ardından ${secondary} ve sarımsakları ekleyip kokusu çıkana kadar 3 dakika çevirin.`,
-          '4. Baharatları ilave edip kısık ateşte kapağı kapalı 4 dakika dinlendirerek lezzetlerin özleşmesini sağlayın.',
-          '5. Sıcak olarak tabağa alın, üzerine taze kekik serpiştirerek servis edin.'
+        instructions: lang === 'tr' ? [
+          'Tüm taze malzemeleri yıkayıp eşit boyutlarda doğrayın.',
+          'Geniş bir tavayı orta-yüksek ateşte ısıtın ve sızma zeytinyağını ilave edin.',
+          'Öncelikle proteinleri ekleyip altın rengi mühür alana kadar 4-5 dakika soteleyin.',
+          'Ardından sebzeleri ve aromatik baharatları ekleyip kısık ateşte 6-8 dakika lezzetlerin bütünleşmesini sağlayın.',
+          'Ateşten alıp 2 dakika dinlendirdikten sonra sıcak olarak servis edin.'
+        ] : lang === 'ru' ? [
+          'Промойте все ингредиенты и нарежьте их аккуратными кусочками.',
+          'Разогрейте сковороду с оливковым маслом на среднем огне.',
+          'Обжарьте протеиновые продукты 4-5 минут до золотистой корочки.',
+          'Добавьте овощи, чеснок и специи, готовьте еще 6-8 минут.',
+          'Дайте блюду отдохнуть 2 минуты перед подачей.'
+        ] : lang === 'zh' ? [
+          '将选好的所有食材清洗干净，均匀切块备用。',
+          '锅中倒入特级初榨橄榄油，中高火均匀热锅。',
+          '先下入肉类/高蛋白食材，翻炒4-5分钟锁住肉汁至表面金黄。',
+          '加入蔬菜和调味香料，转中小火慢煨6-8分钟，让风味充分交融。',
+          '出锅前静置2分钟沉淀鲜香，装盘即可享用。'
+        ] : lang === 'ar' ? [
+          'اغسل جميع المكونات وقطعها إلى أجزاء متساوية.',
+          'سخن مقلاة عميقة مع زيت الزيتون على نار متوسطة.',
+          'أضف البروتين أولاً وقلبه لمدة 4-5 دقائق حتى يأخذ لوناً ذهبياً.',
+          'أضف الخضار والتوابل واتركها على نار هادئة لمدة 6-8 دقائق.',
+          'اترك الطبق يرتاح دقيقتين ثم قدمه ساخناً بالهناء والشفاء.'
         ] : [
-          '1. Heat a skillet over medium-high heat with extra virgin olive oil.',
-          `2. Sear the ${primary} until golden brown, about 5-6 minutes.`,
-          `3. Toss in ${secondary} and minced garlic, sautéing for 3 minutes until fragrant.`,
-          '4. Season with sea salt, black pepper and mountain thyme, cover and simmer for 4 minutes.',
-          '5. Plate immediately and garnish with fresh herbs. Bon appétit!'
+          'Rinse all fresh ingredients thoroughly and cut into even bite-sized portions.',
+          'Heat extra virgin olive oil in a skillet over medium-high heat.',
+          'Add your proteins first, searing for 4-5 minutes until golden brown.',
+          'Toss in vegetables and aromatic seasonings, simmering on gentle heat for 6-8 minutes.',
+          'Rest for 2 minutes before plating to allow all savory juices to settle.'
         ],
-        chefTip: isTr
-          ? 'Eti pişirdikten sonra hemen kesmeyin; 3 dakika dinlendirirseniz suları içinde kalarak pamuk gibi yumuşak kalır.'
-          : 'Let your meat rest for 3 minutes before slicing to lock in all the natural savory juices.',
-        };
+        chefTip: lang === 'tr'
+          ? 'Eti veya sebzeleri pişirdikten sonra hemen kesmeyin; 2-3 dakika dinlendirirseniz suları içinde kalarak pamuk gibi yumuşak kalır.'
+          : lang === 'ru'
+          ? 'Дайте блюду отдохнуть пару минут перед подачей, чтобы сохранить максимум сочности.'
+          : lang === 'zh'
+          ? '烹饪完成后切忌立即切割或装盘，稍等2-3分钟静置回汁，口感将更为细嫩多汁。'
+          : lang === 'ar'
+          ? 'اترك اللحم أو الخضار يرتاح لدقيقتين بعد الطهي للحفاظ على العصارة والنكهة اللذيذة.'
+          : 'Let your dish rest for 2-3 minutes before serving to lock in all natural savory juices.'
+      };
 
       setRecipe(fallbackRecipe);
       setIsGenerating(false);
-    }, 1200);
-  };
-
-  const copyRecipe = () => {
-    if (!recipe) return;
-    const text = `🍳 ${recipe.title}\n⏱️ ${recipe.cookingTime} | 🔥 ${recipe.calories} kcal (P: ${recipe.protein}g, K: ${recipe.carbs}g, Y: ${recipe.fat}g)\n\n🛒 Malzemeler:\n${recipe.ingredients.join('\n')}\n\n👨‍🍳 Hazırlanışı:\n${recipe.instructions.join('\n')}\n\n💡 Şef İpucu: ${recipe.chefTip}\n\n💎 TASTE AI Chef ile üretildi: https://taste-miniapp-xy8k.vercel.app`;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const shareTelegram = () => {
-    if (!recipe) return;
-    const shareText = encodeURIComponent(`🍳 TASTE AI Chef bana buzdolabımdaki malzemelerden harika bir gurme tarif çıkardı: "${recipe.title}" (${recipe.calories} kcal)! Sen de dene:`);
-    const shareUrl = encodeURIComponent('https://taste-miniapp-xy8k.vercel.app');
-    const tgUrl = `https://t.me/share/url?url=${shareUrl}&text=${shareText}`;
-    if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openTelegramLink(tgUrl);
-    } else {
-      window.open(tgUrl, '_blank');
     }
   };
 
+  const handleCopyRecipe = () => {
+    if (!recipe) return;
+    const text = `🍳 ${recipe.title} (TASTE AI Chef)
+
+${recipe.description}
+
+⏱️ ${recipe.cookingTime} | 🥗 ${recipe.diet} | 🔥 ${recipe.calories} kcal
+🥩 Protein: ${recipe.protein}g | 🍞 Carbs: ${recipe.carbs}g | 🥑 Fat: ${recipe.fat}g
+
+🛒 ${t('chef_app.ingredients_title', 'Malzemeler')}:
+${recipe.ingredients.join('\n')}
+
+👨‍🍳 ${t('chef_app.instructions_title', 'Adımlar')}:
+${recipe.instructions.join('\n')}
+
+💡 ${t('chef_app.chef_tip_title', 'Şef Sırrı')}: ${recipe.chefTip}
+
+✨ TASTE AI — The New Face of Web3 Food Ecosystem`;
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
   return (
-    <div style={{ padding: '4px 0 24px' }}>
+    <div style={{ maxWidth: 680, margin: '0 auto', paddingBottom: 40 }}>
+      {/* ── Top Language Selector Bar ── */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: 'rgba(255, 255, 255, 0.03)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: 16,
+        padding: '6px 12px',
+        marginBottom: 12
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 800, color: '#94a3b8' }}>
+          <Globe size={13} color="#f59e0b" />
+          <span>{t('settings.language', 'Dil / Language')}:</span>
+        </div>
+        <div style={{ display: 'flex', gap: 4 }}>
+          {languagesList.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => handleSwitchLanguage(l.code)}
+              style={{
+                background: lang === l.code ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'rgba(255, 255, 255, 0.05)',
+                border: lang === l.code ? '1px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.08)',
+                color: lang === l.code ? '#000' : '#cbd5e1',
+                fontWeight: lang === l.code ? 900 : 600,
+                fontSize: 10,
+                padding: '3px 7px',
+                borderRadius: 10,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 3,
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <span>{l.flag}</span>
+              <span>{l.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Header Banner */}
       <div style={{
         background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(30, 27, 75, 0.4) 100%)',
@@ -317,21 +446,22 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(245, 158, 11, 0.4)'
+            boxShadow: '0 0 16px rgba(245, 158, 11, 0.4)',
+            flexShrink: 0
           }}>
             <ChefHat size={26} color="#000" />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <h2 style={{ fontSize: 16, fontWeight: 900, color: '#fff', margin: 0 }}>
-                TASTE AI Chef
+                {t('chef_banner.title', 'TASTE AI Chef')}
               </h2>
               <span style={{ fontSize: 9, background: '#10b981', color: '#fff', padding: '1px 6px', borderRadius: 6, fontWeight: 900 }}>
-                PRO
+                {t('chef_banner.new_badge', 'PRO')}
               </span>
             </div>
-            <p style={{ fontSize: 11, color: '#fbbf24', margin: '3px 0 0' }}>
-              {isTr ? 'Buzdolabındaki malzemeleri seç, gurme tarif & kalori çıkar!' : 'Pick your ingredients, get gourmet recipe & macro calories!'}
+            <p style={{ fontSize: 11, color: '#fbbf24', margin: '3px 0 0', fontWeight: 600 }}>
+              {t('chef_banner.desc', 'Buzdolabındaki malzemeleri seç, gurme tarif & kalori çıkar!')}
             </p>
           </div>
         </div>
@@ -347,7 +477,7 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
           <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>🧊 {isTr ? 'Buzdolabım & Seçilenler' : 'My Fridge & Selected'}</span>
+            <span>🧊 {t('chef_app.fridge_title', 'Buzdolabım & Seçilenler')}</span>
             <span style={{ fontSize: 10, background: 'rgba(255,255,255,0.08)', padding: '2px 6px', borderRadius: 8, color: '#94a3b8' }}>
               {selectedIngredients.length}
             </span>
@@ -357,7 +487,7 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
               onClick={() => setSelectedIngredients([])}
               style={{ background: 'none', border: 'none', color: '#ef4444', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
             >
-              {isTr ? 'Temizle' : 'Clear'}
+              {t('chef_app.clear', 'Temizle')}
             </button>
           )}
         </div>
@@ -366,7 +496,7 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, minHeight: 34 }}>
           {selectedIngredients.length === 0 ? (
             <div style={{ fontSize: 11, color: '#64748b', fontStyle: 'italic', padding: '6px 0' }}>
-              {isTr ? 'Henüz malzeme seçmediniz. Aşağıdaki listelerden ekleyin veya yazın.' : 'No ingredients selected. Pick from below or type custom ones.'}
+              {t('chef_app.empty_hint', 'Henüz malzeme seçmediniz. Aşağıdaki listelerden ekleyin veya yazın.')}
             </div>
           ) : (
             selectedIngredients.map((item) => (
@@ -401,7 +531,7 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
             type="text"
             value={customInput}
             onChange={(e) => setCustomInput(e.target.value)}
-            placeholder={isTr ? '+ Farklı bir malzeme yaz (örn: Avokado, Somon)...' : '+ Type custom ingredient (e.g. Avocado, Salmon)...'}
+            placeholder={t('chef_app.custom_placeholder', '+ Farklı bir malzeme yaz (örn: Avokado, Somon)...')}
             style={{
               flex: 1,
               background: 'rgba(255,255,255,0.04)',
@@ -426,13 +556,16 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
               cursor: 'pointer'
             }}
           >
-            {isTr ? 'Ekle' : 'Add'}
+            {t('chef_app.add', 'Ekle')}
           </button>
         </form>
       </div>
 
       {/* Categories Tabs & Quick Pick */}
       <div style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: '#94a3b8', marginBottom: 8 }}>
+          {t('chef_app.quick_presets', 'Hızlı Malzeme Seçimi')}
+        </div>
         <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 6, scrollbarWidth: 'none' }}>
           {INGREDIENT_CATEGORIES.map((cat) => (
             <button
@@ -454,36 +587,37 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
               }}
             >
               <span>{cat.emoji}</span>
-              <span>{isTr ? cat.nameTr : cat.nameEn}</span>
+              <span>{getLocalizedText(cat.names)}</span>
             </button>
           ))}
         </div>
 
-        {/* Category Items */}
+        {/* Category items pills */}
         <div style={{
-          background: 'var(--bg-card)',
-          border: '1px solid var(--bg-card-border)',
+          background: 'rgba(255,255,255,0.02)',
+          border: '1px solid rgba(255,255,255,0.05)',
           borderRadius: 16,
-          padding: '12px',
+          padding: 12,
           display: 'flex',
           flexWrap: 'wrap',
-          gap: 6
+          gap: 6,
+          marginTop: 6
         }}>
           {INGREDIENT_CATEGORIES.find(c => c.id === activeCategory)?.items.map((item) => {
-            const name = isTr ? item.nameTr : item.nameEn;
-            const isSelected = selectedIngredients.includes(name);
+            const itemName = getLocalizedText(item.names);
+            const isSelected = selectedIngredients.includes(itemName);
             return (
               <button
                 key={item.id}
-                onClick={() => toggleIngredient(name)}
+                onClick={() => toggleIngredient(itemName)}
                 style={{
-                  background: isSelected ? '#f59e0b' : 'rgba(255,255,255,0.04)',
+                  background: isSelected ? '#f59e0b' : 'rgba(255,255,255,0.05)',
                   border: isSelected ? '1px solid #f59e0b' : '1px solid rgba(255,255,255,0.08)',
                   color: isSelected ? '#000' : '#e2e8f0',
+                  fontSize: 11,
+                  fontWeight: isSelected ? 900 : 600,
                   padding: '6px 10px',
                   borderRadius: 10,
-                  fontSize: 11,
-                  fontWeight: 700,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -492,7 +626,7 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
                 }}
               >
                 {isSelected ? <CheckCircle2 size={12} /> : <Plus size={12} />}
-                <span>{name}</span>
+                <span>{itemName}</span>
               </button>
             );
           })}
@@ -504,90 +638,139 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
         background: 'var(--bg-card)',
         border: '1px solid var(--bg-card-border)',
         borderRadius: 18,
-        padding: '14px',
+        padding: 14,
         marginBottom: 16
       }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', marginBottom: 10 }}>
-          ⚙️ {isTr ? 'Şef Tercihleri' : 'Chef Preferences'}
+        <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span>⚙️ {t('chef_app.chef_preferences', 'Şef Tercihleri')}</span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          {/* Cooking Time */}
-          <div>
-            <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 700, marginBottom: 4 }}>
-              ⏱️ {isTr ? 'Hazırlık Süresi' : 'Prep Time'}
-            </div>
-            <select
-              value={cookingTime}
-              onChange={(e: any) => setCookingTime(e.target.value)}
-              style={{
-                width: '100%',
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                color: '#fff',
-                borderRadius: 10,
-                padding: '6px 8px',
-                fontSize: 11,
-                fontWeight: 700
-              }}
-            >
-              <option value="quick">{isTr ? '⚡ 15-20 Dk (Hızlı)' : '⚡ 15-20 Min (Quick)'}</option>
-              <option value="medium">{isTr ? '🍲 30 Dk (Pratik)' : '🍲 30 Min (Medium)'}</option>
-              <option value="gourmet">{isTr ? '👑 45+ Dk (Gurme)' : '👑 45+ Min (Gourmet)'}</option>
-            </select>
+        {/* Time */}
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Clock size={11} />
+            <span>{t('chef_app.cooking_time', 'Pişirme Süresi')}</span>
           </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
+            {[
+              { id: 'quick', label: t('chef_app.time_quick', '15-20 Dk (Hızlı)') },
+              { id: 'medium', label: t('chef_app.time_medium', '30 Dk (Orta)') },
+              { id: 'gourmet', label: t('chef_app.time_gourmet', '45+ Dk (Gurme)') }
+            ].map((tOption) => (
+              <button
+                key={tOption.id}
+                onClick={() => setCookingTime(tOption.id as any)}
+                style={{
+                  background: cookingTime === tOption.id ? 'rgba(245, 158, 11, 0.2)' : 'rgba(255,255,255,0.03)',
+                  border: cookingTime === tOption.id ? '1px solid #f59e0b' : '1px solid rgba(255,255,255,0.06)',
+                  color: cookingTime === tOption.id ? '#fbbf24' : '#94a3b8',
+                  padding: '7px 4px',
+                  borderRadius: 10,
+                  fontSize: 10,
+                  fontWeight: 800,
+                  cursor: 'pointer'
+                }}
+              >
+                {tOption.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-          {/* Diet Type */}
-          <div>
-            <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 700, marginBottom: 4 }}>
-              🥗 {isTr ? 'Diyet / Tarz' : 'Diet Style'}
-            </div>
-            <select
-              value={dietType}
-              onChange={(e: any) => setDietType(e.target.value)}
-              style={{
-                width: '100%',
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                color: '#fff',
-                borderRadius: 10,
-                padding: '6px 8px',
-                fontSize: 11,
-                fontWeight: 700
-              }}
-            >
-              <option value="high_protein">{isTr ? '💪 Yüksek Protein' : '💪 High Protein'}</option>
-              <option value="low_calorie">{isTr ? '🌿 Düşük Kalori / Fit' : '🌿 Low Calorie'}</option>
-              <option value="all">{isTr ? '🍽️ Standart Lezzet' : '🍽️ Standard'}</option>
-              <option value="keto">{isTr ? '🥑 Ketojenik' : '🥑 Keto'}</option>
-              <option value="vegan">{isTr ? '🌱 Vegan / Vejetaryen' : '🌱 Vegan / Veg'}</option>
-            </select>
+        {/* Diet */}
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Flame size={11} />
+            <span>{t('chef_app.diet_type', 'Diyet & Beslenme')}</span>
+          </div>
+          <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4, scrollbarWidth: 'none' }}>
+            {[
+              { id: 'all', label: t('chef_app.diet_all', 'Tümü') },
+              { id: 'high_protein', label: t('chef_app.diet_high_protein', 'Yüksek Protein') },
+              { id: 'low_calorie', label: t('chef_app.diet_low_calorie', 'Düşük Kalori / Fit') },
+              { id: 'keto', label: t('chef_app.diet_keto', 'Keto') },
+              { id: 'vegan', label: t('chef_app.diet_vegan', 'Vegan') }
+            ].map((dOption) => (
+              <button
+                key={dOption.id}
+                onClick={() => setDietType(dOption.id as any)}
+                style={{
+                  background: dietType === dOption.id ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255,255,255,0.03)',
+                  border: dietType === dOption.id ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.06)',
+                  color: dietType === dOption.id ? '#10b981' : '#94a3b8',
+                  padding: '6px 10px',
+                  borderRadius: 10,
+                  fontSize: 10,
+                  fontWeight: 800,
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer'
+                }}
+              >
+                {dOption.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Cuisine */}
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Utensils size={11} />
+            <span>{t('chef_app.cuisine', 'Mutfak Stili')}</span>
+          </div>
+          <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4, scrollbarWidth: 'none' }}>
+            {[
+              { id: 'mediterranean', label: t('chef_app.cuisine_mediterranean', 'Akdeniz') },
+              { id: 'turkish', label: t('chef_app.cuisine_turkish', 'Türk Mutfağı') },
+              { id: 'italian', label: t('chef_app.cuisine_italian', 'İtalyan') },
+              { id: 'asian', label: t('chef_app.cuisine_asian', 'Asya') },
+              { id: 'world', label: t('chef_app.cuisine_world', 'Dünya') }
+            ].map((cOption) => (
+              <button
+                key={cOption.id}
+                onClick={() => setCuisine(cOption.id as any)}
+                style={{
+                  background: cuisine === cOption.id ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255,255,255,0.03)',
+                  border: cuisine === cOption.id ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.06)',
+                  color: cuisine === cOption.id ? '#60a5fa' : '#94a3b8',
+                  padding: '6px 10px',
+                  borderRadius: 10,
+                  fontSize: 10,
+                  fontWeight: 800,
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer'
+                }}
+              >
+                {cOption.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Generate Button */}
+      {/* Action: Generate Recipe Button */}
       <motion.button
-        whileTap={{ scale: 0.97 }}
-        disabled={isGenerating || selectedIngredients.length === 0}
+        whileHover={{ scale: selectedIngredients.length > 0 && !isGenerating ? 1.02 : 1 }}
+        whileTap={{ scale: selectedIngredients.length > 0 && !isGenerating ? 0.98 : 1 }}
+        disabled={selectedIngredients.length === 0 || isGenerating}
         onClick={handleGenerateRecipe}
         style={{
           width: '100%',
-          padding: '16px',
-          borderRadius: 18,
-          border: 'none',
-          background: selectedIngredients.length === 0
-            ? 'rgba(255,255,255,0.05)'
+          background: selectedIngredients.length === 0 || isGenerating
+            ? 'rgba(255,255,255,0.08)'
             : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-          color: selectedIngredients.length === 0 ? '#64748b' : '#000',
-          fontSize: 14,
+          border: 'none',
+          borderRadius: 16,
+          padding: '14px',
+          color: selectedIngredients.length === 0 || isGenerating ? '#64748b' : '#000',
           fontWeight: 900,
-          cursor: selectedIngredients.length === 0 ? 'not-allowed' : 'pointer',
+          fontSize: 14,
+          cursor: selectedIngredients.length === 0 || isGenerating ? 'not-allowed' : 'pointer',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           gap: 8,
-          boxShadow: selectedIngredients.length > 0 ? '0 6px 20px rgba(245, 158, 11, 0.4)' : 'none',
+          boxShadow: selectedIngredients.length > 0 && !isGenerating ? '0 4px 20px rgba(245, 158, 11, 0.35)' : 'none',
           marginBottom: 20
         }}
       >
@@ -596,149 +779,133 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-            >
-              <Sparkles size={18} />
-            </motion.div>
-            <span>{isTr ? 'Şef Tarifi & Kalorileri Hazırlıyor...' : 'Chef is crafting recipe & calories...'}</span>
+              style={{ width: 16, height: 16, border: '2px solid rgba(0,0,0,0.2)', borderTopColor: '#000', borderRadius: '50%' }}
+            />
+            <span>{t('chef_app.generating', '👨‍🍳 Şef Malzemeleri Değerlendiriyor...')}</span>
           </>
         ) : (
           <>
-            <Sparkles size={18} />
-            <span>{isTr ? 'Şef Gurme Tarifini Üret' : 'Generate Gourmet Recipe'}</span>
+            <Sparkles size={16} />
+            <span>{t('chef_app.create_recipe_btn', '✨ Özel Gurme Tarif & Kalori Çıkar')}</span>
           </>
         )}
       </motion.button>
 
-      {/* Generated Recipe Card */}
+      {/* ── Generated Recipe Display ── */}
       <AnimatePresence>
         {recipe && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             style={{
-              background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%)',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
-              borderRadius: 24,
-              padding: '20px',
-              boxShadow: '0 12px 32px rgba(0,0,0,0.6)'
+              background: 'linear-gradient(180deg, rgba(20, 24, 45, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%)',
+              border: '1px solid rgba(245, 158, 11, 0.4)',
+              borderRadius: 22,
+              padding: '18px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
             }}
           >
-            {/* Title & Badges */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+            {/* Header / Title */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
               <div>
-                <span style={{
-                  fontSize: 10,
-                  background: 'rgba(245, 158, 11, 0.15)',
-                  color: '#fbbf24',
-                  border: '1px solid rgba(245, 158, 11, 0.3)',
-                  padding: '2px 8px',
-                  borderRadius: 10,
-                  fontWeight: 900
-                }}>
-                  {recipe.cuisine} • {recipe.diet}
-                </span>
-                <h3 style={{ fontSize: 18, fontWeight: 900, color: '#fff', margin: '8px 0 4px' }}>
+                <div style={{ display: 'flex', gap: 6, marginBottom: 6, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 9, background: 'rgba(245, 158, 11, 0.2)', color: '#fbbf24', padding: '2px 8px', borderRadius: 8, fontWeight: 900 }}>
+                    {recipe.cuisine}
+                  </span>
+                  <span style={{ fontSize: 9, background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', padding: '2px 8px', borderRadius: 8, fontWeight: 900 }}>
+                    {recipe.diet}
+                  </span>
+                  <span style={{ fontSize: 9, background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '2px 8px', borderRadius: 8, fontWeight: 900 }}>
+                    ⏱️ {recipe.cookingTime}
+                  </span>
+                </div>
+                <h3 style={{ fontSize: 18, fontWeight: 900, color: '#fff', margin: '0 0 6px' }}>
                   {recipe.title}
                 </h3>
-                <p style={{ fontSize: 12, color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
+                <p style={{ fontSize: 12, color: '#cbd5e1', margin: 0, lineHeight: 1.4 }}>
                   {recipe.description}
                 </p>
               </div>
-
-
             </div>
 
             {/* Macro & Calories Dashboard */}
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: 6,
-              background: 'rgba(0,0,0,0.3)',
-              padding: '12px 8px',
+              background: 'rgba(0,0,0,0.35)',
+              border: '1px solid rgba(255,255,255,0.06)',
               borderRadius: 16,
-              border: '1px solid rgba(255,255,255,0.05)',
-              marginBottom: 16,
-              textAlign: 'center'
+              padding: '12px',
+              marginBottom: 16
             }}>
-              <div>
-                <div style={{ fontSize: 9, color: '#f59e0b', fontWeight: 800 }}>KALORİ</div>
-                <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', marginTop: 2 }}>{recipe.calories}</div>
-                <div style={{ fontSize: 8, color: '#64748b' }}>kcal</div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: '#94a3b8', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                {t('chef_app.macro_dashboard', 'Makro & Kalori Değerleri (Porsiyon Başına)')}
               </div>
-              <div>
-                <div style={{ fontSize: 9, color: '#38bdf8', fontWeight: 800 }}>PROTEİN</div>
-                <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', marginTop: 2 }}>{recipe.protein}g</div>
-                <div style={{ fontSize: 8, color: '#64748b' }}>makro</div>
-              </div>
-              <div>
-                <div style={{ fontSize: 9, color: '#a78bfa', fontWeight: 800 }}>KARB</div>
-                <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', marginTop: 2 }}>{recipe.carbs}g</div>
-                <div style={{ fontSize: 8, color: '#64748b' }}>makro</div>
-              </div>
-              <div>
-                <div style={{ fontSize: 9, color: '#f43f5e', fontWeight: 800 }}>YAĞ</div>
-                <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', marginTop: 2 }}>{recipe.fat}g</div>
-                <div style={{ fontSize: 8, color: '#64748b' }}>makro</div>
-              </div>
-            </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, textAlign: 'center' }}>
+                <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: 12, padding: '8px 4px' }}>
+                  <div style={{ fontSize: 10, color: '#f87171', fontWeight: 700 }}>{t('chef_app.calories', 'Kalori')}</div>
+                  <div style={{ fontSize: 16, fontWeight: 900, color: '#fff', marginTop: 2 }}>{recipe.calories}</div>
+                  <div style={{ fontSize: 9, color: '#94a3b8' }}>kcal</div>
+                </div>
 
-            {/* Allergens Warning Bar */}
-            {recipe.allergens && recipe.allergens.length > 0 && (
-              <div style={{
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                borderRadius: 12,
-                padding: '8px 12px',
-                marginBottom: 16,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8
-              }}>
-                <AlertTriangle size={15} color="#ef4444" />
-                <div style={{ fontSize: 11, color: '#fca5a5' }}>
-                  <strong style={{ color: '#ef4444' }}>{isTr ? 'Alerjen Uyarısı: ' : 'Allergen Alert: '}</strong>
-                  {recipe.allergens.join(', ')}
+                <div style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)', borderRadius: 12, padding: '8px 4px' }}>
+                  <div style={{ fontSize: 10, color: '#60a5fa', fontWeight: 700 }}>{t('chef_app.protein', 'Protein')}</div>
+                  <div style={{ fontSize: 16, fontWeight: 900, color: '#fff', marginTop: 2 }}>{recipe.protein}g</div>
+                  <div style={{ fontSize: 9, color: '#94a3b8' }}>kas yapıcı</div>
+                </div>
+
+                <div style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)', borderRadius: 12, padding: '8px 4px' }}>
+                  <div style={{ fontSize: 10, color: '#fbbf24', fontWeight: 700 }}>{t('chef_app.carbs', 'Karb')}</div>
+                  <div style={{ fontSize: 16, fontWeight: 900, color: '#fff', marginTop: 2 }}>{recipe.carbs}g</div>
+                  <div style={{ fontSize: 9, color: '#94a3b8' }}>enerji</div>
+                </div>
+
+                <div style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: 12, padding: '8px 4px' }}>
+                  <div style={{ fontSize: 10, color: '#34d399', fontWeight: 700 }}>{t('chef_app.fat', 'Sağlıklı Yağ')}</div>
+                  <div style={{ fontSize: 16, fontWeight: 900, color: '#fff', marginTop: 2 }}>{recipe.fat}g</div>
+                  <div style={{ fontSize: 9, color: '#94a3b8' }}>besleyici</div>
                 </div>
               </div>
-            )}
 
-            {/* Ingredients Section */}
+              {/* Allergens */}
+              {recipe.allergens && recipe.allergens.length > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 10, fontSize: 10, color: '#fbbf24' }}>
+                  <AlertTriangle size={12} />
+                  <span>{t('chef_app.allergens', 'Alerjenler')}: {recipe.allergens.join(', ')}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Ingredients */}
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: '#fbbf24', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Utensils size={14} />
-                <span>{isTr ? 'Gerekli Malzemeler & Ölçüler' : 'Ingredients & Measurements'}</span>
-              </div>
-              <div style={{
-                background: 'rgba(255,255,255,0.02)',
-                borderRadius: 14,
-                padding: '10px 14px',
-                fontSize: 12,
-                color: '#cbd5e1',
-                lineHeight: 1.7
-              }}>
+              <h4 style={{ fontSize: 13, fontWeight: 900, color: '#fff', margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span>🛒</span>
+                <span>{t('chef_app.ingredients_title', 'Gerekli Malzemeler & Ölçüler')}</span>
+              </h4>
+              <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: '10px 14px' }}>
                 {recipe.ingredients.map((ing, idx) => (
-                  <div key={idx}>{ing}</div>
+                  <div key={idx} style={{ fontSize: 12, color: '#e2e8f0', padding: '4px 0', borderBottom: idx !== recipe.ingredients.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                    {ing}
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Step-by-Step Instructions */}
+            {/* Instructions */}
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: '#10b981', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <ChefHat size={14} />
-                <span>{isTr ? 'Şefin Adım Adım Hazırlanış Rehberi' : 'Step-by-Step Preparation Guide'}</span>
-              </div>
-              <div style={{
-                background: 'rgba(255,255,255,0.02)',
-                borderRadius: 14,
-                padding: '10px 14px',
-                fontSize: 12,
-                color: '#cbd5e1',
-                lineHeight: 1.7
-              }}>
+              <h4 style={{ fontSize: 13, fontWeight: 900, color: '#fff', margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span>👨‍🍳</span>
+                <span>{t('chef_app.instructions_title', 'Adım Adım Hazırlanışı')}</span>
+              </h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {recipe.instructions.map((step, idx) => (
-                  <div key={idx} style={{ marginBottom: 6 }}>{step}</div>
+                  <div key={idx} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: 'rgba(255,255,255,0.02)', borderRadius: 12, padding: '8px 12px' }}>
+                    <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000', fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      {idx + 1}
+                    </span>
+                    <span style={{ fontSize: 12, color: '#e2e8f0', lineHeight: 1.4, marginTop: 1 }}>
+                      {step}
+                    </span>
+                  </div>
                 ))}
               </div>
             </div>
@@ -746,29 +913,33 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
             {/* Chef Tip */}
             {recipe.chefTip && (
               <div style={{
-                background: 'rgba(245, 158, 11, 0.08)',
-                border: '1px solid rgba(245, 158, 11, 0.2)',
+                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.08))',
+                border: '1px dashed rgba(245, 158, 11, 0.4)',
                 borderRadius: 14,
-                padding: '10px 14px',
-                marginBottom: 16,
-                fontSize: 11,
-                color: '#fef08a'
+                padding: '12px 14px',
+                marginBottom: 16
               }}>
-                <strong>💡 {isTr ? 'Şefin Püf Noktası: ' : 'Chef Pro Tip: '}</strong>
-                {recipe.chefTip}
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#fbbf24', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span>💡</span>
+                  <span>{t('chef_app.chef_tip_title', '👨‍🍳 Şefin Altın Sırrı (Pro Tip)')}</span>
+                </div>
+                <div style={{ fontSize: 11, color: '#cbd5e1', lineHeight: 1.4 }}>
+                  {recipe.chefTip}
+                </div>
               </div>
             )}
 
-            {/* Actions Bar */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            {/* Actions: Copy & Reset */}
+            <div style={{ display: 'flex', gap: 8 }}>
               <button
-                onClick={copyRecipe}
+                onClick={handleCopyRecipe}
                 style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  flex: 1,
+                  background: copied ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255,255,255,0.06)',
+                  border: copied ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 14,
                   padding: '10px',
-                  borderRadius: 12,
-                  color: '#fff',
+                  color: copied ? '#10b981' : '#fff',
                   fontSize: 12,
                   fontWeight: 800,
                   cursor: 'pointer',
@@ -778,29 +949,28 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
                   gap: 6
                 }}
               >
-                {copied ? <CheckCircle2 size={14} color="#10b981" /> : <Copy size={14} />}
-                <span>{copied ? (isTr ? 'Kopyalandı!' : 'Copied!') : (isTr ? 'Tarifi Kopyala' : 'Copy Recipe')}</span>
+                {copied ? <CheckCircle2 size={14} /> : <Copy size={14} />}
+                <span>{copied ? t('chef_app.copied', 'Kopyalandı!') : t('chef_app.share_copy', 'Tarifi Kopyala')}</span>
               </button>
 
               <button
-                onClick={shareTelegram}
+                onClick={() => setRecipe(null)}
                 style={{
-                  background: '#229ED9',
-                  border: 'none',
-                  padding: '10px',
-                  borderRadius: 12,
-                  color: '#fff',
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 14,
+                  padding: '10px 14px',
+                  color: '#94a3b8',
                   fontSize: 12,
                   fontWeight: 800,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
                   gap: 6
                 }}
               >
-                <Share2 size={14} />
-                <span>{isTr ? "Telegram'da Paylaş" : 'Share on Telegram'}</span>
+                <RotateCcw size={14} />
+                <span>{t('chef_app.new_recipe_btn', 'Yeni Tarif')}</span>
               </button>
             </div>
           </motion.div>

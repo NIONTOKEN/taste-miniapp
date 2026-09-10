@@ -1,3 +1,4 @@
+import { TasteAIChef } from './components/TasteAIChef';
 import { useEffect, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -85,7 +86,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'charity' | 'legal' | 'ai' | 'faq' | 'tech' | 'wallet' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'tokenomics'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'charity' | 'legal' | 'ai' | 'chef' | 'faq' | 'tech' | 'wallet' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'tokenomics'>('home');
   const [navHistory, setNavHistory] = useState<string[]>([]);
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
@@ -372,7 +373,7 @@ function App() {
             <motion.div
               whileTap={{ scale: 0.98 }}
               onClick={() => {
-                navigateTo('ai');
+                navigateTo('chef');
               }}
               style={{
                 background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.12) 50%, rgba(30, 27, 75, 0.4) 100%)',
@@ -407,7 +408,7 @@ function App() {
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <div style={{ fontSize: 14, fontWeight: 900, color: '#fff' }}>
-                      TASTE AI Chef
+                      {t('chef_banner.title', 'TASTE AI Chef')}
                     </div>
                     <span style={{
                       fontSize: 8,
@@ -417,11 +418,11 @@ function App() {
                       borderRadius: 6,
                       fontWeight: 900
                     }}>
-                      YENİ MOTOR
+                      {t('chef_banner.new_engine', 'YENİ MOTOR')}
                     </span>
                   </div>
                   <div style={{ fontSize: 11, color: '#fbbf24', marginTop: 3, fontWeight: 600 }}>
-                    Buzdolabındaki malzemeleri seç, gurme tarif & kalori çıkar!
+                    {t('chef_banner.desc', 'Buzdolabındaki malzemeleri seç, gurme tarif & kalori çıkar!')}
                   </div>
                 </div>
               </div>
@@ -438,7 +439,7 @@ function App() {
                 gap: 4,
                 flexShrink: 0
               }}>
-                <span>BAŞLA</span>
+                <span>{t('chef_banner.start', 'BAŞLA')}</span>
                 <span>→</span>
               </div>
             </motion.div>
@@ -642,6 +643,11 @@ function App() {
       );
 
       case 'legal': return <Legal />;
+      case 'chef': return (
+        <motion.div key="chef" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <TasteAIChef />
+        </motion.div>
+      );
       case 'ai': return (
         <motion.div key="ai" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <TasteAI />
@@ -825,7 +831,7 @@ function App() {
             {/* AI Chef Top Button */}
             <motion.div
               whileTap={{ scale: 0.92 }}
-              onClick={() => navigateTo('ai')}
+              onClick={() => navigateTo('chef')}
               style={{
                 display: 'flex', alignItems: 'center', gap: 4,
                 background: 'linear-gradient(135deg, rgba(245,158,11,0.25), rgba(217,119,6,0.3))',
@@ -835,7 +841,7 @@ function App() {
               }}
             >
               <span>👨‍🍳</span>
-              <span>AI Şef</span>
+              <span>{t('drawer.ai_chef', 'AI Şef')}</span>
             </motion.div>
 
             {/* KYC badge */}
@@ -947,7 +953,8 @@ function App() {
                 {/* Drawer menu items */}
                 <div style={{ padding: '12px 0', flex: 1 }}>
                   {[
-                    { id: 'ai', icon: '👨‍🍳', label: 'TASTE AI Chef (Tarif & Kalori)', isNew: true },
+                    { id: 'chef', icon: '👨‍🍳', label: t('drawer.ai_chef_menu', 'TASTE AI Chef (Tarif & Kalori)'), isNew: true },
+                    { id: 'ai', icon: '🤖', label: t('app.project_assistant', 'TASTE AI Asistan'), isNew: false },
                     { id: 'ecosystem', icon: '🌐', label: t('drawer.ecosystem', 'TAI Ekosistemi'), isNew: true },
                     { id: 'socials', icon: '📱', label: t('drawer.socials', 'Sosyal Kanallar'), isNew: true },
                     { id: 'team', icon: '👥', label: t('nav.team', 'Takım'), isNew: true },
