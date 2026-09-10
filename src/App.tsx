@@ -367,6 +367,82 @@ function App() {
             </div>
 
             
+            
+            {/* ── TASTE AI Chef Ana Vitrin Kartı (Yeni!) ── */}
+            <motion.div
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                navigateTo('ai');
+              }}
+              style={{
+                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.12) 50%, rgba(30, 27, 75, 0.4) 100%)',
+                border: '1px solid rgba(245, 158, 11, 0.4)',
+                borderRadius: 22,
+                padding: '16px 18px',
+                marginBottom: 16,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                boxShadow: '0 6px 24px rgba(245, 158, 11, 0.2)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 16,
+                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 24,
+                  boxShadow: '0 0 16px rgba(245, 158, 11, 0.6)',
+                  flexShrink: 0
+                }}>
+                  👨‍🍳
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ fontSize: 14, fontWeight: 900, color: '#fff' }}>
+                      TASTE AI Chef
+                    </div>
+                    <span style={{
+                      fontSize: 8,
+                      background: '#10b981',
+                      color: '#fff',
+                      padding: '2px 6px',
+                      borderRadius: 6,
+                      fontWeight: 900
+                    }}>
+                      YENİ MOTOR
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#fbbf24', marginTop: 3, fontWeight: 600 }}>
+                    Buzdolabındaki malzemeleri seç, gurme tarif & kalori çıkar!
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                background: 'rgba(245, 158, 11, 0.25)',
+                color: '#fbbf24',
+                padding: '8px 14px',
+                borderRadius: 12,
+                fontSize: 11,
+                fontWeight: 900,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                flexShrink: 0
+              }}>
+                <span>BAŞLA</span>
+                <span>→</span>
+              </div>
+            </motion.div>
+
             {/* Staking Banner / Kartı (Yakında) */}
             <motion.div
               whileTap={{ scale: 0.98 }}
@@ -568,11 +644,7 @@ function App() {
       case 'legal': return <Legal />;
       case 'ai': return (
         <motion.div key="ai" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>TASTE AI</div>
-            <h3 style={{ fontWeight: 900, margin: '0 0 16px', fontSize: '1rem' }}>🤖 {t('app.project_assistant')}</h3>
-            <TasteAI />
-          </div>
+          <TasteAI />
         </motion.div>
       );
       case 'wallet': return (
@@ -748,8 +820,24 @@ function App() {
             }}>TASTE TAI</span>
           </div>
 
-          {/* Right: KYC + Bell + Lang + Avatar */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* Right: AI Chef + KYC + Bell + Lang + Avatar */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {/* AI Chef Top Button */}
+            <motion.div
+              whileTap={{ scale: 0.92 }}
+              onClick={() => navigateTo('ai')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 4,
+                background: 'linear-gradient(135deg, rgba(245,158,11,0.25), rgba(217,119,6,0.3))',
+                border: '1px solid rgba(245,158,11,0.5)',
+                borderRadius: 20, padding: '4px 9px', fontSize: 11, fontWeight: 900, color: '#fbbf24',
+                cursor: 'pointer', boxShadow: '0 0 10px rgba(245,158,11,0.3)'
+              }}
+            >
+              <span>👨‍🍳</span>
+              <span>AI Şef</span>
+            </motion.div>
+
             {/* KYC badge */}
             <div onClick={() => setShowKYC(true)} style={{
               display: 'flex', alignItems: 'center', gap: 5,
@@ -859,6 +947,7 @@ function App() {
                 {/* Drawer menu items */}
                 <div style={{ padding: '12px 0', flex: 1 }}>
                   {[
+                    { id: 'ai', icon: '👨‍🍳', label: 'TASTE AI Chef (Tarif & Kalori)', isNew: true },
                     { id: 'ecosystem', icon: '🌐', label: t('drawer.ecosystem', 'TAI Ekosistemi'), isNew: true },
                     { id: 'socials', icon: '📱', label: t('drawer.socials', 'Sosyal Kanallar'), isNew: true },
                     { id: 'team', icon: '👥', label: t('nav.team', 'Takım'), isNew: true },

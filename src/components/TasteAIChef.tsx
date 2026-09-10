@@ -106,7 +106,6 @@ export interface GeneratedRecipe {
   ingredients: string[];
   instructions: string[];
   chefTip: string;
-  taiReward: number;
 }
 
 export function TasteAIChef() {
@@ -199,7 +198,6 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
     "Step 4..."
   ],
   "chefTip": "Pro-level secret to enhance flavor",
-  "taiReward": 25
 }
 `;
 
@@ -270,8 +268,7 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
         chefTip: isTr
           ? 'Eti pişirdikten sonra hemen kesmeyin; 3 dakika dinlendirirseniz suları içinde kalarak pamuk gibi yumuşak kalır.'
           : 'Let your meat rest for 3 minutes before slicing to lock in all the natural savory juices.',
-        taiReward: 25
-      };
+        };
 
       setRecipe(fallbackRecipe);
       setIsGenerating(false);
@@ -649,21 +646,7 @@ CRITICAL: Return ONLY a valid, raw JSON object (without markdown backticks, with
                 </p>
               </div>
 
-              <div style={{
-                background: 'rgba(16, 185, 129, 0.15)',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
-                padding: '4px 8px',
-                borderRadius: 10,
-                color: '#10b981',
-                fontSize: 11,
-                fontWeight: 900,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4
-              }}>
-                <Award size={13} />
-                <span>+{recipe.taiReward} TAI</span>
-              </div>
+
             </div>
 
             {/* Macro & Calories Dashboard */}
