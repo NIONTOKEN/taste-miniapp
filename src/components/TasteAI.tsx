@@ -1,3 +1,4 @@
+import { TasteAIChef } from './TasteAIChef';
 import { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -238,6 +239,7 @@ export function TasteAI() {
       timestamp: new Date(),
     },
   ])
+  const [activeSubTab, setActiveSubTab] = useState<'chat' | 'chef'>('chef');
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

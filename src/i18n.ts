@@ -5,7 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
     "en": {
         "translation": {
-            "drawer": { "ecosystem": "Ecosystem", "socials": "Socials", "team": "Team", "jobs": "Jobs", "swap": "Swap", "tokenomics": "Tokenomics", "whitepaper": "Whitepaper", "blockchain": "Blockchain", "ai": "AI", "help": "Help", "website": "Website", "legal": "Legal", "settings": "Settings" },
+            "drawer": { "ecosystem": "Ecosystem", "socials": "Socials", "team": "Team", "jobs": "Jobs", "swap": "Swap", "tokenomics": "Tokenomics", "whitepaper": "Whitepaper", "blockchain": "Blockchain", "ai": "AI", "ai_chef": "AI Chef", "help": "Help", "website": "Website", "legal": "Legal", "settings": "Settings" },
             "kyc": { "title": "KYC Verification", "description": "Verify your identity", "verify_button": "Verify Now", "step1": "Step 1", "step2": "Step 2", "pending": "Pending", "done": "Done" },
             "pool": { "title": "Liquidity Pool", "description": "Provide liquidity and earn rewards" },
             "swap": { "title": "Swap Tokens", "select_pair": "Select Pair" },
@@ -923,7 +923,7 @@ const resources = {
     },
     "tr": {
         "translation": {
-            "drawer": { "ecosystem": "Ekosistem", "socials": "Sosyal Medya", "team": "Takım", "jobs": "İş İlanları", "swap": "Takas", "tokenomics": "Tokenomi", "whitepaper": "Whitepaper", "blockchain": "Blokzincir", "ai": "Yapay Zeka", "help": "Yardım", "website": "Web Sitesi", "legal": "Yasal", "settings": "Ayarlar" },
+            "drawer": { "ecosystem": "Ekosistem", "socials": "Sosyal Medya", "team": "Takım", "jobs": "İş İlanları", "swap": "Takas", "tokenomics": "Tokenomi", "whitepaper": "Whitepaper", "blockchain": "Blokzincir", "ai": "Yapay Zeka", "ai_chef": "AI Şef", "help": "Yardım", "website": "Web Sitesi", "legal": "Yasal", "settings": "Ayarlar" },
             "kyc": { "title": "KYC Doğrulaması", "description": "Kimliğinizi doğrulayın", "verify_button": "Şimdi Doğrula", "step1": "Adım 1", "step2": "Adım 2", "pending": "Bekliyor", "done": "Tamamlandı" },
             "pool": { "title": "Likidite Havuzu", "description": "Likidite sağlayın ve ödüller kazanın" },
             "swap": { "title": "Token Takası", "select_pair": "Çift Seçin" },
@@ -1841,7 +1841,7 @@ const resources = {
     },
     "ru": {
         "translation": {
-            "drawer": { "ecosystem": "Экосистема", "socials": "Соцсети", "team": "Команда", "jobs": "Вакансии", "swap": "Обмен", "tokenomics": "Токеномика", "whitepaper": "Whitepaper", "blockchain": "Блокчейн", "ai": "ИИ", "help": "Помощь", "website": "Веб-сайт", "legal": "Правовая информация", "settings": "Настройки" },
+            "drawer": { "ecosystem": "Экосистема", "socials": "Соцсети", "team": "Команда", "jobs": "Вакансии", "swap": "Обмен", "tokenomics": "Токеномика", "whitepaper": "Whitepaper", "blockchain": "Блокчейн", "ai": "ИИ", "ai_chef": "ИИ Шеф", "help": "Помощь", "website": "Веб-сайт", "legal": "Правовая информация", "settings": "Настройки" },
             "kyc": { "title": "Верификация KYC", "description": "Подтвердите свою личность", "verify_button": "Подтвердить", "step1": "Шаг 1", "step2": "Шаг 2", "pending": "В ожидании", "done": "Готово" },
             "pool": { "title": "Пул ликвидности", "description": "Обеспечьте ликвидность и получайте награды" },
             "swap": { "title": "Обмен токенов", "select_pair": "Выберите пару" },
@@ -3677,7 +3677,7 @@ const resources = {
     },
     "zh": {
         "translation": {
-            "drawer": { "ecosystem": "生态系统", "socials": "社交媒体", "team": "团队", "jobs": "工作", "swap": "交换", "tokenomics": "代币经济学", "whitepaper": "白皮书", "blockchain": "区块链", "ai": "人工智能", "help": "帮助", "website": "网站", "legal": "法律", "settings": "设置" },
+            "drawer": { "ecosystem": "生态系统", "socials": "社交媒体", "team": "团队", "jobs": "工作", "swap": "交换", "tokenomics": "代币经济学", "whitepaper": "白皮书", "blockchain": "区块链", "ai": "人工智能", "ai_chef": "AI大厨", "help": "帮助", "website": "网站", "legal": "法律", "settings": "设置" },
             "kyc": { "title": "KYC 验证", "description": "验证您的身份", "verify_button": "立即验证", "step1": "步骤 1", "step2": "步骤 2", "pending": "待定", "done": "完成" },
             "pool": { "title": "流动性池", "description": "提供流动性并赚取奖励" },
             "swap": { "title": "交换代币", "select_pair": "选择对" },

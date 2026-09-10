@@ -444,7 +444,7 @@ function App() {
               <div style={{ fontSize: 10, letterSpacing: 2, color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: 10 }}>{t('app.quick_links', 'Hızlı Erişim')}</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
                 {[
-                  { emoji: '🤖', label: t('drawer.ai', 'AI'), tab: 'ai' },
+                  { emoji: '👨‍🍳', label: t('drawer.ai_chef', 'AI Şef'), tab: 'ai' },
                   { emoji: '❤️', label: t('nav.charity', 'Bağış'), tab: 'charity' },
                   { emoji: '🌐', label: t('drawer.ecosystem', 'Ekosistem'), tab: 'ecosystem' },
                   { emoji: '👥', label: t('nav.team', 'Takım'), tab: 'team' },
