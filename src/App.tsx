@@ -57,6 +57,15 @@ import {
   ExternalLink,
   QrCode,
   ChefHat,
+  History as HistoryIcon,
+  Copy,
+  ChevronRight,
+  LifeBuoy,
+  Award,
+  Send,
+  Coins,
+  Share2,
+  Megaphone,
   Briefcase,
   Trophy,
   Users,
@@ -106,6 +115,8 @@ function App() {
   const [showProfile, setShowProfile] = useState(false);
   const [showKYC, setShowKYC] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
   const [unreadNotifCount, setUnreadNotifCount] = useState<number>(() => getUnreadNotificationCount());
   const [showSwapScreen, setShowSwapScreen] = useState(false);
   // 5-tab bottom nav active key: 'wallet' | 'team' | 'home' | 'pool' | 'settings'
@@ -444,99 +455,383 @@ function App() {
               </div>
             </motion.div>
 
-            {/* Staking Banner / Kartı (Yakında) */}
-            <motion.div
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                setActiveBottomTab('wallet');
-                navigateTo('wallet');
-              }}
-              style={{
-                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(30, 27, 75, 0.4) 100%)',
-                border: '1px solid rgba(139, 92, 246, 0.35)',
-                borderRadius: 20,
-                padding: '14px 16px',
-                marginBottom: 16,
-                cursor: 'pointer',
+            {/* ── DUYURULAR PANOSU (Screenshot Style Carousel) ── */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                boxShadow: '0 4px 20px rgba(139, 92, 246, 0.15)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 14,
-                  background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 22,
-                  boxShadow: '0 0 12px rgba(139, 92, 246, 0.5)'
-                }}>
-                  💎
+                marginBottom: 12
+              }}>
+                <div style={{ fontSize: 16, fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.3px' }}>
+                  {t('announcements.title', 'Duyurular')}
                 </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ fontSize: 13, fontWeight: 900, color: '#fff' }}>
-                      {t('hybrid_wallet.staking_title', 'TASTE AI & TON Staking')}
+                <div
+                  onClick={() => setShowNotifications(true)}
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: '#3b82f6',
+                    background: 'rgba(59, 130, 246, 0.12)',
+                    padding: '4px 10px',
+                    borderRadius: 20,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 3
+                  }}
+                >
+                  <span>{t('announcements.view_all', 'Tümünü Görüntüle')}</span>
+                  <ChevronRight size={12} />
+                </div>
+              </div>
+
+              {/* Horizontal Scroll Carousel */}
+              <div style={{
+                display: 'flex',
+                gap: 12,
+                overflowX: 'auto',
+                scrollSnapType: 'x mandatory',
+                paddingBottom: 6,
+                scrollbarWidth: 'none'
+              }}>
+                {/* Announcement Card 1: Staking (Exact Blue Style from user image) */}
+                <motion.div
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    minWidth: '84%',
+                    maxWidth: '86%',
+                    scrollSnapAlign: 'start',
+                    background: 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #172554 100%)',
+                    border: '1px solid rgba(59, 130, 246, 0.45)',
+                    borderRadius: 22,
+                    padding: '16px 18px',
+                    boxShadow: '0 8px 24px rgba(29, 78, 216, 0.35)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                    <div style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: '50%',
+                      background: 'rgba(255, 255, 255, 0.16)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 0 12px rgba(255, 255, 255, 0.1)'
+                    }}>
+                      <Megaphone size={18} color="#93c5fd" />
                     </div>
                     <span style={{
-                      fontSize: 8,
-                      background: '#f59e0b',
-                      color: '#000',
-                      padding: '2px 5px',
-                      borderRadius: 6,
-                      fontWeight: 900
+                      fontSize: 10,
+                      fontWeight: 800,
+                      background: 'rgba(0, 0, 0, 0.35)',
+                      color: '#bfdbfe',
+                      padding: '4px 9px',
+                      borderRadius: 12,
+                      border: '1px solid rgba(255, 255, 255, 0.12)'
                     }}>
-                      {t('hybrid_wallet.staking_soon_badge_short', 'YAKINDA')}
+                      {t('announcements.staking_badge', 'ÇOK YAKINDA • %42 APY')}
                     </span>
                   </div>
-                  <div style={{ fontSize: 10, color: '#a78bfa', marginTop: 3 }}>
-                    {t('hybrid_wallet.staking_soon_badge', 'ÇOK YAKINDA BAŞLIYOR — DAHA BAŞLAMADIK')} • %42 APY
+
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', lineHeight: 1.3 }}>
+                      {t('announcements.staking_card_title', 'TASTE ile TON Staking Yakında!')}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#cbd5e1', marginTop: 4, lineHeight: 1.4 }}>
+                      {t('announcements.staking_card_desc', 'Kripto varlıklarınızı kilitleyin, pasif TAI getirisi kazanın.')}
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <div style={{
-                background: 'rgba(139, 92, 246, 0.25)',
-                color: '#c4b5fd',
-                padding: '6px 12px',
-                borderRadius: 10,
-                fontSize: 11,
-                fontWeight: 900,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4
-              }}>
-                <span>GÖZ AT</span>
-                <span>→</span>
-              </div>
-            </motion.div>
-
-            {/* Quick Access Grid */}
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 10, letterSpacing: 2, color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: 10 }}>{t('app.quick_links', 'Hızlı Erişim')}</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-                {[
-                  { emoji: '👨‍🍳', label: t('drawer.ai_chef', 'AI Şef'), tab: 'ai' },
-                  { emoji: '❤️', label: t('nav.charity', 'Bağış'), tab: 'charity' },
-                  { emoji: '🌐', label: t('drawer.ecosystem', 'Ekosistem'), tab: 'ecosystem' },
-                  { emoji: '👥', label: t('nav.team', 'Takım'), tab: 'team' },
-                  { emoji: '📱', label: t('drawer.socials', 'Sosyal'), tab: 'socials' },
-                  { emoji: '⚙️', label: t('nav.settings', 'Ayarlar'), tab: 'settings' },
-                ].map(item => (
-                  <motion.button
-                    key={item.tab}
-                    whileTap={{ scale: 0.92 }}
-                    onClick={() => navigateTo(item.tab as any)}
-                    style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)', borderRadius: 14, padding: '12px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}
+                  <div
+                    onClick={() => {
+                      setActiveBottomTab('wallet');
+                      navigateTo('wallet');
+                    }}
+                    style={{
+                      marginTop: 14,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      fontSize: 12,
+                      fontWeight: 900,
+                      color: '#93c5fd',
+                      cursor: 'pointer'
+                    }}
                   >
-                    <span style={{ fontSize: 22 }}>{item.emoji}</span>
-                    <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.3 }}>{item.label}</span>
-                  </motion.button>
+                    <span>{t('announcements.more', 'Daha Fazla')}</span>
+                    <ChevronRight size={13} />
+                  </div>
+                </motion.div>
+
+                {/* Announcement Card 2: AI Chef (Teal/Emerald) */}
+                <motion.div
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    minWidth: '84%',
+                    maxWidth: '86%',
+                    scrollSnapAlign: 'start',
+                    background: 'linear-gradient(135deg, #0d9488 0%, #065f46 50%, #022c22 100%)',
+                    border: '1px solid rgba(20, 184, 166, 0.45)',
+                    borderRadius: 22,
+                    padding: '16px 18px',
+                    boxShadow: '0 8px 24px rgba(13, 148, 136, 0.3)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                    <div style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: '50%',
+                      background: 'rgba(255, 255, 255, 0.16)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <ChefHat size={18} color="#5eead4" />
+                    </div>
+                    <span style={{
+                      fontSize: 10,
+                      fontWeight: 800,
+                      background: 'rgba(0, 0, 0, 0.35)',
+                      color: '#a7f3d0',
+                      padding: '4px 9px',
+                      borderRadius: 12,
+                      border: '1px solid rgba(255, 255, 255, 0.12)'
+                    }}>
+                      {t('announcements.chef_badge', 'YENİ MOTOR • PRO')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', lineHeight: 1.3 }}>
+                      {t('announcements.chef_card_title', 'TASTE AI Chef Canlıda Yayında!')}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#cbd5e1', marginTop: 4, lineHeight: 1.4 }}>
+                      {t('announcements.chef_card_desc', 'Buzdolabındaki malzemeleri seç, gurme tarif & kalori çıkar.')}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => navigateTo('chef')}
+                    style={{
+                      marginTop: 14,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      fontSize: 12,
+                      fontWeight: 900,
+                      color: '#5eead4',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span>{t('announcements.try_now', 'Hemen Dene')}</span>
+                    <ChevronRight size={13} />
+                  </div>
+                </motion.div>
+
+                {/* Announcement Card 3: Official Telegram Channel (Violet/Indigo) */}
+                <motion.div
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    minWidth: '84%',
+                    maxWidth: '86%',
+                    scrollSnapAlign: 'start',
+                    background: 'linear-gradient(135deg, #4338ca 0%, #312e81 50%, #1e1b4b 100%)',
+                    border: '1px solid rgba(99, 102, 241, 0.45)',
+                    borderRadius: 22,
+                    padding: '16px 18px',
+                    boxShadow: '0 8px 24px rgba(67, 56, 202, 0.3)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                    <div style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: '50%',
+                      background: 'rgba(255, 255, 255, 0.16)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <Send size={18} color="#a5b4fc" />
+                    </div>
+                    <span style={{
+                      fontSize: 10,
+                      fontWeight: 800,
+                      background: 'rgba(0, 0, 0, 0.35)',
+                      color: '#c7d2fe',
+                      padding: '4px 9px',
+                      borderRadius: 12,
+                      border: '1px solid rgba(255, 255, 255, 0.12)'
+                    }}>
+                      {t('announcements.tg_badge', 'RESMİ KANAL')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', lineHeight: 1.3 }}>
+                      {t('announcements.tg_card_title', 'Resmi Telegram Kanalımıza Katılın!')}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#cbd5e1', marginTop: 4, lineHeight: 1.4 }}>
+                      {t('announcements.tg_card_desc', 'Airdrop, listeleme haberleri ve son gelişmeleri kaçırmayın.')}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => {
+                      if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.openTelegramLink('https://t.me/taste2025');
+                      } else {
+                        window.open('https://t.me/taste2025', '_blank');
+                      }
+                    }}
+                    style={{
+                      marginTop: 14,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      fontSize: 12,
+                      fontWeight: 900,
+                      color: '#a5b4fc',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span>{t('announcements.join', 'Kanala Git')}</span>
+                    <ChevronRight size={13} />
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+
+            {/* ── HIZLI BAĞLANTILAR (Exact 8-Button Squircle Grid from Screenshot) ── */}
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontSize: 11, letterSpacing: 1.5, color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', marginBottom: 12 }}>
+                {t('quick_actions.title', 'Hızlı Erişim')}
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: 8, rowGap: 16 }}>
+                {[
+                  {
+                    id: 'ai',
+                    icon: <Bot size={24} color="#fff" />,
+                    label: t('quick_actions.taste_ai', 'TASTE AI'),
+                    gradient: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                    shadow: 'rgba(37, 99, 235, 0.4)',
+                    action: () => navigateTo('chef')
+                  },
+                  {
+                    id: 'staking',
+                    icon: <Coins size={24} color="#fff" />,
+                    label: t('quick_actions.staking', 'Staking'),
+                    gradient: 'linear-gradient(135deg, #0d9488 0%, #059669 100%)',
+                    shadow: 'rgba(13, 148, 136, 0.4)',
+                    action: () => {
+                      setActiveBottomTab('wallet');
+                      navigateTo('wallet');
+                    }
+                  },
+                  {
+                    id: 'tokenomics',
+                    icon: <HistoryIcon size={24} color="#fff" />,
+                    label: t('quick_actions.tokenomics', 'Arz Geçmişi'),
+                    gradient: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+                    shadow: 'rgba(37, 99, 235, 0.4)',
+                    action: () => navigateTo('tokenomics')
+                  },
+                  {
+                    id: 'share',
+                    icon: <Share2 size={24} color="#fff" />,
+                    label: t('quick_actions.share', 'Paylaş'),
+                    gradient: 'linear-gradient(135deg, #0d9488 0%, #059669 100%)',
+                    shadow: 'rgba(13, 148, 136, 0.4)',
+                    action: () => setShowShareModal(true)
+                  },
+                  {
+                    id: 'notifications',
+                    icon: <Bell size={24} color="#fff" />,
+                    label: t('quick_actions.notifications', 'Bildirimler'),
+                    gradient: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                    shadow: 'rgba(37, 99, 235, 0.4)',
+                    action: () => setShowNotifications(true)
+                  },
+                  {
+                    id: 'tg_channel',
+                    icon: <Send size={24} color="#fff" />,
+                    label: t('quick_actions.tg_channel', 'TG Kanal'),
+                    gradient: 'linear-gradient(135deg, #0d9488 0%, #059669 100%)',
+                    shadow: 'rgba(13, 148, 136, 0.4)',
+                    action: () => setShowShareModal(true)
+                  },
+                  {
+                    id: 'tasks',
+                    icon: <Award size={24} color="#fff" />,
+                    label: t('quick_actions.tasks', 'Puan & Görev'),
+                    gradient: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                    shadow: 'rgba(37, 99, 235, 0.4)',
+                    action: () => navigateTo('vote')
+                  },
+                  {
+                    id: 'support',
+                    icon: <LifeBuoy size={24} color="#fff" />,
+                    label: t('quick_actions.support', 'Destek'),
+                    gradient: 'linear-gradient(135deg, #0d9488 0%, #059669 100%)',
+                    shadow: 'rgba(13, 148, 136, 0.4)',
+                    action: () => navigateTo('socials')
+                  }
+                ].map(item => (
+                  <motion.div
+                    key={item.id}
+                    whileTap={{ scale: 0.90 }}
+                    onClick={item.action}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <div style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: 18,
+                      background: item.gradient,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: `0 6px 18px ${item.shadow}`,
+                      border: '1px solid rgba(255, 255, 255, 0.18)',
+                      transition: 'all 0.2s ease'
+                    }}>
+                      {item.icon}
+                    </div>
+                    <span style={{
+                      marginTop: 7,
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: 'var(--text-main)',
+                      textAlign: 'center',
+                      lineHeight: 1.25,
+                      letterSpacing: '-0.2px'
+                    }}>
+                      {item.label}
+                    </span>
+                  </motion.div>
                 ))}
               </div>
             </div>
