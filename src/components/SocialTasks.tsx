@@ -20,8 +20,8 @@ export function SocialTasks() {
             id: 'tg_channel',
             icon: '📢',
             label: isEn ? 'Announcement Channel' : 'Duyuru Kanalı',
-            sublabel: '@taste2025',
-            link: 'https://t.me/taste2025',
+            sublabel: '@TasteAIToken',
+            link: 'https://t.me/TasteAIToken',
             isTelegram: true,
         },
         {

@@ -392,7 +392,7 @@ export function PoweredBy() {
         { name: 'Vite', color: '#646CFF', category: 'Tech', Logo: ViteLogo },
 
         // 🌐 Socials & Communication
-        { name: 'Main TG', color: '#229ED9', category: 'Socials', url: 'https://t.me/taste2025', Logo: TelegramLogo },
+        { name: 'Main TG', color: '#229ED9', category: 'Socials', url: 'https://t.me/TasteAIToken', Logo: TelegramLogo },
         { name: 'Mini App Group', color: '#229ED9', category: 'Socials', url: 'https://t.me/taste_miniapp/1', Logo: TelegramLogo, badge: 'COMMUNITY' },
         { name: 'Launch Bot', color: '#229ED9', category: 'Socials', url: 'https://t.me/taste_launch_bot', Logo: TelegramLogo, badge: 'BOT' },
         { name: 'X / Twitter', color: '#ffffff', category: 'Socials', url: 'https://x.com/taste_token', Logo: XLogo },

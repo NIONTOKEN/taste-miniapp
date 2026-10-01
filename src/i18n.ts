@@ -45,7 +45,7 @@ const resources = {
                 "title": "📢 Share & Community",
                 "subtitle": "Join the TASTE AI family and invite friends to earn together!",
                 "tg_channel": "Official Telegram Channel",
-                "tg_channel_sub": "@taste2025 • Announcements & news",
+                "tg_channel_sub": "@TasteAIToken • Announcements & news",
                 "tg_group": "Telegram Chat Community",
                 "tg_group_sub": "@taste_miniapp • Active trader chat",
                 "join_channel_btn": "Join Channel 🚀",
@@ -227,7 +227,7 @@ const resources = {
                     },
                     "social": {
                         "title": "Social Media Presence",
-                        "desc": "Telegram channel (@taste2025), Community Group, WhatsApp channel, Twitter/X (@taste_token), Instagram (@taste_ton_taste), TikTok (@taste_ton), Facebook, and official website (tastetoken.net) were established. Active on all platforms."
+                        "desc": "Telegram channel (@TasteAIToken), Community Group, WhatsApp channel, Twitter/X (@taste_token), Instagram (@taste_ton_taste), TikTok (@taste_ton), Facebook, and official website (tastetoken.net) were established. Active on all platforms."
                     },
                     "stray": {
                         "title": "Stray Animals Donation Platform",
@@ -1051,7 +1051,7 @@ const resources = {
                 "title": "📢 Paylaş & Topluluk",
                 "subtitle": "TASTE AI topluluğuna katıl ve arkadaşlarını davet et!",
                 "tg_channel": "Resmi Telegram Duyuru Kanalı",
-                "tg_channel_sub": "@taste2025 • Tüm duyurular ve haberler",
+                "tg_channel_sub": "@TasteAIToken • Tüm duyurular ve haberler",
                 "tg_group": "Telegram Topluluk Sohbet Grubu",
                 "tg_group_sub": "@taste_miniapp • Aktif topluluk sohbeti",
                 "join_channel_btn": "Telegram Kanalına Katıl 🚀",
@@ -1233,7 +1233,7 @@ const resources = {
                     },
                     "social": {
                         "title": "Sosyal Ağ Varlığı",
-                        "desc": "Telegram kanalı (@taste2025) ve Topluluk Grubu, WhatsApp kanalı, Twitter/X (@taste_token), Instagram (@taste_ton_taste), TikTok (@taste_ton), Facebook ve resmi website (tastetoken.net) kuruldu. Tüm platformlarda aktif."
+                        "desc": "Telegram kanalı (@TasteAIToken) ve Topluluk Grubu, WhatsApp kanalı, Twitter/X (@taste_token), Instagram (@taste_ton_taste), TikTok (@taste_ton), Facebook ve resmi website (tastetoken.net) kuruldu. Tüm platformlarda aktif."
                     },
                     "stray": {
                         "title": "Sokak Hayvanları Bağış Platformu",
@@ -2057,7 +2057,7 @@ const resources = {
                 "title": "📢 Поделиться и сообщество",
                 "subtitle": "Присоединяйтесь к сообществу TASTE AI и зовите друзей!",
                 "tg_channel": "Официальный Telegram-канал",
-                "tg_channel_sub": "@taste2025 • Все анонсы и новости",
+                "tg_channel_sub": "@TasteAIToken • Все анонсы и новости",
                 "tg_group": "Чат сообщества Telegram",
                 "tg_group_sub": "@taste_miniapp • Живое общение трейдеров",
                 "join_channel_btn": "Вступить в канал 🚀",
@@ -2239,7 +2239,7 @@ const resources = {
                     },
                     "social": {
                         "title": "Присутствие в социальных сетях",
-                        "desc": "Были созданы Telegram-канал (@taste2025), группа сообщества, канал WhatsApp, Twitter/X (@taste_token), Instagram (@taste_ton_taste), TikTok (@taste_ton), Facebook и официальный сайт (tastetoken.net). Активен на всех платформах."
+                        "desc": "Были созданы Telegram-канал (@TasteAIToken), группа сообщества, канал WhatsApp, Twitter/X (@taste_token), Instagram (@taste_ton_taste), TikTok (@taste_ton), Facebook и официальный сайт (tastetoken.net). Активен на всех платформах."
                     },
                     "stray": {
                         "title": "Платформа для пожертвований бездомных животных",
@@ -3063,7 +3063,7 @@ const resources = {
                 "title": "📢 مشاركة والمجتمع",
                 "subtitle": "انضم إلى مجتمع TASTE AI وادعُ أصدقاءك!",
                 "tg_channel": "قناة تيليجرام الرسمية",
-                "tg_channel_sub": "@taste2025 • الإعلانات والأخبار",
+                "tg_channel_sub": "@TasteAIToken • الإعلانات والأخبار",
                 "tg_group": "مجموعة محادثات تيليجرام",
                 "tg_group_sub": "@taste_miniapp • دردشة المجتمع النشطة",
                 "join_channel_btn": "الانضمام للقناة 🚀",
@@ -3245,7 +3245,7 @@ const resources = {
                     },
                     "social": {
                         "title": "تواجد وسائل التواصل الاجتماعي",
-                        "desc": "تم إنشاء قناة Telegram (@taste2025)، ومجموعة المجتمع، وقناة WhatsApp، وTwitter/X (@taste_token)، وInstagram (@taste_ton_taste)، وTikTok (@taste_ton)، وFacebook، والموقع الرسمي (tastetoken.net). نشط على جميع المنصات."
+                        "desc": "تم إنشاء قناة Telegram (@TasteAIToken)، ومجموعة المجتمع، وقناة WhatsApp، وTwitter/X (@taste_token)، وInstagram (@taste_ton_taste)، وTikTok (@taste_ton)، وFacebook، والموقع الرسمي (tastetoken.net). نشط على جميع المنصات."
                     },
                     "stray": {
                         "title": "منصة التبرع بالحيوانات الضالة",
@@ -4069,7 +4069,7 @@ const resources = {
                 "title": "📢 分享与官方社群",
                 "subtitle": "加入 TASTE AI 大家庭，邀请好友共享生态福利！",
                 "tg_channel": "Telegram 官方公告频道",
-                "tg_channel_sub": "@taste2025 • 最新公告与一手资讯",
+                "tg_channel_sub": "@TasteAIToken • 最新公告与一手资讯",
                 "tg_group": "Telegram 官方社群群组",
                 "tg_group_sub": "@taste_miniapp • 活跃交易者深度交流",
                 "join_channel_btn": "进入官方频道 🚀",
@@ -4251,7 +4251,7 @@ const resources = {
                     },
                     "social": {
                         "title": "社交媒体存在",
-                        "desc": "建立了 Telegram 频道（@taste2025）、社区组、WhatsApp 频道、Twitter/X（@taste_token）、Instagram（@taste_ton_taste）、TikTok（@taste_ton）、Facebook 和官方网站（tastetoken.net）。活跃于所有平台。"
+                        "desc": "建立了 Telegram 频道（@TasteAIToken）、社区组、WhatsApp 频道、Twitter/X（@taste_token）、Instagram（@taste_ton_taste）、TikTok（@taste_ton）、Facebook 和官方网站（tastetoken.net）。活跃于所有平台。"
                     },
                     "stray": {
                         "title": "流浪动物捐赠平台",

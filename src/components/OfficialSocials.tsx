@@ -69,8 +69,8 @@ export function OfficialSocials({ onClose }: OfficialSocialsProps) {
             id: 'tg_channel',
             icon: <Megaphone size={22} />,
             label: isEn ? 'Telegram Community' : 'Telegram Duyuru Kanalı',
-            sublabel: '@taste2025',
-            link: 'https://t.me/taste2025',
+            sublabel: '@TasteAIToken',
+            link: 'https://t.me/TasteAIToken',
             color: '#0088cc'
         },
         {

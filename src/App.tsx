@@ -117,6 +117,36 @@ function App() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
+  // Direct Share with Friends via Telegram Share Sheet
+  const handleShareWithFriends = () => {
+    const inviteUrl = `https://t.me/taste_launch_bot?start=ref_${userId}`;
+    const shareText = t('app.referral_message', '🍳 TASTE AI — Web3 Gastronomi & Yapay Zeka ekosistemine katıl! $TAI token kazan:');
+    const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteUrl)}&text=${encodeURIComponent(shareText)}`;
+
+    if (window.Telegram?.WebApp?.openTelegramLink) {
+      window.Telegram.WebApp.openTelegramLink(tgShareUrl);
+    } else if (navigator.share) {
+      navigator.share({
+        title: 'TASTE AI',
+        text: shareText,
+        url: inviteUrl
+      }).catch(() => {
+        setShowShareModal(true);
+      });
+    } else {
+      setShowShareModal(true);
+    }
+  };
+
+  const handleOpenTGChannel = () => {
+    const channelUrl = 'https://t.me/TasteAIToken';
+    if (window.Telegram?.WebApp?.openTelegramLink) {
+      window.Telegram.WebApp.openTelegramLink(channelUrl);
+    } else {
+      window.open(channelUrl, '_blank');
+    }
+  };
+
   const [unreadNotifCount, setUnreadNotifCount] = useState<number>(() => getUnreadNotificationCount());
   const [showSwapScreen, setShowSwapScreen] = useState(false);
   // 5-tab bottom nav active key: 'wallet' | 'team' | 'home' | 'pool' | 'settings'
@@ -380,81 +410,6 @@ function App() {
 
             
             
-            {/* ── TASTE AI Chef Ana Vitrin Kartı (Yeni!) ── */}
-            <motion.div
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                navigateTo('chef');
-              }}
-              style={{
-                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.12) 50%, rgba(30, 27, 75, 0.4) 100%)',
-                border: '1px solid rgba(245, 158, 11, 0.4)',
-                borderRadius: 22,
-                padding: '16px 18px',
-                marginBottom: 16,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                boxShadow: '0 6px 24px rgba(245, 158, 11, 0.2)',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 16,
-                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 24,
-                  boxShadow: '0 0 16px rgba(245, 158, 11, 0.6)',
-                  flexShrink: 0
-                }}>
-                  👨‍🍳
-                </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ fontSize: 14, fontWeight: 900, color: '#fff' }}>
-                      {t('chef_banner.title', 'TASTE AI Chef')}
-                    </div>
-                    <span style={{
-                      fontSize: 8,
-                      background: '#10b981',
-                      color: '#fff',
-                      padding: '2px 6px',
-                      borderRadius: 6,
-                      fontWeight: 900
-                    }}>
-                      {t('chef_banner.new_engine', 'YENİ MOTOR')}
-                    </span>
-                  </div>
-                  <div style={{ fontSize: 11, color: '#fbbf24', marginTop: 3, fontWeight: 600 }}>
-                    {t('chef_banner.desc', 'Buzdolabındaki malzemeleri seç, gurme tarif & kalori çıkar!')}
-                  </div>
-                </div>
-              </div>
-
-              <div style={{
-                background: 'rgba(245, 158, 11, 0.25)',
-                color: '#fbbf24',
-                padding: '8px 14px',
-                borderRadius: 12,
-                fontSize: 11,
-                fontWeight: 900,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-                flexShrink: 0
-              }}>
-                <span>{t('chef_banner.start', 'BAŞLA')}</span>
-                <span>→</span>
-              </div>
-            </motion.div>
-
             {/* ── DUYURULAR PANOSU (Screenshot Style Carousel) ── */}
             <div style={{ marginBottom: 20 }}>
               <div style={{
@@ -697,9 +652,9 @@ function App() {
                   <div
                     onClick={() => {
                       if (window.Telegram?.WebApp) {
-                        window.Telegram.WebApp.openTelegramLink('https://t.me/taste2025');
+                        window.Telegram.WebApp.openTelegramLink('https://t.me/TasteAIToken');
                       } else {
-                        window.open('https://t.me/taste2025', '_blank');
+                        window.open('https://t.me/TasteAIToken', '_blank');
                       }
                     }}
                     style={{
@@ -760,7 +715,7 @@ function App() {
                     label: t('quick_actions.share', 'Paylaş'),
                     gradient: 'linear-gradient(135deg, #0d9488 0%, #059669 100%)',
                     shadow: 'rgba(13, 148, 136, 0.4)',
-                    action: () => setShowShareModal(true)
+                    action: handleShareWithFriends
                   },
                   {
                     id: 'notifications',
@@ -776,7 +731,7 @@ function App() {
                     label: t('quick_actions.tg_channel', 'TG Kanal'),
                     gradient: 'linear-gradient(135deg, #0d9488 0%, #059669 100%)',
                     shadow: 'rgba(13, 148, 136, 0.4)',
-                    action: () => setShowShareModal(true)
+                    action: handleOpenTGChannel
                   },
                   {
                     id: 'tasks',
