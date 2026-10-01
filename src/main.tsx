@@ -10,7 +10,7 @@ import { WalletProvider } from './context/WalletContext'
 // Robust manifest URL for both dev and production
 const MANIFEST_URL = (typeof window !== 'undefined' && window.location.origin.startsWith('https://'))
   ? `${window.location.origin}/tonconnect-manifest.json`
-  : 'https://taste-miniapp.vercel.app/tonconnect-manifest.json';
+  : 'https://taste-miniapp-xy8k.vercel.app/tonconnect-manifest.json';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
