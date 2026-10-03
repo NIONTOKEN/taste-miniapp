@@ -362,9 +362,9 @@ export function Whitepaper() {
                         {`🔒 JVault ${t('whitepaper.summary.lock_prefix')}leri — %88.4`}
                     </div>
                     {[
-                        { label: `${t('whitepaper.summary.lock_prefix')} 1 — 10,000,000 TASTE (40%)`, addr: 'EQDKKeOpSEE_diuEGULjR-yrJwrGOSwoHvYVdAPmtbeNj0v2' },
-                        { label: `${t('whitepaper.summary.lock_prefix')} 2 — 8,000,000 TASTE (32%)`, addr: 'EQDZLpOUQHOF1C6ekwMl3ERhl-j--r3zprppGtgm287K-6sc' },
-                        { label: `${t('whitepaper.summary.lock_prefix')} 3 — 4,100,000 TASTE (16.4%)`, addr: 'EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co' },
+                        { label: `${t('whitepaper.summary.lock_prefix')} 1 — 10,000,000 TAI (%40) · 🔓 15.01.2027`, addr: 'EQDKKeOpSEE_diuEGULjR-yrJwrGOSwoHvYVdAPmtbeNj0v2' },
+                        { label: `${t('whitepaper.summary.lock_prefix')} 2 — 8,000,000 TAI (%32) · 🔓 17.01.2029`, addr: 'EQDZLpOUQHOF1C6ekwMl3ERhl-j--r3zprppGtgm287K-6sc' },
+                        { label: `${t('whitepaper.summary.lock_prefix')} 3 — 4,100,000 TAI (%16.4) · 🔓 20.02.2027`, addr: 'EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co' },
                     ].map((lock, i) => (
                         <div key={i} onClick={() => {
                             const url = `https://tonscan.org/nft/${lock.addr}`;

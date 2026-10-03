@@ -450,9 +450,14 @@ function App() {
                 paddingBottom: 6,
                 scrollbarWidth: 'none'
               }}>
-                {/* Announcement Card 1: Staking (Exact Blue Style from user image) */}
+                {/* Announcement Card 1: Staking — CANLI */}
                 <motion.div
                   whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    const url = 'https://jvault.xyz/staking/v2/stake/TASTEAI';
+                    if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(url);
+                    else window.open(url, '_blank');
+                  }}
                   style={{
                     minWidth: '84%',
                     maxWidth: '86%',
@@ -466,61 +471,46 @@ function App() {
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     position: 'relative',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    cursor: 'pointer'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                     <div style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: '50%',
-                      background: 'rgba(255, 255, 255, 0.16)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 0 12px rgba(255, 255, 255, 0.1)'
+                      width: 36, height: 36, borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.16)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: '0 0 12px rgba(255,255,255,0.1)'
                     }}>
                       <Megaphone size={18} color="#93c5fd" />
                     </div>
                     <span style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      background: 'rgba(0, 0, 0, 0.35)',
-                      color: '#bfdbfe',
-                      padding: '4px 9px',
-                      borderRadius: 12,
-                      border: '1px solid rgba(255, 255, 255, 0.12)'
+                      fontSize: 10, fontWeight: 800,
+                      background: 'rgba(34,197,94,0.25)',
+                      color: '#86efac',
+                      padding: '4px 9px', borderRadius: 12,
+                      border: '1px solid rgba(34,197,94,0.4)',
+                      display: 'inline-flex', alignItems: 'center', gap: 4
                     }}>
-                      {t('announcements.staking_badge', 'ÇOK YAKINDA • %42 APY')}
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 5px #22c55e' }} />
+                      {t('announcements.staking_badge', 'CANLI • 4 Dönem')}
                     </span>
                   </div>
 
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', lineHeight: 1.3 }}>
-                      {t('announcements.staking_card_title', 'TASTE ile TON Staking Yakında!')}
+                      {t('announcements.staking_card_title', 'TASTE AI Staking Başladı! 🎉')}
                     </div>
                     <div style={{ fontSize: 11, color: '#cbd5e1', marginTop: 4, lineHeight: 1.4 }}>
-                      {t('announcements.staking_card_desc', 'Kripto varlıklarınızı kilitleyin, pasif TAI getirisi kazanın.')}
+                      {t('announcements.staking_card_desc', 'TAI tokenlarını kilitle (14/30/90/120 gün) ve çarpan ödülü kazan.')}
                     </div>
                   </div>
 
-                  <div
-                    onClick={() => {
-                      setActiveBottomTab('wallet');
-                      navigateTo('wallet');
-                    }}
-                    style={{
-                      marginTop: 14,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 4,
-                      fontSize: 12,
-                      fontWeight: 900,
-                      color: '#93c5fd',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <span>{t('announcements.more', 'Daha Fazla')}</span>
+                  <div style={{
+                    marginTop: 14, display: 'inline-flex', alignItems: 'center',
+                    gap: 4, fontSize: 12, fontWeight: 900, color: '#93c5fd', cursor: 'pointer'
+                  }}>
+                    <span>{t('announcements.stake_now', 'Hemen Stake Et')}</span>
                     <ChevronRight size={13} />
                   </div>
                 </motion.div>
@@ -694,11 +684,12 @@ function App() {
                     id: 'staking',
                     icon: <Coins size={24} color="#fff" />,
                     label: t('quick_actions.staking', 'Staking'),
-                    gradient: 'linear-gradient(135deg, #0d9488 0%, #059669 100%)',
-                    shadow: 'rgba(13, 148, 136, 0.4)',
+                    gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+                    shadow: 'rgba(139, 92, 246, 0.4)',
                     action: () => {
-                      setActiveBottomTab('wallet');
-                      navigateTo('wallet');
+                      const url = 'https://jvault.xyz/staking/v2/stake/TASTEAI';
+                      if (window.Telegram?.WebApp) window.Telegram.WebApp.openLink(url);
+                      else window.open(url, '_blank');
                     }
                   },
                   {
