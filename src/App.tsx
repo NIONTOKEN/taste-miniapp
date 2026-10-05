@@ -139,7 +139,7 @@ function App() {
   };
 
   const handleOpenTGChannel = () => {
-    const channelUrl = 'https://t.me/TasteAIToken';
+    const channelUrl = 'https://t.me/taste2025';
     if (window.Telegram?.WebApp?.openTelegramLink) {
       window.Telegram.WebApp.openTelegramLink(channelUrl);
     } else {
@@ -642,9 +642,9 @@ function App() {
                   <div
                     onClick={() => {
                       if (window.Telegram?.WebApp) {
-                        window.Telegram.WebApp.openTelegramLink('https://t.me/TasteAIToken');
+                        window.Telegram.WebApp.openTelegramLink('https://t.me/taste2025');
                       } else {
-                        window.open('https://t.me/TasteAIToken', '_blank');
+                        window.open('https://t.me/taste2025', '_blank');
                       }
                     }}
                     style={{
