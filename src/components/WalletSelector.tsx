@@ -253,7 +253,7 @@ export const WalletSelector = () => {
                                                             : 'Use the Taste internal wallet for easy in-app transactions.'}
                                                     </p>
                                                     <button
-                                                        onClick={createInternalWallet}
+                                                        onClick={() => createInternalWallet()}
                                                         style={{
                                                             width: '100%', padding: '16px', borderRadius: '15px', border: 'none',
                                                             background: 'var(--gradient-gold)', color: '#000', fontWeight: 900,

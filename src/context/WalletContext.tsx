@@ -24,10 +24,11 @@ interface WalletContextType {
     };
     refreshBalances: () => Promise<void>;
     isLoading: boolean;
-    createInternalWallet: () => Promise<InternalWalletInfo>;
+    createInternalWallet: (wordCount?: 12 | 24) => Promise<InternalWalletInfo>;
     importWallet: (mnemonic: string) => Promise<InternalWalletInfo>;
     logoutInternal: () => void;
     internalWallet: InternalWalletInfo | null;
+    loadInternal: () => Promise<void>;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -56,16 +57,26 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const loadInternal = async () => {
         try {
             const info = await internalWalletService.getWalletInfo();
-            if (info) setInternalWallet(info);
+            if (info) {
+                setInternalWallet(info);
+            } else {
+                setInternalWallet(null);
+            }
         } catch (err) {
             console.error('[WalletContext] Internal wallet load error:', err);
             try { localStorage.removeItem('taste_internal_wallet_mnemonic'); } catch {}
+            setInternalWallet(null);
         }
     };
 
     useEffect(() => {
+        // Sadece kullanıcı daha önce internal'ı manuel seçmemişse external'a geç
+        // Bu sayede hem Tonkeeper hem iç cüzdan aynı anda görünebilir/seçilebilir
         if (externalAddress) {
-            setWalletType('external');
+            const savedType = localStorage.getItem('taste_wallet_type');
+            if (savedType !== 'internal') {
+                setWalletType('external');
+            }
         }
     }, [externalAddress]);
 
@@ -73,9 +84,9 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         loadInternal();
     }, []);
 
-    const createInternalWallet = async () => {
+    const createInternalWallet = async (wordCount: 12 | 24 = 24) => {
         try {
-            const info = await internalWalletService.createWallet();
+            const info = await internalWalletService.createWallet(wordCount);
             setInternalWallet(info);
             setWalletType('internal');
             return info;
@@ -185,7 +196,8 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             createInternalWallet,
             importWallet,
             logoutInternal,
-            internalWallet
+            internalWallet,
+            loadInternal
         }}>
             {children}
         </WalletContext.Provider>

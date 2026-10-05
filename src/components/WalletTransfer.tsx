@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
 import { internalWalletService } from '../services/internalWallet';
-import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
+import { useTonConnectUI, TonConnectButton, useTonAddress } from '@tonconnect/ui-react';
 import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoNOT, LogoTAI } from './TokenLogos';
 import { toNano, Address, beginCell } from '@ton/core';
 import { fetchLiveTaiPrice, LiveTokenPrice } from '../services/stonfiService';
@@ -35,8 +35,9 @@ interface TxEvent {
 
 export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBorsa }) => {
   const { t } = useTranslation();
-  const { walletType, setWalletType, activeAddress, balances, refreshBalances } = useWallet();
+  const { walletType, setWalletType, activeAddress, balances, refreshBalances, internalWallet, createInternalWallet, importWallet, logoutInternal, loadInternal } = useWallet();
   const [tonConnectUI] = useTonConnectUI();
+  const externalAddress = useTonAddress();
 
   const [showBalance, setShowBalance] = useState(true);
   const [activeActionModal, setActiveActionModal] = useState<'none' | 'deposit' | 'withdraw' | 'history' | 'manage'>('none');
@@ -247,9 +248,10 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
 
   const handleCreateNewWallet = async () => {
     try {
-      const info = await internalWalletService.createWallet(mnemonicCount);
+      const info = await createInternalWallet(mnemonicCount);
       setGeneratedWords(info.mnemonic);
       setWalletManageMode('backup');
+      setActiveActionModal('manage');
       refreshBalances();
     } catch (e: any) {
       alert(t('wallet_transfer.wallet_error', 'Hata: ') + e.message);
@@ -259,7 +261,7 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
   const handleImportWallet = async () => {
     try {
       setImportError('');
-      await internalWalletService.importWallet(importInput);
+      await importWallet(importInput);
       setWalletManageMode('menu');
       refreshBalances();
       setTimeout(() => setActiveActionModal('none'), 1200);
@@ -626,154 +628,355 @@ export const WalletTransfer: React.FC<WalletTransferProps> = ({ onNavigateToBors
       </div>
 
       {/* ── 3. Cüzdan Yönetimi & Bağlantı Barı (Resmi TonConnect Butonlu) ── */}
+      {/* ── 3. Cüzdan Yönetimi & Bağlantı Barı (Taste Dahili & Tonkeeper Çift Cüzdan Desteği) ── */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(37,99,235,0.08) 100%)',
-        border: '1px solid rgba(245,158,11,0.25)',
-        borderRadius: '18px',
-        padding: '14px 16px',
+        background: 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(37,99,235,0.08) 100%)',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        borderRadius: '20px',
+        padding: '14px',
         marginBottom: '20px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '10px'
+        gap: '12px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
-                {walletType === 'internal' ? t('wallet_transfer.taste_wallet', '🔐 Taste Yerleşik Cüzdan') : t('wallet_transfer.tonconnect_wallet', '🔗 TonConnect Cüzdanı')}
-              </span>
-              {activeAddress && (
-                <span style={{ fontSize: '9px', background: '#22c55e', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>{t('wallet_transfer.active_badge', 'AKTİF')}</span>
-              )}
-            </div>
-            <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>
-              {activeAddress ? `${activeAddress.slice(0, 8)}...${activeAddress.slice(-6)}` : t('wallet_transfer.not_connected', 'Cüzdan bağlı değil')}
-            </div>
-          </div>
-
+        {/* Çift Cüzdan Seçim Sekmesi (Taste Dahili & Tonkeeper Harici) */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          background: 'rgba(0, 0, 0, 0.4)',
+          borderRadius: '14px',
+          padding: '4px',
+          gap: '6px',
+          border: '1px solid rgba(255, 255, 255, 0.08)'
+        }}>
+          {/* 1. Taste Cüzdanı (Uygulama İçi) */}
           <button
             onClick={() => {
-              setWalletManageMode('menu');
-              setActiveActionModal('manage');
+              setWalletType('internal');
+              refreshBalances();
             }}
             style={{
-              background: 'rgba(255,255,255,0.08)',
-              color: '#fff',
-              border: '1px solid rgba(255,255,255,0.15)',
+              padding: '10px 8px',
               borderRadius: '10px',
-              padding: '8px 12px',
+              border: walletType === 'internal' ? '1px solid rgba(16, 185, 129, 0.6)' : '1px solid transparent',
+              background: walletType === 'internal' ? 'linear-gradient(135deg, rgba(16,185,129,0.3), rgba(4,120,87,0.4))' : 'transparent',
+              color: walletType === 'internal' ? '#34d399' : '#94a3b8',
+              fontWeight: 900,
               fontSize: '11px',
-              fontWeight: 800,
-              cursor: 'pointer'
-            }}
-          >
-            {t('wallet_transfer.manage', 'Yönet ⚙️')}
-          </button>
-        </div>
-
-        {/* Cüzdan Bağlı Değilse Resmi TonConnect Butonu */}
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between', paddingTop: '4px' }}>
-          <div style={{ flex: 1 }}>
-            <TonConnectButton className="taste-tonconnect-btn" />
-          </div>
-          <button
-            onClick={refreshBalances}
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '10px',
-              padding: '8px 10px',
-              color: '#94a3b8',
-              fontSize: '11px',
-              fontWeight: 700,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px'
+              justifyContent: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease'
             }}
           >
-            <RefreshCw size={12} />
-            <span>{t('wallet_transfer.refresh', 'Yenile')}</span>
+            <span>🔐</span>
+            <span>{t('wallet_transfer.taste_internal_title', 'Taste Cüzdanı')}</span>
+            {internalWallet ? (
+              <span style={{ fontSize: '8px', background: walletType === 'internal' ? '#10b981' : 'rgba(16,185,129,0.4)', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>
+                {walletType === 'internal' ? t('wallet_transfer.active_badge', 'AKTİF') : 'HAZIR'}
+              </span>
+            ) : (
+              <span style={{ fontSize: '8px', background: 'rgba(245,158,11,0.25)', color: '#fbbf24', padding: '1px 4px', borderRadius: '4px', fontWeight: 800 }}>
+                YENİ
+              </span>
+            )}
+          </button>
+
+          {/* 2. Tonkeeper / TonConnect (Harici) */}
+          <button
+            onClick={() => {
+              setWalletType('external');
+              refreshBalances();
+            }}
+            style={{
+              padding: '10px 8px',
+              borderRadius: '10px',
+              border: walletType === 'external' ? '1px solid rgba(59, 130, 246, 0.6)' : '1px solid transparent',
+              background: walletType === 'external' ? 'linear-gradient(135deg, rgba(37,99,235,0.3), rgba(29,78,216,0.4))' : 'transparent',
+              color: walletType === 'external' ? '#60a5fa' : '#94a3b8',
+              fontWeight: 900,
+              fontSize: '11px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <span>💎</span>
+            <span>{t('wallet_transfer.tonkeeper_external_title', 'Tonkeeper / Dış')}</span>
+            {externalAddress ? (
+              <span style={{ fontSize: '8px', background: walletType === 'external' ? '#3b82f6' : 'rgba(59,130,246,0.4)', color: '#fff', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>
+                {walletType === 'external' ? t('wallet_transfer.active_badge', 'AKTİF') : 'BAĞLI'}
+              </span>
+            ) : (
+              <span style={{ fontSize: '8px', background: 'rgba(255,255,255,0.1)', color: '#94a3b8', padding: '1px 4px', borderRadius: '4px', fontWeight: 800 }}>
+                BAĞLA
+              </span>
+            )}
           </button>
         </div>
 
-        {/* Cüzdan Bağlıyken Her Cihazda Görünür Adresi Kopyala ve Bağlantıyı Kes Butonları */}
-        {activeAddress && (
-          <div style={{
-            display: 'flex',
-            gap: '8px',
-            paddingTop: '8px',
-            borderTop: '1px solid rgba(255,255,255,0.08)'
-          }}>
-            <button
-              onClick={() => copyToClipboard(activeAddress)}
-              style={{
-                flex: 1,
-                padding: '9px 12px',
-                borderRadius: '10px',
-                border: '1px solid rgba(255,255,255,0.12)',
-                background: 'rgba(255,255,255,0.05)',
-                color: copied ? '#10b981' : '#cbd5e1',
-                fontSize: '11px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px'
-              }}
-            >
-              {copied ? <Check size={14} /> : <Copy size={14} />}
-              <span>{copied ? t('wallet_transfer.copied', 'Kopyalandı!') : t('wallet_transfer.copy_address', 'Adresi Kopyala')}</span>
-            </button>
+        {/* ── Durum 1: Taste Dahili Cüzdanı Aktif ── */}
+        {walletType === 'internal' && (
+          <div>
+            {internalWallet ? (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 900, color: '#34d399' }}>
+                        🔐 {t('wallet_transfer.taste_wallet', 'Taste Yerleşik Cüzdan')}
+                      </span>
+                      <span style={{ fontSize: '9px', background: '#22c55e', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>
+                        {t('wallet_transfer.active_badge', 'AKTİF')}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#cbd5e1', marginTop: '3px', fontFamily: 'monospace' }}>
+                      {internalWallet.address.slice(0, 10)}...{internalWallet.address.slice(-8)}
+                    </div>
+                  </div>
 
-            {walletType === 'external' ? (
-              <button
-                onClick={() => tonConnectUI.disconnect()}
-                style={{
-                  flex: 1,
-                  padding: '9px 12px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(239, 68, 68, 0.3)',
-                  background: 'rgba(239, 68, 68, 0.08)',
-                  color: '#f87171',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px'
-                }}
-              >
-                <Link2 size={14} style={{ transform: 'rotate(45deg)' }} />
-                <span>{t('wallet_transfer.disconnect', 'Bağlantıyı Kes')}</span>
-              </button>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <button
+                      onClick={() => {
+                        setWalletManageMode('menu');
+                        setActiveActionModal('manage');
+                      }}
+                      style={{
+                        background: 'rgba(255,255,255,0.08)',
+                        color: '#fff',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        borderRadius: '10px',
+                        padding: '6px 10px',
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {t('wallet_transfer.manage', 'Yönet ⚙️')}
+                    </button>
+                    <button
+                      onClick={refreshBalances}
+                      style={{
+                        background: 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '10px',
+                        padding: '6px 8px',
+                        color: '#94a3b8',
+                        cursor: 'pointer'
+                      }}
+                      title={t('wallet_transfer.refresh', 'Yenile')}
+                    >
+                      <RefreshCw size={13} />
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                  <button
+                    onClick={() => copyToClipboard(internalWallet.address)}
+                    style={{
+                      flex: 1,
+                      padding: '9px 12px',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                      background: 'rgba(16, 185, 129, 0.08)',
+                      color: copied ? '#10b981' : '#a7f3d0',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    {copied ? <Check size={14} /> : <Copy size={14} />}
+                    <span>{copied ? t('wallet_transfer.copied', 'Kopyalandı!') : t('wallet_transfer.copy_address', 'Adresi Kopyala')}</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      logoutInternal();
+                      refreshBalances();
+                    }}
+                    style={{
+                      padding: '9px 12px',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                      background: 'rgba(239, 68, 68, 0.08)',
+                      color: '#f87171',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    <Link2 size={13} style={{ transform: 'rotate(45deg)' }} />
+                    <span>{t('wallet_transfer.disconnect', 'Çıkış')}</span>
+                  </button>
+                </div>
+              </div>
             ) : (
-              <button
-                onClick={() => {
-                  internalWalletService.logout();
-                  refreshBalances();
-                }}
-                style={{
-                  flex: 1,
-                  padding: '9px 12px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(239, 68, 68, 0.3)',
-                  background: 'rgba(239, 68, 68, 0.08)',
-                  color: '#f87171',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px'
-                }}
-              >
-                <Link2 size={14} style={{ transform: 'rotate(45deg)' }} />
-                <span>{t('wallet_transfer.disconnect', 'Cüzdandan Çık')}</span>
-              </button>
+              <div style={{
+                background: 'rgba(16, 185, 129, 0.05)',
+                border: '1px dashed rgba(16, 185, 129, 0.3)',
+                borderRadius: '14px',
+                padding: '14px',
+                textAlign: 'center'
+              }}>
+                <div style={{ fontSize: '13px', fontWeight: 900, color: '#fff', marginBottom: '4px' }}>
+                  🔐 {t('wallet_transfer.no_internal_title', 'Taste Dahili Cüzdanınızı Oluşturun')}
+                </div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', lineHeight: 1.4, marginBottom: '12px' }}>
+                  {t('wallet_transfer.no_internal_desc', 'Uygulama içi güvenli TON & TAI cüzdanınızı tek tıkla oluşturup hemen kullanmaya başlayabilirsiniz.')}
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={handleCreateNewWallet}
+                    style={{
+                      flex: 1,
+                      padding: '11px',
+                      borderRadius: '10px',
+                      border: 'none',
+                      background: 'linear-gradient(135deg, #10b981, #047857)',
+                      color: '#fff',
+                      fontSize: '12px',
+                      fontWeight: 900,
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 12px rgba(16,185,129,0.3)'
+                    }}
+                  >
+                    ✨ {t('wallet_transfer.quick_create_btn', '1 Tıkla Cüzdan Oluştur')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setWalletManageMode('import');
+                      setActiveActionModal('manage');
+                    }}
+                    style={{
+                      padding: '11px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      background: 'rgba(255,255,255,0.06)',
+                      color: '#cbd5e1',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    📥 {t('wallet_transfer.import_btn_short', 'İçe Aktar')}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Durum 2: Tonkeeper / Harici Cüzdan Aktif ── */}
+        {walletType === 'external' && (
+          <div>
+            {externalAddress ? (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 900, color: '#60a5fa' }}>
+                        💎 {t('wallet_transfer.tonconnect_wallet', 'Tonkeeper / Harici Cüzdan')}
+                      </span>
+                      <span style={{ fontSize: '9px', background: '#3b82f6', color: '#fff', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>
+                        {t('wallet_transfer.active_badge', 'AKTİF')}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#cbd5e1', marginTop: '3px', fontFamily: 'monospace' }}>
+                      {externalAddress.slice(0, 10)}...{externalAddress.slice(-8)}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={refreshBalances}
+                    style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '10px',
+                      padding: '6px 8px',
+                      color: '#94a3b8',
+                      cursor: 'pointer'
+                    }}
+                    title={t('wallet_transfer.refresh', 'Yenile')}
+                  >
+                    <RefreshCw size={13} />
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                  <button
+                    onClick={() => copyToClipboard(externalAddress)}
+                    style={{
+                      flex: 1,
+                      padding: '9px 12px',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(59, 130, 246, 0.3)',
+                      background: 'rgba(59, 130, 246, 0.08)',
+                      color: copied ? '#10b981' : '#bfdbfe',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    {copied ? <Check size={14} /> : <Copy size={14} />}
+                    <span>{copied ? t('wallet_transfer.copied', 'Kopyalandı!') : t('wallet_transfer.copy_address', 'Adresi Kopyala')}</span>
+                  </button>
+
+                  <button
+                    onClick={() => tonConnectUI.disconnect()}
+                    style={{
+                      padding: '9px 12px',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                      background: 'rgba(239, 68, 68, 0.08)',
+                      color: '#f87171',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    <Link2 size={13} style={{ transform: 'rotate(45deg)' }} />
+                    <span>{t('wallet_transfer.disconnect', 'Bağlantıyı Kes')}</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div style={{
+                background: 'rgba(59, 130, 246, 0.05)',
+                border: '1px dashed rgba(59, 130, 246, 0.3)',
+                borderRadius: '14px',
+                padding: '14px',
+                textAlign: 'center'
+              }}>
+                <div style={{ fontSize: '13px', fontWeight: 900, color: '#fff', marginBottom: '4px' }}>
+                  💎 {t('wallet_transfer.connect_tonkeeper_title', 'Tonkeeper veya Harici Cüzdan Bağlayın')}
+                </div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', lineHeight: 1.4, marginBottom: '12px' }}>
+                  {t('wallet_transfer.connect_tonkeeper_desc', 'Tonkeeper, Telegram Wallet veya MyTonWallet cüzdanınızı bağlayarak bakiye ve transferlerinizi yönetin.')}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                  <TonConnectButton className="taste-tonconnect-btn" />
+                </div>
+              </div>
             )}
           </div>
         )}
