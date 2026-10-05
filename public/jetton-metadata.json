@@ -2,9 +2,11 @@
   "name": "TASTE AI",
   "symbol": "TAI",
   "decimals": "9",
-  "description": "Taste AI () is a next-generation Web3 payment and AI-powered gastronomy ecosystem built on the TON blockchain. With multi-DEX swap support and real-world utility, Taste AI enables seamless transactions and liquidity pool rewards.",
+  "description": "Taste AI (TAI) is a next-generation Web3 payment and AI-powered gastronomy ecosystem built on the TON blockchain. With multi-DEX swap support and real-world utility, Taste AI enables seamless transactions, staking rewards, and liquidity pool incentives.",
   "image": "https://raw.githubusercontent.com/NIONTOKEN/taste-miniapp/main/public/tai-logo-gold.png",
+  "total_supply": "25000000000000000",
   "social": [
+    "https://t.me/taste2025",
     "https://t.me/TasteAIToken",
     "https://x.com/AiTaste"
   ],
@@ -13,5 +15,54 @@
   ],
   "catalogs": [
     "https://tonviewer.com/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
-  ]
+  ],
+  "tokenomics": {
+    "total_supply": "25,000,000 TAI",
+    "jvault_locked_reserves": "22,100,000 TAI (88.4%)",
+    "liquidity_pools": "1,600,000 TAI (6.4%)",
+    "founders_reserve": "1,000,000 TAI (4.0%)",
+    "operations_and_community": "300,000 TAI (1.2%)",
+    "jvault_locks": [
+      {
+        "id": 1,
+        "amount": "10,000,000 TAI",
+        "contract_nft": "EQDKKeOpSEE_diuEGULjR-yrJwrGOSwoHvYVdAPmtbeNj0v2",
+        "unlock_date": "2027-01-15T00:00:00Z"
+      },
+      {
+        "id": 2,
+        "amount": "8,000,000 TAI",
+        "contract_nft": "EQDZLpOUQHOF1C6ekwMl3ERhl-j--r3zprppGtgm287K-6sc",
+        "unlock_date": "2029-01-17T00:00:00Z"
+      },
+      {
+        "id": 3,
+        "amount": "4,100,000 TAI",
+        "contract_nft": "EQDi4tBlzXtLMXQA1OVOZfKVwLiGoM-tU0rNBVc8e4rHt3co",
+        "unlock_date": "2027-02-20T00:00:00Z"
+      }
+    ],
+    "founder_wallets": [
+      {
+        "role": "Founder 1",
+        "address": "UQBaV1KUbR2apZzROevRo53NRgyOetrTJSu92cKhgY8qqA-l",
+        "amount": "500,000 TAI"
+      },
+      {
+        "role": "Founder 2",
+        "address": "UQBX8d1RPOoTK-_DY-gNcd1_JvVNUZgZ1TiKof_1s8CTS_Il",
+        "amount": "500,000 TAI"
+      }
+    ],
+    "liquidity": {
+      "dex": "STON.fi",
+      "lp_token": "EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS",
+      "router": "EQCiypoBWNIEPlarBp04UePyEj5zH0ZDHxuRNqJ1WQx3FCY-"
+    },
+    "staking": {
+      "platform": "JVault V2",
+      "pool_contract": "EQB55_FDUQE9e2RFjnztcQpb_0u8yM70V_AmZxGOtrZ61rnU",
+      "rewards_pool": "100,000 TAI"
+    }
+  }
 }

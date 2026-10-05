@@ -371,40 +371,34 @@ function App() {
               </div>
             </motion.div>
 
-            {/* TAI Swap & DeFi Pool — with images */}
+            {/* TAI Swap & DeFi Pool — mavi butonlar (görselsiz) */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
               <motion.button
                 whileTap={{ scale: 0.96 }}
                 onClick={() => setShowSwapScreen(true)}
                 style={{
-                  background: 'var(--bg-card)', border: '1px solid rgba(245,159,11,0.25)',
-                  borderRadius: 20, padding: 0, cursor: 'pointer', overflow: 'hidden', textAlign: 'center'
+                  background: 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #172554 100%)',
+                  border: '1px solid rgba(59,130,246,0.45)',
+                  boxShadow: '0 8px 20px rgba(29,78,216,0.3)',
+                  borderRadius: 18, padding: '16px 12px', cursor: 'pointer', textAlign: 'center', color: '#fff'
                 }}
               >
-                <div style={{ width: '100%', height: 80, overflow: 'hidden' }}>
-                  <img src="/photo_14.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div style={{ padding: '10px 12px' }}>
-                  <div style={{ fontSize: 14, fontWeight: 900, color: 'var(--primary)' }}>⚡ {t('app.buy_with', 'TAI Al')}</div>
-                  <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>TON, USDT, DOGS</div>
-                </div>
+                <div style={{ fontSize: 15, fontWeight: 900 }}>⚡ {t('app.buy_with', 'TAI Al')}</div>
+                <div style={{ fontSize: 10, color: '#bfdbfe', marginTop: 4 }}>TON, USDT, DOGS</div>
               </motion.button>
 
               <motion.button
                 whileTap={{ scale: 0.96 }}
                 onClick={() => { setActiveBottomTab('pool'); navigateTo('pool'); }}
                 style={{
-                  background: 'var(--bg-card)', border: '1px solid rgba(16,185,129,0.25)',
-                  borderRadius: 20, padding: 0, cursor: 'pointer', overflow: 'hidden', textAlign: 'center'
+                  background: 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #172554 100%)',
+                  border: '1px solid rgba(59,130,246,0.45)',
+                  boxShadow: '0 8px 20px rgba(29,78,216,0.3)',
+                  borderRadius: 18, padding: '16px 12px', cursor: 'pointer', textAlign: 'center', color: '#fff'
                 }}
               >
-                <div style={{ width: '100%', height: 80, overflow: 'hidden' }}>
-                  <img src="/photo_15.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div style={{ padding: '10px 12px' }}>
-                  <div style={{ fontSize: 14, fontWeight: 900, color: '#10b981' }}>💧 DeFi {t('nav.pool', 'Havuz')}</div>
-                  <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>STON.fi & DeDust</div>
-                </div>
+                <div style={{ fontSize: 15, fontWeight: 900 }}>💧 DeFi {t('nav.pool', 'Havuz')}</div>
+                <div style={{ fontSize: 10, color: '#bfdbfe', marginTop: 4 }}>STON.fi & DeDust</div>
               </motion.button>
             </div>
 
@@ -782,17 +776,25 @@ function App() {
               </div>
             </div>
 
-            {/* Featured image banner */}
+            {/* Featured banner (görselsiz şık kart) */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid var(--bg-card-border)' }}
+              style={{
+                borderRadius: 20,
+                border: '1px solid rgba(245, 158, 11, 0.25)',
+                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.6) 100%)',
+                padding: '16px 18px',
+                boxShadow: '0 4px 18px rgba(0, 0, 0, 0.25)'
+              }}
             >
-              <img src="/photo_16.jpg" alt="TASTE Community" style={{ width: '100%', height: 140, objectFit: 'cover' }} />
-              <div style={{ padding: '14px 16px', background: 'var(--bg-card)' }}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)' }}>🍳 {t('app.banner_title', 'TASTE AI — Web3\'ün Yeni Yüzü!')}</div>
-                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.5 }}>{t('app.banner_desc', 'Toplulukla birlikte büyüyen, yapay zeka destekli gastronomi ekosistemi.')}</div>
+              <div style={{ fontSize: 14, fontWeight: 900, color: '#f59e0b', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span>✨</span>
+                <span>{t('app.banner_title', "TASTE AI — Web3'ün Yeni Yüzü!")}</span>
+              </div>
+              <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 6, lineHeight: 1.5 }}>
+                {t('app.banner_desc', 'Toplulukla birlikte büyüyen, yapay zeka destekli gastronomi ekosistemi.')}
               </div>
             </motion.div>
 
