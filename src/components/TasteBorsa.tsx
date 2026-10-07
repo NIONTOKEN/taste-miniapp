@@ -104,10 +104,13 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
       if (i === count - 1) p = base;
 
       let label = '';
-      if (selectedTf === '1H') label = `${Math.round(60 - (count - i) * 2)} dk önce`;
-      else if (selectedTf === '24H') label = `${Math.round(24 - (count - i) * 0.8)} sa önce`;
-      else if (selectedTf === '7D') label = `${Math.round(7 - (count - i) * 0.23)} gün önce`;
-      else label = `${Math.round(30 - (count - i))} gün önce`;
+      const mStr = t('borsa.min_ago', 'dk önce');
+      const hStr = t('borsa.hr_ago', 'sa önce');
+      const dStr = t('borsa.day_ago', 'gün önce');
+      if (selectedTf === '1H') label = `${Math.round(60 - (count - i) * 2)} ${mStr}`;
+      else if (selectedTf === '24H') label = `${Math.round(24 - (count - i) * 0.8)} ${hStr}`;
+      else if (selectedTf === '7D') label = `${Math.round(7 - (count - i) * 0.23)} ${dStr}`;
+      else label = `${Math.round(30 - (count - i))} ${dStr}`;
 
       pts.push({ price: p, label });
     }

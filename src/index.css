@@ -373,7 +373,13 @@ h3 {
 }
 
 .nav-item.active .nav-icon svg {
-  filter: drop-shadow(0 0 6px var(--primary-glow));
+  filter: drop-shadow(0 0 8px var(--primary-glow));
+}
+
+.nav-item.active .nav-label {
+  color: #f59e0b;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
 }
 
 .nav-icon {

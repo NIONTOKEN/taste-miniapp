@@ -703,12 +703,12 @@ function App() {
                     action: handleShareWithFriends
                   },
                   {
-                    id: 'notifications',
-                    icon: <Bell size={24} color="#fff" />,
-                    label: t('quick_actions.notifications', 'Bildirimler'),
-                    gradient: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                    shadow: 'rgba(37, 99, 235, 0.4)',
-                    action: () => setShowNotifications(true)
+                    id: 'ecosystem',
+                    icon: <Globe size={24} color="#fff" />,
+                    label: t('nav.ecosystem', 'Ekosistem'),
+                    gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+                    shadow: 'rgba(139, 92, 246, 0.4)',
+                    action: () => navigateTo('ecosystem')
                   },
                   {
                     id: 'tg_channel',
@@ -1069,60 +1069,44 @@ function App() {
             }}>TASTE TAI</span>
           </div>
 
-          {/* Right: AI Chef + KYC + Bell + Lang + Avatar */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            {/* AI Chef Top Button */}
-            <motion.div
-              whileTap={{ scale: 0.92 }}
-              onClick={() => navigateTo('chef')}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 4,
-                background: 'linear-gradient(135deg, rgba(245,158,11,0.25), rgba(217,119,6,0.3))',
-                border: '1px solid rgba(245,158,11,0.5)',
-                borderRadius: 20, padding: '4px 9px', fontSize: 11, fontWeight: 900, color: '#fbbf24',
-                cursor: 'pointer', boxShadow: '0 0 10px rgba(245,158,11,0.3)'
-              }}
-            >
-              <span>👨‍🍳</span>
-              <span>{t('drawer.ai_chef', 'AI Şef')}</span>
-            </motion.div>
-
+          {/* Right: KYC + Lang + Profile Avatar */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {/* KYC badge */}
             <div onClick={() => setShowKYC(true)} style={{
               display: 'flex', alignItems: 'center', gap: 5,
               background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.35)',
-              borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 700, color: '#10b981',
+              borderRadius: 20, padding: '5px 11px', fontSize: 11, fontWeight: 800, color: '#10b981',
               cursor: 'pointer'
             }}>
-              <ShieldCheck size={12} />
+              <ShieldCheck size={13} />
               KYC
             </div>
 
-            {/* Notification bell */}
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setShowNotifications(true)}
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '7px', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', position: 'relative' }}
-            >
-              <Bell size={16} />
-              {unreadNotifCount > 0 && (
-                <span style={{ position: 'absolute', top: 5, right: 5, width: 6, height: 6, borderRadius: '50%', background: '#ef4444', border: '1px solid #0a0f1c' }} />
-              )}
-            </motion.button>
-
             {/* Lang button */}
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowLangMenu(!showLangMenu)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--bg-card-border)', color: 'var(--text-main)', padding: '5px 10px', borderRadius: '15px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Globe size={13} />
-              {currentLang.flag}
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowLangMenu(!showLangMenu)} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid var(--bg-card-border)', color: 'var(--text-main)', padding: '6px 11px', borderRadius: '16px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <Globe size={14} />
+              <span>{currentLang.flag}</span>
             </motion.button>
 
-            {/* Profile avatar */}
+            {/* Profile avatar - fully visible, prominent */}
             <motion.button
-              whileTap={{ scale: 0.9 }}
+              whileTap={{ scale: 0.92 }}
               onClick={() => setShowProfile(true)}
-              style={{ padding: 0, background: 'none', border: '2px solid #f59e0b', borderRadius: '50%', cursor: 'pointer', boxShadow: '0 0 10px rgba(245,159,11,0.4)' }}
+              style={{
+                padding: 0,
+                background: 'none',
+                border: '2px solid #f59e0b',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                boxShadow: '0 0 14px rgba(245,159,11,0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}
+              title={t('profile_ext.title', 'Profil')}
             >
-              <img src="/logo.jpg" alt="profil" style={{ width: 34, height: 34, borderRadius: '50%', display: 'block', objectFit: 'cover' }} />
+              <img src="/logo.jpg" alt="profil" style={{ width: 36, height: 36, borderRadius: '50%', display: 'block', objectFit: 'cover' }} />
             </motion.button>
           </div>
 
@@ -1297,58 +1281,51 @@ function App() {
           )}
         </AnimatePresence>
 
-        {/* ── 5-Tab Bottom Navigation (TTCoin style) ── */}
-        <nav className="bottom-nav" style={{ padding: '0 4px' }}>
+        {/* ── 3-Tab Ultra-Modern Bottom Navigation ── */}
+        <nav className="bottom-nav" style={{ padding: '0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
           {/* 1. Cüzdan */}
           <button
             className={`nav-item ${activeBottomTab === 'wallet' ? 'active' : ''}`}
             onClick={() => { setActiveBottomTab('wallet'); navigateTo('wallet'); setIsMenuOpen(false); }}
+            style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
           >
-            <span className="nav-icon"><Wallet size={21} /></span>
+            <span className="nav-icon"><Wallet size={22} /></span>
             <span className="nav-label">{t('nav.wallet', 'Cüzdan')}</span>
           </button>
 
-          {/* 2. Ana Sayfa — center big button */}
+          {/* 2. Ana Sayfa — Glowing Center Button */}
           <button
             onClick={() => { setActiveBottomTab('home'); setActiveTab('home'); setIsMenuOpen(false); }}
-            style={{ position: 'relative', flex: '1.3', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer', gap: 4 }}
+            style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer', gap: 4 }}
           >
             <motion.div
               whileTap={{ scale: 0.9 }}
-              animate={activeBottomTab === 'home' ? { boxShadow: ['0 0 12px rgba(245,159,11,0.5)', '0 0 24px rgba(245,159,11,0.9)', '0 0 12px rgba(245,159,11,0.5)'] } : {}}
+              animate={activeBottomTab === 'home' ? { boxShadow: ['0 0 12px rgba(245,159,11,0.5)', '0 0 26px rgba(245,159,11,0.95)', '0 0 12px rgba(245,159,11,0.5)'] } : {}}
               transition={{ duration: 1.8, repeat: Infinity }}
               style={{
-                width: 50, height: 50, borderRadius: '50%',
+                width: 52, height: 52, borderRadius: '50%',
                 background: activeBottomTab === 'home'
                   ? 'linear-gradient(135deg, #f59e0b, #d97706)'
-                  : 'rgba(245,159,11,0.15)',
+                  : 'rgba(245,159,11,0.18)',
                 border: '2px solid #f59e0b',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginTop: -14,
-                boxShadow: activeBottomTab === 'home' ? '0 0 20px rgba(245,159,11,0.6)' : 'none',
+                marginTop: -16,
+                boxShadow: activeBottomTab === 'home' ? '0 0 22px rgba(245,159,11,0.65)' : 'none',
               }}
             >
-              <Home size={22} color={activeBottomTab === 'home' ? '#000' : '#f59e0b'} />
+              <Home size={23} color={activeBottomTab === 'home' ? '#000' : '#f59e0b'} />
             </motion.div>
-            <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', color: activeBottomTab === 'home' ? '#f59e0b' : '#64748b', letterSpacing: 0.5 }}>{t('nav.home', 'Ana Sayfa')}</span>
+            <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', color: activeBottomTab === 'home' ? '#f59e0b' : '#64748b', letterSpacing: 0.5 }}>{t('nav.home', 'Ana Sayfa')}</span>
           </button>
 
-          {/* 4. Havuz */}
+          {/* 3. Havuz */}
           <button
             className={`nav-item ${activeBottomTab === 'pool' ? 'active' : ''}`}
             onClick={() => { setActiveBottomTab('pool'); navigateTo('pool'); setIsMenuOpen(false); }}
+            style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
           >
-            <span className="nav-icon"><Waves size={21} /></span>
+            <span className="nav-icon"><Waves size={22} /></span>
             <span className="nav-label">{t('nav.pool', 'Havuz')}</span>
-          </button>
-
-          {/* 5. Ayarlar */}
-          <button
-            className={`nav-item ${activeBottomTab === 'settings' ? 'active' : ''}`}
-            onClick={() => { setActiveBottomTab('settings'); navigateTo('settings'); setIsMenuOpen(false); }}
-          >
-            <span className="nav-icon"><SettingsIcon size={21} /></span>
-            <span className="nav-label">{t('nav.settings', 'Ayarlar')}</span>
           </button>
         </nav>
 

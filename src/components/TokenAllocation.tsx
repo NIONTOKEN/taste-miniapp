@@ -64,16 +64,31 @@ const FOUNDER_WALLETS = [
 // Likidite ve Staking Havuzları
 const POOLS = {
     stonfiLp: {
-        name: 'STON.fi GRAM-TAI LP Token',
+        name: 'STON.fi GRAM/TON - TAI LP Token',
         address: 'EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
         raw: '0:86107ac1baea0a549ff42ea432dfc17e73ea4df89af3d0cfc049d0ad27164bef',
-        supply: '7,219,957 LP',
-        dexUrl: 'https://app.ston.fi/pools/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS'
+        supply: '7,816,556 LP',
+        dexUrl: 'https://app.ston.fi/pools/EQCGEHrBuuoKVJ_0LqQy38F-c-pN-Jrz0M_ASdCtJxZL74nS',
+        amount: '~593,716 TAI'
     },
-    stonfiRouter: {
-        name: 'STON.fi DEX Router v2 (Aktif Havuz)',
-        address: 'EQCiypoBWNIEPlarBp04UePyEj5zH0ZDHxuRNqJ1WQx3FCY-',
-        amount: '~552,000 TAI'
+    dedustPool: {
+        name: 'DeDust.io TAI Likidite Havuzu',
+        address: 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-',
+        tonkeeperUrl: 'https://app.tonkeeper.com/dapp/https%3A%2F%2Fdedust.io%2Fpools%3Ftab%3Dpersonal%26by%3Dvalue_usd',
+        dedustUrl: 'https://dedust.io/pools',
+        badge: 'DeDust DEX'
+    },
+    stonfiDogs: {
+        name: 'STON.fi DOGS - TAI Havuzu',
+        address: 'EQCDT9dCT52pdfsLNW0e6qP5T3cgq7M4Ug72zkGYgP17tsWD',
+        amount: '~13,859 TAI',
+        swapUrl: 'https://app.ston.fi/swap?ft=EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
+    },
+    stonfiUtya: {
+        name: 'STON.fi UTYA - TAI Havuzu',
+        address: 'EQDh5oHPvfRwPu2bORBGCoLEO4WQZKL4fk5DD1gydeNG9oEH',
+        amount: '~12,043 TAI',
+        swapUrl: 'https://app.ston.fi/swap?ft=EQBaCgUwOoc6gHCNln_oJzb0mVs79YG7wYoavh-o1ItaneLA&tt=EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-'
     },
     jvaultStaking: {
         name: 'JVault V2 Staking Havuzu',
@@ -573,7 +588,7 @@ export function TokenAllocation() {
             {tab === 'liquidity' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {/* STON.fi LP */}
+                        {/* 1. STON.fi Ana Havuz */}
                         <div style={{
                             background: 'rgba(255,255,255,0.03)',
                             border: '1px solid rgba(59, 130, 246, 0.35)',
@@ -587,16 +602,16 @@ export function TokenAllocation() {
                                     </span>
                                 </div>
                                 <span style={{ fontSize: '10px', background: 'rgba(59,130,246,0.2)', color: '#60a5fa', padding: '2px 8px', borderRadius: '6px', fontWeight: 900 }}>
-                                    DEX HAVUZU
+                                    STON.fi
                                 </span>
                             </div>
 
                             <div style={{ fontSize: '11px', color: '#94a3b8' }}>
-                                📊 STON.fi üzerinde GRAM-TAI işlem çifti için oluşturulmuş resmi LP Token kontratı.
+                                📊 STON.fi DEX üzerinde GRAM/TON - TAI çifti (Aktif: <strong style={{ color: '#22c55e' }}>{POOLS.stonfiLp.amount}</strong>)
                             </div>
 
                             <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px 10px', borderRadius: '10px', display: 'flex', justifyContent: 'space-between' }}>
-                                <span style={{ fontSize: '11px', color: '#64748b' }}>Toplam LP Arzı:</span>
+                                <span style={{ fontSize: '11px', color: '#64748b' }}>LP Token Arzı:</span>
                                 <span style={{ fontSize: '11px', fontWeight: 900, color: '#60a5fa' }}>{POOLS.stonfiLp.supply}</span>
                             </div>
 
@@ -624,43 +639,102 @@ export function TokenAllocation() {
                                         fontSize: '11px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
                                     }}
                                 >
-                                    <span>STON.fi'de Gör</span>
+                                    <span>STON.fi Havuzu</span>
                                     <ExternalLink size={12} />
                                 </button>
                             </div>
                         </div>
 
-                        {/* STON.fi Router v2 */}
+                        {/* 2. DeDust.io Havuzu */}
                         <div style={{
                             background: 'rgba(255,255,255,0.03)',
-                            border: '1px solid rgba(16, 185, 129, 0.35)',
+                            border: '1px solid rgba(245, 158, 11, 0.35)',
                             borderRadius: '16px', padding: '14px', display: 'flex', flexDirection: 'column', gap: '8px'
                         }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
-                                    {POOLS.stonfiRouter.name}
-                                </span>
-                                <span style={{ fontSize: '11px', fontWeight: 900, color: '#10b981' }}>
-                                    {POOLS.stonfiRouter.amount}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <Droplets size={16} color="#f59e0b" />
+                                    <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>
+                                        {POOLS.dedustPool.name}
+                                    </span>
+                                </div>
+                                <span style={{ fontSize: '10px', background: 'rgba(245,158,11,0.2)', color: '#f59e0b', padding: '2px 8px', borderRadius: '6px', fontWeight: 900 }}>
+                                    DeDust DEX
                                 </span>
                             </div>
-                            <div style={{ fontSize: '9px', color: '#64748b', fontFamily: 'monospace', wordBreak: 'break-all', background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: '6px' }}>
-                                {POOLS.stonfiRouter.address}
+
+                            <div style={{ fontSize: '11px', color: '#94a3b8' }}>
+                                ⚡ DeDust.io protokolündeki TAI likidite havuzu ve Tonkeeper dApp doğrudan erişimi.
                             </div>
-                            <button
-                                onClick={() => openLink(`https://tonviewer.com/${POOLS.stonfiRouter.address}`)}
-                                style={{
-                                    width: '100%', padding: '8px 0', borderRadius: '8px', border: 'none',
-                                    background: 'rgba(16, 185, 129, 0.2)', color: '#34d399',
-                                    fontSize: '11px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
-                                }}
-                            >
-                                <span>Tonviewer'da İncele</span>
-                                <ExternalLink size={12} />
-                            </button>
+
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button
+                                    onClick={() => openLink(POOLS.dedustPool.tonkeeperUrl)}
+                                    style={{
+                                        flex: 1, padding: '8px 0', borderRadius: '8px', border: 'none',
+                                        background: 'linear-gradient(135deg, #0d9488, #059669)', color: '#fff',
+                                        fontSize: '11px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
+                                    }}
+                                >
+                                    <span>Tonkeeper dApp</span>
+                                    <ExternalLink size={12} />
+                                </button>
+                                <button
+                                    onClick={() => openLink(POOLS.dedustPool.dedustUrl)}
+                                    style={{
+                                        flex: 1, padding: '8px 0', borderRadius: '8px', border: 'none',
+                                        background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000',
+                                        fontSize: '11px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
+                                    }}
+                                >
+                                    <span>DeDust Pools</span>
+                                    <ExternalLink size={12} />
+                                </button>
+                            </div>
                         </div>
 
-                        {/* JVault Staking Pool */}
+                        {/* 3. STON.fi DOGS & UTYA Havuzları */}
+                        <div style={{
+                            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px'
+                        }}>
+                            {/* DOGS Pool */}
+                            <div style={{
+                                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(249,115,22,0.3)',
+                                borderRadius: '14px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'
+                            }}>
+                                <div style={{ fontSize: '11px', fontWeight: 900, color: '#f97316' }}>🐶 DOGS - TAI</div>
+                                <div style={{ fontSize: '10px', color: '#94a3b8' }}>Havuz: {POOLS.stonfiDogs.amount}</div>
+                                <button
+                                    onClick={() => openLink(POOLS.stonfiDogs.swapUrl)}
+                                    style={{
+                                        padding: '6px 0', borderRadius: '6px', border: 'none',
+                                        background: 'rgba(249,115,22,0.2)', color: '#fdba74', fontSize: '10px', fontWeight: 800, cursor: 'pointer'
+                                    }}
+                                >
+                                    STON.fi Swap ↗
+                                </button>
+                            </div>
+
+                            {/* UTYA Pool */}
+                            <div style={{
+                                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(234,179,8,0.3)',
+                                borderRadius: '14px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'
+                            }}>
+                                <div style={{ fontSize: '11px', fontWeight: 900, color: '#eab308' }}>🦆 UTYA - TAI</div>
+                                <div style={{ fontSize: '10px', color: '#94a3b8' }}>Havuz: {POOLS.stonfiUtya.amount}</div>
+                                <button
+                                    onClick={() => openLink(POOLS.stonfiUtya.swapUrl)}
+                                    style={{
+                                        padding: '6px 0', borderRadius: '6px', border: 'none',
+                                        background: 'rgba(234,179,8,0.2)', color: '#fef08a', fontSize: '10px', fontWeight: 800, cursor: 'pointer'
+                                    }}
+                                >
+                                    STON.fi Swap ↗
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* 4. JVault Staking Pool */}
                         <div style={{
                             background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(15, 23, 42, 0.7))',
                             border: '1px solid rgba(139, 92, 246, 0.4)',
@@ -695,7 +769,7 @@ export function TokenAllocation() {
                                     boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)'
                                 }}
                             >
-                                <span>JVault'ta Stake Et</span>
+                                <span>JVault Staking Havuzu</span>
                                 <ExternalLink size={13} />
                             </button>
                         </div>
