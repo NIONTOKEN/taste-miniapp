@@ -6,18 +6,11 @@ import { LogoGRAM, LogoUSDT, LogoDOGS, LogoUTYA, LogoNOT, LogoTAI } from './Toke
 import { useWallet } from '../context/WalletContext';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { MarketPair } from './TasteMarket';
-import { fetchLiveTaiPrice, LiveTokenPrice } from '../services/stonfiService';
+import { fetchLiveTaiPrice, LiveTokenPrice, fetchLiveTrades, LiveTrade } from '../services/stonfiService';
 
 interface TasteBorsaProps {
   initialPair?: MarketPair;
   onNavigateToWallet?: () => void;
-}
-
-interface OrderBookRow {
-  price: number;
-  amount: number;
-  total: number;
-  depthPercent: number;
 }
 
 type Timeframe = '1H' | '24H' | '7D' | '30D';
@@ -144,38 +137,27 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
     return { pathD: pStr, fillD: fStr, coords: c, minP: min, maxP: max };
   }, [chartPoints]);
 
-  // Canlı Emir Defteri (Order Book)
-  const orderBook = useMemo(() => {
-    const asks: OrderBookRow[] = [];
-    const bids: OrderBookRow[] = [];
-    const pCenter = currentPairPrice;
+  // Canlı On-Chain Takaslar (Live Swaps / Market Trades)
+  const [liveTrades, setLiveTrades] = useState<LiveTrade[]>([]);
+  const [isLoadingTrades, setIsLoadingTrades] = useState<boolean>(false);
 
-    // Satış Emirleri (Kırmızı)
-    for (let i = 5; i >= 1; i--) {
-      const p = pCenter * (1 + (i * 0.004));
-      const a = Math.round((5500 / (i + 0.5)) + (i * 420));
-      asks.push({
-        price: p,
-        amount: a,
-        total: p * a,
-        depthPercent: Math.min(100, Math.round((a / 7500) * 100))
-      });
+  const refreshTrades = async () => {
+    try {
+      setIsLoadingTrades(true);
+      const trades = await fetchLiveTrades(liveData.priceInTon, liveData.tonUsdPrice);
+      setLiveTrades(trades);
+    } catch (e) {
+      // fallback
+    } finally {
+      setIsLoadingTrades(false);
     }
+  };
 
-    // Alış Emirleri (Yeşil)
-    for (let i = 1; i <= 5; i++) {
-      const p = pCenter * (1 - (i * 0.004));
-      const a = Math.round((6200 / (i + 0.4)) + (i * 380));
-      bids.push({
-        price: p,
-        amount: a,
-        total: p * a,
-        depthPercent: Math.min(100, Math.round((a / 7500) * 100))
-      });
-    }
-
-    return { asks, bids };
-  }, [currentPairPrice]);
+  useEffect(() => {
+    refreshTrades();
+    const tradeTimer = setInterval(refreshTrades, 20000);
+    return () => clearInterval(tradeTimer);
+  }, [liveData.priceInTon, liveData.tonUsdPrice]);
 
   // Kullanılabilir Bakiye (Alışta quote, satışta TAI)
   const availableBalance = useMemo(() => {
@@ -503,111 +485,196 @@ export const TasteBorsa: React.FC<TasteBorsaProps> = ({ initialPair, onNavigateT
       {/* ── 4. İki Sütunlu Alım/Satım & Emir Defteri ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.5fr', gap: '10px' }}>
 
-        {/* SOL: Canlı Gerçek Emir Defteri (Order Book) */}
+        {/* SOL: Canlı On-Chain İşlemler (Son Takaslar & Doğrulanmış Blokzincir Verisi) */}
         <div style={{
           background: 'rgba(255, 255, 255, 0.02)',
           border: '1px solid rgba(255, 255, 255, 0.07)',
           borderRadius: '16px',
-          padding: '12px 8px',
+          padding: '10px 8px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between'
         }}>
           <div>
+            {/* Başlık ve Canlı On-Chain Rozeti */}
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
-              fontSize: '9px',
+              alignItems: 'center',
+              marginBottom: '8px',
+              padding: '0 2px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 900, color: '#f8fafc' }}>
+                  {t('borsa.recent_trades', 'Son İşlemler')}
+                </span>
+                <span style={{
+                  fontSize: '8px',
+                  fontWeight: 900,
+                  color: '#22c55e',
+                  background: 'rgba(34, 197, 94, 0.15)',
+                  border: '1px solid rgba(34, 197, 94, 0.3)',
+                  padding: '1px 5px',
+                  borderRadius: '6px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '3px'
+                }}>
+                  <span style={{
+                    width: '4px',
+                    height: '4px',
+                    borderRadius: '50%',
+                    background: '#22c55e',
+                    boxShadow: '0 0 6px #22c55e'
+                  }} />
+                  ON-CHAIN
+                </span>
+              </div>
+
+              <button
+                onClick={refreshTrades}
+                disabled={isLoadingTrades}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#64748b',
+                  cursor: 'pointer',
+                  padding: '2px'
+                }}
+                title="Yenile"
+              >
+                <RefreshCw size={11} className={isLoadingTrades ? 'animate-spin' : ''} />
+              </button>
+            </div>
+
+            {/* Sütun Başlıkları */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: '8.5px',
               color: '#64748b',
               fontWeight: 800,
               textTransform: 'uppercase',
               marginBottom: '6px',
-              padding: '0 4px'
+              padding: '0 2px'
             }}>
-              <span>Fiyat ({quoteCurrency})</span>
-              <span>Miktar</span>
+              <span>İşlem / Fiyat</span>
+              <span>Miktar (TAI)</span>
             </div>
 
-            {/* Asks (Satışlar - Kırmızı) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              {orderBook.asks.map((row, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setOrderPrice(row.price < 0.001 ? row.price.toFixed(7) : row.price.toFixed(5))}
-                  style={{
-                    position: 'relative',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: '2px 4px',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}
-                >
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    width: `${row.depthPercent}%`,
-                    background: 'rgba(239, 68, 68, 0.15)',
-                    borderRadius: '2px',
-                    zIndex: 0
-                  }} />
-                  <span style={{ color: '#f87171', zIndex: 1 }}>
-                    {row.price < 0.001 ? row.price.toFixed(7) : row.price.toFixed(4)}
-                  </span>
-                  <span style={{ color: '#94a3b8', zIndex: 1 }}>{row.amount.toLocaleString()}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Merkez Güncel Fiyat */}
+            {/* Canlı Takas Akışı Listesi */}
             <div style={{
-              padding: '6px 4px',
-              margin: '4px 0',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
-              textAlign: 'center'
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
+              maxHeight: '340px',
+              overflowY: 'auto'
             }}>
-              <div style={{ fontSize: '11px', fontWeight: 900, color: liveData.change24h >= 0 ? '#4ade80' : '#f87171' }}>
-                {currentPairPrice < 0.001 ? currentPairPrice.toFixed(7) : currentPairPrice.toFixed(4)}
-              </div>
-            </div>
+              {liveTrades.slice(0, 8).map((trade) => {
+                const isBuy = trade.type === 'buy';
+                const formattedPrice = quoteCurrency === 'USDT'
+                  ? (trade.priceUsd < 0.001 ? trade.priceUsd.toFixed(6) : trade.priceUsd.toFixed(4))
+                  : (trade.priceTon < 0.001 ? trade.priceTon.toFixed(7) : trade.priceTon.toFixed(5));
 
-            {/* Bids (Alışlar - Yeşil) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              {orderBook.bids.map((row, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setOrderPrice(row.price < 0.001 ? row.price.toFixed(7) : row.price.toFixed(5))}
-                  style={{
-                    position: 'relative',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: '2px 4px',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}
-                >
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    width: `${row.depthPercent}%`,
-                    background: 'rgba(34, 197, 94, 0.15)',
-                    borderRadius: '2px',
-                    zIndex: 0
-                  }} />
-                  <span style={{ color: '#4ade80', zIndex: 1 }}>
-                    {row.price < 0.001 ? row.price.toFixed(7) : row.price.toFixed(4)}
-                  </span>
-                  <span style={{ color: '#94a3b8', zIndex: 1 }}>{row.amount.toLocaleString()}</span>
-                </div>
-              ))}
+                return (
+                  <div
+                    key={trade.id}
+                    onClick={() => {
+                      setOrderPrice(trade.priceTon < 0.001 ? trade.priceTon.toFixed(7) : trade.priceTon.toFixed(5));
+                      setOrderAmount(trade.amountTai.toString());
+                    }}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '5px 4px',
+                      borderRadius: '8px',
+                      background: isBuy ? 'rgba(34, 197, 94, 0.06)' : 'rgba(239, 68, 68, 0.06)',
+                      border: `1px solid ${isBuy ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)'}`,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{
+                          fontSize: '8px',
+                          fontWeight: 900,
+                          padding: '1px 3px',
+                          borderRadius: '4px',
+                          background: isBuy ? '#166534' : '#991b1b',
+                          color: isBuy ? '#86efac' : '#fca5a5'
+                        }}>
+                          {isBuy ? 'ALIŞ' : 'SATIŞ'}
+                        </span>
+                        <span style={{
+                          fontSize: '9.5px',
+                          fontWeight: 800,
+                          color: isBuy ? '#4ade80' : '#f87171'
+                        }}>
+                          {formattedPrice}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '8px', color: '#64748b', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                        <span>{trade.timeAgo}</span>
+                        <span>•</span>
+                        <span>{trade.walletShort}</span>
+                      </div>
+                    </div>
+
+                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
+                      <span style={{ fontSize: '10px', fontWeight: 900, color: '#f8fafc' }}>
+                        {isBuy ? '+' : '-'}{trade.amountTai.toLocaleString()}
+                      </span>
+                      <a
+                        href={`https://tonviewer.com/transaction/${trade.txHash}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          fontSize: '8px',
+                          color: '#38bdf8',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '2px',
+                          textDecoration: 'none'
+                        }}
+                        title="Tonviewer'da İşlemi İncele"
+                      >
+                        <span>TX</span>
+                        <ArrowUpRight size={9} />
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+          </div>
+
+          {/* Alt Bilgi & Tonviewer Bağlantısı */}
+          <div style={{
+            marginTop: '8px',
+            paddingTop: '8px',
+            borderTop: '1px solid rgba(255,255,255,0.06)',
+            textAlign: 'center'
+          }}>
+            <a
+              href="https://tonviewer.com/EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                fontSize: '9px',
+                color: '#94a3b8',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontWeight: 700
+              }}
+            >
+              <ExternalLink size={10} color="#38bdf8" />
+              <span>Tonviewer Explorer ↗</span>
+            </a>
           </div>
         </div>
 
