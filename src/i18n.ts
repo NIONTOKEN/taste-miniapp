@@ -29,7 +29,23 @@ const resources = {
                 "tg_card_title": "Join Official Telegram Channel!",
                 "tg_card_desc": "Never miss airdrops, listing news, and exclusive updates.",
                 "tg_badge": "OFFICIAL CHANNEL",
-                "join": "Join Channel"
+                "join": "Join Channel",
+                "ads_badge": "TON SPONSORED • DAILY",
+                "ads_title": "Watch Video, Earn & Grow the TON Pool!",
+                "ads_desc": "Support the TON pool and earn free TAI by watching up to 10 videos daily.",
+                "watch_now": "Watch & Earn Now"
+            },
+            "ads": {
+                "banner_title": "Watch Video & Earn +50 TAI",
+                "banner_desc": "Watch a 15s sponsored video, earn TAI and boost the pool!",
+                "watch_btn": "Watch",
+                "modal_title": "Watch Sponsored Video",
+                "modal_subtitle": "Watch a 15-second video, earn rewards and generate TON for the Taste AI pool!",
+                "daily_remaining": "Remaining Today:",
+                "reward_tai_success": "Congrats! +50 TAI added to your balance! 🎉",
+                "reward_energy_success": "Congrats! Tap-to-Earn energy refilled! ⚡",
+                "ad_failed": "Ad could not be completed.",
+                "start_ad_btn": "Watch Ad & Claim Reward"
             },
             "quick_actions": {
                 "title": "Quick Actions",
@@ -1047,7 +1063,23 @@ const resources = {
                 "tg_card_title": "Resmi Telegram Kanalımıza Katılın!",
                 "tg_card_desc": "Airdrop, listeleme haberleri ve son gelişmeleri kaçırmayın.",
                 "tg_badge": "RESMİ KANAL",
-                "join": "Kanala Git"
+                "join": "Kanala Git",
+                "ads_badge": "TON SPONSORLU • GÜNLÜK",
+                "ads_title": "Video İzle, Hem Kazan Hem TON Havuzunu Büyüt!",
+                "ads_desc": "Günde 10 defa sponsorlu video izleyerek bedava TAI ve TON havuz desteği sağla.",
+                "watch_now": "Hemen İzle & Kazan"
+            },
+            "ads": {
+                "banner_title": "Video İzle & +50 TAI Kazan",
+                "banner_desc": "15 sn sponsorlu video izle, hem TAI kazan hem havuzu büyüt!",
+                "watch_btn": "İzle",
+                "modal_title": "Sponsorlu Video İzle",
+                "modal_subtitle": "15 saniyelik video izle, hem sen kazan hem Taste AI havuzuna TON kazandır!",
+                "daily_remaining": "Bugün Kalan Hak:",
+                "reward_tai_success": "Tebrikler! +50 TAI Bakiyenize Eklendi! 🎉",
+                "reward_energy_success": "Tebrikler! Dokun-Kazan Enerjiniz Fullendi! ⚡",
+                "ad_failed": "Reklam tamamlanamadı.",
+                "start_ad_btn": "Reklamı İzle & Ödülü Al"
             },
             "quick_actions": {
                 "title": "Hızlı Erişim",

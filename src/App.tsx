@@ -83,9 +83,11 @@ import {
   Droplets,
   Waves,
   Settings as SettingsIcon,
-  User
+  User,
+  Play
 } from 'lucide-react'
 import { apiService } from './services/api'
+import { RewardedAdModal } from './components/RewardedAdModal'
 
 const TASTE_LOGO = '/logo.jpg'
 
@@ -151,6 +153,17 @@ function App() {
   const [showSwapScreen, setShowSwapScreen] = useState(false);
   // 5-tab bottom nav active key: 'wallet' | 'team' | 'home' | 'pool' | 'settings'
   const [activeBottomTab, setActiveBottomTab] = useState<'wallet' | 'home' | 'pool' | 'settings'>('home');
+  const [isRewardAdModalOpen, setIsRewardAdModalOpen] = useState(false);
+
+  const handleRewardEarned = (rewardType: 'tai' | 'energy', rewardAmt: number) => {
+    if (rewardType === 'tai') {
+      const currentBonus = parseFloat(localStorage.getItem('taste_bonus_tai') || '0');
+      localStorage.setItem('taste_bonus_tai', (currentBonus + rewardAmt).toString());
+      setPingAmount(rewardAmt);
+      setShowPing(true);
+      setTimeout(() => setShowPing(false), 3500);
+    }
+  };
 
   // Telegram SDK Initialization
   useEffect(() => {
@@ -402,8 +415,76 @@ function App() {
               </motion.button>
             </div>
 
-            
-            
+            {/* ── AdsGram Sponsorlu Video İzle & TAI / TON Kazan Bannerı ── */}
+            <motion.div
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setIsRewardAdModalOpen(true)}
+              style={{
+                background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.22) 0%, rgba(79, 70, 229, 0.18) 100%)',
+                border: '1px solid rgba(167, 139, 250, 0.35)',
+                borderRadius: 20,
+                padding: '13px 16px',
+                marginBottom: 20,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer',
+                boxShadow: '0 6px 20px rgba(124, 58, 237, 0.22)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 14,
+                  background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 14px rgba(139, 92, 246, 0.45)'
+                }}>
+                  <Gift size={22} color="#fff" />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ fontSize: 13, fontWeight: 900, color: '#fff' }}>
+                      {t('ads.banner_title', 'Video İzle & +50 TAI Kazan')}
+                    </span>
+                    <span style={{
+                      fontSize: 8.5,
+                      background: 'rgba(34,197,94,0.22)',
+                      color: '#4ade80',
+                      border: '1px solid rgba(34,197,94,0.4)',
+                      padding: '1px 6px',
+                      borderRadius: 6,
+                      fontWeight: 900
+                    }}>
+                      TON SPONSOR
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 10.5, color: '#c4b5fd', marginTop: 2 }}>
+                    {t('ads.banner_desc', '15 sn sponsorlu video izle, hem TAI kazan hem havuzu büyüt!')}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
+                color: '#fff',
+                padding: '7px 12px',
+                borderRadius: 12,
+                fontSize: 11,
+                fontWeight: 900,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                boxShadow: '0 2px 10px rgba(139, 92, 246, 0.3)'
+              }}>
+                <Play size={11} fill="#fff" />
+                <span>{t('ads.watch_btn', 'İzle')}</span>
+              </div>
+            </motion.div>
+
             {/* ── DUYURULAR PANOSU (Screenshot Style Carousel) ── */}
             <div style={{ marginBottom: 20 }}>
               <div style={{
@@ -653,6 +734,78 @@ function App() {
                     }}
                   >
                     <span>{t('announcements.join', 'Kanala Git')}</span>
+                    <ChevronRight size={13} />
+                  </div>
+                </motion.div>
+
+                {/* Announcement Card 4: AdsGram TON Watch & Earn (Violet/Purple) */}
+                <motion.div
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setIsRewardAdModalOpen(true)}
+                  style={{
+                    minWidth: '84%',
+                    maxWidth: '86%',
+                    scrollSnapAlign: 'start',
+                    background: 'linear-gradient(135deg, #7c3aed 0%, #4c1d95 50%, #1e1b4b 100%)',
+                    border: '1px solid rgba(167, 139, 250, 0.45)',
+                    borderRadius: 22,
+                    padding: '16px 18px',
+                    boxShadow: '0 8px 24px rgba(124, 58, 237, 0.3)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                    <div style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: '50%',
+                      background: 'rgba(255, 255, 255, 0.16)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <Gift size={18} color="#c084fc" />
+                    </div>
+                    <span style={{
+                      fontSize: 10,
+                      fontWeight: 800,
+                      background: 'rgba(0, 0, 0, 0.35)',
+                      color: '#e9d5ff',
+                      padding: '4px 9px',
+                      borderRadius: 12,
+                      border: '1px solid rgba(255, 255, 255, 0.12)'
+                    }}>
+                      {t('announcements.ads_badge', 'TON SPONSORLU • GÜNLÜK')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', lineHeight: 1.3 }}>
+                      {t('announcements.ads_title', 'Video İzle, Hem Kazan Hem TON Havuzunu Büyüt!')}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#cbd5e1', marginTop: 4, lineHeight: 1.4 }}>
+                      {t('announcements.ads_desc', 'Günde 10 defa sponsorlu video izleyerek bedava TAI ve TON havuz desteği sağla.')}
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      marginTop: 14,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      fontSize: 12,
+                      fontWeight: 900,
+                      color: '#c084fc',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span>{t('announcements.watch_now', 'Hemen İzle & Kazan')}</span>
                     <ChevronRight size={13} />
                   </div>
                 </motion.div>
@@ -1415,6 +1568,13 @@ function App() {
           </div>
         </div>
       </div>
+
+      {/* AdsGram Rewarded Video Modal */}
+      <RewardedAdModal
+        isOpen={isRewardAdModalOpen}
+        onClose={() => setIsRewardAdModalOpen(false)}
+        onRewardEarned={handleRewardEarned}
+      />
     </PinLock>
   );
 }
