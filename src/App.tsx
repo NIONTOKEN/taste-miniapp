@@ -34,7 +34,6 @@ import { PWAInstallBanner } from './components/PWAInstallBanner'
 import { InstallModal } from './components/InstallModal'
 import { OfficialSocials } from './components/OfficialSocials'
 import { Team } from './components/Team'
-import { SplashScreen } from './components/SplashScreen'
 import { Profile } from './components/Profile'
 import { TasteEcosystem } from './components/TasteEcosystem'
 import { KYCModal } from './components/KYCModal'
@@ -115,7 +114,6 @@ function App() {
 
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
   const [showProfile, setShowProfile] = useState(false);
   const [showKYC, setShowKYC] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -1176,10 +1174,6 @@ function App() {
 
   return (
     <PinLock>
-      {/* ── Splash Screen (shown on every app launch) ── */}
-      <AnimatePresence>
-        {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
-      </AnimatePresence>
       <PWAInstallBanner />
       <InstallModal isOpen={isInstallModalOpen} onClose={() => setIsInstallModalOpen(false)} />
       <AnimatePresence>

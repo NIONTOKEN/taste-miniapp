@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 
@@ -97,7 +97,7 @@ export function DisclaimerModal({ onAccept }: DisclaimerModalProps) {
                         color="#22d3ee"
                         title={isEn ? "Community Utility Asset" : "Topluluk ve Ekosistem Varlığı"}
                         subtitle="Utility Token"
-                        text={isEn ? "TASTE AI is the new face of Web3 — an AI-powered food ecosystem on TON blockchain. Not fiat currency. — TASTE is transitioning to a brand-new ecosystem structure. New utility features will be announced soon.]" : "TASTE AI, Web3 dünyasının yeni yüzüdür — TON blokzinciri üzerinde yapay zeka destekli yemek ekosistemi. Fiat para değildir."}
+                        text={isEn ? "TASTE AI is the new face of Web3 — an AI-powered food ecosystem on TON blockchain. Not fiat currency. — TASTE is transitioning to a brand-new ecosystem structure. New utility features will be announced soon." : "TASTE AI, Web3 dünyasının yeni yüzüdür — TON blokzinciri üzerinde yapay zeka destekli yemek ekosistemi. Fiat para değildir."}
                     />
 
                     <DisclaimerItem
