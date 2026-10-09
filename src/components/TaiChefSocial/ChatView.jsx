@@ -479,7 +479,12 @@ export default function ChatView({
       ) : (
         <div className="hidden md:flex flex-1 items-center justify-center p-8 text-center bg-slate-50/50">
           <div className="max-w-xs space-y-3">
-            <img src="/chef-logo.png" alt="TAI Chef" className="w-16 h-16 mx-auto rounded-full shadow border-2 border-amber-500/40 p-0.5 object-cover" />
+            <img
+              src="/chef-logo.png"
+              alt="TAI Chef"
+              style={{ width: '64px', height: '64px', objectFit: 'cover' }}
+              className="w-16 h-16 mx-auto rounded-full shadow border-2 border-amber-500/40 p-0.5 object-cover"
+            />
             <h3 className="font-serif font-bold text-slate-900 text-base">
               {lang === 'tr' ? 'Bir Şef Seçin' : 'Select a Chef'}
             </h3>

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   MapPin, 
   UtensilsCrossed, 
@@ -47,6 +47,7 @@ export default function ProfileView({
               <img
                 src={currentUser?.avatar || '/chef-logo.png'}
                 alt={currentUser?.name}
+                style={{ width: '96px', height: '96px', objectFit: 'cover' }}
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover border-4 border-white shadow-lg bg-white"
               />
               <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white" title="Çevrimiçi" />

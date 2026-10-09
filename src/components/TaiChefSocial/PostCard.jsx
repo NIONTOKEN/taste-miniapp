@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Heart, 
   MessageCircle, 
@@ -115,6 +115,7 @@ export default function PostCard({
             <img
               src={post.author?.avatar || '/chef-logo.png'}
               alt={post.author?.name}
+              style={{ width: '44px', height: '44px', objectFit: 'cover' }}
               className="w-11 h-11 rounded-2xl object-cover border border-amber-500/30 p-0.5"
             />
             {post.author?.isVerified && (

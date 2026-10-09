@@ -335,6 +335,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp, initialLang = 'tr' }
                 <img
                   src={currentUser?.avatar || '/chef-logo.png'}
                   alt={currentUser?.name || 'Chef'}
+                  style={{ width: '44px', height: '44px', objectFit: 'cover' }}
                   className="w-11 h-11 rounded-2xl object-cover border border-amber-500/30"
                 />
                 <div>

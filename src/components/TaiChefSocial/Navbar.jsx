@@ -30,7 +30,8 @@ export default function Navbar({
           <img
             src="/chef-logo.png"
             alt="TAI Chef"
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover shadow-sm border border-amber-500/40 p-0.5 group-hover:scale-105 transition-transform"
+            style={{ width: '36px', height: '36px', minWidth: '36px', minHeight: '36px', objectFit: 'cover' }}
+            className="w-9 h-9 rounded-full object-cover shadow-sm border border-amber-500/40 p-0.5 group-hover:scale-105 transition-transform flex-shrink-0"
           />
           <div>
             <div className="flex items-center gap-1.5">
@@ -99,6 +100,7 @@ export default function Navbar({
                   <img
                     src={currentUser.avatar || '/chef-logo.png'}
                     alt={currentUser.name}
+                    style={{ width: '28px', height: '28px', objectFit: 'cover' }}
                     className="w-7 h-7 rounded-lg object-cover border border-amber-500/30"
                   />
                   <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-white" />
