@@ -48,12 +48,12 @@ export const RewardedAdModal: React.FC<RewardedAdModalProps> = ({
       const result = await showRewardedAd();
 
       if (result.success) {
-        const rewardAmount = selectedReward === 'tai' ? 50 : 1000;
-        recordAdReward(selectedReward === 'tai' ? 50 : 0);
+        const rewardAmount = selectedReward === 'tai' ? 5 : 1000;
+        recordAdReward(selectedReward === 'tai' ? 5 : 0);
         setStats(getDailyAdStats());
 
         const successText = selectedReward === 'tai'
-          ? t('ads.reward_tai_success', 'Tebrikler! +50 TAI Bakiyenize Eklendi! 🎉')
+          ? t('ads.reward_tai_success', 'Tebrikler! +5 TAI Bakiyenize Eklendi! 🎉')
           : t('ads.reward_energy_success', 'Tebrikler! Dokun-Kazan Enerjiniz Fullendi! ⚡');
 
         setSuccessMsg(successText);
@@ -172,7 +172,7 @@ export const RewardedAdModal: React.FC<RewardedAdModalProps> = ({
             }}
           >
             <Gift size={24} color={selectedReward === 'tai' ? '#c084fc' : '#94a3b8'} />
-            <div style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>+50 TAI</div>
+            <div style={{ fontSize: '13px', fontWeight: 900, color: '#fff' }}>+5 TAI</div>
             <div style={{ fontSize: '10px', color: '#a78bfa' }}>Token Hediyesi</div>
           </button>
 

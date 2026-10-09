@@ -54,8 +54,8 @@ export default function NotificationDrawer({
               <h2 className="font-bold text-slate-900 text-sm">{t.notifications}</h2>
               <p className="text-[11px] text-slate-500">
                 {unreadCount > 0 
-                  ? (lang === 'tr' ? `${unreadCount} yeni okunmamÄ±ÅŸ bildirim` : `${unreadCount} unread notifications`) 
-                  : (lang === 'tr' ? 'TÃ¼m bildirimler okundu' : 'All caught up')}
+                  ? (lang === 'tr' ? `${unreadCount} yeni okunmamış bildirim` : `${unreadCount} unread notifications`) 
+                  : (lang === 'tr' ? 'Tüm bildirimler okundu' : 'All caught up')}
               </p>
             </div>
           </div>
@@ -89,7 +89,7 @@ export default function NotificationDrawer({
                 <div className="relative flex-shrink-0">
                   <img
                     src={n.actor?.avatar || '/chef-logo.png'}
-                    alt={n.actor?.name || 'Åef'}
+                    alt={n.actor?.name || 'Şef'}
                     className="w-10 h-10 rounded-2xl object-cover border border-slate-200"
                   />
                   <div className="absolute -bottom-1 -right-1 p-0.5 rounded-full bg-white border border-slate-200 shadow-sm">
@@ -99,7 +99,7 @@ export default function NotificationDrawer({
 
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-slate-800 leading-snug">
-                    <span className="font-bold text-slate-900">{n.actor?.name || 'Bir KullanÄ±cÄ±'}</span> {n.message.replace(n.actor?.name || '', '')}
+                    <span className="font-bold text-slate-900">{n.actor?.name || 'Bir Kullanıcı'}</span> {n.message.replace(n.actor?.name || '', '')}
                   </p>
                   <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-400">
                     <Calendar className="w-3 h-3" />

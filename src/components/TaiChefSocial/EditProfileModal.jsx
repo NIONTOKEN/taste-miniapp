@@ -37,7 +37,7 @@ export default function EditProfileModal({
   const handleSave = async (e) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError(lang === 'tr' ? 'Ad Soyad boÅŸ bÄ±rakÄ±lamaz.' : 'Name cannot be empty.');
+      setError(lang === 'tr' ? 'Ad Soyad boş bırakılamaz.' : 'Name cannot be empty.');
       return;
     }
 
@@ -66,7 +66,7 @@ export default function EditProfileModal({
       onProfileUpdated(res.user);
       onClose();
     } catch (err) {
-      setError(err.message || 'Hata oluÅŸtu');
+      setError(err.message || 'Hata oluştu');
     } finally {
       setSaving(false);
     }
@@ -98,7 +98,7 @@ export default function EditProfileModal({
             </div>
           )}
 
-          {/* Profil FotoÄŸrafÄ± */}
+          {/* Profil Fotoğrafı */}
           <div className="flex flex-col items-center gap-2">
             <input
               ref={fileInputRef}
@@ -125,7 +125,7 @@ export default function EditProfileModal({
               onClick={() => fileInputRef.current?.click()}
               className="text-xs text-amber-600 font-semibold hover:underline"
             >
-              {lang === 'tr' ? 'FotoÄŸrafÄ± DeÄŸiÅŸtir' : 'Change Photo'}
+              {lang === 'tr' ? 'Fotoğrafı Değiştir' : 'Change Photo'}
             </button>
           </div>
 
@@ -157,7 +157,7 @@ export default function EditProfileModal({
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="Ä°stanbul, TÃ¼rkiye"
+                placeholder="İstanbul, Türkiye"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white"
               />
             </div>
@@ -180,7 +180,7 @@ export default function EditProfileModal({
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               rows={3}
-              placeholder="Mutfak tecrÃ¼beniz ve uzmanlÄ±ÄŸÄ±nÄ±z..."
+              placeholder="Mutfak tecrübeniz ve uzmanlığınız..."
               className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white resize-none"
             />
           </div>

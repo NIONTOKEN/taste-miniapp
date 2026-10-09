@@ -15,12 +15,12 @@ import { triggerHaptic } from './services/telegram';
 import PostCard from './PostCard';
 
 const CATEGORIES = [
-  'TÃ¼mÃ¼',
-  'Deniz ÃœrÃ¼nleri',
+  'Tümü',
+  'Deniz Ürünleri',
   'Et & Izgara',
-  'PastacÄ±lÄ±k & TatlÄ±',
-  'FÃ¼zyon & Modern',
-  'Geleneksel & TaÅŸ FÄ±rÄ±n',
+  'Pastacılık & Tatlı',
+  'Füzyon & Modern',
+  'Geleneksel & Taş Fırın',
   'Makarna & Risotto'
 ];
 
@@ -35,7 +35,7 @@ export default function ExploreView({
   onOpenDirectChat
 }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('TÃ¼mÃ¼');
+  const [selectedCategory, setSelectedCategory] = useState('Tümü');
 
   // Filtreleme
   const filteredPosts = posts.filter(post => {
@@ -47,21 +47,21 @@ export default function ExploreView({
       post.location?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.ingredients?.some(i => i.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const matchesCategory = selectedCategory === 'TÃ¼mÃ¼' || post.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'Tümü' || post.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-20 animate-in fade-in">
-      {/* KeÅŸfet Arama Ã‡ubuÄŸu */}
+      {/* Keşfet Arama Çubuğu */}
       <div className="relative">
         <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Tabak, ÅŸef, lokasyon veya malzeme arayÄ±n (Ã¶rn: levrek, trÃ¼f, Paris, mikla)..."
+          placeholder="Tabak, şef, lokasyon veya malzeme arayın (örn: levrek, trüf, Paris, mikla)..."
           className="w-full bg-[#111726] border border-chef-border rounded-2xl pl-12 pr-4 py-3.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 shadow-xl"
         />
         {searchQuery && (
@@ -74,14 +74,14 @@ export default function ExploreView({
         )}
       </div>
 
-      {/* PopÃ¼ler Åefler Vitrini */}
+      {/* Popüler Şefler Vitrini */}
       <div>
         <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2">
             <ChefHat className="w-5 h-5 text-amber-400" />
-            <h2 className="font-serif font-bold text-slate-100 text-sm">Ã–ne Ã‡Ä±kan Usta Åefler</h2>
+            <h2 className="font-serif font-bold text-slate-100 text-sm">Öne Çıkan Usta Şefler</h2>
           </div>
-          <span className="text-[11px] text-chef-textMuted">TÃ¼m Gastronomi AÄŸÄ±</span>
+          <span className="text-[11px] text-chef-textMuted">Tüm Gastronomi Ağı</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -162,13 +162,13 @@ export default function ExploreView({
         </div>
       </div>
 
-      {/* KeÅŸfedilen Tabaklar */}
+      {/* Keşfedilen Tabaklar */}
       <div className="space-y-4 pt-2">
         <div className="flex items-center justify-between px-1">
           <h2 className="font-serif font-bold text-slate-100 text-sm">
-            {selectedCategory === 'TÃ¼mÃ¼' ? 'Trend Tabaklar & ReÃ§eteler' : `${selectedCategory} TabaklarÄ±`}
+            {selectedCategory === 'Tümü' ? 'Trend Tabaklar & Reçeteler' : `${selectedCategory} Tabakları`}
           </h2>
-          <span className="text-[11px] text-slate-500">{filteredPosts.length} paylaÅŸÄ±m bulundu</span>
+          <span className="text-[11px] text-slate-500">{filteredPosts.length} paylaşım bulundu</span>
         </div>
 
         {filteredPosts.length > 0 ? (
@@ -189,9 +189,9 @@ export default function ExploreView({
         ) : (
           <div className="glass-panel rounded-2xl border border-chef-border p-12 text-center text-slate-400 space-y-2">
             <Compass className="w-8 h-8 mx-auto text-amber-400/60" />
-            <p className="text-xs">AramanÄ±za veya seÃ§ilen kategoriye uygun tabak bulunamadÄ±.</p>
+            <p className="text-xs">Aramanıza veya seçilen kategoriye uygun tabak bulunamadı.</p>
             <button
-              onClick={() => { setSearchQuery(''); setSelectedCategory('TÃ¼mÃ¼'); }}
+              onClick={() => { setSearchQuery(''); setSelectedCategory('Tümü'); }}
               className="text-xs text-amber-400 font-semibold underline"
             >
               Filtreleri Temizle

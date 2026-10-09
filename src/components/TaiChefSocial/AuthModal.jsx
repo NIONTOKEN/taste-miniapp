@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { User, Lock, Upload, CheckCircle2, AlertCircle, ChefHat, Sparkles, MapPin, Building2 } from 'lucide-react';
 import { api } from './services/api';
 import { triggerHaptic } from './services/telegram';
@@ -46,12 +46,12 @@ export default function AuthModal({
     try {
       if (isRegister) {
         if (!username.trim() || !name.trim()) {
-          setError(lang === 'tr' ? 'LÃ¼tfen kullanÄ±cÄ± adÄ± ve adÄ±nÄ±zÄ± giriniz.' : 'Please enter username and full name.');
+          setError(lang === 'tr' ? 'Lütfen kullanıcı adı ve adınızı giriniz.' : 'Please enter username and full name.');
           setLoading(false);
           return;
         }
 
-        let uploadedAvatarUrl = '/chef-logo.png';
+        let uploadedAvatarUrl = avatarPreview || '/chef-logo.png';
         if (avatarFile) {
           try {
             const uploadRes = await api.uploadImage(avatarFile);
@@ -65,10 +65,10 @@ export default function AuthModal({
           username: username.trim(),
           password: password || '123456',
           name: name.trim(),
-          title: title.trim() || (lang === 'tr' ? 'Usta Åef' : 'Master Chef'),
-          restaurant: restaurant.trim() || (lang === 'tr' ? 'Mutfak AtÃ¶lyesi' : 'Culinary Studio'),
-          location: location.trim() || (lang === 'tr' ? 'Ä°stanbul, TÃ¼rkiye' : 'Istanbul, Turkey'),
-          bio: bio.trim() || (lang === 'tr' ? 'Gastronomi ve lezzet tutkunu ÅŸef.' : 'Passionate culinary artist.'),
+          title: title.trim() || (lang === 'tr' ? 'Usta Şef' : 'Master Chef'),
+          restaurant: restaurant.trim() || (lang === 'tr' ? 'Mutfak Atölyesi' : 'Culinary Studio'),
+          location: location.trim() || (lang === 'tr' ? 'İstanbul, Türkiye' : 'Istanbul, Turkey'),
+          bio: bio.trim() || (lang === 'tr' ? 'Gastronomi ve lezzet tutkunu şef.' : 'Passionate culinary artist.'),
           avatar: uploadedAvatarUrl
         });
 
@@ -76,9 +76,9 @@ export default function AuthModal({
         onLoginSuccess(res.user);
         onClose();
       } else {
-        // GiriÅŸ Yap
+        // Giriş Yap
         if (!username.trim()) {
-          setError(lang === 'tr' ? 'KullanÄ±cÄ± adÄ±nÄ±zÄ± giriniz.' : 'Enter your username.');
+          setError(lang === 'tr' ? 'Kullanıcı adınızı giriniz.' : 'Enter your username.');
           setLoading(false);
           return;
         }
@@ -89,7 +89,7 @@ export default function AuthModal({
         onClose();
       }
     } catch (err) {
-      setError(err.message || (lang === 'tr' ? 'GiriÅŸ yapÄ±lamadÄ±' : 'Authentication failed'));
+      setError(err.message || (lang === 'tr' ? 'Giriş yapılamadı' : 'Authentication failed'));
     } finally {
       setLoading(false);
     }
@@ -98,11 +98,11 @@ export default function AuthModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-sm animate-in fade-in">
       <div className="w-full max-w-md bg-white rounded-3xl border border-slate-200/90 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-        {/* Ãœst Logo ve BaÅŸlÄ±k */}
+        {/* Üst Logo ve Başlık */}
         <div className="p-6 text-center border-b border-slate-100 bg-gradient-to-b from-amber-50/50 to-white">
           <img
             src="/chef-logo.png"
-            alt="TA CHEF"
+            alt="TAI CHEF"
             className="w-20 h-20 mx-auto rounded-full shadow-lg border-2 border-amber-500/40 p-0.5 object-cover mb-3"
           />
           <h2 className="font-serif font-bold text-xl text-slate-900 tracking-tight">
@@ -110,12 +110,12 @@ export default function AuthModal({
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             {isRegister 
-              ? (lang === 'tr' ? 'GerÃ§ek ÅŸef profilinizi oluÅŸturun ve aÄŸa baÄŸlanÄ±n' : 'Create your real chef profile and connect') 
-              : (lang === 'tr' ? 'TA CHEF topluluÄŸuna giriÅŸ yapÄ±n' : 'Sign in to TA CHEF community')}
+              ? (lang === 'tr' ? 'Gerçek şef profilinizi oluşturun ve ağa bağlanın' : 'Create your real chef profile and connect') 
+              : (lang === 'tr' ? 'TAI CHEF topluluğuna giriş yapın' : 'Sign in to TAI CHEF community')}
           </p>
         </div>
 
-        {/* Form AlanÄ± */}
+        {/* Form Alanı */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1">
           {error && (
             <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
@@ -124,7 +124,7 @@ export default function AuthModal({
             </div>
           )}
 
-          {/* KayÄ±t Modunda Profil FotoÄŸrafÄ± YÃ¼kleme */}
+          {/* Kayıt Modunda Profil Fotoğrafı Yükleme */}
           {isRegister && (
             <div className="flex flex-col items-center gap-2 pb-2">
               <input
@@ -157,7 +157,7 @@ export default function AuthModal({
             </div>
           )}
 
-          {/* Ad Soyad (Sadece KayÄ±t) */}
+          {/* Ad Soyad (Sadece Kayıt) */}
           {isRegister && (
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -167,14 +167,14 @@ export default function AuthModal({
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder={lang === 'tr' ? 'Ã–rn: Ahmet Usta' : 'e.g. John Doe'}
+                placeholder={lang === 'tr' ? 'Örn: Ahmet Usta' : 'e.g. John Doe'}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white transition-colors"
                 required={isRegister}
               />
             </div>
           )}
 
-          {/* KullanÄ±cÄ± AdÄ± */}
+          {/* Kullanıcı Adı */}
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
               {t.username} *
@@ -183,13 +183,13 @@ export default function AuthModal({
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder={lang === 'tr' ? 'Ã–rn: cheftaha' : 'e.g. chef_john'}
+              placeholder={lang === 'tr' ? 'Örn: cheftaha' : 'e.g. chef_john'}
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white transition-colors"
               required
             />
           </div>
 
-          {/* Åifre */}
+          {/* Şifre */}
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
               {t.password}
@@ -198,12 +198,12 @@ export default function AuthModal({
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢"
+              placeholder="••••••"
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white transition-colors"
             />
           </div>
 
-          {/* KayÄ±t Modu Ek Alanlar */}
+          {/* Kayıt Modu Ek Alanlar */}
           {isRegister && (
             <>
               <div className="grid grid-cols-2 gap-3">
@@ -227,7 +227,7 @@ export default function AuthModal({
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder={lang === 'tr' ? 'Ä°stanbul' : 'London'}
+                    placeholder={lang === 'tr' ? 'İstanbul' : 'London'}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white"
                   />
                 </div>
@@ -241,7 +241,7 @@ export default function AuthModal({
                   type="text"
                   value={restaurant}
                   onChange={(e) => setRestaurant(e.target.value)}
-                  placeholder={lang === 'tr' ? 'Restoran / Mutfak AdÄ±' : 'Restaurant Name'}
+                  placeholder={lang === 'tr' ? 'Restoran / Mutfak Adı' : 'Restaurant Name'}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white"
                 />
               </div>
@@ -253,7 +253,7 @@ export default function AuthModal({
                 <textarea
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  placeholder={lang === 'tr' ? 'Mutfak tutkunuz, tecrÃ¼beniz ve uzmanlÄ±ÄŸÄ±nÄ±z...' : 'Your passion and culinary journey...'}
+                  placeholder={lang === 'tr' ? 'Mutfak tutkunuz, tecrübeniz ve uzmanlığınız...' : 'Your passion and culinary journey...'}
                   rows={2}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white resize-none"
                 />
@@ -261,17 +261,17 @@ export default function AuthModal({
             </>
           )}
 
-          {/* GÃ¶nder Butonu */}
+          {/* Gönder Butonu */}
           <button
             type="submit"
             disabled={loading}
             className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-md transition-all active:scale-98 disabled:opacity-50"
           >
-            {loading ? (lang === 'tr' ? 'Ä°ÅŸleniyor...' : 'Processing...') : (isRegister ? t.register : t.login)}
+            {loading ? (lang === 'tr' ? 'İşleniyor...' : 'Processing...') : (isRegister ? t.register : t.login)}
           </button>
         </form>
 
-        {/* Alt DeÄŸiÅŸtirme Butonu */}
+        {/* Alt Değiştirme Butonu */}
         <div className="p-4 border-t border-slate-100 bg-slate-50 text-center">
           <button
             type="button"
@@ -282,12 +282,11 @@ export default function AuthModal({
             className="text-xs text-amber-700 hover:text-amber-800 font-semibold"
           >
             {isRegister 
-              ? (lang === 'tr' ? 'Zaten hesabÄ±nÄ±z var mÄ±? GiriÅŸ YapÄ±n' : 'Already have an account? Sign In')
-              : (lang === 'tr' ? 'HesabÄ±nÄ±z yok mu? Hemen GerÃ§ek Åef Profili AÃ§Ä±n' : 'Don\'t have an account? Create Chef Profile')}
+              ? (lang === 'tr' ? 'Zaten hesabınız var mı? Giriş Yapın' : 'Already have an account? Sign In')
+              : (lang === 'tr' ? 'Hesabınız yok mu? Hemen Gerçek Şef Profili Açın' : "Don't have an account? Create Chef Profile")}
           </button>
         </div>
       </div>
     </div>
   );
 }
-

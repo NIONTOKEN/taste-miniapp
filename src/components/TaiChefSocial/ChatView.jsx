@@ -193,10 +193,10 @@ export default function ChatView({
           </span>
         </div>
 
-        {/* HÄ±zlÄ± Åef SeÃ§ici */}
+        {/* Hızlı Şef Seçici */}
         <div className="p-3 border-b border-slate-200 bg-white">
           <p className="text-[10px] uppercase font-bold text-slate-400 mb-2">
-            {lang === 'tr' ? 'Åefler ile Sohbet BaÅŸlat' : 'Start Chat With Chefs'}
+            {lang === 'tr' ? 'Şefler ile Sohbet Başlat' : 'Start Chat With Chefs'}
           </p>
           <div className="flex gap-2 overflow-x-auto pb-1">
             {allChefs.filter(c => c.id !== currentUser?.id).map(chef => (
@@ -228,7 +228,7 @@ export default function ChatView({
           </div>
         </div>
 
-        {/* Aktif KonuÅŸmalar */}
+        {/* Aktif Konuşmalar */}
         <div className="flex-1 overflow-y-auto divide-y divide-slate-100 bg-white">
           {conversations.length > 0 ? (
             conversations.map(({ user, lastMessage, unreadCount }) => {
@@ -263,7 +263,7 @@ export default function ChatView({
                       )}
                     </div>
                     <p className="text-[11px] text-slate-500 truncate mt-0.5">
-                      {lastMessage ? lastMessage.text || 'ğŸ“· GÃ¶rsel' : user.restaurant || user.title}
+                      {lastMessage ? lastMessage.text || 'ğŸ“· Görsel' : user.restaurant || user.title}
                     </p>
                   </div>
 
@@ -277,16 +277,16 @@ export default function ChatView({
             })
           ) : (
             <div className="p-8 text-center text-slate-400 text-xs">
-              <p>{lang === 'tr' ? 'HenÃ¼z aktif sohbetiniz yok.' : 'No active chats yet.'}</p>
+              <p>{lang === 'tr' ? 'Henüz aktif sohbetiniz yok.' : 'No active chats yet.'}</p>
               <p className="mt-1 text-[11px] text-amber-600 font-medium">
-                {lang === 'tr' ? 'YukarÄ±daki ÅŸeflerden birini seÃ§erek baÅŸlayÄ±n!' : 'Select a chef above to start!'}
+                {lang === 'tr' ? 'Yukarıdaki şeflerden birini seçerek başlayın!' : 'Select a chef above to start!'}
               </p>
             </div>
           )}
         </div>
       </div>
 
-      {/* SaÄŸ Panel: Aktif Sohbet */}
+      {/* Sağ Panel: Aktif Sohbet */}
       {activeChef ? (
         <div className="flex-1 flex flex-col bg-white">
           {/* Sohbet Header */}
@@ -314,13 +314,13 @@ export default function ChatView({
                 <div className="flex items-center gap-1.5">
                   <h3 className="font-bold text-slate-900 text-sm">{activeChef.name}</h3>
                   <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded-full border border-amber-200">
-                    {activeChef.title || 'Åef'}
+                    {activeChef.title || 'Şef'}
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500">
                   {partnerIsTyping ? (
                     <span className="text-amber-600 font-semibold animate-pulse">
-                      {lang === 'tr' ? 'yazÄ±yor...' : 'typing...'}
+                      {lang === 'tr' ? 'yazıyor...' : 'typing...'}
                     </span>
                   ) : (
                     activeChef.restaurant || (activeChef.isOnline ? t.online : t.offline)
@@ -339,7 +339,7 @@ export default function ChatView({
             </span>
           </div>
 
-          {/* Mesaj AkÄ±ÅŸÄ± */}
+          {/* Mesaj Akışı */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/40">
             {messages.length === 0 && !loading && (
               <div className="text-center py-12 space-y-2">
@@ -347,10 +347,10 @@ export default function ChatView({
                   <Utensils className="w-6 h-6" />
                 </div>
                 <p className="text-sm font-bold text-slate-800">
-                  {activeChef.name} {lang === 'tr' ? 'ile sohbeti baÅŸlatÄ±n' : '- start conversation'}
+                  {activeChef.name} {lang === 'tr' ? 'ile sohbeti başlatın' : '- start conversation'}
                 </p>
                 <p className="text-xs text-slate-500">
-                  {lang === 'tr' ? 'ReÃ§eteler, tabaklar veya gastronomi hakkÄ±nda yazÄ±ÅŸÄ±n.' : 'Discuss recipes, dishes, and culinary ideas.'}
+                  {lang === 'tr' ? 'Reçeteler, tabaklar veya gastronomi hakkında yazışın.' : 'Discuss recipes, dishes, and culinary ideas.'}
                 </p>
               </div>
             )}
@@ -396,7 +396,7 @@ export default function ChatView({
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce" />
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce [animation-delay:0.2s]" />
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce [animation-delay:0.4s]" />
-                  <span className="text-[11px] ml-1 font-medium">{lang === 'tr' ? 'Åef yazÄ±yor...' : 'Chef is typing...'}</span>
+                  <span className="text-[11px] ml-1 font-medium">{lang === 'tr' ? 'Şef yazıyor...' : 'Chef is typing...'}</span>
                 </div>
               </div>
             )}
@@ -404,7 +404,7 @@ export default function ChatView({
             <div ref={messagesEndRef} />
           </div>
 
-          {/* HÄ±zlÄ± Åef Mesaj ÅablonlarÄ± */}
+          {/* Hızlı Şef Mesaj Şablonları */}
           <div className="px-3 py-1.5 bg-slate-50 border-t border-slate-200 flex gap-1.5 overflow-x-auto">
             {t.quickMsgs.map((quick, i) => (
               <button
@@ -418,11 +418,11 @@ export default function ChatView({
             ))}
           </div>
 
-          {/* Resim Ã–nizleme */}
+          {/* Resim Önizleme */}
           {imagePreview && (
             <div className="p-2 bg-slate-50 border-t border-slate-200 flex items-center gap-2">
               <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-amber-500">
-                <img src={imagePreview} alt="SeÃ§ilen" className="w-full h-full object-cover" />
+                <img src={imagePreview} alt="Seçilen" className="w-full h-full object-cover" />
                 <button
                   onClick={() => { setSelectedImage(null); setImagePreview(''); }}
                   className="absolute top-0.5 right-0.5 bg-black/70 text-white rounded-full p-0.5"
@@ -431,12 +431,12 @@ export default function ChatView({
                 </button>
               </div>
               <span className="text-xs text-slate-600 font-medium">
-                {lang === 'tr' ? 'GÃ¶rsel eklendi, gÃ¶ndermek iÃ§in enter\'a basÄ±n' : 'Image attached, press enter to send'}
+                {lang === 'tr' ? 'Görsel eklendi, göndermek için enter\'a basın' : 'Image attached, press enter to send'}
               </span>
             </div>
           )}
 
-          {/* Mesaj GiriÅŸ BarÄ± */}
+          {/* Mesaj Giriş Barı */}
           <div className="p-3 border-t border-slate-200 bg-white flex items-center gap-2">
             <input
               ref={fileInputRef}
@@ -448,7 +448,7 @@ export default function ChatView({
             <button
               onClick={() => fileInputRef.current?.click()}
               className="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-amber-600 transition-colors"
-              title={lang === 'tr' ? 'FotoÄŸraf GÃ¶nder' : 'Send Photo'}
+              title={lang === 'tr' ? 'Fotoğraf Gönder' : 'Send Photo'}
             >
               <ImageIcon className="w-5 h-5" />
             </button>
@@ -463,7 +463,7 @@ export default function ChatView({
                   handleSendMessage();
                 }
               }}
-              placeholder={`${activeChef.name} ${lang === 'tr' ? 'adlÄ± ÅŸefe mesaj yazÄ±n...' : '- type a message...'}`}
+              placeholder={`${activeChef.name} ${lang === 'tr' ? 'adlı şefe mesaj yazın...' : '- type a message...'}`}
               className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white"
             />
 
@@ -479,13 +479,13 @@ export default function ChatView({
       ) : (
         <div className="hidden md:flex flex-1 items-center justify-center p-8 text-center bg-slate-50/50">
           <div className="max-w-xs space-y-3">
-            <img src="/chef-logo.png" alt="TA CHEF" className="w-16 h-16 mx-auto rounded-full shadow border-2 border-amber-500/40 p-0.5 object-cover" />
+            <img src="/chef-logo.png" alt="TAI Chef" className="w-16 h-16 mx-auto rounded-full shadow border-2 border-amber-500/40 p-0.5 object-cover" />
             <h3 className="font-serif font-bold text-slate-900 text-base">
-              {lang === 'tr' ? 'Bir Åef SeÃ§in' : 'Select a Chef'}
+              {lang === 'tr' ? 'Bir Şef Seçin' : 'Select a Chef'}
             </h3>
             <p className="text-xs text-slate-500">
               {lang === 'tr' 
-                ? 'Sol taraftaki ÅŸeflerden birini seÃ§erek anlÄ±k olarak mesajlaÅŸmaya baÅŸlayÄ±n.' 
+                ? 'Sol taraftaki şeflerden birini seçerek anlık olarak mesajlaşmaya başlayın.' 
                 : 'Select a chef from the left list to start real-time messaging.'}
             </p>
           </div>

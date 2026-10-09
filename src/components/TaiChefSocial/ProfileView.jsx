@@ -29,9 +29,9 @@ export default function ProfileView({
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-20 animate-in fade-in">
-      {/* Åef Profil KartÄ± */}
+      {/* Şef Profil Kartı */}
       <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-        {/* Kapak GÃ¶rseli */}
+        {/* Kapak Görseli */}
         <div className="h-32 sm:h-44 w-full bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-400 relative">
           <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-amber-800 text-xs font-bold shadow-sm">
             <ShieldCheck className="w-4 h-4 text-amber-600" />
@@ -39,7 +39,7 @@ export default function ProfileView({
           </div>
         </div>
 
-        {/* Profil DetaylarÄ± */}
+        {/* Profil Detayları */}
         <div className="px-6 pb-6 pt-0 relative">
           <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between -mt-14 sm:-mt-16 gap-4 mb-4">
             {/* Avatar */}
@@ -49,10 +49,10 @@ export default function ProfileView({
                 alt={currentUser?.name}
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover border-4 border-white shadow-lg bg-white"
               />
-              <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white" title="Ã‡evrimiÃ§i" />
+              <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white" title="Çevrimiçi" />
             </div>
 
-            {/* Aksiyon: Profili DÃ¼zenle & Ä°statistikler */}
+            {/* Aksiyon: Profili Düzenle & İstatistikler */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-5 bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-2xl">
                 <div className="text-center">
@@ -76,7 +76,7 @@ export default function ProfileView({
             </div>
           </div>
 
-          {/* Ä°sim & Bilgiler */}
+          {/* İsim & Bilgiler */}
           <div className="space-y-2 text-center sm:text-left">
             <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
               <h1 className="font-serif text-2xl font-bold text-slate-900">
@@ -89,11 +89,11 @@ export default function ProfileView({
 
             <p className="text-xs font-semibold text-amber-700 flex items-center justify-center sm:justify-start gap-1.5">
               <UtensilsCrossed className="w-3.5 h-3.5 text-amber-600" />
-              <span>{currentUser?.title || 'Usta Åef'} â€¢ {currentUser?.restaurant || 'Kendi MutfaÄŸÄ±'}</span>
+              <span>{currentUser?.title || 'Usta Şef'} • {currentUser?.restaurant || 'Kendi Mutfağı'}</span>
             </p>
 
             <p className="text-xs text-slate-600 max-w-xl leading-relaxed">
-              {currentUser?.bio || (lang === 'tr' ? 'Mutfak felsefenizi ve uzmanlÄ±klarÄ±nÄ±zÄ± eklemek iÃ§in "Profili DÃ¼zenle" butonuna tÄ±klayÄ±n.' : 'Click "Edit Profile" to share your culinary philosophy.')}
+              {currentUser?.bio || (lang === 'tr' ? 'Mutfak felsefenizi ve uzmanlıklarınızı eklemek için "Profili Düzenle" butonuna tıklayın.' : 'Click "Edit Profile" to share your culinary philosophy.')}
             </p>
 
             {currentUser?.location && (
@@ -106,7 +106,7 @@ export default function ProfileView({
         </div>
       </div>
 
-      {/* Sekmeler: TabaklarÄ±m vs Tarif Defterim */}
+      {/* Sekmeler: Tabaklarım vs Tarif Defterim */}
       <div className="flex items-center justify-center gap-3 border-b border-slate-200 pb-3">
         <button
           onClick={() => { triggerHaptic('light'); setActiveTab('my_posts'); }}
@@ -184,13 +184,13 @@ export default function ProfileView({
           <UtensilsCrossed className="w-8 h-8 mx-auto text-amber-600/50" />
           <h3 className="font-serif font-bold text-slate-800 text-sm">
             {activeTab === 'my_posts' 
-              ? (lang === 'tr' ? 'HenÃ¼z PaylaÅŸtÄ±ÄŸÄ±nÄ±z Tabak Yok' : 'No Dishes Shared Yet') 
-              : (lang === 'tr' ? 'Tarif Defteriniz BoÅŸ' : 'Your Recipe Book is Empty')}
+              ? (lang === 'tr' ? 'Henüz Paylaştığınız Tabak Yok' : 'No Dishes Shared Yet') 
+              : (lang === 'tr' ? 'Tarif Defteriniz Boş' : 'Your Recipe Book is Empty')}
           </h3>
           <p className="text-xs text-slate-400 max-w-sm mx-auto">
             {activeTab === 'my_posts'
-              ? (lang === 'tr' ? 'Mutfakta hazÄ±rladÄ±ÄŸÄ±nÄ±z ilk tabaÄŸÄ± alttaki "+" butonundan hemen paylaÅŸÄ±n!' : 'Share your first dish now!')
-              : (lang === 'tr' ? 'AkÄ±ÅŸta beÄŸendiÄŸiniz tabaklarÄ± yer imi butonundan kaydedebilirsiniz.' : 'Bookmark your favorite recipes to view them here.')}
+              ? (lang === 'tr' ? 'Mutfakta hazırladığınız ilk tabağı alttaki "+" butonundan hemen paylaçın!' : 'Share your first dish now!')
+              : (lang === 'tr' ? 'Akışta beğendiğiniz tabakları yer imi butonundan kaydedebilirsiniz.' : 'Bookmark your favorite recipes to view them here.')}
           </p>
         </div>
       )}

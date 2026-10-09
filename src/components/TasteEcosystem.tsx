@@ -22,6 +22,7 @@ import {
   Zap,
   Shield,
   Star,
+  ChefHat,
 } from 'lucide-react'
 
 interface EcosystemProps {
@@ -47,6 +48,22 @@ const LOCALIZED_SECTIONS: Record<string, any> = {
     lp_wallet: 'LP Cüzdan Adresi:',
     more_pools: '🔥 YENİ HAVUZLAR YAKINDA! (MORE POOLS TO COME...)',
     items: {
+      'tai-chef-social': {
+        subtitle: 'Şefler & Mutfak Ağı',
+        description: 'Yapay zeka destekli şef & gastronomi sosyal ağı. Özel gurme tarifler, mutfak videoları paylaşın, usta şeflerle takipleşin ve mutfak topluluğuna bağlanın.',
+        features: [
+          'Gerçek şef profili ve dijital mutfak kimliği',
+          'Tabak fotoğrafları ve video reels paylaşımları',
+          'Yapay zeka gastronomi ve kalori asistanı',
+          'Reçete defteri, yorumlar ve şefler arası direkt mesajlaşma',
+          'Taste Web3 ekosistem ve TAI ödül entegrasyonu',
+        ],
+        stats: [
+          { label: 'Ağ', value: 'Web3 Sosyal' },
+          { label: 'Durum', value: 'Canlı Yayında' },
+          { label: 'Topluluk', value: 'Usta Şefler' },
+        ]
+      },
       'ai-recipes': {
         subtitle: 'Akıllı Tarifler',
         description: 'Yapay zeka destekli tarif motoru ile malzemelerinizi girin, size özel yemek tarifleri alın. Gastronomi dünyasını AI ile keşfedin.',
@@ -226,6 +243,22 @@ const LOCALIZED_SECTIONS: Record<string, any> = {
     lp_wallet: 'LP Wallet Address:',
     more_pools: '🔥 NEW POOLS COMING SOON!',
     items: {
+      'tai-chef-social': {
+        subtitle: 'Chefs & Culinary Network',
+        description: 'AI-powered social culinary network for chefs and food enthusiasts. Share gourmet dishes, videos, connect with master chefs, and join kitchen discussions.',
+        features: [
+          'Real verified chef profile & digital culinary identity',
+          'Dish photography and reels video sharing',
+          'AI culinary recipe and nutrition assistant',
+          'Recipe book, comments & direct chef-to-chef messaging',
+          'Integrated with Taste Web3 ecosystem & TAI rewards',
+        ],
+        stats: [
+          { label: 'Network', value: 'Web3 Social' },
+          { label: 'Status', value: 'Live' },
+          { label: 'Community', value: 'Master Chefs' },
+        ]
+      },
       'ai-recipes': {
         subtitle: 'Smart Recipes',
         description: 'Enter your ingredients into our AI-powered recipe engine and get personalized recipes. Explore the culinary world with AI.',
@@ -392,6 +425,36 @@ const LOCALIZED_SECTIONS: Record<string, any> = {
 
 // ─── 10 Ekosistem Bölümü ────────────────────────────────────────────────────
 const ECOSYSTEM_SECTIONS = [
+  {
+    id: 'tai-chef-social',
+    icon: ChefHat,
+    customImage: '/chef-logo.png',
+    emoji: '👨‍🍳',
+    title: 'TAI Chef Social',
+    subtitle: 'Şefler & Mutfak Ağı',
+    color: '#F59E0B',
+    glow: 'rgba(245,158,11,0.35)',
+    gradient: 'linear-gradient(135deg, rgba(245,158,11,0.18), rgba(217,119,6,0.06))',
+    border: 'rgba(245,158,11,0.5)',
+    badge: 'CANLI · YENİ',
+    badgeColor: '#F59E0B',
+    navTarget: 'taichef',
+    description:
+      'Yapay zeka destekli şef & gastronomi sosyal ağı. Özel gurme tarifler, mutfak videoları paylaşın, usta şeflerle takipleşin ve mutfak topluluğuna bağlanın.',
+    features: [
+      'Gerçek şef profili ve dijital mutfak kimliği',
+      'Tabak fotoğrafları ve video reels paylaşımları',
+      'Yapay zeka gastronomi ve kalori asistanı',
+      'Reçete defteri, yorumlar ve şefler arası direkt mesajlaşma',
+      'Taste Web3 ekosistem ve TAI ödül entegrasyonu',
+    ],
+    stats: [
+      { label: 'Ağ', value: 'Web3 Sosyal' },
+      { label: 'Durum', value: 'Canlı Yayında' },
+      { label: 'Topluluk', value: 'Usta Şefler' },
+    ],
+    comingSoon: false,
+  },
   {
     id: 'ai-recipes',
     icon: UtensilsCrossed,
@@ -712,11 +775,11 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
   const activeSection = translatedSections.find(s => s.id === selectedSection)
 
   const handleCardAction = (section: typeof ECOSYSTEM_SECTIONS[0]) => {
-    if (section.id === 'pool') {
-      setSelectedSection(section.id)
-    } else {
-      setSelectedSection(section.id)
+    if (section.id === 'tai-chef-social') {
+      onNavigate('taichef');
+      return;
     }
+    setSelectedSection(section.id)
   }
 
   const handleNavigate = (section: typeof ECOSYSTEM_SECTIONS[0]) => {
@@ -925,8 +988,13 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                   marginBottom: '10px',
                   boxShadow: isHovered ? `0 0 12px ${section.glow}` : 'none',
                   transition: 'all 0.25s ease',
+                  overflow: 'hidden'
                 }}>
-                  <Icon size={20} color={section.color} />
+                  {(section as any).customImage ? (
+                    <img src={(section as any).customImage} alt={section.title} style={{ width: '100%', height: '100%', borderRadius: '10px', objectFit: 'cover' }} />
+                  ) : (
+                    <Icon size={20} color={section.color} />
+                  )}
                 </div>
 
                 {/* Title */}
@@ -1087,8 +1155,13 @@ export function TasteEcosystem({ onNavigate, onOpenTastePay }: EcosystemProps) {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                   boxShadow: `0 0 20px ${activeSection.glow}`,
+                  overflow: 'hidden'
                 }}>
-                  {(() => { const Icon = activeSection.icon; return <Icon size={26} color={activeSection.color} /> })()}
+                  {(activeSection as any).customImage ? (
+                    <img src={(activeSection as any).customImage} alt={activeSection.title} style={{ width: '100%', height: '100%', borderRadius: '14px', objectFit: 'cover' }} />
+                  ) : (
+                    (() => { const Icon = activeSection.icon; return <Icon size={26} color={activeSection.color} /> })()
+                  )}
                 </div>
 
                 <div style={{ flex: 1 }}>

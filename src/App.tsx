@@ -450,7 +450,7 @@ function App() {
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span style={{ fontSize: 13, fontWeight: 900, color: '#fff' }}>
-                      {t('ads.banner_title', 'Video İzle & +50 TAI Kazan')}
+                      {t('ads.banner_title', 'Video İzle & +5 TAI Kazan')}
                     </span>
                     <span style={{
                       fontSize: 8.5,
@@ -1400,7 +1400,18 @@ function App() {
                 {/* Drawer menu items */}
                 <div style={{ padding: '12px 0', flex: 1 }}>
                   {[
-                    { id: 'taichef', icon: '👨‍🍳', label: t('drawer.tai_chef_social_menu', 'TAI Chef (Sosyal Medya & Mutfak Ağı)'), isNew: true },
+                    {
+                      id: 'taichef',
+                      icon: (
+                        <img
+                          src="/chef-logo.png"
+                          alt="TAI Chef"
+                          style={{ width: 24, height: 24, borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(245,158,11,0.6)' }}
+                        />
+                      ),
+                      label: t('drawer.tai_chef_social_menu', 'TAI Chef (Sosyal Medya & Mutfak Ağı)'),
+                      isNew: true
+                    },
                     { id: 'chef', icon: '🍽️', label: t('drawer.ai_chef_menu', 'TASTE AI Chef (Tarif & Kalori)'), isNew: false },
                     { id: 'ai', icon: '🤖', label: t('app.project_assistant', 'TASTE AI Asistan'), isNew: false },
                     { id: 'ecosystem', icon: '🌐', label: t('drawer.ecosystem', 'TAI Ekosistemi'), isNew: true },
@@ -1445,7 +1456,7 @@ function App() {
                         {activeTab === item.id && (
                           <div style={{ position: 'absolute', left: 0, top: 6, bottom: 6, width: 3, background: '#f59e0b', borderRadius: '0 3px 3px 0' }} />
                         )}
-                        <span style={{ fontSize: 20, width: 28, textAlign: 'center' }}>{item.icon}</span>
+                        <span style={{ fontSize: 20, width: 28, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{item.icon}</span>
                         <span style={{ fontSize: 14, fontWeight: 600 }}>{item.label}</span>
                         {item.isNew && (
                           <span style={{ marginLeft: 'auto', background: 'linear-gradient(135deg,#f97316,#ea580c)', color: '#fff', fontSize: 8, fontWeight: 900, padding: '2px 6px', borderRadius: 6 }}>{t('app_ext.new_badge', 'YENİ')}</span>

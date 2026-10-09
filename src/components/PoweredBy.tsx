@@ -262,6 +262,10 @@ const LockerLogo = () => (
     </svg>
 )
 
+const ChefLogo = () => (
+    <img src="/chef-logo.png" alt="TAI Chef" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+)
+
 // ─── Tool Definitions ──────────────────────────────────────────────────────
 interface Tool {
     name: string
@@ -392,6 +396,7 @@ export function PoweredBy() {
         { name: 'Vite', color: '#646CFF', category: 'Tech', Logo: ViteLogo },
 
         // 🌐 Socials & Communication
+        { name: 'TAI Chef Social', color: '#f59e0b', category: 'Socials', Logo: ChefLogo, badge: 'COMMUNITY' },
         { name: 'Main TG', color: '#229ED9', category: 'Socials', url: 'https://t.me/TasteAIToken', Logo: TelegramLogo },
         { name: 'Mini App Group', color: '#229ED9', category: 'Socials', url: 'https://t.me/taste_miniapp/1', Logo: TelegramLogo, badge: 'COMMUNITY' },
         { name: 'Launch Bot', color: '#229ED9', category: 'Socials', url: 'https://t.me/taste_launch_bot', Logo: TelegramLogo, badge: 'BOT' },

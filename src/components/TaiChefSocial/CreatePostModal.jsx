@@ -30,7 +30,7 @@ export default function CreatePostModal({
 
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
-  const [location, setLocation] = useState({ name: 'TA Gourmet Kitchen', city: 'Ä°stanbul', lat: 41.0315, lng: 28.9754 });
+  const [location, setLocation] = useState({ name: 'TA Gourmet Kitchen', city: 'İstanbul', lat: 41.0315, lng: 28.9754 });
   const [cookTime, setCookTime] = useState('30 dk');
   const [difficulty, setDifficulty] = useState('Orta');
   const [category, setCategory] = useState('Ana Yemek');
@@ -43,7 +43,7 @@ export default function CreatePostModal({
   if (!isOpen) return null;
 
   const categories = lang === 'tr' ? [
-    'Deniz ÃœrÃ¼nleri', 'Et & Izgara', 'PastacÄ±lÄ±k & TatlÄ±', 'FÃ¼zyon', 'TaÅŸ FÄ±rÄ±n', 'Makarna & Risotto', 'Vejetaryen'
+    'Deniz Ürünleri', 'Et & Izgara', 'Pastacılık & Tatlı', 'Füzyon', 'Taş Fırın', 'Makarna & Risotto', 'Vejetaryen'
   ] : [
     'Seafood', 'Steak & Grill', 'Pastry & Dessert', 'Fusion', 'Stone Oven', 'Pasta & Risotto', 'Vegetarian'
   ];
@@ -52,7 +52,7 @@ export default function CreatePostModal({
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 100 * 1024 * 1024) {
-        setError(lang === 'tr' ? 'Medya boyutu 100 MB\'dan kÃ¼Ã§Ã¼k olmalÄ±dÄ±r.' : 'File size must be under 100 MB.');
+        setError(lang === 'tr' ? 'Medya boyutu 100 MB\'dan küçük olmalıdır.' : 'File size must be under 100 MB.');
         return;
       }
       setError('');
@@ -67,7 +67,7 @@ export default function CreatePostModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) {
-      setError(lang === 'tr' ? 'LÃ¼tfen tabak adÄ±nÄ± giriniz.' : 'Please enter dish title.');
+      setError(lang === 'tr' ? 'Lütfen tabak adını giriniz.' : 'Please enter dish title.');
       return;
     }
 
@@ -93,7 +93,7 @@ export default function CreatePostModal({
         caption: caption.trim(),
         image: finalMediaUrl, // Hem video hem resim url'si bu alanda
         mediaType: detectedType, // 'video' veya 'image'
-        location: location || { name: 'Mutfak', city: 'Ä°stanbul', lat: 41.0082, lng: 28.9784 },
+        location: location || { name: 'Mutfak', city: 'İstanbul', lat: 41.0082, lng: 28.9784 },
         cookTime,
         difficulty,
         category,
@@ -107,7 +107,7 @@ export default function CreatePostModal({
       onPostCreated(created);
       onClose();
     } catch (err) {
-      setError(err.message || 'Hata oluÅŸtu');
+      setError(err.message || 'Hata oluştu');
     } finally {
       setUploading(false);
     }
@@ -126,7 +126,7 @@ export default function CreatePostModal({
               <div>
                 <h3 className="font-serif font-bold text-slate-900 text-base">{t.createPlate}</h3>
                 <p className="text-[11px] text-slate-500">
-                  {lang === 'tr' ? 'FotoÄŸraf veya Mutfak Videosu PaylaÅŸÄ±n (100MB)' : 'Share a Photo or Kitchen Video (100MB)'}
+                  {lang === 'tr' ? 'Fotoğraf veya Mutfak Videosu Paylaçın (100MB)' : 'Share a Photo or Kitchen Video (100MB)'}
                 </p>
               </div>
             </div>
@@ -144,12 +144,12 @@ export default function CreatePostModal({
               </div>
             )}
 
-            {/* Medya (FotoÄŸraf / Video) YÃ¼kleme AlanÄ± */}
+            {/* Medya (Fotoğraf / Video) Yükleme Alanı */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
-                <span>{lang === 'tr' ? 'Tabak FotoÄŸrafÄ± veya HazÄ±rlÄ±k Videosu *' : 'Dish Photo or Preparation Video *'}</span>
+                <span>{lang === 'tr' ? 'Tabak Fotoğrafı veya Hazırlık Videosu *' : 'Dish Photo or Preparation Video *'}</span>
                 <span className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">
-                  FotoÄŸraf & Video (MP4 / WebM)
+                  Fotoğraf & Video (MP4 / WebM)
                 </span>
               </label>
 
@@ -171,7 +171,7 @@ export default function CreatePostModal({
                       className="w-full h-full object-contain"
                     />
                   ) : (
-                    <img src={mediaPreview} alt="Ã–nizleme" className="w-full h-full object-cover" />
+                    <img src={mediaPreview} alt="Önizleme" className="w-full h-full object-cover" />
                   )}
 
                   <div className="absolute top-2 right-2">
@@ -181,7 +181,7 @@ export default function CreatePostModal({
                       className="px-3 py-1.5 rounded-xl bg-white/90 backdrop-blur-md text-slate-900 font-bold text-xs flex items-center gap-1.5 shadow"
                     >
                       <Upload className="w-3.5 h-3.5" />
-                      {lang === 'tr' ? 'MedyayÄ± DeÄŸiÅŸtir' : 'Change Media'}
+                      {lang === 'tr' ? 'Medyayı Değiştir' : 'Change Media'}
                     </button>
                   </div>
                 </div>
@@ -199,7 +199,7 @@ export default function CreatePostModal({
                     </div>
                   </div>
                   <p className="text-xs font-bold text-slate-800">
-                    {lang === 'tr' ? 'FotoÄŸraf veya Video YÃ¼klemek Ä°Ã§in TÄ±klayÄ±n' : 'Click to Upload Photo or Video'}
+                    {lang === 'tr' ? 'Fotoğraf veya Video Yüklemek İçin Tıklayın' : 'Click to Upload Photo or Video'}
                   </p>
                   <p className="text-[11px] text-slate-400 mt-0.5">
                     {lang === 'tr' ? 'MP4, MOV, WebM veya JPG, PNG (Maks 100 MB)' : 'MP4, MOV, WebM or JPG, PNG (Max 100 MB)'}
@@ -208,16 +208,16 @@ export default function CreatePostModal({
               )}
             </div>
 
-            {/* BaÅŸlÄ±k */}
+            {/* Başlık */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                {lang === 'tr' ? 'Tabak / Tarif / Video BaÅŸlÄ±ÄŸÄ± *' : 'Dish / Recipe Title *'}
+                {lang === 'tr' ? 'Tabak / Tarif / Video Başlığı *' : 'Dish / Recipe Title *'}
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder={lang === 'tr' ? 'Ã–rn: AÄŸÄ±r AteÅŸte Kuzu Ä°ncik & Ä°likli KeÅŸkek' : 'e.g. Slow Braised Lamb Shank with Smoked Wheat'}
+                placeholder={lang === 'tr' ? 'Örn: Ağır Ateşte Kuzu İncik & İlikli Keşkek' : 'e.g. Slow Braised Lamb Shank with Smoked Wheat'}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white"
                 required
               />
@@ -236,30 +236,30 @@ export default function CreatePostModal({
                 <div className="flex items-center gap-2 min-w-0">
                   <MapPin className="w-4 h-4 text-amber-600 flex-shrink-0" />
                   <span className="text-xs text-slate-800 truncate font-semibold">
-                    {location ? `${location.name} (${location.city})` : 'Konum SeÃ§'}
+                    {location ? `${location.name} (${location.city})` : 'Konum Seç'}
                   </span>
                 </div>
                 <span className="text-[11px] text-amber-700 font-bold px-2 py-0.5 rounded-lg bg-amber-50">
-                  {lang === 'tr' ? 'DeÄŸiÅŸtir' : 'Change'}
+                  {lang === 'tr' ? 'Değiştir' : 'Change'}
                 </span>
               </button>
             </div>
 
-            {/* AÃ§Ä±klama & ReÃ§ete */}
+            {/* Açıklama & Reçete */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                {lang === 'tr' ? 'Åef Notu & PiÅŸirme SÄ±rrÄ±' : 'Chef Notes & Secret Technique'}
+                {lang === 'tr' ? 'Şef Notu & Pişirme Sırrı' : 'Chef Notes & Secret Technique'}
               </label>
               <textarea
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
-                placeholder={lang === 'tr' ? 'TabaÄŸÄ±n hikayesi, sos dengesi veya mutfaktaki piÅŸirme adÄ±mlarÄ±...' : 'The technique, secret ingredients or flavor profile...'}
+                placeholder={lang === 'tr' ? 'Tabağın hikayesi, sos dengesi veya mutfaktaki pişirme adımları...' : 'The technique, secret ingredients or flavor profile...'}
                 rows={3}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white resize-none"
               />
             </div>
 
-            {/* PiÅŸirme SÃ¼resi & Zorluk */}
+            {/* Pişirme Süresi & Zorluk */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">{t.cookTime}</label>
@@ -280,8 +280,8 @@ export default function CreatePostModal({
                 >
                   <option value="Kolay">{lang === 'tr' ? 'Kolay' : 'Easy'}</option>
                   <option value="Orta">{lang === 'tr' ? 'Orta' : 'Medium'}</option>
-                  <option value="Ä°leri DÃ¼zey">{lang === 'tr' ? 'Ä°leri DÃ¼zey' : 'Advanced'}</option>
-                  <option value="Michelin / Usta Ä°ÅŸi">{lang === 'tr' ? 'Michelin / Usta Ä°ÅŸi' : 'Master Chef'}</option>
+                  <option value="İleri Düzey">{lang === 'tr' ? 'İleri Düzey' : 'Advanced'}</option>
+                  <option value="Michelin / Usta İşi">{lang === 'tr' ? 'Michelin / Usta İşi' : 'Master Chef'}</option>
                 </select>
               </div>
             </div>
@@ -312,13 +312,13 @@ export default function CreatePostModal({
             {/* Malzemeler */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                {t.ingredients} ({lang === 'tr' ? 'VirgÃ¼lle ayÄ±rÄ±n' : 'Comma separated'})
+                {t.ingredients} ({lang === 'tr' ? 'Virgülle ayırın' : 'Comma separated'})
               </label>
               <input
                 type="text"
                 value={ingredientsInput}
                 onChange={(e) => setIngredientsInput(e.target.value)}
-                placeholder={lang === 'tr' ? 'Kuzu incik, safran, aÅŸurelik buÄŸday, tereyaÄŸÄ±' : 'Lamb shank, saffron, wheat, butter'}
+                placeholder={lang === 'tr' ? 'Kuzu incik, safran, aşurelik buğday, tereyağı' : 'Lamb shank, saffron, wheat, butter'}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white"
               />
             </div>
@@ -340,7 +340,7 @@ export default function CreatePostModal({
               className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition-all active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
             >
               <Upload className="w-4 h-4" />
-              <span>{uploading ? (lang === 'tr' ? 'YÃ¼kleniyor...' : 'Sharing...') : t.sharePlateBtn}</span>
+              <span>{uploading ? (lang === 'tr' ? 'Yükleniyor...' : 'Sharing...') : t.sharePlateBtn}</span>
             </button>
           </div>
         </div>

@@ -32,7 +32,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
   const [lang, setLang] = useState('tr');
   const t = translations[lang] || translations.tr;
 
-  // Aktif KullanÄ±cÄ± & TÃ¼m KullanÄ±cÄ±lar
+  // Aktif Kullanıcı & Tüm Kullanıcılar
   const [currentUser, setCurrentUser] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -57,7 +57,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
     setTimeout(() => setToast(null), 4000);
   };
 
-  // 1. Veri YÃ¼kleme & BaÅŸlatma
+  // 1. Veri Yükleme & Başlatma
   const loadUsersAndData = async () => {
     try {
       const users = await api.getAllUsers();
@@ -106,10 +106,10 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
         username: tgUser.handle.replace('@', ''),
         name: tgUser.name,
         avatar: tgUser.avatar,
-        title: 'Telegram Åefi',
+        title: 'Telegram Şefi',
         restaurant: 'Mutfak',
-        location: 'TÃ¼rkiye',
-        bio: 'Telegram Mini App kullanÄ±cÄ±sÄ±'
+        location: 'Türkiye',
+        bio: 'Telegram Mini App kullanıcısı'
       }).then(res => {
         if (res.user) {
           setCurrentUser(res.user);
@@ -121,7 +121,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
     loadUsersAndData();
   }, []);
 
-  // 2. CanlÄ± Socket.io Dinleyicileri
+  // 2. Canlı Socket.io Dinleyicileri
   useEffect(() => {
     if (!currentUser?.id) return;
     const socket = initSocket(currentUser.id);
@@ -135,7 +135,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
       if (newPost.userId !== currentUser.id) {
         sounds.playNotification();
         showToast(
-          lang === 'tr' ? `${newPost.author?.name} yeni bir tabak paylaÅŸtÄ±!` : `${newPost.author?.name} shared a new dish!`,
+          lang === 'tr' ? `${newPost.author?.name} yeni bir tabak paylaştı!` : `${newPost.author?.name} shared a new dish!`,
           t.appName
         );
       }
@@ -167,7 +167,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
       if (msg.receiverId === currentUser.id) {
         sounds.playMessage();
         triggerHaptic('light');
-        showToast(msg.text || 'ğŸ“· GÃ¶rsel', t.messages);
+        showToast(msg.text || 'ğŸ“· Görsel', t.messages);
       }
       api.getConversations(currentUser.id).then(setConversations).catch(() => {});
     };
@@ -221,7 +221,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
       const res = await api.toggleSave(postId, currentUser.id);
       setPosts(prev => prev.map(p => p.id === postId ? { ...p, saves: res.saves } : p));
       showToast(
-        res.isSaved ? (lang === 'tr' ? 'Tarif defterine kaydedildi' : 'Saved to recipe book') : (lang === 'tr' ? 'KaldÄ±rÄ±ldÄ±' : 'Removed'),
+        res.isSaved ? (lang === 'tr' ? 'Tarif defterine kaydedildi' : 'Saved to recipe book') : (lang === 'tr' ? 'Kaldırıldı' : 'Removed'),
         t.appName
       );
     } catch (e) {
@@ -231,7 +231,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
 
   const handlePostCreated = (newPost) => {
     setPosts(prev => [newPost, ...prev]);
-    showToast(lang === 'tr' ? 'TabaÄŸÄ±nÄ±z paylaÅŸÄ±ldÄ±!' : 'Dish shared successfully!', t.appName);
+    showToast(lang === 'tr' ? 'Tabağınız paylaşıldı!' : 'Dish shared successfully!', t.appName);
   };
 
   const handleMarkAllNotifsRead = async () => {
@@ -256,7 +256,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-amber-500 selection:text-white pb-24">
-      {/* EÄŸer Mini App'ten gelindiyse En Ãœste ÅÄ±k Geri DÃ¶n Butonu */}
+      {/* Eğer Mini App'ten gelindiyse En Üste Şık Geri Dön Butonu */}
       {onBackToMiniApp && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 flex items-center justify-between">
           <button
@@ -264,7 +264,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
             className="flex items-center gap-1.5 text-xs font-bold text-amber-800 hover:text-amber-900"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>â† Taste Mini App'e DÃ¶n</span>
+            <span>â† Taste Mini App'e Dön</span>
           </button>
           <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider">
             TAI Chef Social Hub
@@ -287,14 +287,14 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
         </div>
       )}
 
-      {/* Ãœst Navigasyon */}
+      {/* Üst Navigasyon */}
       <Navbar
         currentUser={currentUser}
         allUsers={allUsers}
         onSwitchUser={(user) => {
           setCurrentUser(user);
           localStorage.setItem('ta_chef_user_id', user.id);
-          showToast(user.name, lang === 'tr' ? 'Åef DeÄŸiÅŸtirildi' : 'Switched Chef');
+          showToast(user.name, lang === 'tr' ? 'Şef Değiştirildi' : 'Switched Chef');
         }}
         unreadNotifsCount={unreadNotifsCount}
         unreadMessagesCount={unreadMessagesCount}
@@ -311,9 +311,9 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
         t={t}
       />
 
-      {/* Ana Ä°Ã§erik */}
+      {/* Ana İçerik */}
       <main className="flex-1 max-w-3xl w-full mx-auto px-3 sm:px-4 py-4">
-        {/* 1. SEKME: AKIÅ (FEED) */}
+        {/* 1. SEKME: AKIŞ (FEED) */}
         {activeTab === 'feed' && (
           <div className="space-y-5">
             <div 
@@ -335,7 +335,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
                     {t.sharePrompt}
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    {lang === 'tr' ? 'FotoÄŸraf veya video yÃ¼kle, restoran lokasyonunu ve reÃ§eteni ekle...' : 'Upload photo or video, add location and secret recipe...'}
+                    {lang === 'tr' ? 'Fotoğraf veya video yükle, restoran lokasyonunu ve reçeteni ekle...' : 'Upload photo or video, add location and secret recipe...'}
                   </p>
                 </div>
               </div>
@@ -366,10 +366,10 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
                 <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center text-slate-500 space-y-2">
                   <ChefHat className="w-8 h-8 mx-auto text-amber-500" />
                   <p className="text-xs font-bold text-slate-700">
-                    {lang === 'tr' ? 'HenÃ¼z paylaÅŸÄ±m yapÄ±lmamÄ±ÅŸ.' : 'No dishes shared yet.'}
+                    {lang === 'tr' ? 'Henüz paylaşım yapılmamış.' : 'No dishes shared yet.'}
                   </p>
                   <p className="text-[11px] text-slate-400">
-                    {lang === 'tr' ? 'Ä°lk ÅŸef tabaÄŸÄ±nÄ± siz paylaÅŸÄ±n!' : 'Be the first to share a culinary dish!'}
+                    {lang === 'tr' ? 'İlk şef tabağını siz paylaçın!' : 'Be the first to share a culinary dish!'}
                   </p>
                 </div>
               )}
@@ -377,7 +377,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
           </div>
         )}
 
-        {/* 2. SEKME: AÅÃ‡I AÄI & ARKADAÅLIK & KÄ°M ONLINE (FRIENDS) */}
+        {/* 2. SEKME: AŞÇI AĞI & ARKADAŞLIK & KİM ONLINE (FRIENDS) */}
         {activeTab === 'friends' && (
           <FriendsView
             currentUser={currentUser}
@@ -402,7 +402,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
           />
         )}
 
-        {/* 4. SEKME: PROFÄ°LÄ°M (PROFILE) */}
+        {/* 4. SEKME: PROFİLİM (PROFILE) */}
         {activeTab === 'profile' && (
           <ProfileView
             currentUser={currentUser}
@@ -415,7 +415,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
         )}
       </main>
 
-      {/* Alt Navigasyon Ã‡ubuÄŸu */}
+      {/* Alt Navigasyon Çubuğu */}
       <BottomNav
         activeTab={activeTab}
         setActiveTab={(tab) => {
@@ -438,7 +438,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
         onLoginSuccess={(user) => {
           setCurrentUser(user);
           localStorage.setItem('ta_chef_user_id', user.id);
-          showToast(`${user.name}`, lang === 'tr' ? 'BaÅŸarÄ±yla GiriÅŸ YapÄ±ldÄ±' : 'Welcome');
+          showToast(`${user.name}`, lang === 'tr' ? 'Başarıyla Giriş Yapıldı' : 'Welcome');
           loadUsersAndData();
         }}
         lang={lang}
@@ -451,7 +451,7 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
         currentUser={currentUser}
         onProfileUpdated={(updatedUser) => {
           setCurrentUser(updatedUser);
-          showToast(lang === 'tr' ? 'Profiliniz gÃ¼ncellendi!' : 'Profile updated successfully!', t.appName);
+          showToast(lang === 'tr' ? 'Profiliniz güncellendi!' : 'Profile updated successfully!', t.appName);
           loadUsersAndData();
         }}
         lang={lang}

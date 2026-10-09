@@ -44,7 +44,7 @@ export default function PostCard({
   const likesCount = post.likes?.length || 0;
   const commentsCount = post.comments?.length || 0;
 
-  // Video mu Resim mi kontrolÃ¼
+  // Video mu Resim mi kontrolü
   const isVideo = post.mediaType === 'video' || (post.image && (post.image.includes('.mp4') || post.image.includes('.webm') || post.image.includes('.mov')));
 
   const handleLikeClick = () => {
@@ -73,7 +73,7 @@ export default function PostCard({
     if (navigator.share) {
       navigator.share({
         title: post.title,
-        text: `${post.author?.name} tarafÄ±ndan paylaÅŸÄ±lan tabak: ${post.title}`,
+        text: `${post.author?.name} tarafından paylaşılan tabak: ${post.title}`,
         url: shareUrl
       }).catch(() => {});
     } else {
@@ -105,7 +105,7 @@ export default function PostCard({
 
   return (
     <article className="bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      {/* Ãœst Åef Bilgisi Header */}
+      {/* Üst Şef Bilgisi Header */}
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div 
@@ -133,7 +133,7 @@ export default function PostCard({
                 {post.author?.name}
               </h3>
               <span className="text-[10px] px-2 py-0.2 rounded-full bg-amber-50 text-amber-700 font-semibold border border-amber-200">
-                {post.author?.title || 'Åef'}
+                {post.author?.title || 'Şef'}
               </span>
             </div>
 
@@ -164,12 +164,12 @@ export default function PostCard({
             className="px-3 py-1.5 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50 text-slate-700 hover:text-amber-800 text-xs font-semibold flex items-center gap-1.5 transition-colors"
           >
             <ChefHat className="w-3.5 h-3.5 text-amber-600" />
-            <span>{lang === 'tr' ? 'Åefe Yaz' : 'Message'}</span>
+            <span>{lang === 'tr' ? 'Şefe Yaz' : 'Message'}</span>
           </button>
         )}
       </div>
 
-      {/* Medya AlanÄ±: FOTOÄRAF VEYA VÄ°DEO */}
+      {/* Medya Alanı: FOTOĞRAF VEYA VİDEO */}
       <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-black overflow-hidden flex items-center justify-center">
         {isVideo ? (
           <div className="relative w-full h-full cursor-pointer" onClick={toggleVideoPlay}>
@@ -193,7 +193,7 @@ export default function PostCard({
               </div>
             )}
 
-            {/* Ses AÃ§ / Kapa Butonu */}
+            {/* Ses Aç / Kapa Butonu */}
             <button
               onClick={toggleMute}
               className="absolute bottom-3 right-3 p-2 rounded-xl bg-black/60 backdrop-blur-md text-white border border-white/20 hover:bg-black/80 transition-colors z-10"
@@ -204,7 +204,7 @@ export default function PostCard({
             {/* Video Rozeti */}
             <span className="absolute top-3 left-3 px-2.5 py-1 rounded-xl bg-black/60 backdrop-blur-md text-white text-xs font-semibold flex items-center gap-1 border border-white/20">
               <VideoIcon className="w-3.5 h-3.5 text-amber-400" />
-              <span>{lang === 'tr' ? 'Video ReÃ§ete' : 'Video Recipe'}</span>
+              <span>{lang === 'tr' ? 'Video Reçete' : 'Video Recipe'}</span>
             </span>
           </div>
         ) : (
@@ -216,7 +216,7 @@ export default function PostCard({
           />
         )}
 
-        {/* SÃ¼re & Zorluk Rozetleri (Sadece fotoÄŸraflarda veya sol Ã¼stte) */}
+        {/* Süre & Zorluk Rozetleri (Sadece fotoğraflarda veya sol üstte) */}
         {!isVideo && (
           <div className="absolute top-3 left-3 flex items-center gap-2">
             {post.cookTime && (
@@ -241,7 +241,7 @@ export default function PostCard({
         )}
       </div>
 
-      {/* Ä°Ã§erik */}
+      {/* İçerik */}
       <div className="p-4 space-y-3">
         <h2 className="font-serif text-lg font-bold text-slate-900 tracking-tight">
           {post.title}
@@ -266,7 +266,7 @@ export default function PostCard({
           </div>
         )}
 
-        {/* Aksiyon ButonlarÄ± */}
+        {/* Aksiyon Butonları */}
         <div className="flex items-center justify-between pt-2 border-t border-slate-100">
           <div className="flex items-center gap-4">
             <button
@@ -293,7 +293,7 @@ export default function PostCard({
             <button
               onClick={handleShare}
               className="p-1 text-slate-500 hover:text-slate-800 transition-colors"
-              title="PaylaÅŸ"
+              title="Paylaş"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
             </button>
@@ -321,7 +321,7 @@ export default function PostCard({
                   <div key={c.id} className="p-2.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs">
                     <div className="flex items-center justify-between text-slate-500 mb-0.5">
                       <span className="font-bold text-slate-800">
-                        {c.userName || (c.userId === currentUser?.id ? (lang === 'tr' ? 'Siz' : 'You') : 'Åef')}
+                        {c.userName || (c.userId === currentUser?.id ? (lang === 'tr' ? 'Siz' : 'You') : 'Şef')}
                       </span>
                       <span className="text-[10px]">
                         {new Date(c.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -332,7 +332,7 @@ export default function PostCard({
                 ))
               ) : (
                 <p className="text-xs text-slate-400 text-center py-2">
-                  {lang === 'tr' ? 'Ä°lk ÅŸef yorumunu siz yapÄ±n!' : 'Be the first to comment!'}
+                  {lang === 'tr' ? 'İlk şef yorumunu siz yapın!' : 'Be the first to comment!'}
                 </p>
               )}
             </div>

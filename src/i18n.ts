@@ -36,13 +36,13 @@ const resources = {
                 "watch_now": "Watch & Earn Now"
             },
             "ads": {
-                "banner_title": "Watch Video & Earn +50 TAI",
+                "banner_title": "Watch Video & Earn +5 TAI",
                 "banner_desc": "Watch a 15s sponsored video, earn TAI and boost the pool!",
                 "watch_btn": "Watch",
                 "modal_title": "Watch Sponsored Video",
                 "modal_subtitle": "Watch a 15-second video, earn rewards and generate TON for the Taste AI pool!",
                 "daily_remaining": "Remaining Today:",
-                "reward_tai_success": "Congrats! +50 TAI added to your balance! 🎉",
+                "reward_tai_success": "Congrats! +5 TAI added to your balance! 🎉",
                 "reward_energy_success": "Congrats! Tap-to-Earn energy refilled! ⚡",
                 "ad_failed": "Ad could not be completed.",
                 "start_ad_btn": "Watch Ad & Claim Reward"
@@ -1070,13 +1070,13 @@ const resources = {
                 "watch_now": "Hemen İzle & Kazan"
             },
             "ads": {
-                "banner_title": "Video İzle & +50 TAI Kazan",
+                "banner_title": "Video İzle & +5 TAI Kazan",
                 "banner_desc": "15 sn sponsorlu video izle, hem TAI kazan hem havuzu büyüt!",
                 "watch_btn": "İzle",
                 "modal_title": "Sponsorlu Video İzle",
                 "modal_subtitle": "15 saniyelik video izle, hem sen kazan hem Taste AI havuzuna TON kazandır!",
                 "daily_remaining": "Bugün Kalan Hak:",
-                "reward_tai_success": "Tebrikler! +50 TAI Bakiyenize Eklendi! 🎉",
+                "reward_tai_success": "Tebrikler! +5 TAI Bakiyenize Eklendi! 🎉",
                 "reward_energy_success": "Tebrikler! Dokun-Kazan Enerjiniz Fullendi! ⚡",
                 "ad_failed": "Reklam tamamlanamadı.",
                 "start_ad_btn": "Reklamı İzle & Ödülü Al"

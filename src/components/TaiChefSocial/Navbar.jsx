@@ -29,7 +29,7 @@ export default function Navbar({
         >
           <img
             src="/chef-logo.png"
-            alt="TA CHEF"
+            alt="TAI Chef"
             className="w-10 h-10 rounded-full object-cover shadow-sm border border-amber-500/40 p-0.5 group-hover:scale-105 transition-transform"
           />
           <div>
@@ -45,16 +45,16 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Aksiyonlar: Dil DeÄŸiÅŸtirici, Bildirimler, Mesajlar, Profil */}
+        {/* Aksiyonlar: Dil Değiştirici, Bildirimler, Mesajlar, Profil */}
         <div className="flex items-center gap-2">
-          {/* Dil SeÃ§eneÄŸi (TR / EN) */}
+          {/* Dil Seçeneği (TR / EN) */}
           <button
             onClick={() => {
               triggerHaptic('light');
               onToggleLang();
             }}
             className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors"
-            title="Dili DeÄŸiÅŸtir / Change Language"
+            title="Dili Değiştir / Change Language"
           >
             <Globe className="w-3.5 h-3.5 text-amber-600" />
             <span>{lang.toUpperCase()}</span>
@@ -88,7 +88,7 @@ export default function Navbar({
             )}
           </button>
 
-          {/* Profil / GiriÅŸ Butonu */}
+          {/* Profil / Giriş Butonu */}
           {currentUser ? (
             <div className="relative">
               <button
@@ -108,13 +108,13 @@ export default function Navbar({
                     {currentUser.name}
                   </p>
                   <p className="text-[10px] text-amber-600 font-medium truncate max-w-[100px]">
-                    {currentUser.title || 'Åef'}
+                    {currentUser.title || 'Şef'}
                   </p>
                 </div>
                 <ChevronDown className="w-3 h-3 text-slate-400" />
               </button>
 
-              {/* KullanÄ±cÄ± MenÃ¼sÃ¼ */}
+              {/* Kullanıcı Menüsü */}
               {showUserDropdown && (
                 <div 
                   className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in zoom-in-95 duration-100"
@@ -125,7 +125,7 @@ export default function Navbar({
                     <p className="text-[11px] text-slate-500 font-mono">@{currentUser.username}</p>
                   </div>
 
-                  {/* Profil DÃ¼zenle */}
+                  {/* Profil Düzenle */}
                   <button
                     onClick={() => {
                       setShowUserDropdown(false);
@@ -137,11 +137,11 @@ export default function Navbar({
                     <span>{t.profile}</span>
                   </button>
 
-                  {/* KullanÄ±cÄ± DeÄŸiÅŸtirici (Mevcut diÄŸer kullanÄ±cÄ±lar) */}
+                  {/* Kullanıcı Değiştirici (Mevcut diğer kullanıcılar) */}
                   {allUsers.length > 1 && (
                     <div className="pt-2 border-t border-slate-100 mt-1">
                       <p className="text-[10px] uppercase font-bold text-slate-400 px-2 mb-1">
-                        {lang === 'tr' ? 'KullanÄ±cÄ± DeÄŸiÅŸtir (Test)' : 'Switch User'}
+                        {lang === 'tr' ? 'Kullanıcı Değiştir (Test)' : 'Switch User'}
                       </p>
                       <div className="space-y-0.5 max-h-36 overflow-y-auto">
                         {allUsers.map((u) => (
@@ -164,7 +164,7 @@ export default function Navbar({
                     </div>
                   )}
 
-                  {/* Ã‡Ä±kÄ±ÅŸ Yap / Yeni Profil AÃ§ */}
+                  {/* Çıkış Yap / Yeni Profil Aç */}
                   <div className="pt-2 border-t border-slate-100 mt-1 flex gap-1">
                     <button
                       onClick={() => {
