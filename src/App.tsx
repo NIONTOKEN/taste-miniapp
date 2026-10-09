@@ -1,4 +1,6 @@
 import { TasteAIChef } from './components/TasteAIChef';
+// @ts-ignore
+import TaiChefSocialApp from './components/TaiChefSocial/TaiChefSocialApp';
 import { useEffect, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -97,7 +99,7 @@ function App() {
 
   const [amount, setAmount] = useState(1);
   const [holdersCount, setHoldersCount] = useState<string>('...');
-  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'charity' | 'legal' | 'ai' | 'chef' | 'faq' | 'tech' | 'wallet' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'tokenomics'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'manifesto' | 'roadmap' | 'whitepaper' | 'charity' | 'legal' | 'ai' | 'chef' | 'taichef' | 'faq' | 'tech' | 'wallet' | 'vote' | 'community' | 'partners' | 'settings' | 'socials' | 'team' | 'ecosystem' | 'pool' | 'swap' | 'tokenomics'>('home');
   const [navHistory, setNavHistory] = useState<string[]>([]);
   const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || '0';
   const [isTastePayOpen, setIsTastePayOpen] = useState(false);
@@ -525,6 +527,66 @@ function App() {
                 paddingBottom: 6,
                 scrollbarWidth: 'none'
               }}>
+                {/* Announcement Card 0: TAI Chef Social (Luxury Gold) */}
+                <motion.div
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => navigateTo('taichef')}
+                  style={{
+                    minWidth: '84%',
+                    maxWidth: '86%',
+                    scrollSnapAlign: 'start',
+                    background: 'linear-gradient(135deg, #78350f 0%, #b45309 50%, #d97706 100%)',
+                    border: '1px solid rgba(251, 191, 36, 0.45)',
+                    borderRadius: 22,
+                    padding: '16px 18px',
+                    boxShadow: '0 8px 24px rgba(217, 119, 6, 0.35)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                    <div style={{
+                      width: 36, height: 36, borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.16)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}>
+                      <ChefHat size={18} color="#fef08a" />
+                    </div>
+                    <span style={{
+                      fontSize: 10, fontWeight: 800,
+                      background: 'rgba(0,0,0,0.3)',
+                      color: '#fef08a',
+                      padding: '4px 9px', borderRadius: 12,
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      display: 'inline-flex', alignItems: 'center', gap: 4
+                    }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 5px #f59e0b' }} />
+                      {t('announcements.taichef_badge', 'YENİ • SOSYAL MEDYA')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', lineHeight: 1.3 }}>
+                      {t('announcements.taichef_card_title', 'TAI Chef Sosyal Ağı Açıldı!')}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#fef3c7', marginTop: 4, lineHeight: 1.4 }}>
+                      {t('announcements.taichef_card_desc', 'Şeflerle takipleş, video & fotoğraf paylaş, mutfak sohbetine katıl.')}
+                    </div>
+                  </div>
+
+                  <div style={{
+                    marginTop: 14, display: 'inline-flex', alignItems: 'center',
+                    gap: 4, fontSize: 12, fontWeight: 900, color: '#fef08a'
+                  }}>
+                    <span>{t('announcements.taichef_enter', 'Şefler Topluluğuna Katıl')}</span>
+                    <ChevronRight size={13} />
+                  </div>
+                </motion.div>
+
                 {/* Announcement Card 1: Staking — CANLI */}
                 <motion.div
                   whileTap={{ scale: 0.98 }}
@@ -1044,6 +1106,11 @@ function App() {
           <TasteAIChef />
         </motion.div>
       );
+      case 'taichef': return (
+        <motion.div key="taichef" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          <TaiChefSocialApp onBackToMiniApp={() => navigateTo('home')} />
+        </motion.div>
+      );
       case 'ai': return (
         <motion.div key="ai" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <TasteAI />
@@ -1333,7 +1400,8 @@ function App() {
                 {/* Drawer menu items */}
                 <div style={{ padding: '12px 0', flex: 1 }}>
                   {[
-                    { id: 'chef', icon: '👨‍🍳', label: t('drawer.ai_chef_menu', 'TASTE AI Chef (Tarif & Kalori)'), isNew: true },
+                    { id: 'taichef', icon: '👨‍🍳', label: t('drawer.tai_chef_social_menu', 'TAI Chef (Sosyal Medya & Mutfak Ağı)'), isNew: true },
+                    { id: 'chef', icon: '🍽️', label: t('drawer.ai_chef_menu', 'TASTE AI Chef (Tarif & Kalori)'), isNew: false },
                     { id: 'ai', icon: '🤖', label: t('app.project_assistant', 'TASTE AI Asistan'), isNew: false },
                     { id: 'ecosystem', icon: '🌐', label: t('drawer.ecosystem', 'TAI Ekosistemi'), isNew: true },
                     { id: 'socials', icon: '📱', label: t('drawer.socials', 'Sosyal Kanallar'), isNew: true },

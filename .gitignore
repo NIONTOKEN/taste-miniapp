@@ -49,3 +49,7 @@ credentials.json
 *.pem
 *.key
 .credentials
+
+# Chef uploads
+chef-server/uploads/*
+!chef-server/uploads/.gitkeep

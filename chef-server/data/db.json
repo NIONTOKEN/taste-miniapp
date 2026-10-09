@@ -1,0 +1,204 @@
+{
+  "users": [
+    {
+      "id": "u-tachef",
+      "username": "tachef",
+      "password": "123",
+      "name": "fatih kaya",
+      "title": "executıve chef",
+      "restaurant": "otel / restaurant",
+      "location": "muğla",
+      "bio": "25 yıldır yemek yapmaya çalışan gariban",
+      "avatar": "/chef-logo.png",
+      "isVerified": true,
+      "isOnline": true,
+      "lastSeen": "2026-10-09T07:23:02.337Z",
+      "friends": [
+        "u-burak"
+      ],
+      "friendRequestsSent": [],
+      "friendRequestsReceived": [],
+      "createdAt": "2026-10-09T06:00:00.000Z"
+    },
+    {
+      "id": "u-burak",
+      "username": "chefburak",
+      "password": "123",
+      "name": "Burak Özdemir",
+      "title": "Executive Chef & Restoratör",
+      "restaurant": "Hatay Medeniyetler Sofrası",
+      "location": "Ataşehir / İstanbul",
+      "bio": "Geleneksel taş fırın lezzetleri, kuzu tandır ve devasa ziyafet tabakları.",
+      "avatar": "https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=400&q=80",
+      "isVerified": true,
+      "isOnline": true,
+      "lastSeen": "2026-10-09T06:50:00.000Z",
+      "friends": [
+        "u-tachef"
+      ],
+      "friendRequestsSent": [],
+      "friendRequestsReceived": [],
+      "createdAt": "2026-10-09T06:00:00.000Z"
+    },
+    {
+      "id": "u-selin",
+      "username": "pastryselin",
+      "password": "123",
+      "name": "Selin Aydın",
+      "title": "Head Pastry Artist & Chocolatier",
+      "restaurant": "Atelier Pâtisserie",
+      "location": "Nişantaşı / İstanbul",
+      "bio": "Fransız pastacılığı, el yapımı çikolata ve sanatsal tatlı tasarımları.",
+      "avatar": "https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?auto=format&fit=crop&w=400&q=80",
+      "isVerified": true,
+      "isOnline": false,
+      "lastSeen": "2026-10-09T06:40:00.000Z",
+      "friends": [],
+      "friendRequestsSent": [],
+      "friendRequestsReceived": [
+        "u-tachef"
+      ],
+      "createdAt": "2026-10-09T06:00:00.000Z"
+    }
+  ],
+  "posts": [
+    {
+      "id": "post-1",
+      "userId": "u-tachef",
+      "title": "Meşe Kömüründe Mühürlenmiş Kuzu Pirzola & İlikli Sos",
+      "caption": "Taze biberiye ve sarımsak marinasyonlu kuzu pirzola, fırınlanmış kök sebzeler ve 24 saatlik kemik suyu demi-glace sosu ile servis edildi.",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
+      "location": {
+        "name": "TA Gourmet Restaurant & Lounge",
+        "city": "Etiler, İstanbul",
+        "lat": 41.0827,
+        "lng": 29.0322
+      },
+      "cookTime": "25 dk",
+      "difficulty": "Michelin / Usta İşi",
+      "category": "Et & Izgara",
+      "ingredients": [
+        "Kuzu Pirzola",
+        "Dağ Kekiği",
+        "Demi-Glace Sos",
+        "Deniz Tuzu",
+        "Taze Sarımsak"
+      ],
+      "likes": [
+        "u-burak",
+        "u-tachef"
+      ],
+      "saves": [],
+      "comments": [
+        {
+          "id": "c-1",
+          "userId": "u-burak",
+          "userName": "Burak Özdemir",
+          "userAvatar": "https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=400&q=80",
+          "text": "Eline emeğine sağlık Taha Şefim, demi-glace sosun parlaklığı ve etin pişme derecesi harika görünüyor!",
+          "createdAt": "2026-10-09T06:30:00.000Z"
+        }
+      ],
+      "createdAt": "2026-10-09T06:20:00.000Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m-1",
+      "senderId": "u-burak",
+      "receiverId": "u-tachef",
+      "text": "Selam Taha Şefim! Yeni menüdeki kuzu pirzola sunumu harika olmuş, haftaya bizim restorana da beklerim.",
+      "image": null,
+      "createdAt": "2026-10-09T06:35:00.000Z",
+      "isRead": true
+    },
+    {
+      "id": "m-2",
+      "senderId": "u-tachef",
+      "receiverId": "u-burak",
+      "text": "Aleyküm selam Burak Şefim, çok teşekkür ederim! Mutlaka uğrayacağım, yeni reçeteler üzerine sohbet ederiz. 👨‍🍳🔥",
+      "image": null,
+      "createdAt": "2026-10-09T06:38:00.000Z",
+      "isRead": true
+    },
+    {
+      "id": "m-1791529791398",
+      "senderId": "u-tachef",
+      "receiverId": "u-burak",
+      "text": "Tabağınız harika görünüyor şefim! 🔥",
+      "image": null,
+      "createdAt": "2026-10-09T07:09:51.398Z",
+      "isRead": false
+    },
+    {
+      "id": "m-1791529791403",
+      "senderId": "u-tachef",
+      "receiverId": "u-burak",
+      "text": "Tabağınız harika görünüyor şefim! 🔥",
+      "image": null,
+      "createdAt": "2026-10-09T07:09:51.403Z",
+      "isRead": false
+    },
+    {
+      "id": "m-1791529811256",
+      "senderId": "u-tachef",
+      "receiverId": "u-burak",
+      "text": "Sosun kıvamı ve reçetesi nedir?",
+      "image": null,
+      "createdAt": "2026-10-09T07:10:11.256Z",
+      "isRead": false
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-1791529811256",
+      "userId": "u-burak",
+      "actorId": "u-tachef",
+      "type": "message",
+      "message": "fatih kaya size yeni bir mesaj gönderdi.",
+      "postId": null,
+      "createdAt": "2026-10-09T07:10:11.256Z",
+      "isRead": false
+    },
+    {
+      "id": "notif-1791529791403",
+      "userId": "u-burak",
+      "actorId": "u-tachef",
+      "type": "message",
+      "message": "fatih kaya size yeni bir mesaj gönderdi.",
+      "postId": null,
+      "createdAt": "2026-10-09T07:09:51.403Z",
+      "isRead": false
+    },
+    {
+      "id": "notif-1791529791398",
+      "userId": "u-burak",
+      "actorId": "u-tachef",
+      "type": "message",
+      "message": "fatih kaya size yeni bir mesaj gönderdi.",
+      "postId": null,
+      "createdAt": "2026-10-09T07:09:51.398Z",
+      "isRead": false
+    },
+    {
+      "id": "notif-1",
+      "userId": "u-tachef",
+      "actorId": "u-burak",
+      "type": "like",
+      "message": "Burak Özdemir tabağınızı beğendi.",
+      "postId": "post-1",
+      "createdAt": "2026-10-09T06:30:00.000Z",
+      "isRead": false
+    },
+    {
+      "id": "notif-2",
+      "userId": "u-tachef",
+      "actorId": "u-selin",
+      "type": "friend_request",
+      "message": "Selin Aydın size arkadaşlık isteği gönderdi.",
+      "postId": null,
+      "createdAt": "2026-10-09T06:40:00.000Z",
+      "isRead": false
+    }
+  ]
+}
