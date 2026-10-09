@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Bell, MessageSquare, Globe, LogIn, LogOut, Edit3, ShieldCheck, ChevronDown, Check } from 'lucide-react';
 import { triggerHaptic } from './services/telegram';
 
@@ -20,40 +20,40 @@ export default function Navbar({
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full glass-nav px-4 py-2.5 safe-top shadow-sm">
-      <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
+    <header className="sticky top-0 z-40 w-full glass-nav px-3 sm:px-4 py-2 safe-top shadow-sm">
+      <div className="max-w-5xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3">
         {/* Logo & Marka */}
         <div 
           onClick={() => { triggerHaptic('light'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="flex items-center gap-2.5 cursor-pointer group"
+          className="flex items-center gap-2 cursor-pointer group flex-shrink-0"
         >
           <img
             src="/chef-logo.png"
             alt="TAI Chef"
-            className="w-10 h-10 rounded-full object-cover shadow-sm border border-amber-500/40 p-0.5 group-hover:scale-105 transition-transform"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover shadow-sm border border-amber-500/40 p-0.5 group-hover:scale-105 transition-transform"
           />
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-serif font-bold text-base sm:text-lg tracking-wide text-slate-900">
+              <span className="font-serif font-bold text-sm sm:text-lg tracking-wide text-slate-900">
                 {t.appName}
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+              <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
                 Gourmet
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 font-medium -mt-0.5">{t.appSub}</p>
+            <p className="hidden xs:block text-[10px] text-slate-500 font-medium -mt-0.5 truncate max-w-[130px]">{t.appSub}</p>
           </div>
         </div>
 
         {/* Aksiyonlar: Dil Değiştirici, Bildirimler, Mesajlar, Profil */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           {/* Dil Seçeneği (TR / EN) */}
           <button
             onClick={() => {
               triggerHaptic('light');
               onToggleLang();
             }}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors"
+            className="flex items-center gap-1 px-2 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors"
             title="Dili Değiştir / Change Language"
           >
             <Globe className="w-3.5 h-3.5 text-amber-600" />

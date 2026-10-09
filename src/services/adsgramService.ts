@@ -4,7 +4,7 @@
 declare global {
   interface Window {
     Adsgram?: {
-      init: (params: { blockId: string; debug?: boolean; debugBannerType?: string }) => AdsgramController;
+      init: (params: { blockId: string; debug?: boolean }) => AdsgramController;
     };
   }
 }
@@ -20,8 +20,8 @@ interface AdsgramController {
   show: () => Promise<ShowPromiseResult>;
 }
 
-// Varsayılan Block ID (Kullanıcı adsgram.ai'den aldığı ID'yi buraya girebilir veya .env'e koyabilir)
-export const DEFAULT_ADSGRAM_BLOCK_ID = '52869'; // Canlı AdsGram Rewarded Video Block ID
+// Varsayılan Block ID (AdsGram panelinde oluşturulan Rewarded Video blok ID)
+export const DEFAULT_ADSGRAM_BLOCK_ID = '52869';
 
 export function getAdsgramBlockId(): string {
   if (typeof window !== 'undefined') {
@@ -91,8 +91,9 @@ export interface AdWatchResult {
 }
 
 /**
- * AdsGram Ödüllü Video Reklamını Başlatır
- * Kullanıcı reklamı sonuna kadar izlerse { success: true, reason: 'completed' } döner.
+ * AdsGram Ödüllü Video Reklamını Başlatır.
+ * SADECE VE SADECE video reklam gerçekten baştan sona izlendiğinde ödül verir!
+ * Asla sahte/otomatik ödül vermez.
  */
 export async function showRewardedAd(): Promise<AdWatchResult> {
   const stats = getDailyAdStats();
@@ -100,7 +101,7 @@ export async function showRewardedAd(): Promise<AdWatchResult> {
     return {
       success: false,
       reason: 'limit_reached',
-      errorMsg: 'Bugünkü reklam izleme limitine ulaştınız. Yarın tekrar deneyin!'
+      errorMsg: 'Bugünkü reklam izleme limitine ulaştınız (10/10). Yarın tekrar deneyin!'
     };
   }
 
@@ -109,34 +110,46 @@ export async function showRewardedAd(): Promise<AdWatchResult> {
   // 1. AdsGram SDK yüklü ise gerçek reklamı tetikle
   if (typeof window !== 'undefined' && window.Adsgram) {
     try {
-      const isDebug = blockId.startsWith('int-');
+      const isDebug = blockId.startsWith('int-') || blockId.startsWith('test') || localStorage.getItem('taste_adsgram_debug') === 'true';
       const AdController = window.Adsgram.init({
         blockId: blockId,
-        debug: isDebug,
-        debugBannerType: 'Rewarded'
+        debug: isDebug
       });
 
       const res = await AdController.show();
+
       if (res && res.done) {
         return { success: true, reason: 'completed' };
       } else {
         return {
           success: false,
           reason: 'skipped',
-          errorMsg: 'Reklam tamamlanmadan kapatıldı. Ödül kazanamadınız.'
+          errorMsg: 'Reklam videosu sonuna kadar izlenmeden kapatıldı. Ödül kazanılamadı.'
         };
       }
     } catch (err: any) {
-      console.warn('[AdsGram] Real ad call error:', err);
-      // Hata Adsgram kaynaklıysa veya blok ID henüz aktif değilse simülasyona düş
+      console.error('[AdsGram] Real ad call error:', err);
+      const desc = err?.description || err?.message || (typeof err === 'string' ? err : '');
+      
+      let friendlyMsg = 'Şu anda gösterilecek video reklam bulunamadı. Lütfen biraz sonra tekrar deneyin.';
+      if (desc.toLowerCase().includes('no ads') || desc.toLowerCase().includes('empty')) {
+        friendlyMsg = 'AdsGram reklam havuzunda şu an uygun video bulunamadı. Adsgram platform onayı veya yeni reklam kampanyaları bekleniyor.';
+      } else if (desc) {
+        friendlyMsg = `AdsGram Bildirimi: ${desc}`;
+      }
+
+      return {
+        success: false,
+        reason: 'failed',
+        errorMsg: friendlyMsg
+      };
     }
   }
 
-  // 2. Simülasyon Fallback (Geliştirme / Test veya Henüz Block ID beklenirken)
-  return new Promise((resolve) => {
-    // 3 saniyelik simüle edilmiş reklam izleme
-    setTimeout(() => {
-      resolve({ success: true, reason: 'completed' });
-    }, 2500);
-  });
+  // 2. AdsGram SDK henüz yüklenmediyse
+  return {
+    success: false,
+    reason: 'failed',
+    errorMsg: 'AdsGram reklam servisi yüklenemedi. Lütfen Telegram uygulamasından açtığınızdan emin olun.'
+  };
 }

@@ -187,7 +187,24 @@ function App() {
     };
   }, []);
 
-  // Fetch holders count + TASTE per TON calculation
+  // Telegram native BackButton handling when inside taichef
+  useEffect(() => {
+    const webApp = (window.Telegram?.WebApp as any);
+    if (webApp?.BackButton) {
+      const tgBack = webApp.BackButton;
+      if (activeTab === 'taichef') {
+        tgBack.show();
+        const onTgBack = () => navigateTo('home');
+        tgBack.onClick(onTgBack);
+        return () => {
+          tgBack.offClick(onTgBack);
+          tgBack.hide();
+        };
+      } else {
+        tgBack.hide();
+      }
+    }
+  }, [activeTab]);
   useEffect(() => {
     const fetchData = async () => {
       const JETTON_ADDRESS = import.meta.env.VITE_JETTON_ADDRESS || 'EQB0beTxStmdhVri4s-cYlwYJaG_ZiR5lpLufCNC2VWUxZc-';
@@ -1106,11 +1123,7 @@ function App() {
           <TasteAIChef />
         </motion.div>
       );
-      case 'taichef': return (
-        <motion.div key="taichef" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-          <TaiChefSocialApp onBackToMiniApp={() => navigateTo('home')} />
-        </motion.div>
-      );
+      case 'taichef': return null;
       case 'ai': return (
         <motion.div key="ai" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <TasteAI />
@@ -1228,7 +1241,15 @@ function App() {
       </AnimatePresence>
 
 
-      <div className={`container ${isRTL ? 'rtl' : ''}`} style={{ paddingBottom: '90px', paddingTop: '40px' }}>
+      {activeTab === 'taichef' ? (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9999, overflowY: 'auto', background: '#f8fafc' }}>
+          <TaiChefSocialApp
+            onBackToMiniApp={() => navigateTo('home')}
+            initialLang={currentLang.code.startsWith('tr') ? 'tr' : 'en'}
+          />
+        </div>
+      ) : (
+        <div className={`container ${isRTL ? 'rtl' : ''}`} style={{ paddingBottom: '90px', paddingTop: '40px' }}>
         <PriceTicker />
 
         {/* Buy Ping Notification */}
@@ -1647,6 +1668,7 @@ function App() {
           </div>
         </div>
       </div>
+    )}
 
       {/* AdsGram Rewarded Video Modal */}
       <RewardedAdModal

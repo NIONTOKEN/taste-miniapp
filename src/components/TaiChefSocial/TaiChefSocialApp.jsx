@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './tai-chef.css';
 import Navbar from './Navbar';
 import BottomNav from './BottomNav';
@@ -27,10 +27,14 @@ import {
   ArrowLeft
 } from 'lucide-react';
 
-export default function TaiChefSocialApp({ onBackToMiniApp }) {
+export default function TaiChefSocialApp({ onBackToMiniApp, initialLang = 'tr' }) {
   // Dil Durumu (TR / EN)
-  const [lang, setLang] = useState('tr');
+  const [lang, setLang] = useState(initialLang);
   const t = translations[lang] || translations.tr;
+
+  useEffect(() => {
+    if (initialLang) setLang(initialLang);
+  }, [initialLang]);
 
   // Aktif Kullanıcı & Tüm Kullanıcılar
   const [currentUser, setCurrentUser] = useState(null);
@@ -258,17 +262,20 @@ export default function TaiChefSocialApp({ onBackToMiniApp }) {
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-amber-500 selection:text-white pb-24">
       {/* Eğer Mini App'ten gelindiyse En Üste Şık Geri Dön Butonu */}
       {onBackToMiniApp && (
-        <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200/80 px-4 py-2.5 flex items-center justify-between shadow-xs sticky top-0 z-50">
           <button
             onClick={onBackToMiniApp}
-            className="flex items-center gap-1.5 text-xs font-bold text-amber-800 hover:text-amber-900"
+            className="flex items-center gap-2 text-xs font-bold text-amber-900 hover:text-amber-700 bg-white/80 hover:bg-white px-3 py-1.5 rounded-xl border border-amber-200 shadow-xs transition-all active:scale-95"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>â† Taste Mini App'e Dön</span>
+            <ArrowLeft className="w-4 h-4 text-amber-700" />
+            <span>{lang === 'tr' ? "Taste Mini App'e Dön" : "Back to Taste Mini App"}</span>
           </button>
-          <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider">
-            TAI Chef Social Hub
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">
+              TAI Chef Social
+            </span>
+          </div>
         </div>
       )}
 

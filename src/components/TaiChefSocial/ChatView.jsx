@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Send, 
   Image as ImageIcon, 
@@ -427,7 +427,7 @@ export default function ChatView({
                   onClick={() => { setSelectedImage(null); setImagePreview(''); }}
                   className="absolute top-0.5 right-0.5 bg-black/70 text-white rounded-full p-0.5"
                 >
-                  âœ•
+                  ✕
                 </button>
               </div>
               <span className="text-xs text-slate-600 font-medium">

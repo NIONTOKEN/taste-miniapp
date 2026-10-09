@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   Search, 
   Compass, 
@@ -118,7 +118,7 @@ export default function ExploreView({
 
               <div className="mt-3 pt-3 border-t border-chef-border/50 flex items-center justify-between">
                 <span className="text-[10px] text-slate-400">
-                  â˜… <strong className="text-amber-400">{chef.rating || '4.9'}</strong> Puan
+                  ★ <strong className="text-amber-400">{chef.rating || '4.9'}</strong> {lang === 'tr' ? 'Puan' : 'Rating'}
                 </span>
                 <button
                   onClick={() => {
