@@ -21,7 +21,7 @@ interface AdsgramController {
 }
 
 // Varsayılan Block ID (Kullanıcı adsgram.ai'den aldığı ID'yi buraya girebilir veya .env'e koyabilir)
-export const DEFAULT_ADSGRAM_BLOCK_ID = 'int-8550'; // Placeholder block ID (AdsGram test ID)
+export const DEFAULT_ADSGRAM_BLOCK_ID = '52869'; // Canlı AdsGram Rewarded Video Block ID
 
 export function getAdsgramBlockId(): string {
   if (typeof window !== 'undefined') {
@@ -109,7 +109,7 @@ export async function showRewardedAd(): Promise<AdWatchResult> {
   // 1. AdsGram SDK yüklü ise gerçek reklamı tetikle
   if (typeof window !== 'undefined' && window.Adsgram) {
     try {
-      const isDebug = blockId.startsWith('int-') || blockId === DEFAULT_ADSGRAM_BLOCK_ID;
+      const isDebug = blockId.startsWith('int-');
       const AdController = window.Adsgram.init({
         blockId: blockId,
         debug: isDebug,
