@@ -403,75 +403,6 @@ function App() {
               </div>
             </motion.div>
 
-            {/* ── 🇹🇷 TL / Kredi Kartı & Havale ile Tek Noktadan TAI Al (Onramper) ── */}
-            <motion.div
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setShowSwapScreen(true)}
-              style={{
-                background: 'linear-gradient(135deg, rgba(245, 159, 11, 0.25) 0%, rgba(217, 119, 6, 0.18) 100%)',
-                border: '1px solid rgba(245, 159, 11, 0.5)',
-                borderRadius: 20,
-                padding: '14px 16px',
-                marginBottom: 14,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer',
-                boxShadow: '0 8px 24px rgba(245, 159, 11, 0.2)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{
-                  width: 42,
-                  height: 42,
-                  borderRadius: 14,
-                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 20,
-                  flexShrink: 0,
-                  boxShadow: '0 4px 14px rgba(245, 159, 11, 0.4)'
-                }}>
-                  💳
-                </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 13.5, fontWeight: 900, color: '#fff' }}>
-                      🇹🇷 TL & Kredi Kartı ile $TAI Al
-                    </span>
-                    <span style={{
-                      fontSize: 8.5,
-                      background: 'rgba(16,185,129,0.22)',
-                      color: '#34d399',
-                      border: '1px solid rgba(16,185,129,0.45)',
-                      padding: '1px 6px',
-                      borderRadius: 6,
-                      fontWeight: 900
-                    }}>
-                      ONRAMPER
-                    </span>
-                  </div>
-                  <div style={{ fontSize: 10.5, color: '#fde68a', marginTop: 2 }}>
-                    Visa, Mastercard, Troy veya 0 Komisyon Banka Havalesi ile anında al
-                  </div>
-                </div>
-              </div>
-
-              <div style={{
-                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                color: '#000',
-                padding: '8px 13px',
-                borderRadius: 12,
-                fontSize: 11,
-                fontWeight: 900,
-                flexShrink: 0,
-                boxShadow: '0 2px 10px rgba(245, 159, 11, 0.35)'
-              }}>
-                HEMEN AL
-              </div>
-            </motion.div>
-
             {/* TAI Swap & DeFi Pool — mavi butonlar (görselsiz) */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
               <motion.button
@@ -485,7 +416,7 @@ function App() {
                 }}
               >
                 <div style={{ fontSize: 15, fontWeight: 900 }}>⚡ {t('app.buy_with', 'TAI Al')}</div>
-                <div style={{ fontSize: 10, color: '#bfdbfe', marginTop: 4 }}>TL, Kart, TON, USDT</div>
+                <div style={{ fontSize: 10, color: '#bfdbfe', marginTop: 4 }}>TON, USDT, DOGS</div>
               </motion.button>
 
               <motion.button
