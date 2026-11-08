@@ -397,10 +397,32 @@ export function SwapScreen({ onClose, initialMode = 'fiat' }: SwapScreenProps) {
                   letterSpacing: 0.5,
                 }}
               >
-                {isTR ? 'ADIM 1: KART İLE TON AL' : 'STEP 1: BUY TON WITH CARD'}
+                {isTR ? 'ADIM 1: KART İLE TON / GRAM AL' : 'STEP 1: BUY TON / GRAM WITH CARD'}
               </span>
               <span style={{ fontSize: 11, color: '#94a3b8', fontWeight: 700 }}>
                 Visa / Mastercard / Troy / Apple Pay
+              </span>
+            </div>
+
+            {/* TON / GRAM Bilgilendirme Rozeti */}
+            <div style={{
+              background: 'rgba(59, 130, 246, 0.15)',
+              border: '1px solid rgba(59, 130, 246, 0.35)',
+              borderRadius: 10,
+              padding: '8px 12px',
+              marginBottom: 14,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              fontSize: 11,
+              color: '#93c5fd',
+              lineHeight: 1.4
+            }}>
+              <span style={{ fontSize: 16 }}>💡</span>
+              <span>
+                {isTR 
+                  ? 'Borsalarda ve cüzdanlarda TON kripto parası "Gram" veya "Toncoin" olarak da adlandırılır. İkisi de aynı resmi TON varlığıdır, rahatlıkla alabilirsiniz.' 
+                  : 'Notice: TON is also known as Gram or Toncoin across exchanges and wallets. Both represent the same official TON asset.'}
               </span>
             </div>
 
@@ -612,14 +634,14 @@ export function SwapScreen({ onClose, initialMode = 'fiat' }: SwapScreenProps) {
                   borderRadius: 8,
                 }}
               >
-                {isTR ? 'ADIM 2: TON -> $TAI DÖNÜŞTÜR' : 'STEP 2: SWAP TON TO $TAI'}
+                {isTR ? 'ADIM 2: TON / GRAM -> $TAI DÖNÜŞTÜR' : 'STEP 2: SWAP TON / GRAM TO $TAI'}
               </span>
               <span style={{ fontSize: 11, color: '#34d399', fontWeight: 700 }}>STON.fi Resmi Havuz</span>
             </div>
 
             <p style={{ fontSize: 11.5, color: '#cbd5e1', margin: '0 0 12px', lineHeight: 1.45 }}>
               {isTR
-                ? 'Kartla aldığınız TON cüzdanınıza düştüğü anda aşağıdaki butona basarak saniyeler içinde $TAI tokena çevirin:'
+                ? 'Kartla aldığınız TON (Gram) cüzdanınıza düştüğü anda aşağıdaki butona basarak saniyeler içinde $TAI tokena çevirin:'
                 : 'Once your purchased TON arrives in your wallet, tap below to swap it into $TAI in seconds:'}
             </p>
 
@@ -700,10 +722,10 @@ export function SwapScreen({ onClose, initialMode = 'fiat' }: SwapScreenProps) {
               {/* Step 1 */}
               <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: 14, padding: '12px 14px', borderLeft: '3px solid #f59e0b' }}>
                 <div style={{ fontSize: 12, fontWeight: 900, color: '#fbbf24', marginBottom: 4 }}>
-                  1. Yerli Borsadan veya Telegram P2P'den TON Alın
+                  1. Yerli Borsadan veya Telegram P2P'den TON (Gram / Toncoin) Alın
                 </div>
                 <div style={{ fontSize: 11, color: '#cbd5e1', lineHeight: 1.45 }}>
-                  <strong>Binance TR, Paribu veya BtcTurk</strong> hesabınıza bankanızdan TL gönderip <strong>TON (Toncoin)</strong> satın alın.
+                  <strong>Binance TR, Paribu veya BtcTurk</strong> hesabınıza bankanızdan TL gönderip <strong>TON (Gram / Toncoin)</strong> satın alın (Bazı borsalarda Gram olarak da listelenebilir, ikisi de aynı TON ağıdır).
                 </div>
               </div>
 
