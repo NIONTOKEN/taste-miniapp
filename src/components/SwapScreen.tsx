@@ -72,7 +72,7 @@ export function SwapScreen({ onClose, initialMode = 'fiat' }: SwapScreenProps) {
 
   const pair = PAIRS.find(p => p.key === selectedPair)!
 
-  const onramperApiKey = import.meta.env.VITE_ONRAMPER_API_KEY || ''
+  const onramperApiKey = import.meta.env.VITE_ONRAMPER_API_KEY || 'pk_test_01M6X4SBBF2BRQSB0NFX2QTTEW'
   const mercuryoWidgetId = import.meta.env.VITE_MERCURYO_WIDGET_ID || ''
 
   const buildOnramperUrl = () => {
